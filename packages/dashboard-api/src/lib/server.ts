@@ -1,14 +1,19 @@
-import { PORT, NODE_ENV } from "../config";
 import express from "express";
+import http from "http";
 import logger from "./logger";
 
 export class Server {
   private readonly _app: express.Application;
+  private readonly _httpServer: http.Server;
+  private readonly port: number;
+  private readonly nodeEnv: string;
+  protected readonly logger = logger;
 
-  readonly logger = logger;
-
-  constructor() {
+  constructor(port: number, nodeEnv: string) {
     this._app = express();
+    this._httpServer = http.createServer(this._app);
+    this.port = port;
+    this.nodeEnv = nodeEnv;
 
     process.on("unhandledRejection", (error: Error) => {
       this.logger.error(`unhandledRejection
@@ -25,7 +30,11 @@ export class Server {
     return this._app;
   }
 
-  start(): void {
+  protected get httpServer(): http.Server {
+    return this._httpServer;
+  }
+
+  start(): Promise<void> {
     this.app.use(
       (
         error: Error,
@@ -43,10 +52,13 @@ export class Server {
     this.app.all("*", function (_, res: express.Response) {
       res.status(404).send({ error: true, message: "Check your URL please" });
     });
-    this.app.listen(PORT, () =>
-      this.logger.info(
-        `ENV: ${NODE_ENV}; Dashboard-api is listening on port ${PORT}`
-      )
+
+    return new Promise<void>((resolve) =>
+      this.httpServer.listen({ port: this.port }, () => {
+        this.logger.info(`ENV: ${this.nodeEnv}`);
+        this.logger.info(`Server ready at http://localhost:${this.port}`);
+        resolve();
+      })
     );
   }
 }

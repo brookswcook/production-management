@@ -1,14 +1,8 @@
-import {
-  transports,
-  format,
-  createLogger,
-  Logger,
-  level as levelType,
-} from "winston";
+import { transports, format, createLogger, Logger } from "winston";
 
 export function useLogger(service: string, level = "info") {
   const logger: Logger = createLogger({
-    level: level as levelType,
+    level: level,
     format: format.json(),
     defaultMeta: { service },
     transports: [

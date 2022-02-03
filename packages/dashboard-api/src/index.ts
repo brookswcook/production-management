@@ -1,5 +1,10 @@
 import "reflect-metadata";
-import { PORT as port, NODE_ENV as nodeEnv } from "./config";
+import {
+  PORT as port,
+  NODE_ENV as nodeEnv,
+  MONGO_DEBUG_MODE_ENABLED,
+  MONGO_URI,
+} from "./config";
 import { ApolloServer } from "apollo-server-express";
 import {
   ApolloServerPluginDrainHttpServer,
@@ -10,6 +15,7 @@ import cors from "cors";
 import jwt from "express-jwt";
 import { jwtAuth } from "./lib/jwt";
 import { buildSchema } from "type-graphql";
+import mongoose from "mongoose";
 
 class DashboardApolloServer extends Server {
   constructor() {
@@ -17,6 +23,7 @@ class DashboardApolloServer extends Server {
   }
 
   public async init() {
+    await this.initializeDB();
     const apolloServer = await this.setupApolloServer();
     await apolloServer.start();
     this.setupMiddlewares();
@@ -46,6 +53,17 @@ class DashboardApolloServer extends Server {
         methods: ["GET", "POST"],
       })
     );
+  }
+
+  protected async initializeDB() {
+    try {
+      mongoose.set("debug", Boolean(MONGO_DEBUG_MODE_ENABLED));
+      await mongoose.connect(MONGO_URI);
+      this.logger.info("Connected to mongo successfully");
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
   }
 }
 

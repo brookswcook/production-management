@@ -2,7 +2,6 @@
 
 ## Manage monorepo packages with lerna
 
-
 ```sh
 # add to all packages
 npx lerna add react

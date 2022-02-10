@@ -6,7 +6,7 @@
   "scripts": {
     "build": "lerna run build",
     "format": "prettier --write \"packages/*/src/**/*.{js,jsx,ts,tsx}\"",
-    "lint": "eslint \"packages/*/src/**/*.{js,jsx,ts,tsx}\" --quiet"
+    "lint": "npx lerna exec -- eslint --ext ts,tsx src --quiet"
   },
   "license": "ISC",
   "volta": {

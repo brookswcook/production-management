@@ -1,6 +1,7 @@
-.vscode
 **/tsconfig.tsbuildinfo
 **/node_modules
 **/dist
 **/.env
 **/*.log
+**/coverage
+**/build

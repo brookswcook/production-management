@@ -1,5 +1,5 @@
-import { useUserQuery } from "../generated/graphql";
-import "./App.css";
+import { useUserQuery } from "../../generated/graphql";
+import "./styles.css";
 
 function App() {
   const { data, loading, error } = useUserQuery({

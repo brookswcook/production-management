@@ -1,4 +1,8 @@
-import { getModelForClass, prop as Property } from "@typegoose/typegoose";
+import {
+  getModelForClass,
+  index,
+  prop as Property,
+} from "@typegoose/typegoose";
 import { Field, Int, ObjectType } from "type-graphql";
 import { Sample } from "../sample/sample.model";
 import { TechPack } from "../techPack/techPack.model";
@@ -7,6 +11,7 @@ import { ProductProduction } from "./production.model";
 import { ProductQualityControl } from "./qualityControl.model";
 import { ProductShipping } from "./shipping.model";
 
+@index({ model: 1, style: 1, sku: 1 }, { unique: true })
 @ObjectType()
 export class Product {
   @Field()

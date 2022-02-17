@@ -9,19 +9,25 @@ export class TechPack {
   @Property()
   fabricCode!: string;
 
-  @Field()
-  @Property()
-  type!: string;
+  @Field({ nullable: true })
+  @Property({
+    get(this: TechPack) {
+      if (this.print != null) return "print";
+      else if (this.pantone != null) return "pantone";
+      return null;
+    },
+  })
+  type?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
-  print!: string;
+  print?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
-  pantone!: string;
+  pantone?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
-  color!: string;
+  color?: string;
 }

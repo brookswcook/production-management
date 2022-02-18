@@ -9,6 +9,7 @@ export class TechPack {
   @Property()
   fabricCode!: string;
 
+  // TODO: create shared type print|pantone
   @Field({ nullable: true })
   @Property({
     get(this: TechPack) {

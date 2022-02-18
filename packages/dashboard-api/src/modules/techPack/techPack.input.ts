@@ -3,7 +3,7 @@ import { Field, InputType } from "type-graphql";
 @InputType()
 export class UploadTechPackInput {
   @Field()
-  productTitle!: string;
+  productName!: string;
 
   @Field()
   fabricCode!: string;

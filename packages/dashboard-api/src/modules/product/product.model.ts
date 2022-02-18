@@ -2,8 +2,10 @@ import {
   getModelForClass,
   index,
   prop as Property,
+  Ref,
 } from "@typegoose/typegoose";
 import { Field, Int, ObjectType } from "type-graphql";
+import { FitSample } from "../sample/fitSample.model";
 import { Sample } from "../sample/sample.model";
 import { TechPack } from "../techPack/techPack.model";
 import { FabricProduction } from "./fabricProduction.model";
@@ -20,7 +22,7 @@ export class Product {
       return `${this.model}-${this.style}-${this.sku}`;
     },
   })
-  title?: string;
+  name!: string;
 
   @Field()
   @Property({ required: true })
@@ -63,18 +65,13 @@ export class Product {
   @Property({ _id: false })
   fabricSample?: Sample;
 
-  @Field(() => [Sample], { nullable: true })
-  @Property({ _id: false, type: () => Sample })
-  fitSamples?: Sample[];
-
-  @Field(() => Sample, { nullable: true })
+  // Note: might be useful to get it as part of product by populate, see also getFitSamplesByProductName
   @Property({
-    get(this: Product) {
-      if (this.fitSamples == null) return null;
-      return this.fitSamples.find((fitSample) => fitSample.approved);
-    },
+    ref: () => FitSample,
+    foreignField: "productName",
+    localField: "name",
   })
-  preProductionSample?: Sample;
+  fitSamples!: Ref<FitSample>[];
 
   @Field(() => FabricProduction, { nullable: true })
   @Property({ _id: false })

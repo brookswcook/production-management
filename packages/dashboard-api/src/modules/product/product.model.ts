@@ -8,10 +8,10 @@ import { Field, Int, ObjectType } from "type-graphql";
 import { FitSample } from "../sample/fitSample.model";
 import { Sample } from "../sample/sample.model";
 import { TechPack } from "../techPack/techPack.model";
-import { FabricProduction } from "./fabricProduction.model";
-import { ProductProduction } from "./production.model";
-import { ProductQualityControl } from "./qualityControl.model";
-import { ProductShipping } from "./shipping.model";
+import { FabricProduction } from "../fabricProduction/fabricProduction.model";
+import { ProductProduction } from "../productProduction/productProduction.model";
+import { ProductQualityControl } from "../productQualityControl/productQualityControl.model";
+import { ProductShipping } from "../productShipping/productShipping.model";
 
 @index({ model: 1, style: 1, sku: 1 }, { unique: true })
 @ObjectType()

@@ -3,13 +3,13 @@ import { prop as Property } from "@typegoose/typegoose";
 
 @ObjectType()
 export class ProductQualityControl {
-  @Field()
+  @Field({ nullable: false })
   @Property()
-  lastVisitDate!: Date;
+  lastVisitDate?: Date;
 
   @Field()
   @Property()
-  scheduledVisitDate!: Date;
+  scheduledVisitDate?: Date;
 
   @Field()
   @Property({ default: false })

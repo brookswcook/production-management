@@ -12,6 +12,8 @@ import { CreateProductInput } from "./product.input";
 import { Product, ProductModel } from "./product.model";
 import { FitSample, FitSampleModel } from "../sample/fitSample.model";
 import { DocumentType } from "@typegoose/typegoose";
+import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
+import { StartProductionInput } from "../productProduction/productProduction.input";
 
 @Resolver(Product)
 export class ProductResolver {
@@ -40,7 +42,22 @@ export class ProductResolver {
 
   @Mutation(() => Product)
   async createProduct(@Arg("data") { ...data }: CreateProductInput) {
-    return new ProductModel(data).save();
+    // TODO: use workflow saved in db
+    const productWorkflowData: Partial<Product> = {
+      fabricProduction: {
+        lastStartdate: new Date(new Date().getTime() + 14 * 8.64e7),
+      },
+      production: {
+        lastStartdate: new Date(new Date().getTime() + 21 * 8.64e7),
+      },
+      qualityControl: {
+        lastVisitDate: new Date(new Date().getTime() + 28 * 8.64e7),
+      },
+      shipping: {
+        lastShippingDate: new Date(new Date().getTime() + 35 * 8.64e7),
+      },
+    };
+    return new ProductModel({ ...productWorkflowData, ...data }).save();
   }
 
   @Mutation(() => Product)
@@ -82,6 +99,27 @@ export class ProductResolver {
     return product.save();
   }
 
+  @Mutation(() => Product)
+  async startFabricProduction(
+    @Arg("data") { productName }: StartFabricProductionInput
+  ): Promise<Product> {
+    return this.updatePerProductNameOrFail(productName, {
+      fabricProduction: {
+        sufficientFabric: true,
+        actualStartDate: new Date(),
+        started: true,
+      },
+    });
+  }
+
+  @Mutation(() => Product)
+  async startProduction(
+    @Arg("data") { productName }: StartProductionInput
+  ): Promise<Product> {
+    return this.updatePerProductNameOrFail(productName, {
+      production: { actualStartDate: new Date(), started: true },
+    });
+  }
   private async findPerProductNameOrFail(
     productName: string,
     populatePath = ""

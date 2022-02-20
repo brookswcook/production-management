@@ -3,9 +3,9 @@ import { prop as Property } from "@typegoose/typegoose";
 
 @ObjectType()
 export class ProductProduction {
-  @Field()
+  @Field({ nullable: false })
   @Property()
-  lastStartdate!: Date;
+  lastStartdate?: Date;
 
   @Field({ nullable: true })
   @Property({ default: false })

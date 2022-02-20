@@ -9,11 +9,11 @@ export class ProductShipping {
 
   @Field()
   @Property()
-  actualShippingDate!: Date;
+  actualShippingDate?: Date;
 
   @Field()
   @Property()
-  trackNumber!: string;
+  trackNumber?: string;
 
   @Field()
   @Property()

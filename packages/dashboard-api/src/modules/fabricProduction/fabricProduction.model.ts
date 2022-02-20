@@ -3,15 +3,19 @@ import { prop as Property } from "@typegoose/typegoose";
 
 @ObjectType()
 export class FabricProduction {
-  @Field()
+  @Field({ nullable: false })
   @Property()
-  lastStartdate!: Date;
+  lastStartdate?: Date;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
-  sufficientFabric!: boolean;
+  sufficientFabric?: boolean;
 
-  @Field()
+  @Field({ nullable: true })
+  @Property({ default: false })
+  started?: boolean;
+
+  @Field({ nullable: true })
   @Property()
-  actualStartDate!: Date;
+  actualStartDate?: Date;
 }

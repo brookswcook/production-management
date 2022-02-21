@@ -1,5 +1,14 @@
-import { Container, Grid } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Button, Container, Grid } from "@mui/material";
+import AddIcon from "@mui/icons-material/AccessAlarm";
+import {
+  DataGrid,
+  GridColDef,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarDensitySelector,
+  GridToolbarExport,
+  GridToolbarFilterButton,
+} from "@mui/x-data-grid";
 import { useProductsQuery } from "../../generated/graphql";
 
 export default function ProductGrid() {
@@ -26,6 +35,21 @@ export default function ProductGrid() {
     },
   ];
 
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector />
+        <GridToolbarExport />
+        <Button variant="text" size="small" onClick={() => {}}>
+          <AddIcon />
+          New Product
+        </Button>
+      </GridToolbarContainer>
+    );
+  }
+
   return (
     <Container maxWidth="xl">
       <Grid item xs={12}>
@@ -38,6 +62,9 @@ export default function ProductGrid() {
           error={error}
           autoHeight
           rowsPerPageOptions={[5]}
+          components={{
+            Toolbar: CustomToolbar,
+          }}
           checkboxSelection
           disableSelectionOnClick
         />

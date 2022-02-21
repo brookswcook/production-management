@@ -1,13 +1,11 @@
 import ProductGrid from "../ProductGrid";
+import Title from "../Title";
 
-function App() {
+export default function App() {
   return (
     <div>
-      <h2>Production control app</h2>
-      <br />
+      <Title>Production control app</Title>
       <ProductGrid />
     </div>
   );
 }
-
-export default App;

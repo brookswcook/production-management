@@ -1,0 +1,27 @@
+query Products {
+  products {
+    name
+    model
+    style
+    sku
+    deliveryDate
+    dueIn
+    techPack {
+      fabricCode
+      type
+      print
+      pantone
+      color
+    }
+    fabricSample {
+      sku
+    }
+    fitSamples {
+      sku
+      approved
+    }
+    preProductionSample {
+      sku
+    }
+  }
+}

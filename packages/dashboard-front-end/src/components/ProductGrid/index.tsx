@@ -18,11 +18,11 @@ export default function ProductGrid() {
 
   const rows = data ? data.products : [];
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Title", width: 150 },
+    { field: "name", headerName: "Title", flex: 150 },
     {
       field: "deliveryDate",
       headerName: "Delivery date",
-      width: 200,
+      flex: 150,
       type: "date",
       valueFormatter: params => {
         return new Date(params.value as string).toLocaleDateString();
@@ -31,7 +31,10 @@ export default function ProductGrid() {
     {
       field: "dueIn",
       headerName: "Due in",
-      width: 100,
+      flex: 100,
+      valueFormatter: params => {
+        return `${params.value as string} days`;
+      },
     },
   ];
 

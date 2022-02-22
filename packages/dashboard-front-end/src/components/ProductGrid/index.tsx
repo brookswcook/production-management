@@ -38,14 +38,14 @@ export default function ProductGrid() {
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <GridToolbarColumnsButton />
-        <GridToolbarFilterButton />
-        <GridToolbarDensitySelector />
-        <GridToolbarExport />
         <Button variant="text" size="small" onClick={() => {}}>
           <AddIcon />
           New Product
         </Button>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector />
+        <GridToolbarExport />
       </GridToolbarContainer>
     );
   }

@@ -53,9 +53,7 @@ export class Product {
   @Field()
   @Property({
     get(this: Product) {
-      return Boolean(
-        this.fabricProduction?.onTime == true || this.production?.onTime == true
-      );
+      return this.fabricProduction?.onTime || this.production?.onTime;
     },
   })
   onTime?: boolean;

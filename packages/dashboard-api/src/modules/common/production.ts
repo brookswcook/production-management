@@ -18,9 +18,13 @@ export class Production {
   @Field({ nullable: true })
   @Property({
     get(this: Production) {
-      return Boolean(
-        this.started || new Date().getTime() - this.lastStartDate.getTime() > 0
-      );
+      if (this.started && this.actualStartDate) {
+        return (
+          this.lastStartDate.getTime() - this.actualStartDate.getTime() > 0
+        );
+      } else {
+        return this.lastStartDate.getTime() - new Date().getTime() > 0;
+      }
     },
   })
   onTime?: boolean;

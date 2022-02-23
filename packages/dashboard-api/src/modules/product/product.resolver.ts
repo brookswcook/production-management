@@ -45,10 +45,10 @@ export class ProductResolver {
     // TODO: use workflow saved in db
     const productWorkflowData: Partial<Product> = {
       fabricProduction: {
-        lastStartdate: new Date(new Date().getTime() + 14 * 8.64e7),
+        lastStartDate: new Date(new Date().getTime() + 14 * 8.64e7),
       },
       production: {
-        lastStartdate: new Date(new Date().getTime() + 21 * 8.64e7),
+        lastStartDate: new Date(new Date().getTime() + 21 * 8.64e7),
       },
       qualityControl: {
         lastVisitDate: new Date(new Date().getTime() + 28 * 8.64e7),
@@ -104,11 +104,9 @@ export class ProductResolver {
     @Arg("data") { productName }: StartFabricProductionInput
   ): Promise<Product> {
     return this.updatePerProductNameOrFail(productName, {
-      fabricProduction: {
-        sufficientFabric: true,
-        actualStartDate: new Date(),
-        started: true,
-      },
+      "fabricProduction.sufficientFabric": true,
+      "fabricProduction.actualStartDate": new Date(),
+      "fabricProduction.started": true,
     });
   }
 
@@ -117,9 +115,21 @@ export class ProductResolver {
     @Arg("data") { productName }: StartProductionInput
   ): Promise<Product> {
     return this.updatePerProductNameOrFail(productName, {
-      production: { actualStartDate: new Date(), started: true },
+      "production.actualStartDate": new Date(),
+      "production.started": true,
     });
   }
+
+  // @Mutation(() => Product)
+  // async scheduleQCVisit(
+  //   @Arg("data") { productName }: StartProductionInput
+  // ): Promise<Product> {
+  //   return this.updatePerProductNameOrFail(productName, {
+  //     "production.actualStartDate": new Date(),
+  //     "production.started": true,
+  //   });
+  // }
+
   private async findPerProductNameOrFail(
     productName: string,
     populatePath = ""
@@ -135,13 +145,13 @@ export class ProductResolver {
 
   private async updatePerProductNameOrFail(
     productName: string,
-    data: Partial<Product>
+    data: Partial<Product> | { [key: string]: unknown }
   ): Promise<Product> {
     const product = await ProductModel.findOneAndUpdate<Product>(
       {
         title: productName,
       },
-      { ...data },
+      { $set: data },
       { returnOriginal: false }
     ).exec();
     if (product == null) throw Error(`Product with given title not found`);

@@ -1,17 +1,5 @@
-import { Field, ObjectType } from "type-graphql";
-import { prop as Property } from "@typegoose/typegoose";
+import { ObjectType } from "type-graphql";
+import { Production } from "../common/production";
 
 @ObjectType()
-export class ProductProduction {
-  @Field({ nullable: false })
-  @Property()
-  lastStartdate?: Date;
-
-  @Field({ nullable: true })
-  @Property({ default: false })
-  started?: boolean;
-
-  @Field({ nullable: true })
-  @Property()
-  actualStartDate?: Date;
-}
+export class ProductProduction extends Production {}

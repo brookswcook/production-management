@@ -44,14 +44,23 @@ export class Product {
   @Property({
     get(this: Product) {
       return Math.floor(
-        (new Date().getTime() - this.deliveryDate.getTime()) / 8.64e7
+        (this.deliveryDate.getTime() - new Date().getTime()) / 8.64e7
       );
     },
   })
   dueIn?: number;
 
-  stage?: string;
+  @Field()
+  @Property({
+    get(this: Product) {
+      return Boolean(
+        this.fabricProduction?.onTime == true || this.production?.onTime == true
+      );
+    },
+  })
   onTime?: boolean;
+
+  stage?: string;
   techPackUploaded?: boolean;
   awaitingFabricSample?: boolean;
   awaitingFitSample?: boolean;

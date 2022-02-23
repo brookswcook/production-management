@@ -6,6 +6,7 @@ query Products {
     sku
     deliveryDate
     dueIn
+    onTime
     techPack {
       fabricCode
       type
@@ -22,6 +23,23 @@ query Products {
     }
     preProductionSample {
       sku
+    }
+    fabricProduction {
+      lastStartDate
+      sufficientFabric
+      started
+      actualStartDate
+      onTime
+    }
+    production {
+      lastStartDate
+      onTime
+    }
+    qualityControl {
+      lastVisitDate
+    }
+    shipping {
+      lastShippingDate
     }
   }
 }

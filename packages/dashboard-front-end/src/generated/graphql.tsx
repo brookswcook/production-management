@@ -27,7 +27,8 @@ export type CreateProductInput = {
 export type FabricProduction = {
   __typename?: 'FabricProduction';
   actualStartDate?: Maybe<Scalars['DateTime']>;
-  lastStartdate: Scalars['DateTime'];
+  lastStartDate: Scalars['DateTime'];
+  onTime?: Maybe<Scalars['Boolean']>;
   started?: Maybe<Scalars['Boolean']>;
   sufficientFabric?: Maybe<Scalars['Boolean']>;
 };
@@ -45,7 +46,6 @@ export type Mutation = {
   approveFabricSample: Product;
   createProduct: Product;
   markFabricSampleDelivered: Product;
-  scheduleQCVisit: Product;
   sendFabricSample: Product;
   sendFitSample: FitSample;
   startFabricProduction: Product;
@@ -66,11 +66,6 @@ export type MutationCreateProductArgs = {
 
 export type MutationMarkFabricSampleDeliveredArgs = {
   data: UniqueSampleInput;
-};
-
-
-export type MutationScheduleQcVisitArgs = {
-  data: StartProductionInput;
 };
 
 
@@ -107,6 +102,7 @@ export type Product = {
   fitSamples: Array<FitSample>;
   model: Scalars['String'];
   name: Scalars['String'];
+  onTime: Scalars['Boolean'];
   preProductionSample?: Maybe<FitSample>;
   production?: Maybe<ProductProduction>;
   qualityControl?: Maybe<ProductQualityControl>;
@@ -119,7 +115,8 @@ export type Product = {
 export type ProductProduction = {
   __typename?: 'ProductProduction';
   actualStartDate?: Maybe<Scalars['DateTime']>;
-  lastStartdate: Scalars['DateTime'];
+  lastStartDate: Scalars['DateTime'];
+  onTime?: Maybe<Scalars['Boolean']>;
   started?: Maybe<Scalars['Boolean']>;
 };
 
@@ -216,7 +213,7 @@ export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', nam
 export type ProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string } | null }> };
+export type ProductsQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null }> };
 
 
 export const UserDocument = gql`
@@ -262,6 +259,7 @@ export const ProductsDocument = gql`
     sku
     deliveryDate
     dueIn
+    onTime
     techPack {
       fabricCode
       type
@@ -278,6 +276,23 @@ export const ProductsDocument = gql`
     }
     preProductionSample {
       sku
+    }
+    fabricProduction {
+      lastStartDate
+      sufficientFabric
+      started
+      actualStartDate
+      onTime
+    }
+    production {
+      lastStartDate
+      onTime
+    }
+    qualityControl {
+      lastVisitDate
+    }
+    shipping {
+      lastShippingDate
     }
   }
 }

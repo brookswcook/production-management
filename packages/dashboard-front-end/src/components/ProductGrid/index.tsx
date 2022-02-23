@@ -36,6 +36,12 @@ export default function ProductGrid() {
         return `${params.value as string} days`;
       },
     },
+    {
+      field: "onTime",
+      headerName: "On time",
+      flex: 50,
+      type: "boolean",
+    },
   ];
 
   function CustomToolbar() {

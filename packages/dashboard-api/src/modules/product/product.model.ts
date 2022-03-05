@@ -48,12 +48,16 @@ export class Product {
       );
     },
   })
-  dueIn?: number;
+  dueIn!: number;
 
+  // TODO: add QC and Shipping stages
   @Field()
   @Property({
     get(this: Product) {
-      return this.fabricProduction?.onTime || this.production?.onTime;
+      return (
+        (this.fabricProduction?.onTime || this.production?.onTime) &&
+        this.dueIn > 0
+      );
     },
   })
   onTime?: boolean;

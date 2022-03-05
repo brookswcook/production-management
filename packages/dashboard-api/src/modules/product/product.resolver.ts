@@ -42,7 +42,7 @@ export class ProductResolver {
 
   @Mutation(() => Product)
   async createProduct(@Arg("data") { ...data }: CreateProductInput) {
-    // TODO: use workflow saved in db
+    // TODO: use workflow saved in db. Calculate it based on delivery date
     const productWorkflowData: Partial<Product> = {
       fabricProduction: {
         lastStartDate: new Date(new Date().getTime() + 14 * 8.64e7),

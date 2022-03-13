@@ -1,5 +1,4 @@
-import { Button, Container, Grid } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import { Container, Grid } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -10,6 +9,7 @@ import {
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
 import { useProductsQuery } from "../../generated/graphql";
+import GridToolBarNewProductButton from "../GridToolbarNewProductButton";
 
 export default function ProductGrid() {
   const { data, loading, error } = useProductsQuery({
@@ -47,10 +47,7 @@ export default function ProductGrid() {
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <Button variant="text" size="small" onClick={() => {}}>
-          <AddIcon />
-          New Product
-        </Button>
+        <GridToolBarNewProductButton />
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />

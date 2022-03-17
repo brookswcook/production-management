@@ -1,5 +1,6 @@
-import { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, MouseEvent } from "react";
 import {
+  Button,
   ClickAwayListener,
   FormControl,
   Input,
@@ -10,18 +11,27 @@ import {
   TextField,
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
+import { useEffect } from "react";
 
 interface IProps {
   anchorEl: HTMLElement | null;
 }
 
 const NewProductPopper: FunctionComponent<IProps> = ({ anchorEl }) => {
-  const open = Boolean(anchorEl);
   const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    setOpen(Boolean(anchorEl));
+  }, [anchorEl]);
+
+  function createNewProduct() {
+    setOpen(false);
+  }
 
   return (
-    <ClickAwayListener onClickAway={() => (anchorEl = null)}>
-      <Popper open={open} anchorEl={anchorEl} placement="bottom-start">
+    <Popper open={open} anchorEl={anchorEl} placement="bottom-start">
+      <ClickAwayListener onClickAway={() => setOpen(false)}>
         <Paper
           sx={{
             border: 1,
@@ -51,10 +61,13 @@ const NewProductPopper: FunctionComponent<IProps> = ({ anchorEl }) => {
               }}
               renderInput={params => <TextField {...params} />}
             />
+            <Button variant="contained" onClick={createNewProduct}>
+              Create
+            </Button>
           </Stack>
         </Paper>
-      </Popper>
-    </ClickAwayListener>
+      </ClickAwayListener>
+    </Popper>
   );
 };
 

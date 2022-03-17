@@ -7,7 +7,6 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 export default function App() {
   return (
     <div>
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <AppBar position="static">
           <Toolbar>

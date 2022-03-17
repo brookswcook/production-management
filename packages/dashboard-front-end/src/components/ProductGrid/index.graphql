@@ -1,45 +1,55 @@
+fragment productFields on Product {
+  name
+  model
+  style
+  sku
+  deliveryDate
+  dueIn
+  onTime
+  techPack {
+    fabricCode
+    type
+    print
+    pantone
+    color
+  }
+  fabricSample {
+    sku
+  }
+  fitSamples {
+    sku
+    approved
+  }
+  preProductionSample {
+    sku
+  }
+  fabricProduction {
+    lastStartDate
+    sufficientFabric
+    started
+    actualStartDate
+    onTime
+  }
+  production {
+    lastStartDate
+    onTime
+  }
+  qualityControl {
+    lastVisitDate
+  }
+  shipping {
+    lastShippingDate
+  }
+}
+
 query Products {
   products {
-    name
-    model
-    style
-    sku
-    deliveryDate
-    dueIn
-    onTime
-    techPack {
-      fabricCode
-      type
-      print
-      pantone
-      color
-    }
-    fabricSample {
-      sku
-    }
-    fitSamples {
-      sku
-      approved
-    }
-    preProductionSample {
-      sku
-    }
-    fabricProduction {
-      lastStartDate
-      sufficientFabric
-      started
-      actualStartDate
-      onTime
-    }
-    production {
-      lastStartDate
-      onTime
-    }
-    qualityControl {
-      lastVisitDate
-    }
-    shipping {
-      lastShippingDate
-    }
+    ...productFields
+  }
+}
+
+mutation CreateProduct($data: CreateProductInput!) {
+  createProduct(data: $data) {
+    ...productFields
   }
 }

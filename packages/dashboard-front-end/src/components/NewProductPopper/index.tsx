@@ -12,20 +12,29 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import { useEffect } from "react";
+import { useCreateProductMutation } from "../../generated/graphql";
 
 interface IProps {
   anchorEl: HTMLElement | null;
 }
 
 const NewProductPopper: FunctionComponent<IProps> = ({ anchorEl }) => {
-  const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
+  const [newProductMutation] = useCreateProductMutation();
   const [open, setOpen] = useState<boolean>(false);
+
+  const [model, setModel] = useState<string>("");
+  const [style, setStyle] = useState<string>("");
+  const [sku, setSku] = useState<string>("");
+  const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
 
   useEffect(() => {
     setOpen(Boolean(anchorEl));
   }, [anchorEl]);
 
-  function createNewProduct() {
+  async function createNewProduct() {
+    await newProductMutation({
+      variables: { data: { model, style, sku, deliveryDate } },
+    });
     setOpen(false);
   }
 
@@ -43,15 +52,33 @@ const NewProductPopper: FunctionComponent<IProps> = ({ anchorEl }) => {
           <Stack spacing={2}>
             <FormControl>
               <InputLabel htmlFor="model-input">Model</InputLabel>
-              <Input id="model-input" />
+              <Input
+                id="model-input"
+                value={model}
+                onChange={({ target: { value } }) => {
+                  setModel(value);
+                }}
+              />
             </FormControl>
             <FormControl>
               <InputLabel htmlFor="style-input">Style</InputLabel>
-              <Input id="style-input" />
+              <Input
+                id="style-input"
+                value={style}
+                onChange={({ target: { value } }) => {
+                  setStyle(value);
+                }}
+              />
             </FormControl>
             <FormControl>
               <InputLabel htmlFor="sku-input">SKU</InputLabel>
-              <Input id="sku-input" />
+              <Input
+                id="sku-input"
+                value={sku}
+                onChange={({ target: { value } }) => {
+                  setSku(value);
+                }}
+              />
             </FormControl>
             <DatePicker
               label="Delivery Date"

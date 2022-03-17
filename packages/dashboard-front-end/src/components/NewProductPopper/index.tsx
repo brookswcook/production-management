@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, MouseEvent } from "react";
+import { FunctionComponent, useState } from "react";
 import {
   Button,
   ClickAwayListener,

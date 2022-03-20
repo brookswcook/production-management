@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { useState } from "react";
 import {
   Button,
   ClickAwayListener,
@@ -18,7 +18,7 @@ interface IProps {
   anchorEl: HTMLElement | null;
 }
 
-const NewProductPopper: FunctionComponent<IProps> = ({ anchorEl }) => {
+export default function NewProductPopper({ anchorEl }: IProps) {
   const [newProductMutation] = useCreateProductMutation();
   const [open, setOpen] = useState<boolean>(false);
 
@@ -96,6 +96,4 @@ const NewProductPopper: FunctionComponent<IProps> = ({ anchorEl }) => {
       </ClickAwayListener>
     </Popper>
   );
-};
-
-export default NewProductPopper;
+}

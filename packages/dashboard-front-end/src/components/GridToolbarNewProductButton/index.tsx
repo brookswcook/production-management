@@ -1,9 +1,9 @@
-import { Fragment, FunctionComponent, MouseEvent, useState } from "react";
+import { Fragment, MouseEvent, useState } from "react";
 import { Button } from "@mui/material";
 import NewProductPopper from "../NewProductPopper";
 import AddIcon from "@mui/icons-material/Add";
 
-const GridToolBarNewProductButton: FunctionComponent = () => {
+export default function GridToolBarNewProductButton() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   function toggleNewProduct(event: MouseEvent<HTMLElement>) {
@@ -19,6 +19,4 @@ const GridToolBarNewProductButton: FunctionComponent = () => {
       <NewProductPopper anchorEl={anchorEl} />
     </Fragment>
   );
-};
-
-export default GridToolBarNewProductButton;
+}

@@ -42,11 +42,11 @@ const NewProductPopper: FunctionComponent<IProps> = ({ anchorEl }) => {
     <Popper open={open} anchorEl={anchorEl} placement="bottom-start">
       <ClickAwayListener onClickAway={() => setOpen(false)}>
         <Paper
+          elevation={9}
           sx={{
-            border: 1,
-            p: 1,
+            padding: 1,
             bgcolor: "background.paper",
-            transform: "translate3d(-5px, 60px, 0px)",
+            transform: "translate3d(-4px, 58px, 0px)",
           }}
         >
           <Stack spacing={2}>

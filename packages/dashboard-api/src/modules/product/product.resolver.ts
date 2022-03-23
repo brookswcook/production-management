@@ -1,5 +1,6 @@
 import {
   Arg,
+  Authorized,
   FieldResolver,
   Mutation,
   Query,
@@ -35,11 +36,13 @@ export class ProductResolver {
   }
 
   // TODO: consider to use lean() with getter plugin
+  @Authorized()
   @Query(() => [Product])
   products() {
     return ProductModel.find().exec();
   }
 
+  @Authorized()
   @Mutation(() => Product)
   async createProduct(@Arg("data") { ...data }: CreateProductInput) {
     // TODO: use workflow saved in db. Calculate it based on delivery date
@@ -60,6 +63,7 @@ export class ProductResolver {
     return new ProductModel({ ...productWorkflowData, ...data }).save();
   }
 
+  @Authorized()
   @Mutation(() => Product)
   async uploadTechPack(
     @Arg("data") { productName, ...data }: UploadTechPackInput
@@ -67,6 +71,7 @@ export class ProductResolver {
     return this.updatePerProductNameOrFail(productName, { techPack: data });
   }
 
+  @Authorized()
   @Mutation(() => Product)
   async sendFabricSample(
     @Arg("data") { productName, ...data }: SendSampleInput
@@ -78,6 +83,7 @@ export class ProductResolver {
     return product.save();
   }
 
+  @Authorized()
   @Mutation(() => Product)
   async markFabricSampleDelivered(
     @Arg("data") { productName }: UniqueSampleInput
@@ -88,6 +94,7 @@ export class ProductResolver {
     return product.save();
   }
 
+  @Authorized()
   @Mutation(() => Product)
   async approveFabricSample(
     @Arg("data") { productName }: UniqueSampleInput
@@ -99,6 +106,7 @@ export class ProductResolver {
     return product.save();
   }
 
+  @Authorized()
   @Mutation(() => Product)
   async startFabricProduction(
     @Arg("data") { productName }: StartFabricProductionInput
@@ -110,6 +118,7 @@ export class ProductResolver {
     });
   }
 
+  @Authorized()
   @Mutation(() => Product)
   async startProduction(
     @Arg("data") { productName }: StartProductionInput

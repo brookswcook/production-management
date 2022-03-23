@@ -16,6 +16,7 @@ import jwt from "express-jwt";
 import { jwtAuth } from "./lib/jwt";
 import { buildSchema } from "type-graphql";
 import mongoose from "mongoose";
+import { authChecker } from "./lib/auth";
 
 class DashboardApolloServer extends Server {
   constructor() {
@@ -34,6 +35,7 @@ class DashboardApolloServer extends Server {
   protected async setupApolloServer(): Promise<ApolloServer> {
     const schema = await buildSchema({
       resolvers: [__dirname + "/modules/**/*.resolver.{js,ts}"],
+      authChecker,
     });
     return new ApolloServer({
       plugins: [
@@ -42,6 +44,9 @@ class DashboardApolloServer extends Server {
       ],
       introspection: true,
       schema,
+      context: ({ req }) => ({
+        user: req.user,
+      }),
     });
   }
 

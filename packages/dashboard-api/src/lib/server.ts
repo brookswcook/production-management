@@ -1,3 +1,4 @@
+import { AuthenticationError } from "apollo-server-express";
 import express from "express";
 import http from "http";
 import logger from "./logger";
@@ -43,7 +44,9 @@ export class Server {
         _next: express.NextFunction
       ) => {
         if (error.name === "UnauthorizedError") {
-          res.status(401).send("Unauthorized");
+          return res
+            .status(401)
+            .send(new AuthenticationError("Not authorized or invalid token!"));
         }
         this.logger.error(error.stack);
         return res.status(500).end();
@@ -53,7 +56,7 @@ export class Server {
       res.status(404).send({ error: true, message: "Check your URL please" });
     });
 
-    return new Promise<void>((resolve) =>
+    return new Promise<void>(resolve =>
       this.httpServer.listen({ port: this.port }, () => {
         this.logger.info(`ENV: ${this.nodeEnv}`);
         this.logger.info(`Server ready at http://localhost:${this.port}`);

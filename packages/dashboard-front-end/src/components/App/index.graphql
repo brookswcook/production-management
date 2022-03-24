@@ -1,5 +1,6 @@
-query User {
-  user {
-    name
+query Users {
+  users {
+    email
+    date
   }
 }

@@ -41,10 +41,16 @@ export type FitSample = {
   trackNumber: Scalars['String'];
 };
 
+export type LoginInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   approveFabricSample: Product;
   createProduct: Product;
+  login: Scalars['String'];
   markFabricSampleDelivered: Product;
   sendFabricSample: Product;
   sendFitSample: FitSample;
@@ -61,6 +67,11 @@ export type MutationApproveFabricSampleArgs = {
 
 export type MutationCreateProductArgs = {
   data: CreateProductInput;
+};
+
+
+export type MutationLoginArgs = {
+  data: LoginInput;
 };
 
 
@@ -140,7 +151,7 @@ export type ProductShipping = {
 export type Query = {
   __typename?: 'Query';
   products: Array<Product>;
-  user: User;
+  users: Array<User>;
 };
 
 export type Sample = {
@@ -189,7 +200,7 @@ export type UploadTechPackInput = {
 export type User = {
   __typename?: 'User';
   date: Scalars['DateTime'];
-  name: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type Workflow = {
@@ -205,10 +216,10 @@ export type WorkflowStage = {
   duration: Scalars['Float'];
 };
 
-export type UserQueryVariables = Exact<{ [key: string]: never; }>;
+export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', name: string } };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', email: string, date: any }> };
 
 export type ProductFieldsFragment = { __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null };
 
@@ -269,40 +280,41 @@ export const ProductFieldsFragmentDoc = gql`
   }
 }
     `;
-export const UserDocument = gql`
-    query User {
-  user {
-    name
+export const UsersDocument = gql`
+    query Users {
+  users {
+    email
+    date
   }
 }
     `;
 
 /**
- * __useUserQuery__
+ * __useUsersQuery__
  *
- * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserQuery({
+ * const { data, loading, error } = useUsersQuery({
  *   variables: {
  *   },
  * });
  */
-export function useUserQuery(baseOptions?: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+export function useUsersQuery(baseOptions?: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        return Apollo.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
       }
-export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+          return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
         }
-export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
-export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
-export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
+export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
+export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
 export const ProductsDocument = gql`
     query Products {
   products {

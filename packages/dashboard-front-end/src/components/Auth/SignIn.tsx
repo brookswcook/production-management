@@ -17,7 +17,9 @@ import { AuthContext } from "./AuthProvider";
 import { useLoginMutation } from "../../generated/graphql";
 import { toast } from "react-toastify";
 
-function Copyright(props: any) {
+type JSONValue = string | number | { [x: string]: JSONValue };
+
+function Copyright(props: { [x: string]: JSONValue }) {
   return (
     <Typography
       variant="body2"

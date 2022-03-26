@@ -7,7 +7,11 @@ interface AuthContextType {
   signOut: () => void;
 }
 
-export const AuthContext = createContext<AuthContextType>(null!);
+export const AuthContext = createContext<AuthContextType>({
+  token: null,
+  signIn() {},
+  signOut() {},
+});
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { token, setToken } = useToken();

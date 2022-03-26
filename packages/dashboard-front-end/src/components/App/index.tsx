@@ -23,6 +23,8 @@ import {
 import SignIn from "../Auth/SignIn";
 import RequireAuth from "../Auth/RequireAuth";
 import { AuthContext, AuthProvider } from "../Auth/AuthProvider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Dashboard() {
   const { signOut } = useContext(AuthContext);
@@ -74,6 +76,7 @@ function ApolloApp() {
             <Route path="/" element={<Dashboard />} />
           </Routes>
         </Router>
+        <ToastContainer />
       </LocalizationProvider>
     </ApolloProvider>
   );

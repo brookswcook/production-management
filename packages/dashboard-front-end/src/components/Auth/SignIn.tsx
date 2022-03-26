@@ -11,9 +11,11 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./AuthProvider";
+import { useLoginMutation } from "../../generated/graphql";
+import { toast } from "react-toastify";
 
 function Copyright(props: any) {
   return (
@@ -33,29 +35,28 @@ function Copyright(props: any) {
   );
 }
 
-interface IStateType {
-  from: { pathname: string };
-}
-
 export default function SignIn() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { signIn } = useContext(AuthContext);
+  const [loginMutation] = useLoginMutation();
 
-  const {
-    from: { pathname = "" },
-  } = location.state as IStateType;
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    try {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+      const email = data.get("email") as string;
+      const password = data.get("password") as string;
 
-    const email = data.get("email") as string;
-    const password = data.get("password") as string;
+      const { data: loginData } = await loginMutation({
+        variables: { data: { email, password } },
+      });
 
-    void signIn(email, password).then(() =>
-      navigate(pathname, { replace: true })
-    );
+      signIn(loginData?.login ?? null);
+      navigate("/", { replace: true });
+    } catch (error) {
+      toast.error("Login failed");
+    }
   }
 
   return (

@@ -1,9 +1,27 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { REACT_APP_APOLLO_SERVER_URI } from "./config";
+import { setContext } from "@apollo/client/link/context";
 
-const client = new ApolloClient({
-  uri: REACT_APP_APOLLO_SERVER_URI,
-  cache: new InMemoryCache(),
-});
+export default function createClient(authToken: string | null) {
+  const httpLink = createHttpLink({
+    uri: REACT_APP_APOLLO_SERVER_URI,
+  });
 
-export default client;
+  const authLink = createAuthLink(authToken);
+
+  return new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+  });
+}
+
+function createAuthLink(token: string | null) {
+  return setContext((_, { headers }: { headers: object }) => {
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      },
+    };
+  });
+}

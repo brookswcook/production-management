@@ -47,9 +47,3 @@ query Products {
     ...productFields
   }
 }
-
-mutation CreateProduct($data: CreateProductInput!) {
-  createProduct(data: $data) {
-    ...productFields
-  }
-}

@@ -1,13 +1,36 @@
-import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Button,
+  createTheme,
+  IconButton,
+  ThemeProvider,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ProductGrid from "../ProductGrid";
+import { Fragment, useContext } from "react";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { ApolloProvider } from "@apollo/client";
+import createApolloClient from "../../apolloClient";
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
+import SignIn from "../Auth/SignIn";
+import RequireAuth from "../Auth/RequireAuth";
+import { AuthContext, AuthProvider } from "../Auth/AuthProvider";
 
-export default function App() {
+function Dashboard() {
+  const { signOut } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   return (
-    <div>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <RequireAuth>
+      <Fragment>
         <AppBar position="static">
           <Toolbar>
             <IconButton
@@ -22,11 +45,47 @@ export default function App() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Production control app
             </Typography>
-            <Button color="inherit">Logout</Button>
+            <Button
+              color="inherit"
+              onClick={() => signOut().then(() => navigate("/"))}
+            >
+              Logout
+            </Button>
           </Toolbar>
         </AppBar>
         <ProductGrid />
+      </Fragment>
+    </RequireAuth>
+  );
+}
+
+function ApolloApp() {
+  const { token } = useContext(AuthContext);
+  const apolloClient = createApolloClient(token);
+
+  return (
+    <ApolloProvider client={apolloClient}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <Router>
+          <Routes>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/" element={<Dashboard />} />
+          </Routes>
+        </Router>
       </LocalizationProvider>
-    </div>
+    </ApolloProvider>
+  );
+}
+
+export default function App() {
+  const theme = createTheme();
+  return (
+    <Fragment>
+      <ThemeProvider theme={theme}>
+        <AuthProvider>
+          <ApolloApp />
+        </AuthProvider>
+      </ThemeProvider>
+    </Fragment>
   );
 }

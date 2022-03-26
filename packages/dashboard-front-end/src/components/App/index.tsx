@@ -28,6 +28,11 @@ function Dashboard() {
   const { signOut } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  function onSignOut() {
+    signOut();
+    navigate("/");
+  }
+
   return (
     <RequireAuth>
       <Fragment>
@@ -45,10 +50,7 @@ function Dashboard() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Production control app
             </Typography>
-            <Button
-              color="inherit"
-              onClick={() => signOut().then(() => navigate("/"))}
-            >
+            <Button color="inherit" onClick={onSignOut}>
               Logout
             </Button>
           </Toolbar>
@@ -61,10 +63,10 @@ function Dashboard() {
 
 function ApolloApp() {
   const { token } = useContext(AuthContext);
-  const apolloClient = createApolloClient(token);
+  const client = createApolloClient(token);
 
   return (
-    <ApolloProvider client={apolloClient}>
+    <ApolloProvider client={client}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Router>
           <Routes>

@@ -1,7 +1,3 @@
-# domains:
-# - domain: staging.productionmanagement.com
-#   type: PRIMARY
-#   zone: productionmanagement.com
 envs:
 - key: NODE_ENV
   scope: RUN_AND_BUILD_TIME
@@ -24,5 +20,5 @@ services:
   instance_count: 1
   instance_size_slug: basic-xxs
   routes:
-  - path: /graphql
+  - path: /
   source_dir: /

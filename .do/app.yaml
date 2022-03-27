@@ -20,5 +20,22 @@ services:
   instance_count: 1
   instance_size_slug: basic-xxs
   routes:
+  - path: /graphql
+  source_dir: /
+
+- name: dashboard-front-end
+  dockerfile_path: packages/dashboard-front-end
+  envs:
+    - key: REACT_APP_APOLLO_SERVER_URI
+      scope: RUN_AND_BUILD_TIME
+      value: http://localhost:4000/graphql
+  github:
+    branch: master
+    deploy_on_push: true
+    repo: vitaliyazvinski/production-management
+  http_port: 80
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  routes:
   - path: /
   source_dir: /

@@ -24,7 +24,7 @@ services:
   source_dir: /
 
 - name: dashboard-front-end
-  dockerfile_path: packages/dashboard-front-end
+  dockerfile_path: packages/dashboard-front-end/Dockerfile
   envs:
     - key: REACT_APP_APOLLO_SERVER_URI
       scope: RUN_AND_BUILD_TIME

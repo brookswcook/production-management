@@ -15,5 +15,5 @@ services:
   instance_size_slug: basic-xxs
   name: production-management
   routes:
-  - path: /api
+  - path: /graphql
   source_dir: /

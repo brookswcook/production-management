@@ -1,0 +1,4 @@
+Dockerfile
+**/tsconfig.tsbuildinfo
+**/node_modules
+**/*.log

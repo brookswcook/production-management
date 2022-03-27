@@ -1,0 +1,19 @@
+# domains:
+# - domain: staging.productionmanagement.com
+#   type: PRIMARY
+#   zone: productionmanagement.com
+name: staging-production-management
+region: sfo
+services:
+- dockerfile_path: packages/dashboard-api/Dockerfile
+  github:
+    branch: master
+    deploy_on_push: true
+    repo: vitaliyazvinski/production-management
+  http_port: 4000
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  name: production-management
+  routes:
+  - path: /api
+  source_dir: /

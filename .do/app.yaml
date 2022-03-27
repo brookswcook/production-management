@@ -2,11 +2,20 @@
 # - domain: staging.productionmanagement.com
 #   type: PRIMARY
 #   zone: productionmanagement.com
+envs:
+- key: NODE_ENV
+  scope: RUN_AND_BUILD_TIME
+  value: production
 name: staging-production-management
 region: sfo
 services:
 - name: dashboard-api
   dockerfile_path: packages/dashboard-api/Dockerfile
+  envs:
+    - key: MONGO_URI
+      scope: RUN_AND_BUILD_TIME
+      type: SECRET
+      value: EV[1:0Mt1Sf9ms0EHnF7bf9nqrzo20iAHE8Xc:Mk4H1j/GKw23o288FG95yrp0FFtKSRDFxMEdEPPq+vfQyYrvFQskWeyNRUOev53TOM8ob6LqUPEWfKIIMYbBjxI7Hkvm/BYRGIm2Y1Qk+Tt1mPLT1dyZQI43xB201MTtPssHSMx2Hw==]
   github:
     branch: master
     deploy_on_push: true

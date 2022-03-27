@@ -11,6 +11,6 @@ RUN npm run build
 
 EXPOSE 4000
 
-WORKDIR /usr/src/app/dashboard-api
+WORKDIR /usr/src/app/packages/dashboard-api
 
 CMD [ "npm", "run", "start" ]

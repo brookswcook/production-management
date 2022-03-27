@@ -5,7 +5,8 @@
 name: staging-production-management
 region: sfo
 services:
-- dockerfile_path: packages/dashboard-api/Dockerfile
+- name: dashboard-api
+  dockerfile_path: packages/dashboard-api/Dockerfile
   github:
     branch: master
     deploy_on_push: true
@@ -13,7 +14,6 @@ services:
   http_port: 4000
   instance_count: 1
   instance_size_slug: basic-xxs
-  name: production-management
   routes:
   - path: /graphql
   source_dir: /

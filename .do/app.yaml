@@ -2,37 +2,36 @@ envs:
 - key: NODE_ENV
   scope: RUN_AND_BUILD_TIME
   value: production
+- key: REACT_APP_APOLLO_SERVER_URI
+  scope: RUN_AND_BUILD_TIME
+  value: /api/graphql
 name: staging-production-management
 region: sfo
 services:
 - name: dashboard-api
   dockerfile_path: packages/dashboard-api/Dockerfile
   envs:
-    - key: MONGO_URI
-      scope: RUN_AND_BUILD_TIME
-      type: SECRET
-      value: EV[1:0Mt1Sf9ms0EHnF7bf9nqrzo20iAHE8Xc:Mk4H1j/GKw23o288FG95yrp0FFtKSRDFxMEdEPPq+vfQyYrvFQskWeyNRUOev53TOM8ob6LqUPEWfKIIMYbBjxI7Hkvm/BYRGIm2Y1Qk+Tt1mPLT1dyZQI43xB201MTtPssHSMx2Hw==]
+  - key: MONGO_URI
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:h6ZR6WF4Zkoa67Wakczxgg68JEha/zrI:+XpxsVmXlCScGizl+WNw7C5dZ1N2B+yEZu9BoX66617FtCRgPQBBmr1J009KrCKZCoPr52E5jMAu3+pQwX2MbbKPu50LanffpwYj/nZ28xnyEceb7gnuOkhODzQOHL+w+FFSRSJywQ==]
   github:
     branch: master
     deploy_on_push: true
-    repo: vitaliyazvinski/production-management
+    repo: brookswcook/production-management
   http_port: 4000
   instance_count: 1
   instance_size_slug: basic-xxs
   routes:
-  - path: /graphql
+  - path: /api
   source_dir: /
 
 - name: dashboard-front-end
   dockerfile_path: packages/dashboard-front-end/Dockerfile
-  envs:
-    - key: REACT_APP_APOLLO_SERVER_URI
-      scope: RUN_AND_BUILD_TIME
-      value: http://localhost:4000/graphql
   github:
     branch: master
     deploy_on_push: true
-    repo: vitaliyazvinski/production-management
+    repo: brookswcook/production-management
   http_port: 80
   instance_count: 1
   instance_size_slug: basic-xxs

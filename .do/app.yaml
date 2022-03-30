@@ -2,9 +2,6 @@ envs:
 - key: NODE_ENV
   scope: RUN_AND_BUILD_TIME
   value: production
-- key: REACT_APP_APOLLO_SERVER_URI
-  scope: RUN_AND_BUILD_TIME
-  value: /api/graphql
 name: staging-production-management
 region: sfo
 services:

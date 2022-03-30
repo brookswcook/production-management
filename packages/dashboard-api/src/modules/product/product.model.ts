@@ -62,8 +62,15 @@ export class Product {
   })
   onTime?: boolean;
 
-  stage?: string;
+  @Field()
+  @Property({
+    get(this: Product) {
+      return this.techPack != null;
+    },
+  })
   techPackUploaded?: boolean;
+
+  stage?: string;
   awaitingFabricSample?: boolean;
   awaitingFitSample?: boolean;
   gradingUploaded?: boolean;

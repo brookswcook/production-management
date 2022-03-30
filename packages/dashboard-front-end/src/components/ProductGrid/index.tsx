@@ -4,7 +4,6 @@ import {
   GridColDef,
   GridToolbarColumnsButton,
   GridToolbarContainer,
-  GridToolbarDensitySelector,
   GridToolbarExport,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
@@ -42,6 +41,12 @@ export default function ProductGrid() {
       flex: 50,
       type: "boolean",
     },
+    {
+      field: "techPackUploaded",
+      headerName: "Tech pack",
+      flex: 50,
+      type: "boolean",
+    },
   ];
 
   function CustomToolbar() {
@@ -50,7 +55,6 @@ export default function ProductGrid() {
         <GridToolBarNewProductButton />
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
-        <GridToolbarDensitySelector />
         <GridToolbarExport />
       </GridToolbarContainer>
     );

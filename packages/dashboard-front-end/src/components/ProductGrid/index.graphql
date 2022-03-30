@@ -6,6 +6,7 @@ fragment productFields on Product {
   deliveryDate
   dueIn
   onTime
+  techPackUploaded
   techPack {
     fabricCode
     type

@@ -5,9 +5,11 @@
   "description": "A set of tools to control production schedule",
   "scripts": {
     "start": "lerna run start",
+    "dev": "lerna run dev",
     "build": "lerna run build",
     "format": "prettier --write \"packages/*/src/**/*.{js,jsx,ts,tsx}\"",
-    "lint": "npx lerna exec -- eslint --ext ts,tsx src --quiet"
+    "lint": "npx lerna exec -- eslint --ext ts,tsx src --quiet",
+    "codegen": "lerna run codegen --scope=dashboard-front-end"
   },
   "license": "ISC",
   "volta": {

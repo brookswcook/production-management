@@ -14,7 +14,7 @@ export default function GridToolBarNewProductButton() {
     <Fragment>
       <Button variant="text" size="small" onClick={toggleNewProduct}>
         <AddIcon />
-        New Product
+        New
       </Button>
       <NewProductPopper anchorEl={anchorEl} />
     </Fragment>

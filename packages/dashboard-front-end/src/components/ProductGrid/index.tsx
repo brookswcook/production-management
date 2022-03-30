@@ -63,7 +63,7 @@ export default function ProductGrid() {
           rows={rows}
           columns={columns}
           getRowId={item => item.name as string}
-          pageSize={5}
+          pageSize={10}
           loading={loading}
           error={error}
           autoHeight

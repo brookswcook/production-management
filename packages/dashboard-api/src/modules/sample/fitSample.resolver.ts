@@ -1,9 +1,10 @@
-import { Arg, Mutation, Resolver } from "type-graphql";
+import { Arg, Authorized, Mutation, Resolver } from "type-graphql";
 import { FitSample, FitSampleModel } from "./fitSample.model";
 import { SendSampleInput } from "./sample.input";
 
 @Resolver(FitSample)
 export class FitSampleResolver {
+  @Authorized()
   @Mutation(() => FitSample)
   async sendFitSample(
     @Arg("data") { ...data }: SendSampleInput

@@ -17,11 +17,12 @@ export default function ProductGrid() {
 
   const rows = data ? data.products : [];
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Title", flex: 150 },
+    { field: "name", headerName: "Title", minWidth: 120, flex: 3 },
     {
       field: "deliveryDate",
       headerName: "Delivery date",
-      flex: 150,
+      minWidth: 80,
+      flex: 3,
       type: "date",
       valueFormatter: params => {
         return new Date(params.value as string).toLocaleDateString();
@@ -30,7 +31,8 @@ export default function ProductGrid() {
     {
       field: "dueIn",
       headerName: "Due in",
-      flex: 100,
+      minWidth: 70,
+      flex: 2,
       valueFormatter: params => {
         return `${params.value as string} days`;
       },
@@ -38,13 +40,25 @@ export default function ProductGrid() {
     {
       field: "onTime",
       headerName: "On time",
-      flex: 50,
+      flex: 2,
       type: "boolean",
     },
     {
       field: "techPackUploaded",
       headerName: "Tech pack",
-      flex: 50,
+      flex: 2,
+      type: "boolean",
+    },
+    {
+      field: "awaitingFabricSample",
+      headerName: "Awaiting Fabric Sample",
+      flex: 2,
+      type: "boolean",
+    },
+    {
+      field: "awaitingFitSample",
+      headerName: "Awaiting Fit Sample",
+      flex: 2,
       type: "boolean",
     },
   ];

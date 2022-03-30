@@ -14,7 +14,7 @@ export class FitSample extends Sample {
   @Property({ required: true })
   productName!: string;
 
-  static async getFitSamplesByProductName(
+  static getFitSamplesByProductName(
     this: ReturnModelType<typeof FitSample>,
     productName: string,
     params: Partial<Omit<FitSample, "productName">> = {}

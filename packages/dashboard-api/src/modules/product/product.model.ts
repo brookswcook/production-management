@@ -5,7 +5,7 @@ import {
   Ref,
 } from "@typegoose/typegoose";
 import { Field, Int, ObjectType } from "type-graphql";
-import { FitSample } from "../sample/fitSample.model";
+import { FitSample, FitSampleModel } from "../sample/fitSample.model";
 import { Sample } from "../sample/sample.model";
 import { TechPack } from "../techPack/techPack.model";
 import { FabricProduction } from "../fabricProduction/fabricProduction.model";
@@ -71,9 +71,35 @@ export class Product {
   techPackUploaded?: boolean;
 
   stage?: string;
+
+  // TODO: should it be true if teck pack wasn't uploaded?
+  @Field()
+  @Property({
+    get(this: Product) {
+      return !this.fabricSample?.delivered;
+    },
+  })
   awaitingFabricSample?: boolean;
+
+  @Field()
+  @Property({
+    async get(this: Product) {
+      const fitSamples = await FitSampleModel.getFitSamplesByProductName(
+        this.name
+      );
+      return !fitSamples.some(fitSample => fitSample.delivered);
+    },
+  })
   awaitingFitSample?: boolean;
-  gradingUploaded?: boolean;
+
+  // TODO: define grading
+  // @Field()
+  // @Property({
+  //   get(this: Product) {
+  //     return this.grading != null;
+  //   },
+  // })
+  // gradingUploaded?: boolean;
 
   @Field(() => TechPack, { nullable: true })
   @Property({ _id: false })

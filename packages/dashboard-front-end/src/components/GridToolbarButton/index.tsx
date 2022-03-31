@@ -5,10 +5,12 @@ export default function GridToolbarButton({
   icon,
   title,
   children,
+  disabled,
 }: {
   icon: ReactElement;
   title: string;
   children: ReactElement;
+  disabled?: boolean;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -24,7 +26,12 @@ export default function GridToolbarButton({
 
   return (
     <Fragment>
-      <Button variant="text" size="small" onClick={toggleNewProduct}>
+      <Button
+        disabled={disabled}
+        variant="text"
+        size="small"
+        onClick={toggleNewProduct}
+      >
         {icon}
         {title}
       </Button>

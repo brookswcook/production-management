@@ -2,6 +2,7 @@ import { Container, Grid } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
+  GridSelectionModel,
   GridToolbarColumnsButton,
   GridToolbarContainer,
   GridToolbarExport,
@@ -11,11 +12,14 @@ import { useProductsQuery } from "../../generated/graphql";
 import GridToolbarButton from "../GridToolbarButton";
 import AddIcon from "@mui/icons-material/Add";
 import NewProduct from "../NewProduct";
+import { Fragment, useState } from "react";
 
 export default function ProductGrid() {
   const { data, loading, error } = useProductsQuery({
     variables: {},
   });
+
+  const [selectedItems, setSelectedItems] = useState<GridSelectionModel>([]);
 
   const rows = data ? data.products : [];
   const columns: GridColDef[] = [
@@ -83,6 +87,12 @@ export default function ProductGrid() {
           title="New"
           children={<NewProduct />}
         />
+        <GridToolbarButton
+          icon={<AddIcon />}
+          title="Upload TP"
+          children={<Fragment />}
+          disabled={selectedItems.length !== 1}
+        />
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarExport />
@@ -101,6 +111,9 @@ export default function ProductGrid() {
           loading={loading}
           error={error}
           autoHeight
+          onSelectionModelChange={selectionModel =>
+            setSelectedItems(selectionModel)
+          }
           rowsPerPageOptions={[5]}
           components={{
             Toolbar: CustomToolbar,

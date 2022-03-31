@@ -106,12 +106,12 @@ export type MutationUploadTechPackArgs = {
 
 export type Product = {
   __typename?: 'Product';
-  awaitingFabricSample: Scalars['Boolean'];
-  awaitingFitSample: Scalars['Boolean'];
   deliveryDate: Scalars['DateTime'];
   dueIn: Scalars['Int'];
   fabricProduction?: Maybe<FabricProduction>;
   fabricSample?: Maybe<Sample>;
+  fabricSampleDelivered: Scalars['Boolean'];
+  fitSampleDelivered: Scalars['Boolean'];
   fitSamples: Array<FitSample>;
   model: Scalars['String'];
   name: Scalars['String'];
@@ -121,6 +121,7 @@ export type Product = {
   qualityControl?: Maybe<ProductQualityControl>;
   shipping?: Maybe<ProductShipping>;
   sku: Scalars['String'];
+  stage: Scalars['String'];
   style: Scalars['String'];
   techPack?: Maybe<TechPack>;
   techPackUploaded: Scalars['Boolean'];
@@ -236,14 +237,14 @@ export type CreateProductMutationVariables = Exact<{
 }>;
 
 
-export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, techPackUploaded: boolean, awaitingFabricSample: boolean, awaitingFitSample: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null } };
+export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null } };
 
-export type ProductFieldsFragment = { __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, techPackUploaded: boolean, awaitingFabricSample: boolean, awaitingFitSample: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null };
+export type ProductFieldsFragment = { __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null };
 
 export type ProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, techPackUploaded: boolean, awaitingFabricSample: boolean, awaitingFitSample: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null }> };
+export type ProductsQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null }> };
 
 export const ProductFieldsFragmentDoc = gql`
     fragment productFields on Product {
@@ -255,8 +256,8 @@ export const ProductFieldsFragmentDoc = gql`
   dueIn
   onTime
   techPackUploaded
-  awaitingFabricSample
-  awaitingFitSample
+  fabricSampleDelivered
+  fitSampleDelivered
   techPack {
     fabricCode
     type

@@ -72,14 +72,13 @@ export class Product {
 
   stage?: string;
 
-  // TODO: should it be true if teck pack wasn't uploaded?
   @Field()
   @Property({
     get(this: Product) {
-      return !this.fabricSample?.delivered;
+      return this.fabricSample?.delivered;
     },
   })
-  awaitingFabricSample?: boolean;
+  fabricSampleDelivered?: boolean;
 
   @Field()
   @Property({
@@ -87,10 +86,10 @@ export class Product {
       const fitSamples = await FitSampleModel.getFitSamplesByProductName(
         this.name
       );
-      return !fitSamples.some(fitSample => fitSample.delivered);
+      return fitSamples.some(fitSample => fitSample.delivered);
     },
   })
-  awaitingFitSample?: boolean;
+  fitSampleDelivered?: boolean;
 
   // TODO: define grading
   // @Field()

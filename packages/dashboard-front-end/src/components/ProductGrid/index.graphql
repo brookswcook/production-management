@@ -7,8 +7,8 @@ fragment productFields on Product {
   dueIn
   onTime
   techPackUploaded
-  awaitingFabricSample
-  awaitingFitSample
+  fabricSampleDelivered
+  fitSampleDelivered
   techPack {
     fabricCode
     type

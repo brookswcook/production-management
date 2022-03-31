@@ -34,7 +34,12 @@ export class ProductResolver {
         lastShippingDate: new Date(new Date().getTime() + 35 * 8.64e7),
       },
     };
-    return new ProductModel({ ...productWorkflowData, ...data }).save();
+    return (
+      await new ProductModel({
+        ...productWorkflowData,
+        ...data,
+      }).save()
+    ).populate("fitSamples");
   }
 
   @Authorized()

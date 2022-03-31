@@ -2,10 +2,9 @@ import {
   getModelForClass,
   index,
   prop as Property,
-  Ref,
 } from "@typegoose/typegoose";
 import { Field, Int, ObjectType } from "type-graphql";
-import { FitSample, FitSampleModel } from "../sample/fitSample.model";
+import { FitSample } from "../sample/fitSample.model";
 import { Sample } from "../sample/sample.model";
 import { TechPack } from "../techPack/techPack.model";
 import { FabricProduction } from "../fabricProduction/fabricProduction.model";
@@ -70,23 +69,31 @@ export class Product {
   })
   techPackUploaded?: boolean;
 
+  @Field()
+  @Property({
+    get(this: Product) {
+      if (this.production?.started) return "Production";
+      else if (this.fabricProduction?.started) return "Pre-Cut & Sew";
+      else if (this.fitSamples.length > 0) return "Fit Sampling";
+      else if (this.fabricSample) return "Fabric Sampling";
+      else if (this.techPack) return "Pre-Sampling";
+      else return "Planning";
+    },
+  })
   stage?: string;
 
   @Field()
   @Property({
     get(this: Product) {
-      return this.fabricSample?.delivered;
+      return this.fabricSample?.delivered ?? false;
     },
   })
   fabricSampleDelivered?: boolean;
 
   @Field()
   @Property({
-    async get(this: Product) {
-      const fitSamples = await FitSampleModel.getFitSamplesByProductName(
-        this.name
-      );
-      return fitSamples.some(fitSample => fitSample.delivered);
+    get(this: Product) {
+      return this.fitSamples.some(fitSample => fitSample.delivered);
     },
   })
   fitSampleDelivered?: boolean;
@@ -109,12 +116,21 @@ export class Product {
   fabricSample?: Sample;
 
   // Note: might be useful to get it as part of product by populate, see also getFitSamplesByProductName
+  @Field(() => [FitSample])
   @Property({
     ref: () => FitSample,
     foreignField: "productName",
     localField: "name",
   })
-  fitSamples!: Ref<FitSample>[];
+  fitSamples!: FitSample[];
+
+  @Field(() => FitSample, { nullable: true })
+  @Property({
+    get(this: Product) {
+      return this.fitSamples.find(sample => sample.approved);
+    },
+  })
+  preProductionSample?: FitSample;
 
   @Field(() => FabricProduction, { nullable: true })
   @Property({ _id: false })
@@ -131,6 +147,34 @@ export class Product {
   @Field(() => ProductShipping, { nullable: true })
   @Property({ _id: false })
   shipping?: ProductShipping;
+
+  static async findPerProductNameOrFail(
+    productName: string,
+    populatePath = ""
+  ) {
+    const product = await ProductModel.findOne({
+      name: productName,
+    } as Product)
+      .populate(populatePath)
+      .exec();
+    if (product == null) throw Error(`Product with given title not found`);
+    return product;
+  }
+
+  static async updatePerProductNameOrFail(
+    productName: string,
+    data: Partial<Product> | { [key: string]: unknown }
+  ): Promise<Product> {
+    const product = await ProductModel.findOneAndUpdate(
+      {
+        name: productName,
+      } as Product,
+      { $set: data },
+      { returnOriginal: false }
+    ).exec();
+    if (product == null) throw Error(`Product with given title not found`);
+    return product;
+  }
 }
 
 export const ProductModel = getModelForClass(Product);

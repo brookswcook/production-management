@@ -2,10 +2,10 @@ import { Field, InputType } from "type-graphql";
 
 @InputType()
 export class UploadTechPackInput {
-  @Field()
+  @Field({ nullable: false })
   productName!: string;
 
-  @Field()
+  @Field({ nullable: false })
   fabricCode!: string;
 
   @Field({ nullable: true })

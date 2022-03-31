@@ -38,6 +38,12 @@ export default function ProductGrid() {
       },
     },
     {
+      field: "stage",
+      headerName: "Stage",
+      flex: 2,
+      type: "string",
+    },
+    {
       field: "onTime",
       headerName: "On time",
       description: "Product lifecycle based on workflow rules is on time",

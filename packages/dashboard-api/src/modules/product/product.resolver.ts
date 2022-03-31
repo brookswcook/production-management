@@ -1,45 +1,19 @@
-import {
-  Arg,
-  Authorized,
-  FieldResolver,
-  Mutation,
-  Query,
-  Resolver,
-  Root,
-} from "type-graphql";
+import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import { SendSampleInput, UniqueSampleInput } from "../sample/sample.input";
 import { UploadTechPackInput } from "../techPack/techPack.input";
 import { CreateProductInput } from "./product.input";
 import { Product, ProductModel } from "./product.model";
-import { FitSample, FitSampleModel } from "../sample/fitSample.model";
-import { DocumentType } from "@typegoose/typegoose";
 import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
 import { StartProductionInput } from "../productProduction/productProduction.input";
 
 @Resolver(Product)
 export class ProductResolver {
-  @FieldResolver(() => [FitSample])
-  fitSamples(@Root() product: DocumentType<Product>): Promise<FitSample[]> {
-    return FitSampleModel.getFitSamplesByProductName(product.toObject().name);
-  }
-
-  // TODO: use loader to avoid redundant db calls
-  @FieldResolver(() => FitSample, { nullable: true })
-  async preProductionSample(
-    @Root() product: DocumentType<Product>
-  ): Promise<FitSample | null> {
-    const approvedFitSamples = await FitSampleModel.getFitSamplesByProductName(
-      product.toObject().name,
-      { approved: true }
-    );
-    return approvedFitSamples.pop() || null;
-  }
-
   // TODO: consider to use lean() with getter plugin
+  // TODO: populate fitSamples only when needed; analyze AST
   @Authorized()
   @Query(() => [Product])
-  products() {
-    return ProductModel.find().exec();
+  async products() {
+    return ProductModel.find().populate("fitSamples").exec();
   }
 
   @Authorized()
@@ -68,7 +42,9 @@ export class ProductResolver {
   async uploadTechPack(
     @Arg("data") { productName, ...data }: UploadTechPackInput
   ): Promise<Product> {
-    return this.updatePerProductNameOrFail(productName, { techPack: data });
+    return ProductModel.updatePerProductNameOrFail(productName, {
+      techPack: data,
+    });
   }
 
   @Authorized()
@@ -76,7 +52,7 @@ export class ProductResolver {
   async sendFabricSample(
     @Arg("data") { productName, ...data }: SendSampleInput
   ): Promise<Product> {
-    const product = await this.findPerProductNameOrFail(productName);
+    const product = await ProductModel.findPerProductNameOrFail(productName);
     if (product.fabricSample != null)
       throw Error("Fabric sample has been already sent!");
     product.fabricSample = data;
@@ -88,7 +64,7 @@ export class ProductResolver {
   async markFabricSampleDelivered(
     @Arg("data") { productName }: UniqueSampleInput
   ): Promise<Product> {
-    const product = await this.findPerProductNameOrFail(productName);
+    const product = await ProductModel.findPerProductNameOrFail(productName);
     if (product.fabricSample == null) throw Error("Fabric sample is not sent!");
     product.fabricSample.delivered = true;
     return product.save();
@@ -99,7 +75,7 @@ export class ProductResolver {
   async approveFabricSample(
     @Arg("data") { productName }: UniqueSampleInput
   ): Promise<Product> {
-    const product = await this.findPerProductNameOrFail(productName);
+    const product = await ProductModel.findPerProductNameOrFail(productName);
     if (product.fabricSample == null || !product.fabricSample.delivered)
       throw Error("Fabric sample is not delivered!");
     product.fabricSample.approved = true;
@@ -111,7 +87,7 @@ export class ProductResolver {
   async startFabricProduction(
     @Arg("data") { productName }: StartFabricProductionInput
   ): Promise<Product> {
-    return this.updatePerProductNameOrFail(productName, {
+    return ProductModel.updatePerProductNameOrFail(productName, {
       "fabricProduction.sufficientFabric": true,
       "fabricProduction.actualStartDate": new Date(),
       "fabricProduction.started": true,
@@ -123,7 +99,7 @@ export class ProductResolver {
   async startProduction(
     @Arg("data") { productName }: StartProductionInput
   ): Promise<Product> {
-    return this.updatePerProductNameOrFail(productName, {
+    return ProductModel.updatePerProductNameOrFail(productName, {
       "production.actualStartDate": new Date(),
       "production.started": true,
     });
@@ -138,32 +114,4 @@ export class ProductResolver {
   //     "production.started": true,
   //   });
   // }
-
-  private async findPerProductNameOrFail(
-    productName: string,
-    populatePath = ""
-  ) {
-    const product = await ProductModel.findOne({
-      title: productName,
-    })
-      .populate(populatePath)
-      .exec();
-    if (product == null) throw Error(`Product with given title not found`);
-    return product;
-  }
-
-  private async updatePerProductNameOrFail(
-    productName: string,
-    data: Partial<Product> | { [key: string]: unknown }
-  ): Promise<Product> {
-    const product = await ProductModel.findOneAndUpdate<Product>(
-      {
-        title: productName,
-      },
-      { $set: data },
-      { returnOriginal: false }
-    ).exec();
-    if (product == null) throw Error(`Product with given title not found`);
-    return product;
-  }
 }

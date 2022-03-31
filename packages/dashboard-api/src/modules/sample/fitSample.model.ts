@@ -11,7 +11,7 @@ import { Sample } from "./sample.model";
 @modelOptions({ schemaOptions: { collection: "fit_samples" } })
 export class FitSample extends Sample {
   //@Field({ nullable: false })
-  @Property({ required: true })
+  @Property({ required: true, index: true })
   productName!: string;
 
   static getFitSamplesByProductName(

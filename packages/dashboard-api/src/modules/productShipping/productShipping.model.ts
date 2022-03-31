@@ -13,6 +13,10 @@ export class ProductShipping {
 
   @Field()
   @Property()
+  shipped?: boolean;
+
+  @Field()
+  @Property()
   trackNumber?: string;
 
   @Field()

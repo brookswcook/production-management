@@ -8,7 +8,9 @@ import {
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
 import { useProductsQuery } from "../../generated/graphql";
-import GridToolBarNewProductButton from "../GridToolbarNewProductButton";
+import GridToolbarButton from "../GridToolbarButton";
+import AddIcon from "@mui/icons-material/Add";
+import NewProduct from "../NewProduct";
 
 export default function ProductGrid() {
   const { data, loading, error } = useProductsQuery({
@@ -76,7 +78,11 @@ export default function ProductGrid() {
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <GridToolBarNewProductButton />
+        <GridToolbarButton
+          icon={<AddIcon />}
+          title="New"
+          children={<NewProduct />}
+        />
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarExport />

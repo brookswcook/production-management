@@ -13,13 +13,16 @@ import {
 import { DatePicker } from "@mui/lab";
 import { useEffect } from "react";
 import { useCreateProductMutation } from "../../generated/graphql";
+import { toast } from "react-toastify";
 
 interface IProps {
   anchorEl: HTMLElement | null;
 }
 
 export default function NewProductPopper({ anchorEl }: IProps) {
-  const [newProductMutation] = useCreateProductMutation();
+  const [newProductMutation] = useCreateProductMutation({
+    refetchQueries: ["Products"],
+  });
   const [open, setOpen] = useState<boolean>(false);
 
   const [model, setModel] = useState<string>("");
@@ -32,10 +35,14 @@ export default function NewProductPopper({ anchorEl }: IProps) {
   }, [anchorEl]);
 
   async function createNewProduct() {
-    await newProductMutation({
-      variables: { data: { model, style, sku, deliveryDate } },
-    });
-    setOpen(false);
+    try {
+      await newProductMutation({
+        variables: { data: { model, style, sku, deliveryDate } },
+      });
+      setOpen(false);
+    } catch (error) {
+      toast.error("User input error");
+    }
   }
 
   return (

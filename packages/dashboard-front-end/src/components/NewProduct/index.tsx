@@ -26,7 +26,6 @@ export default function NewProduct() {
       await newProductMutation({
         variables: { data: { model, style, sku, deliveryDate } },
       });
-      //setOpen(false);
     } catch (error) {
       toast.error("User input error");
     }

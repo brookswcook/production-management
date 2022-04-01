@@ -12,14 +12,23 @@ import { useProductsQuery } from "../../generated/graphql";
 import GridToolbarButton from "../GridToolbarButton";
 import AddIcon from "@mui/icons-material/Add";
 import NewProduct from "../NewProduct";
-import { Fragment, useState } from "react";
+import { useEffect, useState } from "react";
+import TechPackParams from "../TechPackParams";
 
 export default function ProductGrid() {
   const { data, loading, error } = useProductsQuery({
     variables: {},
   });
-
   const [selectedItems, setSelectedItems] = useState<GridSelectionModel>([]);
+  const [singleSelectedItem, setSingleSelectedItem] = useState<
+    string | undefined
+  >();
+
+  useEffect(() => {
+    selectedItems.length === 1
+      ? setSingleSelectedItem(selectedItems.at(0)?.valueOf().toString())
+      : setSingleSelectedItem(undefined);
+  }, [selectedItems]);
 
   const rows = data ? data.products : [];
   const columns: GridColDef[] = [
@@ -90,8 +99,8 @@ export default function ProductGrid() {
         <GridToolbarButton
           icon={<AddIcon />}
           title="Upload TP"
-          children={<Fragment />}
-          disabled={selectedItems.length !== 1}
+          children={<TechPackParams productName={singleSelectedItem} />}
+          disabled={singleSelectedItem == null}
         />
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />

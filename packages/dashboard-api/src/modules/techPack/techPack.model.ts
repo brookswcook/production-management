@@ -1,5 +1,6 @@
 import { prop as Property } from "@typegoose/typegoose";
 import { Field, ObjectType } from "type-graphql";
+import { TechPackType } from "dashboard-core";
 
 // It's used as embedded document of product so there's no need to get a model through getModelForClass
 // otherwise typegoose will create dedicated collection which is not needed
@@ -9,7 +10,6 @@ export class TechPack {
   @Property()
   fabricCode!: string;
 
-  // TODO: create shared type print|pantone
   @Field({ nullable: true })
   @Property({
     get(this: TechPack) {
@@ -18,7 +18,7 @@ export class TechPack {
       return null;
     },
   })
-  type?: string;
+  type?: TechPackType;
 
   @Field({ nullable: true })
   @Property()

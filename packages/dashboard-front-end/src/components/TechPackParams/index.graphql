@@ -1,0 +1,13 @@
+mutation UploadTechPack($data: UploadTechPackInput!) {
+  uploadTechPack(data: $data) {
+    name
+    deliveryDate
+    techPack {
+      fabricCode
+      type
+      print
+      pantone
+      color
+    }
+  }
+}

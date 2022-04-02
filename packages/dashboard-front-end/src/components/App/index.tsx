@@ -19,6 +19,7 @@ import {
   BrowserRouter as Router,
   Routes,
   useNavigate,
+  Link,
 } from "react-router-dom";
 import SignIn from "../Auth/SignIn";
 import RequireAuth from "../Auth/RequireAuth";
@@ -50,10 +51,14 @@ function Dashboard({ children }: { children: ReactElement }) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Production control app
-            </Typography>
-            <Button color="inherit" onClick={onSignOut}>
+            <Button variant="text" size="small">
+              <Typography variant="h6" sx={{ color: "white" }}>
+                <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+                  Production Management App
+                </Link>
+              </Typography>
+            </Button>
+            <Button color="inherit" onClick={onSignOut} sx={{ ml: "auto" }}>
               Logout
             </Button>
           </Toolbar>

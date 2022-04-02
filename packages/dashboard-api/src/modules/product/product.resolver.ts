@@ -17,6 +17,12 @@ export class ProductResolver {
   }
 
   @Authorized()
+  @Query(() => Product)
+  async product(@Arg("productName", { nullable: false }) productName: string) {
+    return ProductModel.findPerProductNameOrFail(productName, "fitSamples");
+  }
+
+  @Authorized()
   @Mutation(() => Product)
   async createProduct(@Arg("data") { ...data }: CreateProductInput) {
     // TODO: use workflow saved in db. Calculate it based on delivery date

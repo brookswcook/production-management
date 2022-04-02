@@ -157,7 +157,7 @@ export class Product {
     } as Product)
       .populate(populatePath)
       .exec();
-    if (product == null) throw Error(`Product with given title not found`);
+    if (product == null) throw Error(`Product with given name not found`);
     return product;
   }
 

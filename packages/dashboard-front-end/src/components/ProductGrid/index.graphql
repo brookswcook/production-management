@@ -64,3 +64,9 @@ query Products {
     ...productFields
   }
 }
+
+query Product($productName: String!) {
+  product(productName: $productName) {
+    ...productFields
+  }
+}

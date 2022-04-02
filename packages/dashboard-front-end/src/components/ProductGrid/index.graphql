@@ -1,3 +1,17 @@
+fragment sampleFields on Sample {
+  sku
+  approved
+  trackNumber
+  delivered
+}
+
+fragment fitSampleFields on FitSample {
+  sku
+  approved
+  trackNumber
+  delivered
+}
+
 fragment productFields on Product {
   name
   model
@@ -18,14 +32,13 @@ fragment productFields on Product {
     color
   }
   fabricSample {
-    sku
+    ...sampleFields
   }
   fitSamples {
-    sku
-    approved
+    ...fitSampleFields
   }
   preProductionSample {
-    sku
+    ...fitSampleFields
   }
   fabricProduction {
     lastStartDate

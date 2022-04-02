@@ -1,0 +1,5 @@
+mutation SendFabricSample($data: SendSampleInput!) {
+  sendFabricSample(data: $data) {
+    name
+  }
+}

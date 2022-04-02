@@ -238,14 +238,25 @@ export type CreateProductMutationVariables = Exact<{
 }>;
 
 
-export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null } };
+export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null } };
 
-export type ProductFieldsFragment = { __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null };
+export type SampleFieldsFragment = { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null };
+
+export type FitSampleFieldsFragment = { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null };
+
+export type ProductFieldsFragment = { __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null };
 
 export type ProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null }> };
+export type ProductsQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: any, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: any, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: any | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: any, onTime?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: any } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: any } | null }> };
+
+export type SendFabricSampleMutationVariables = Exact<{
+  data: SendSampleInput;
+}>;
+
+
+export type SendFabricSampleMutation = { __typename?: 'Mutation', sendFabricSample: { __typename?: 'Product', name: string } };
 
 export type UploadTechPackMutationVariables = Exact<{
   data: UploadTechPackInput;
@@ -254,6 +265,22 @@ export type UploadTechPackMutationVariables = Exact<{
 
 export type UploadTechPackMutation = { __typename?: 'Mutation', uploadTechPack: { __typename?: 'Product', name: string, deliveryDate: any, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null } };
 
+export const SampleFieldsFragmentDoc = gql`
+    fragment sampleFields on Sample {
+  sku
+  approved
+  trackNumber
+  delivered
+}
+    `;
+export const FitSampleFieldsFragmentDoc = gql`
+    fragment fitSampleFields on FitSample {
+  sku
+  approved
+  trackNumber
+  delivered
+}
+    `;
 export const ProductFieldsFragmentDoc = gql`
     fragment productFields on Product {
   name
@@ -275,14 +302,13 @@ export const ProductFieldsFragmentDoc = gql`
     color
   }
   fabricSample {
-    sku
+    ...sampleFields
   }
   fitSamples {
-    sku
-    approved
+    ...fitSampleFields
   }
   preProductionSample {
-    sku
+    ...fitSampleFields
   }
   fabricProduction {
     lastStartDate
@@ -302,7 +328,8 @@ export const ProductFieldsFragmentDoc = gql`
     lastShippingDate
   }
 }
-    `;
+    ${SampleFieldsFragmentDoc}
+${FitSampleFieldsFragmentDoc}`;
 export const UsersDocument = gql`
     query Users {
   users {
@@ -436,6 +463,39 @@ export function useProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<P
 export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
 export type ProductsLazyQueryHookResult = ReturnType<typeof useProductsLazyQuery>;
 export type ProductsQueryResult = Apollo.QueryResult<ProductsQuery, ProductsQueryVariables>;
+export const SendFabricSampleDocument = gql`
+    mutation SendFabricSample($data: SendSampleInput!) {
+  sendFabricSample(data: $data) {
+    name
+  }
+}
+    `;
+export type SendFabricSampleMutationFn = Apollo.MutationFunction<SendFabricSampleMutation, SendFabricSampleMutationVariables>;
+
+/**
+ * __useSendFabricSampleMutation__
+ *
+ * To run a mutation, you first call `useSendFabricSampleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendFabricSampleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendFabricSampleMutation, { data, loading, error }] = useSendFabricSampleMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useSendFabricSampleMutation(baseOptions?: Apollo.MutationHookOptions<SendFabricSampleMutation, SendFabricSampleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendFabricSampleMutation, SendFabricSampleMutationVariables>(SendFabricSampleDocument, options);
+      }
+export type SendFabricSampleMutationHookResult = ReturnType<typeof useSendFabricSampleMutation>;
+export type SendFabricSampleMutationResult = Apollo.MutationResult<SendFabricSampleMutation>;
+export type SendFabricSampleMutationOptions = Apollo.BaseMutationOptions<SendFabricSampleMutation, SendFabricSampleMutationVariables>;
 export const UploadTechPackDocument = gql`
     mutation UploadTechPack($data: UploadTechPackInput!) {
   uploadTechPack(data: $data) {

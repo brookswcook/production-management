@@ -8,29 +8,32 @@ import {
   GridToolbarExport,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { useProductsQuery } from "../../generated/graphql";
+import {
+  ProductFieldsFragment,
+  useProductsQuery,
+} from "../../generated/graphql";
 import GridToolbarButton from "../GridToolbarButton";
 import AddIcon from "@mui/icons-material/Add";
 import NewProduct from "../NewProduct";
-import { useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import TechPackParams from "../TechPackParams";
+import { SendSampleParams } from "../SampleParams";
 
 export default function ProductGrid() {
   const { data, loading, error } = useProductsQuery({
     variables: {},
   });
-  const [selectedItems, setSelectedItems] = useState<GridSelectionModel>([]);
-  const [singleSelectedItem, setSingleSelectedItem] = useState<
-    string | undefined
-  >();
+  const rows: ProductFieldsFragment[] = data ? data.products : [];
+  const [selectedGridItems, setSelectedGridItems] =
+    useState<GridSelectionModel>([]);
 
-  useEffect(() => {
-    selectedItems.length === 1
-      ? setSingleSelectedItem(selectedItems.at(0)?.valueOf().toString())
-      : setSingleSelectedItem(undefined);
-  }, [selectedItems]);
+  const selectedProductsNames = Array.from(selectedGridItems.values());
+  const selectedProducts = rows.filter(row =>
+    selectedProductsNames.some(name => row.name == name)
+  );
+  const selectedSingleProductName =
+    selectedProducts.length === 1 ? selectedProducts[0].name : undefined;
 
-  const rows = data ? data.products : [];
   const columns: GridColDef[] = [
     { field: "name", headerName: "Title", minWidth: 120, flex: 3 },
     {
@@ -90,22 +93,68 @@ export default function ProductGrid() {
 
   function CustomToolbar() {
     return (
-      <GridToolbarContainer>
-        <GridToolbarButton
-          icon={<AddIcon />}
-          title="New"
-          children={<NewProduct />}
-        />
-        <GridToolbarButton
-          icon={<AddIcon />}
-          title="Upload TP"
-          children={<TechPackParams productName={singleSelectedItem} />}
-          disabled={singleSelectedItem == null}
-        />
-        <GridToolbarColumnsButton />
-        <GridToolbarFilterButton />
-        <GridToolbarExport />
-      </GridToolbarContainer>
+      <Fragment>
+        <GridToolbarContainer>
+          <GridToolbarColumnsButton />
+          <GridToolbarFilterButton />
+          <GridToolbarExport />
+        </GridToolbarContainer>
+        <GridToolbarContainer>
+          <GridToolbarButton
+            icon={<AddIcon />}
+            title="New"
+            children={<NewProduct />}
+          />
+          <GridToolbarButton
+            icon={<Fragment />}
+            title="Upload TP"
+            children={
+              <TechPackParams productName={selectedSingleProductName} />
+            }
+            disabled={selectedProducts.length !== 1}
+          />
+          <GridToolbarButton
+            icon={<Fragment />}
+            title="Send FaS"
+            children={
+              <SendSampleParams productName={selectedSingleProductName} />
+            }
+            disabled={selectedProducts.length !== 1}
+          />
+          <GridToolbarButton
+            icon={<Fragment />}
+            title="Mark FaS delivered"
+            children={<Fragment />}
+            disabled={selectedProducts.length !== 1}
+          />
+          <GridToolbarButton
+            icon={<Fragment />}
+            title="Approve FaS"
+            children={<Fragment />}
+            disabled={selectedProducts.length !== 1}
+          />
+          <GridToolbarButton
+            icon={<Fragment />}
+            title="Send FiS"
+            children={
+              <SendSampleParams productName={selectedSingleProductName} />
+            }
+            disabled={selectedProducts.length !== 1}
+          />
+          <GridToolbarButton
+            icon={<Fragment />}
+            title="Mark FiS delivered"
+            children={<Fragment />}
+            disabled={selectedProducts.length !== 1}
+          />
+          <GridToolbarButton
+            icon={<Fragment />}
+            title="Approve FiS"
+            children={<Fragment />}
+            disabled={selectedProducts.length !== 1}
+          />
+        </GridToolbarContainer>
+      </Fragment>
     );
   }
 
@@ -121,7 +170,7 @@ export default function ProductGrid() {
           error={error}
           autoHeight
           onSelectionModelChange={selectionModel =>
-            setSelectedItems(selectionModel)
+            setSelectedGridItems(selectionModel)
           }
           rowsPerPageOptions={[5]}
           components={{

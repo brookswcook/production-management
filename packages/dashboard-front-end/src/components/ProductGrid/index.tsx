@@ -2,6 +2,7 @@ import { Container, Grid } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
+  GridRenderCellParams,
   GridSelectionModel,
   GridToolbarColumnsButton,
   GridToolbarContainer,
@@ -18,6 +19,7 @@ import NewProduct from "../NewProduct";
 import { Fragment, useState } from "react";
 import TechPackParams from "../TechPackParams";
 import { SendSampleParams } from "../SampleParams";
+import { Link } from "react-router-dom";
 
 export default function ProductGrid() {
   const { data, loading, error } = useProductsQuery({
@@ -35,7 +37,17 @@ export default function ProductGrid() {
     selectedProducts.length === 1 ? selectedProducts[0].name : undefined;
 
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Title", minWidth: 120, flex: 3 },
+    {
+      field: "name",
+      headerName: "Title",
+      minWidth: 120,
+      flex: 3,
+      renderCell({ id, formattedValue }: GridRenderCellParams) {
+        const linkPath = `/products/${id}`;
+        const linkText = `${formattedValue as string}`;
+        return <Link to={linkPath}>{linkText}</Link>;
+      },
+    },
     {
       field: "deliveryDate",
       headerName: "Delivery date",

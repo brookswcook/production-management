@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ProductGrid from "../ProductGrid";
-import { Fragment, useContext } from "react";
+import { Fragment, ReactElement, useContext } from "react";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { ApolloProvider } from "@apollo/client";
@@ -25,8 +25,9 @@ import RequireAuth from "../Auth/RequireAuth";
 import { AuthContext, AuthProvider } from "../Auth/AuthProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProductDetail from "../ProductDetail";
 
-function Dashboard() {
+function Dashboard({ children }: { children: ReactElement }) {
   const { signOut } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -57,7 +58,7 @@ function Dashboard() {
             </Button>
           </Toolbar>
         </AppBar>
-        <ProductGrid />
+        {children}
       </Fragment>
     </RequireAuth>
   );
@@ -73,7 +74,14 @@ function ApolloApp() {
         <Router>
           <Routes>
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/" element={<Dashboard />} />
+            <Route
+              path="/"
+              element={<Dashboard children={<ProductGrid />} />}
+            />
+            <Route
+              path="/products/:name"
+              element={<Dashboard children={<ProductDetail />} />}
+            />
           </Routes>
         </Router>
         <ToastContainer />

@@ -84,7 +84,7 @@ function ApolloApp() {
               element={<Dashboard children={<ProductGrid />} />}
             />
             <Route
-              path="/products/:name"
+              path="/products/:productName"
               element={<Dashboard children={<ProductDetail />} />}
             />
           </Routes>

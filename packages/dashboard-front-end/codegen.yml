@@ -9,3 +9,5 @@ generates:
       - "typescript-react-apollo"
     config:
       withHooks: true
+      scalars: 
+        DateTime: string

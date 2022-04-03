@@ -19,7 +19,7 @@ export default function NewProduct() {
   const [model, setModel] = useState<string>("");
   const [style, setStyle] = useState<string>("");
   const [sku, setSku] = useState<string>("");
-  const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
+  const [deliveryDate, setDeliveryDate] = useState<string>("");
 
   async function createNewProduct() {
     try {
@@ -67,7 +67,7 @@ export default function NewProduct() {
         label="Delivery Date"
         value={deliveryDate}
         onChange={newValue => {
-          setDeliveryDate(newValue);
+          setDeliveryDate(newValue ?? "");
         }}
         renderInput={params => <TextField {...params} />}
       />

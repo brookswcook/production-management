@@ -46,6 +46,21 @@ export default function ProductDetail() {
     preProductionSample,
   }: ProductFieldsFragment = data.product;
 
+  const DetailViewSection = ({
+    children,
+    headerTitle,
+  }: {
+    children: JSX.Element[] | JSX.Element;
+    headerTitle: string;
+  }) => (
+    <Paper elevation={0} sx={{ p: 1 }}>
+      <Typography component="h4" variant="inherit">
+        {headerTitle}
+      </Typography>
+      {children}
+    </Paper>
+  );
+
   return (
     <Container maxWidth="xl">
       <Grid
@@ -94,10 +109,7 @@ export default function ProductDetail() {
             noValidate
             autoComplete="off"
           >
-            <Paper elevation={1} sx={{ p: 1 }}>
-              <Typography component="h4" variant="inherit">
-                {`Details:`}
-              </Typography>
+            <DetailViewSection headerTitle="Details:">
               <TextField
                 label="Expected delivery date"
                 defaultValue={new Date(deliveryDate).toLocaleDateString()}
@@ -107,40 +119,28 @@ export default function ProductDetail() {
                 helperText={`Due In: ${dueIn} days`}
                 variant="standard"
               />
-            </Paper>
-            <Paper elevation={1} sx={{ p: 1 }}>
-              <Typography component="h4" variant="inherit">
-                {`Tech pack:`}
-              </Typography>
+            </DetailViewSection>
+            <DetailViewSection headerTitle="Tech pack:">
               <ObjectInputSet<TechPack>
                 objectToRender={techPack}
                 fields={["fabricCode", "type", "pantone"]}
               />
-            </Paper>
-            <Paper elevation={1} sx={{ p: 1 }}>
-              <Typography component="h4" variant="inherit">
-                {`Fabric sample:`}
-              </Typography>
+            </DetailViewSection>
+            <DetailViewSection headerTitle="Fabric sample:">
               <ObjectInputSet<Sample>
                 objectToRender={fabricSample}
                 fields={["sku", "approved", "trackNumber", "delivered"]}
               />
-            </Paper>
-            <Paper elevation={1} sx={{ p: 1 }}>
-              <Typography component="h4" variant="inherit">
-                {`Fit samples:`}
-              </Typography>
+            </DetailViewSection>
+            <DetailViewSection headerTitle="Fit samples:">
               <SampleGrid samples={fitSamples as Sample[]} />
-            </Paper>
-            <Paper elevation={1} sx={{ p: 1 }}>
-              <Typography component="h4" variant="inherit">
-                {`Pre production sample:`}
-              </Typography>
+            </DetailViewSection>
+            <DetailViewSection headerTitle="Pre production sample:">
               <ObjectInputSet<Sample>
                 objectToRender={preProductionSample}
                 fields={["sku", "approved", "trackNumber", "delivered"]}
               />
-            </Paper>
+            </DetailViewSection>
           </Box>
         </Grid>
       </Grid>

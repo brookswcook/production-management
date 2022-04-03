@@ -18,6 +18,7 @@ import {
 import { ObjectInputSet } from "../Common";
 import GridToolbarButton from "../GridToolbarButton";
 import NewProduct from "../NewProduct";
+import SampleGrid from "../SampleGrid";
 
 export default function ProductDetail() {
   const { productName = "" } = useParams();
@@ -41,6 +42,8 @@ export default function ProductDetail() {
     stage,
     techPack,
     fabricSample,
+    fitSamples,
+    preProductionSample,
   }: ProductFieldsFragment = data.product;
 
   return (
@@ -127,6 +130,16 @@ export default function ProductDetail() {
               <Typography component="h4" variant="inherit">
                 {`Fit samples:`}
               </Typography>
+              <SampleGrid samples={fitSamples as Sample[]} />
+            </Paper>
+            <Paper elevation={1} sx={{ p: 1 }}>
+              <Typography component="h4" variant="inherit">
+                {`Pre production sample:`}
+              </Typography>
+              <ObjectInputSet<Sample>
+                objectToRender={preProductionSample}
+                fields={["sku", "approved", "trackNumber", "delivered"]}
+              />
             </Paper>
           </Box>
         </Grid>

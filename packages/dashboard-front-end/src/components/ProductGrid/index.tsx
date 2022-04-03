@@ -189,7 +189,7 @@ export default function ProductGrid() {
           onSelectionModelChange={selectionModel =>
             setSelectedGridItems(selectionModel)
           }
-          rowsPerPageOptions={[5]}
+          rowsPerPageOptions={[10]}
           components={{
             Toolbar: CustomToolbar,
           }}

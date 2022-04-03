@@ -15,6 +15,9 @@ import {
   Sample,
   useProductQuery,
   FabricProduction,
+  ProductProduction,
+  ProductQualityControl,
+  ProductShipping,
 } from "../../generated/graphql";
 import { ObjectInputSet } from "../Common";
 import GridToolbarButton from "../GridToolbarButton";
@@ -46,6 +49,9 @@ export default function ProductDetail() {
     fitSamples,
     preProductionSample,
     fabricProduction,
+    production,
+    qualityControl,
+    shipping,
   }: ProductFieldsFragment = data.product;
 
   const DetailViewSection = ({
@@ -151,6 +157,40 @@ export default function ProductDetail() {
                   "onTime",
                   "started",
                   "sufficientFabric",
+                ]}
+              />
+            </DetailViewSection>
+            <DetailViewSection headerTitle="Production:">
+              <ObjectInputSet<ProductProduction>
+                objectToRender={production}
+                fields={[
+                  "lastStartDate",
+                  "actualStartDate",
+                  "onTime",
+                  "started",
+                ]}
+              />
+            </DetailViewSection>
+            <DetailViewSection headerTitle="Quality control:">
+              <ObjectInputSet<ProductQualityControl>
+                objectToRender={qualityControl}
+                fields={[
+                  "lastVisitDate",
+                  "scheduledVisitDate",
+                  "visited",
+                  "passed",
+                ]}
+              />
+            </DetailViewSection>
+            <DetailViewSection headerTitle="Shipping:">
+              <ObjectInputSet<ProductShipping>
+                objectToRender={shipping}
+                fields={[
+                  "lastShippingDate",
+                  "actualShippingDate",
+                  "trackNumber",
+                  "shipped",
+                  "delivered",
                 ]}
               />
             </DetailViewSection>

@@ -74,6 +74,7 @@ export default function ProductGrid() {
     {
       field: "stage",
       headerName: "Stage",
+      minWidth: 80,
       flex: 2,
       type: "string",
     },
@@ -137,7 +138,7 @@ export default function ProductGrid() {
             }
             disabled={selectedProducts.length !== 1}
           />
-          <GridToolbarButton
+          {/* <GridToolbarButton
             icon={<Fragment />}
             title="Mark FaS delivered"
             children={<Fragment />}
@@ -148,7 +149,7 @@ export default function ProductGrid() {
             title="Approve FaS"
             children={<Fragment />}
             disabled={selectedProducts.length !== 1}
-          />
+          /> */}
           <GridToolbarButton
             icon={<Fragment />}
             title="Send FiS"
@@ -157,7 +158,7 @@ export default function ProductGrid() {
             }
             disabled={selectedProducts.length !== 1}
           />
-          <GridToolbarButton
+          {/* <GridToolbarButton
             icon={<Fragment />}
             title="Mark FiS delivered"
             children={<Fragment />}
@@ -168,7 +169,7 @@ export default function ProductGrid() {
             title="Approve FiS"
             children={<Fragment />}
             disabled={selectedProducts.length !== 1}
-          />
+          /> */}
         </GridToolbarContainer>
       </Fragment>
     );

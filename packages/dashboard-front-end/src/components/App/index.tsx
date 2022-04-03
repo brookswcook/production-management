@@ -54,7 +54,7 @@ function Dashboard({ children }: { children: ReactElement }) {
             <Button variant="text" size="small">
               <Typography variant="h6" sx={{ color: "white" }}>
                 <Link to="/" style={{ textDecoration: "none", color: "white" }}>
-                  Production Management App
+                  Production Management
                 </Link>
               </Typography>
             </Button>

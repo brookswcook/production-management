@@ -7,19 +7,19 @@ export class ProductShipping {
   @Property()
   lastShippingDate!: Date;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
   actualShippingDate?: Date;
 
   @Field()
-  @Property()
+  @Property({ default: false })
   shipped?: boolean;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
   trackNumber?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
   delivered?: boolean;
 }

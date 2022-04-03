@@ -79,33 +79,22 @@ export default function ProductDetail() {
           borderRadius: "4px",
         }}
       >
-        <Grid item xs={12}>
-          <Box pl={1}>
+        <Grid item xs={12} sx={{ mb: 1 }}>
+          <Paper elevation={1} sx={{ pl: 1, mb: 1 }}>
             <Typography component="span" variant="h6">
               {name}
             </Typography>
             <Typography component="span" ml={1}>
-              {stage}
+              {`${stage} stage ${onTime ? "is on time" : "is not on time"}`}
             </Typography>
-            <Typography component="span" ml={1}>
-              {`${onTime ? "is on time" : "is not on time"}`}
-            </Typography>
-          </Box>
-          <GridToolbarButton
-            icon={<Fragment />}
-            title="New"
-            children={<NewProduct />}
-          />
-          <GridToolbarButton
-            icon={<Fragment />}
-            title="New"
-            children={<NewProduct />}
-          />
-          <GridToolbarButton
-            icon={<Fragment />}
-            title="New"
-            children={<NewProduct />}
-          />
+            <Box>
+              <GridToolbarButton
+                icon={<Fragment />}
+                title="New"
+                children={<NewProduct />}
+              />
+            </Box>
+          </Paper>
         </Grid>
         <Grid item xs={12}>
           <Box

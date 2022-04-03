@@ -49,13 +49,23 @@ fragment productFields on Product {
   }
   production {
     lastStartDate
+    actualStartDate
     onTime
+    started
   }
   qualityControl {
     lastVisitDate
+    scheduledVisitDate
+    visited
+    passed
+    notes
   }
   shipping {
     lastShippingDate
+    actualShippingDate
+    shipped
+    trackNumber
+    delivered
   }
 }
 

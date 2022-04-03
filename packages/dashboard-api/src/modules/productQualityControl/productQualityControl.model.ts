@@ -5,9 +5,9 @@ import { prop as Property } from "@typegoose/typegoose";
 export class ProductQualityControl {
   @Field({ nullable: false })
   @Property()
-  lastVisitDate?: Date;
+  lastVisitDate!: Date;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
   scheduledVisitDate?: Date;
 
@@ -15,7 +15,7 @@ export class ProductQualityControl {
   @Property({ default: false })
   visited?: boolean;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
   passed?: boolean;
 

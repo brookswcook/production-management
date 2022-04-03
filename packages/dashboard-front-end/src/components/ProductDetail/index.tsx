@@ -14,6 +14,7 @@ import {
   TechPack,
   Sample,
   useProductQuery,
+  FabricProduction,
 } from "../../generated/graphql";
 import { ObjectInputSet } from "../Common";
 import GridToolbarButton from "../GridToolbarButton";
@@ -44,6 +45,7 @@ export default function ProductDetail() {
     fabricSample,
     fitSamples,
     preProductionSample,
+    fabricProduction,
   }: ProductFieldsFragment = data.product;
 
   const DetailViewSection = ({
@@ -69,7 +71,6 @@ export default function ProductDetail() {
           marginTop: 1,
           border: "1px solid rgba(224, 224, 224, 1)",
           borderRadius: "4px",
-          padding: 1,
         }}
       >
         <Grid item xs={12}>
@@ -139,6 +140,18 @@ export default function ProductDetail() {
               <ObjectInputSet<Sample>
                 objectToRender={preProductionSample}
                 fields={["sku", "approved", "trackNumber", "delivered"]}
+              />
+            </DetailViewSection>
+            <DetailViewSection headerTitle="Fabric production:">
+              <ObjectInputSet<FabricProduction>
+                objectToRender={fabricProduction}
+                fields={[
+                  "lastStartDate",
+                  "actualStartDate",
+                  "onTime",
+                  "started",
+                  "sufficientFabric",
+                ]}
               />
             </DetailViewSection>
           </Box>

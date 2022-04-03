@@ -9,7 +9,12 @@ import {
 } from "@mui/material";
 import { Fragment } from "react";
 import { useParams } from "react-router-dom";
-import { useProductQuery } from "../../generated/graphql";
+import {
+  ProductFieldsFragment,
+  TechPack,
+  Sample,
+  useProductQuery,
+} from "../../generated/graphql";
 import { ObjectInputSet } from "../Common";
 import GridToolbarButton from "../GridToolbarButton";
 import NewProduct from "../NewProduct";
@@ -28,9 +33,15 @@ export default function ProductDetail() {
     );
   if (data == null || error) return <Fragment>Wrong path!</Fragment>;
 
-  const { name, dueIn, deliveryDate, onTime, stage } = data.product;
-  const techpack = data.product.techPack ?? {};
-  const fabricSample = data.product.fabricSample ?? {};
+  const {
+    name,
+    dueIn,
+    deliveryDate,
+    onTime,
+    stage,
+    techPack,
+    fabricSample,
+  }: ProductFieldsFragment = data.product;
 
   return (
     <Container maxWidth="xl">
@@ -98,8 +109,8 @@ export default function ProductDetail() {
               <Typography component="h4" variant="inherit">
                 {`Tech pack:`}
               </Typography>
-              <ObjectInputSet
-                objectToRender={techpack}
+              <ObjectInputSet<TechPack>
+                objectToRender={techPack}
                 fields={["fabricCode", "type", "pantone"]}
               />
             </Paper>
@@ -107,10 +118,15 @@ export default function ProductDetail() {
               <Typography component="h4" variant="inherit">
                 {`Fabric sample:`}
               </Typography>
-              <ObjectInputSet
+              <ObjectInputSet<Sample>
                 objectToRender={fabricSample}
                 fields={["sku", "approved", "trackNumber", "delivered"]}
               />
+            </Paper>
+            <Paper elevation={1} sx={{ p: 1 }}>
+              <Typography component="h4" variant="inherit">
+                {`Fit samples:`}
+              </Typography>
             </Paper>
           </Box>
         </Grid>

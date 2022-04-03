@@ -45,7 +45,11 @@ export default function ProductGrid() {
       renderCell({ id, formattedValue }: GridRenderCellParams) {
         const linkPath = `/products/${id}`;
         const linkText = `${formattedValue as string}`;
-        return <Link to={linkPath}>{linkText}</Link>;
+        return (
+          <Link to={linkPath} style={{ textDecoration: "none" }}>
+            {linkText}
+          </Link>
+        );
       },
     },
     {
@@ -190,6 +194,7 @@ export default function ProductGrid() {
           }}
           checkboxSelection
           disableSelectionOnClick
+          sx={{ mt: 1 }}
         />
       </Grid>
     </Container>

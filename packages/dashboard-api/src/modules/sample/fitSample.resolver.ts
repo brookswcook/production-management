@@ -11,11 +11,13 @@ export class FitSampleResolver {
   ): Promise<FitSample> {
     const unapprovedFitSample = await FitSampleModel.getFitSamplesByProductName(
       data.productName,
-      { approved: false }
+      { delivered: false }
     );
     if (unapprovedFitSample.length > 0)
       // TODO: use proper validation error
-      throw new Error("Given product has unapproved fit sample!");
+      throw new Error(
+        "Given product already has sent and not delivered fit sample!"
+      );
     return new FitSampleModel(data).save();
   }
 }

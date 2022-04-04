@@ -5,12 +5,27 @@ import { toast } from "react-toastify";
 import {
   SendSampleInput,
   useSendFabricSampleMutation,
+  useSendFitSampleMutation,
 } from "../../generated/graphql";
 
-export function SendSampleParams({ productName }: { productName?: string }) {
-  const [sendFabricSampleMutation] = useSendFabricSampleMutation({
+export function SendSampleParams({
+  productName,
+  sampleType,
+}: {
+  productName?: string;
+  sampleType: "fabricSample" | "fitSample";
+}) {
+  const mutationOptions = {
     refetchQueries: ["Products"],
-  });
+  };
+  const [sendFabricSampleMutation] =
+    useSendFabricSampleMutation(mutationOptions);
+  const [sendFitSampleMutation] = useSendFitSampleMutation(mutationOptions);
+
+  const sendSampleMutation =
+    sampleType === "fabricSample"
+      ? sendFabricSampleMutation
+      : sendFitSampleMutation;
 
   async function sendFabricSample(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -21,7 +36,7 @@ export function SendSampleParams({ productName }: { productName?: string }) {
       "productName"
     >;
     try {
-      await sendFabricSampleMutation({
+      await sendSampleMutation({
         variables: { data: { productName, ...inputData } },
       });
     } catch (error) {

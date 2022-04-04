@@ -134,7 +134,10 @@ export default function ProductGrid() {
             icon={<Fragment />}
             title="Send FaS"
             children={
-              <SendSampleParams productName={selectedSingleProductName} />
+              <SendSampleParams
+                productName={selectedSingleProductName}
+                sampleType="fabricSample"
+              />
             }
             disabled={selectedProducts.length !== 1}
           />
@@ -154,7 +157,10 @@ export default function ProductGrid() {
             icon={<Fragment />}
             title="Send FiS"
             children={
-              <SendSampleParams productName={selectedSingleProductName} />
+              <SendSampleParams
+                productName={selectedSingleProductName}
+                sampleType="fitSample"
+              />
             }
             disabled={selectedProducts.length !== 1}
           />

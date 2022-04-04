@@ -3,3 +3,9 @@ mutation SendFabricSample($data: SendSampleInput!) {
     name
   }
 }
+
+mutation SendFitSample($data: SendSampleInput!) {
+  sendFitSample(data: $data) {
+    sku
+  }
+}

@@ -42,7 +42,12 @@ export default function TechPackParams({
   }
 
   return (
-    <Stack component="form" onSubmit={uploadTechPack} spacing={2}>
+    <Stack
+      component="form"
+      autoComplete="off"
+      onSubmit={uploadTechPack}
+      spacing={2}
+    >
       <FormControl disabled>
         <FormLabel id="tech-pack-type-label">Type</FormLabel>
         <RadioGroup

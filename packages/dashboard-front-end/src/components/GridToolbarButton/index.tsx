@@ -20,7 +20,7 @@ export default function GridToolbarButton({
     setOpen(Boolean(anchorEl));
   }, [anchorEl]);
 
-  function toggleNewProduct(event: MouseEvent<HTMLElement>) {
+  function togglePopper(event: MouseEvent<HTMLElement>) {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   }
 
@@ -30,7 +30,7 @@ export default function GridToolbarButton({
         disabled={disabled}
         variant="text"
         size="small"
-        onClick={toggleNewProduct}
+        onClick={togglePopper}
       >
         {icon}
         {title}

@@ -30,7 +30,12 @@ export function SendSampleParams({ productName }: { productName?: string }) {
   }
 
   return (
-    <Stack component="form" onSubmit={sendFabricSample} spacing={2}>
+    <Stack
+      component="form"
+      onSubmit={sendFabricSample}
+      spacing={2}
+      autoComplete="off"
+    >
       <FormControl>
         <InputLabel htmlFor="sku-input">SKU</InputLabel>
         <Input name="sku" id="sku-input" />

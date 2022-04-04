@@ -21,7 +21,7 @@ import {
 } from "../../generated/graphql";
 import { ObjectInputSet } from "../Common";
 import GridToolbarButton from "../GridToolbarButton";
-import NewProduct from "../NewProduct";
+import ProductParams from "../ProductParams";
 import SampleGrid from "../SampleGrid";
 
 export default function ProductDetail() {
@@ -74,9 +74,9 @@ export default function ProductDetail() {
       <Grid
         container
         sx={{
-          marginTop: 1,
           border: "1px solid rgba(224, 224, 224, 1)",
           borderRadius: "4px",
+          m: 1,
         }}
       >
         <Grid item xs={12} sx={{ mb: 1 }}>
@@ -91,7 +91,7 @@ export default function ProductDetail() {
               <GridToolbarButton
                 icon={<Fragment />}
                 title="New"
-                children={<NewProduct />}
+                children={<ProductParams />}
               />
             </Box>
           </Paper>

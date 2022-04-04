@@ -15,7 +15,7 @@ import {
 } from "../../generated/graphql";
 import GridToolbarButton from "../GridToolbarButton";
 import AddIcon from "@mui/icons-material/Add";
-import NewProduct from "../NewProduct";
+import ProductParams from "../ProductParams";
 import { Fragment, useState } from "react";
 import TechPackParams from "../TechPackParams";
 import { SendSampleParams } from "../SampleParams";
@@ -120,7 +120,7 @@ export default function ProductGrid() {
           <GridToolbarButton
             icon={<AddIcon />}
             title="New"
-            children={<NewProduct />}
+            children={<ProductParams />}
           />
           <GridToolbarButton
             icon={<Fragment />}

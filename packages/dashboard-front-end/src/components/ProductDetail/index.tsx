@@ -1,5 +1,7 @@
+import { ApolloError } from "@apollo/client";
 import {
   Box,
+  Button,
   Container,
   Grid,
   LinearProgress,
@@ -9,6 +11,7 @@ import {
 } from "@mui/material";
 import { Fragment } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   ProductFieldsFragment,
   TechPack,
@@ -18,16 +21,22 @@ import {
   ProductProduction,
   ProductQualityControl,
   ProductShipping,
+  useMarkFabricSampleDeliveredMutation,
+  useApproveFabricSampleMutation,
 } from "../../generated/graphql";
 import { ObjectInputSet } from "../Common";
-import GridToolbarButton from "../GridToolbarButton";
-import ProductParams from "../ProductParams";
 import SampleGrid from "../SampleGrid";
 
 export default function ProductDetail() {
   const { productName = "" } = useParams();
   const { data, error, loading } = useProductQuery({
     variables: { productName },
+  });
+  const [markFabricSampleDeliveredMutation] =
+    useMarkFabricSampleDeliveredMutation();
+
+  const [approveFabricSampleMutation] = useApproveFabricSampleMutation({
+    refetchQueries: ["Product"],
   });
 
   if (loading)
@@ -53,6 +62,23 @@ export default function ProductDetail() {
     qualityControl,
     shipping,
   }: ProductFieldsFragment = data.product;
+
+  async function approveFabricSample() {
+    try {
+      await markFabricSampleDeliveredMutation({
+        variables: {
+          data: { productName: name, sku: fabricSample?.sku as string },
+        },
+      });
+      await approveFabricSampleMutation({
+        variables: {
+          data: { productName: name, sku: fabricSample?.sku as string },
+        },
+      });
+    } catch (error) {
+      toast.error((error as ApolloError).message);
+    }
+  }
 
   const DetailViewSection = ({
     children,
@@ -88,11 +114,9 @@ export default function ProductDetail() {
               {`${stage} stage ${onTime ? "is on time" : "is not on time"}`}
             </Typography>
             <Box>
-              <GridToolbarButton
-                icon={<Fragment />}
-                title="New"
-                children={<ProductParams />}
-              />
+              <Button variant="text" size="small" onClick={approveFabricSample}>
+                Approve Fabric Sample
+              </Button>
             </Box>
           </Paper>
         </Grid>
@@ -129,7 +153,7 @@ export default function ProductDetail() {
               />
             </DetailViewSection>
             <DetailViewSection headerTitle="Fit samples:">
-              <SampleGrid samples={fitSamples as Sample[]} />
+              <SampleGrid productName={name} samples={fitSamples as Sample[]} />
             </DetailViewSection>
             <DetailViewSection headerTitle="Pre production sample:">
               <ObjectInputSet<Sample>

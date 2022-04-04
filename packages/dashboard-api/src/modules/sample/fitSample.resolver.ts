@@ -1,6 +1,6 @@
 import { Arg, Authorized, Mutation, Resolver } from "type-graphql";
 import { FitSample, FitSampleModel } from "./fitSample.model";
-import { SendSampleInput } from "./sample.input";
+import { SendSampleInput, UniqueSampleInput } from "./sample.input";
 
 @Resolver(FitSample)
 export class FitSampleResolver {
@@ -19,5 +19,22 @@ export class FitSampleResolver {
         "Given product already has sent and not delivered fit sample!"
       );
     return new FitSampleModel(data).save();
+  }
+
+  @Authorized()
+  @Mutation(() => FitSample)
+  async approveFitSample(
+    @Arg("data") { productName, sku }: UniqueSampleInput
+  ): Promise<FitSample> {
+    const fitSample = await FitSampleModel.findOneAndUpdate(
+      {
+        productName,
+        sku,
+      } as FitSample,
+      { $set: { delivered: true, approved: true } as Partial<FitSample> },
+      { returnOriginal: false }
+    ).exec();
+    if (fitSample == null) throw Error(`Fit sample is not found`);
+    return fitSample;
   }
 }

@@ -49,6 +49,7 @@ export type LoginInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   approveFabricSample: Product;
+  approveFitSample: FitSample;
   createProduct: Product;
   login: Scalars['String'];
   markFabricSampleDelivered: Product;
@@ -61,6 +62,11 @@ export type Mutation = {
 
 
 export type MutationApproveFabricSampleArgs = {
+  data: UniqueSampleInput;
+};
+
+
+export type MutationApproveFitSampleArgs = {
   data: UniqueSampleInput;
 };
 
@@ -239,6 +245,20 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login: string };
 
+export type ApproveFabricSampleMutationVariables = Exact<{
+  data: UniqueSampleInput;
+}>;
+
+
+export type ApproveFabricSampleMutation = { __typename?: 'Mutation', approveFabricSample: { __typename?: 'Product', fabricSample?: { __typename?: 'Sample', sku: string } | null } };
+
+export type MarkFabricSampleDeliveredMutationVariables = Exact<{
+  data: UniqueSampleInput;
+}>;
+
+
+export type MarkFabricSampleDeliveredMutation = { __typename?: 'Mutation', markFabricSampleDelivered: { __typename?: 'Product', fabricSample?: { __typename?: 'Sample', sku: string } | null } };
+
 export type SampleFieldsFragment = { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null };
 
 export type FitSampleFieldsFragment = { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null };
@@ -263,6 +283,13 @@ export type CreateProductMutationVariables = Exact<{
 
 
 export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null } };
+
+export type ApproveFitSampleMutationVariables = Exact<{
+  data: UniqueSampleInput;
+}>;
+
+
+export type ApproveFitSampleMutation = { __typename?: 'Mutation', approveFitSample: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } };
 
 export type SendFabricSampleMutationVariables = Exact<{
   data: SendSampleInput;
@@ -426,6 +453,76 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const ApproveFabricSampleDocument = gql`
+    mutation ApproveFabricSample($data: UniqueSampleInput!) {
+  approveFabricSample(data: $data) {
+    fabricSample {
+      sku
+    }
+  }
+}
+    `;
+export type ApproveFabricSampleMutationFn = Apollo.MutationFunction<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>;
+
+/**
+ * __useApproveFabricSampleMutation__
+ *
+ * To run a mutation, you first call `useApproveFabricSampleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useApproveFabricSampleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [approveFabricSampleMutation, { data, loading, error }] = useApproveFabricSampleMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useApproveFabricSampleMutation(baseOptions?: Apollo.MutationHookOptions<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>(ApproveFabricSampleDocument, options);
+      }
+export type ApproveFabricSampleMutationHookResult = ReturnType<typeof useApproveFabricSampleMutation>;
+export type ApproveFabricSampleMutationResult = Apollo.MutationResult<ApproveFabricSampleMutation>;
+export type ApproveFabricSampleMutationOptions = Apollo.BaseMutationOptions<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>;
+export const MarkFabricSampleDeliveredDocument = gql`
+    mutation MarkFabricSampleDelivered($data: UniqueSampleInput!) {
+  markFabricSampleDelivered(data: $data) {
+    fabricSample {
+      sku
+    }
+  }
+}
+    `;
+export type MarkFabricSampleDeliveredMutationFn = Apollo.MutationFunction<MarkFabricSampleDeliveredMutation, MarkFabricSampleDeliveredMutationVariables>;
+
+/**
+ * __useMarkFabricSampleDeliveredMutation__
+ *
+ * To run a mutation, you first call `useMarkFabricSampleDeliveredMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkFabricSampleDeliveredMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markFabricSampleDeliveredMutation, { data, loading, error }] = useMarkFabricSampleDeliveredMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useMarkFabricSampleDeliveredMutation(baseOptions?: Apollo.MutationHookOptions<MarkFabricSampleDeliveredMutation, MarkFabricSampleDeliveredMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MarkFabricSampleDeliveredMutation, MarkFabricSampleDeliveredMutationVariables>(MarkFabricSampleDeliveredDocument, options);
+      }
+export type MarkFabricSampleDeliveredMutationHookResult = ReturnType<typeof useMarkFabricSampleDeliveredMutation>;
+export type MarkFabricSampleDeliveredMutationResult = Apollo.MutationResult<MarkFabricSampleDeliveredMutation>;
+export type MarkFabricSampleDeliveredMutationOptions = Apollo.BaseMutationOptions<MarkFabricSampleDeliveredMutation, MarkFabricSampleDeliveredMutationVariables>;
 export const ProductsDocument = gql`
     query Products {
   products {
@@ -528,6 +625,42 @@ export function useCreateProductMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateProductMutationHookResult = ReturnType<typeof useCreateProductMutation>;
 export type CreateProductMutationResult = Apollo.MutationResult<CreateProductMutation>;
 export type CreateProductMutationOptions = Apollo.BaseMutationOptions<CreateProductMutation, CreateProductMutationVariables>;
+export const ApproveFitSampleDocument = gql`
+    mutation ApproveFitSample($data: UniqueSampleInput!) {
+  approveFitSample(data: $data) {
+    sku
+    approved
+    trackNumber
+    delivered
+  }
+}
+    `;
+export type ApproveFitSampleMutationFn = Apollo.MutationFunction<ApproveFitSampleMutation, ApproveFitSampleMutationVariables>;
+
+/**
+ * __useApproveFitSampleMutation__
+ *
+ * To run a mutation, you first call `useApproveFitSampleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useApproveFitSampleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [approveFitSampleMutation, { data, loading, error }] = useApproveFitSampleMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useApproveFitSampleMutation(baseOptions?: Apollo.MutationHookOptions<ApproveFitSampleMutation, ApproveFitSampleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ApproveFitSampleMutation, ApproveFitSampleMutationVariables>(ApproveFitSampleDocument, options);
+      }
+export type ApproveFitSampleMutationHookResult = ReturnType<typeof useApproveFitSampleMutation>;
+export type ApproveFitSampleMutationResult = Apollo.MutationResult<ApproveFitSampleMutation>;
+export type ApproveFitSampleMutationOptions = Apollo.BaseMutationOptions<ApproveFitSampleMutation, ApproveFitSampleMutationVariables>;
 export const SendFabricSampleDocument = gql`
     mutation SendFabricSample($data: SendSampleInput!) {
   sendFabricSample(data: $data) {

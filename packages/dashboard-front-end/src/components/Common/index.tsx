@@ -14,18 +14,20 @@ export function ObjectInputSet<T>({
         .map(field => field.toString())
         .map(field => {
           const value = objectToRender ? objectToRender[field] : null;
+          const label = field
+            .replace(/([a-z])([A-Z])/g, "$1 $2")
+            .split(" ")
+            .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+            .join(" ");
           return (
             <TextField
-              label={field
-                .replace(/([a-z])([A-Z])/g, "$1 $2")
-                .split(" ")
-                .map(s => s.charAt(0).toUpperCase() + s.substring(1))
-                .join(" ")}
+              label={label}
               defaultValue={value}
               InputProps={{
                 readOnly: true,
               }}
               key={field}
+              size="small"
               variant="standard"
             />
           );

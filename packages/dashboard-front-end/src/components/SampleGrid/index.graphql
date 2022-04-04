@@ -1,0 +1,8 @@
+mutation ApproveFitSample($data: UniqueSampleInput!) {
+  approveFitSample(data: $data) {
+    sku
+    approved
+    trackNumber
+    delivered
+  }
+}

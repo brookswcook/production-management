@@ -12,7 +12,7 @@ import { ProductProduction } from "../productProduction/productProduction.model"
 import { ProductQualityControl } from "../productQualityControl/productQualityControl.model";
 import { ProductShipping } from "../productShipping/productShipping.model";
 
-@index({ model: 1, style: 1, sku: 1 }, { unique: true })
+@index<Product>({ model: 1, style: 1, sku: 1 }, { unique: true })
 @ObjectType()
 export class Product {
   @Field()

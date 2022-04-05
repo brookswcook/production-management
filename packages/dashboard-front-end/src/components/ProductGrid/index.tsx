@@ -141,18 +141,6 @@ export default function ProductGrid() {
             }
             disabled={selectedProducts.length !== 1}
           />
-          {/* <GridToolbarButton
-            icon={<Fragment />}
-            title="Mark FaS delivered"
-            children={<Fragment />}
-            disabled={selectedProducts.length !== 1}
-          />
-          <GridToolbarButton
-            icon={<Fragment />}
-            title="Approve FaS"
-            children={<Fragment />}
-            disabled={selectedProducts.length !== 1}
-          /> */}
           <GridToolbarButton
             icon={<Fragment />}
             title="Send FiS"
@@ -164,18 +152,6 @@ export default function ProductGrid() {
             }
             disabled={selectedProducts.length !== 1}
           />
-          {/* <GridToolbarButton
-            icon={<Fragment />}
-            title="Mark FiS delivered"
-            children={<Fragment />}
-            disabled={selectedProducts.length !== 1}
-          />
-          <GridToolbarButton
-            icon={<Fragment />}
-            title="Approve FiS"
-            children={<Fragment />}
-            disabled={selectedProducts.length !== 1}
-          /> */}
         </GridToolbarContainer>
       </Fragment>
     );

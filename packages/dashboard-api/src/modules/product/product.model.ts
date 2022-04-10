@@ -17,10 +17,9 @@ import { Fabric } from "../fabric/fabric.model";
 export class Product {
   @Field()
   @Property({
-    default(this: Product) {
+    get(this: Product) {
       return `${this.style.name} in ${this.fabric.colorName}`;
     },
-    unique: true,
   })
   name!: string;
 
@@ -37,6 +36,7 @@ export class Product {
     ref: () => Style,
     foreignField: "code",
     localField: "styleCode",
+    justOne: true,
   } as StylePropParams)
   style!: Style;
 
@@ -45,6 +45,7 @@ export class Product {
     ref: () => Fabric,
     foreignField: "code",
     localField: "fabricCode",
+    justOne: true,
   } as FabricPropParams)
   fabric!: Fabric;
 
@@ -144,14 +145,16 @@ export class Product {
   @Property({ _id: false })
   shipping?: ProductShipping;
 
-  static async findPerProductNameOrFail(
-    productName: string,
-    populatePath = ""
-  ) {
+  static async findPerProductNameOrFail(productName: string) {
     const product = await ProductModel.findOne({
       name: productName,
     } as Product)
-      .populate(populatePath)
+      .populate("fitSamples")
+      .populate("style")
+      .populate({
+        path: "fabric",
+        populate: { path: "samples" },
+      })
       .exec();
     if (product == null) throw Error(`Product with given name not found`);
     return product;

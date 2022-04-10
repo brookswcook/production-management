@@ -1,6 +1,4 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
-import { SendSampleInput, UniqueSampleInput } from "../sample/sample.input";
-import { UploadTechPackInput } from "../techPack/techPack.input";
 import { CreateProductInput } from "./product.input";
 import { Product, ProductModel } from "./product.model";
 import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
@@ -13,18 +11,25 @@ export class ProductResolver {
   @Authorized()
   @Query(() => [Product])
   async products() {
-    return ProductModel.find().populate("fitSamples").exec();
+    return ProductModel.find()
+      .populate("fitSamples")
+      .populate("style")
+      .populate({
+        path: "fabric",
+        populate: { path: "samples" },
+      })
+      .exec();
   }
 
   @Authorized()
   @Query(() => Product)
   async product(@Arg("productName", { nullable: false }) productName: string) {
-    return ProductModel.findPerProductNameOrFail(productName, "fitSamples");
+    return ProductModel.findPerProductNameOrFail(productName);
   }
 
   @Authorized()
   @Mutation(() => Product)
-  async createProduct(@Arg("data") { ...data }: CreateProductInput) {
+  async createProduct(@Arg("data") data: CreateProductInput) {
     // TODO: use workflow saved in db. Calculate it based on delivery date
     const productWorkflowData: Partial<Product> = {
       fabricProduction: {
@@ -40,58 +45,56 @@ export class ProductResolver {
         lastShippingDate: new Date(new Date().getTime() + 35 * 8.64e7),
       },
     };
-    return (
-      await new ProductModel({
-        ...productWorkflowData,
-        ...data,
-      }).save()
-    ).populate("fitSamples");
+    return new ProductModel({
+      ...productWorkflowData,
+      ...data,
+    }).save();
   }
 
-  @Authorized()
-  @Mutation(() => Product)
-  async uploadTechPack(
-    @Arg("data") { productName, ...data }: UploadTechPackInput
-  ): Promise<Product> {
-    return ProductModel.updatePerProductNameOrFail(productName, {
-      techPack: data,
-    });
-  }
+  // @Authorized()
+  // @Mutation(() => Product)
+  // async uploadTechPack(
+  //   @Arg("data") { productName, ...data }: UploadTechPackInput
+  // ): Promise<Product> {
+  //   return ProductModel.updatePerProductNameOrFail(productName, {
+  //     techPack: data,
+  //   });
+  // }
 
-  @Authorized()
-  @Mutation(() => Product)
-  async sendFabricSample(
-    @Arg("data") { productName, ...data }: SendSampleInput
-  ): Promise<Product> {
-    const product = await ProductModel.findPerProductNameOrFail(productName);
-    if (product.fabricSample != null)
-      throw Error("Fabric sample has been already sent!");
-    product.fabricSample = data;
-    return product.save();
-  }
+  // @Authorized()
+  // @Mutation(() => Product)
+  // async sendFabricSample(
+  //   @Arg("data") { productName, ...data }: SendSampleInput
+  // ): Promise<Product> {
+  //   const product = await ProductModel.findPerProductNameOrFail(productName);
+  //   if (product.fabricSample != null)
+  //     throw Error("Fabric sample has been already sent!");
+  //   product.fabricSample = data;
+  //   return product.save();
+  // }
 
-  @Authorized()
-  @Mutation(() => Product)
-  async markFabricSampleDelivered(
-    @Arg("data") { productName }: UniqueSampleInput
-  ): Promise<Product> {
-    const product = await ProductModel.findPerProductNameOrFail(productName);
-    if (product.fabricSample == null) throw Error("Fabric sample is not sent!");
-    product.fabricSample.delivered = true;
-    return product.save();
-  }
+  // @Authorized()
+  // @Mutation(() => Product)
+  // async markFabricSampleDelivered(
+  //   @Arg("data") { productName }: UniqueSampleInput
+  // ): Promise<Product> {
+  //   const product = await ProductModel.findPerProductNameOrFail(productName);
+  //   if (product.fabricSample == null) throw Error("Fabric sample is not sent!");
+  //   product.fabricSample.delivered = true;
+  //   return product.save();
+  // }
 
-  @Authorized()
-  @Mutation(() => Product)
-  async approveFabricSample(
-    @Arg("data") { productName }: UniqueSampleInput
-  ): Promise<Product> {
-    const product = await ProductModel.findPerProductNameOrFail(productName);
-    if (product.fabricSample == null || !product.fabricSample.delivered)
-      throw Error("Fabric sample is not delivered!");
-    product.fabricSample.approved = true;
-    return product.save();
-  }
+  // @Authorized()
+  // @Mutation(() => Product)
+  // async approveFabricSample(
+  //   @Arg("data") { productName }: UniqueSampleInput
+  // ): Promise<Product> {
+  //   const product = await ProductModel.findPerProductNameOrFail(productName);
+  //   if (product.fabricSample == null || !product.fabricSample.delivered)
+  //     throw Error("Fabric sample is not delivered!");
+  //   product.fabricSample.approved = true;
+  //   return product.save();
+  // }
 
   @Authorized()
   @Mutation(() => Product)

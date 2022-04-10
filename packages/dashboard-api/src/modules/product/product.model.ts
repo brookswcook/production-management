@@ -5,35 +5,48 @@ import {
 } from "@typegoose/typegoose";
 import { Field, Int, ObjectType } from "type-graphql";
 import { FitSample } from "../sample/fitSample.model";
-import { Sample } from "../sample/sample.model";
-import { TechPack } from "../techPack/techPack.model";
 import { FabricProduction } from "../fabricProduction/fabricProduction.model";
 import { ProductProduction } from "../productProduction/productProduction.model";
 import { ProductQualityControl } from "../productQualityControl/productQualityControl.model";
 import { ProductShipping } from "../productShipping/productShipping.model";
+import { Style } from "../style/style.model";
+import { Fabric } from "../fabric/fabric.model";
 
-@index<Product>({ model: 1, style: 1, sku: 1 }, { unique: true })
+@index<Product>({ styleCode: 1, fabricCode: 1 }, { unique: true })
 @ObjectType()
 export class Product {
   @Field()
   @Property({
     default(this: Product) {
-      return `${this.model}-${this.style}-${this.sku}`;
+      return `${this.style.name} in ${this.fabric.colorName}`;
     },
+    unique: true,
   })
   name!: string;
 
   @Field()
   @Property({ required: true })
-  model!: string;
+  styleCode!: string;
 
   @Field()
   @Property({ required: true })
-  style!: string;
+  fabricCode!: string;
 
   @Field()
-  @Property({ required: true })
-  sku!: string;
+  @Property({
+    ref: () => Style,
+    foreignField: "code",
+    localField: "styleCode",
+  } as StylePropParams)
+  style!: Style;
+
+  @Field()
+  @Property({
+    ref: () => Fabric,
+    foreignField: "code",
+    localField: "fabricCode",
+  } as FabricPropParams)
+  fabric!: Fabric;
 
   @Field()
   @Property({ required: true })
@@ -64,19 +77,19 @@ export class Product {
   @Field()
   @Property({
     get(this: Product) {
-      return this.techPack != null;
+      return this.style.techPackUploaded;
     },
   })
   techPackUploaded?: boolean;
 
   @Field()
   @Property({
-    get(this: Product) {
+    get(this: Product): ProductStage {
       if (this.production?.started) return "Production";
       else if (this.fabricProduction?.started) return "Pre-Cut & Sew";
       else if (this.fitSamples.length > 0) return "Fit Sampling";
-      else if (this.fabricSample) return "Fabric Sampling";
-      else if (this.techPack) return "Pre-Sampling";
+      else if (this.fabric.samples.length > 0) return "Fabric Sampling";
+      else if (this.techPackUploaded) return "Pre-Sampling";
       else return "Planning";
     },
   })
@@ -85,7 +98,7 @@ export class Product {
   @Field()
   @Property({
     get(this: Product) {
-      return this.fabricSample?.delivered ?? false;
+      return this.fabric.samples.some(sample => sample.delivered);
     },
   })
   fabricSampleDelivered?: boolean;
@@ -98,30 +111,13 @@ export class Product {
   })
   fitSampleDelivered?: boolean;
 
-  // TODO: define grading
-  // @Field()
-  // @Property({
-  //   get(this: Product) {
-  //     return this.grading != null;
-  //   },
-  // })
-  // gradingUploaded?: boolean;
-
-  @Field(() => TechPack, { nullable: true })
-  @Property({ _id: false })
-  techPack?: TechPack;
-
-  @Field(() => Sample, { nullable: true })
-  @Property({ _id: false })
-  fabricSample?: Sample;
-
   // Note: might be useful to get it as part of product by populate, see also getFitSamplesByProductName
   @Field(() => [FitSample])
   @Property({
     ref: () => FitSample,
     foreignField: "productName",
     localField: "name",
-  })
+  } as FitSamplePropParams)
   fitSamples!: FitSample[];
 
   @Field(() => FitSample, { nullable: true })
@@ -178,3 +174,26 @@ export class Product {
 }
 
 export const ProductModel = getModelForClass(Product);
+
+type FabricPropParams = {
+  localField: keyof Product;
+  foreignField: keyof Fabric;
+};
+
+type StylePropParams = {
+  localField: keyof Product;
+  foreignField: keyof Style;
+};
+
+type FitSamplePropParams = {
+  localField: keyof Product;
+  foreignField: keyof FitSample;
+};
+
+type ProductStage =
+  | "Production"
+  | "Pre-Cut & Sew"
+  | "Fit Sampling"
+  | "Fabric Sampling"
+  | "Pre-Sampling"
+  | "Planning";

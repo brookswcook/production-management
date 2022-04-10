@@ -14,6 +14,14 @@ export class Style {
   @Field({ nullable: true })
   @Property()
   techPackUrl?: string;
+
+  @Field({ nullable: true })
+  @Property({
+    get(this: Style) {
+      return this.techPackUrl != null;
+    },
+  })
+  techPackUploaded?: boolean;
 }
 
 export const StyleModel = getModelForClass(Style);

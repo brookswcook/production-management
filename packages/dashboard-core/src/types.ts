@@ -1,1 +1,1 @@
-export type TechPackType = "print" | "pantone";
+export type ColorType = "print" | "solid";

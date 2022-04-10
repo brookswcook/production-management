@@ -3,13 +3,10 @@ import { Field, InputType } from "type-graphql";
 @InputType()
 export class CreateProductInput {
   @Field()
-  model!: string;
+  styleCode!: string;
 
   @Field()
-  style!: string;
-
-  @Field()
-  sku!: string;
+  fabricCode!: string;
 
   @Field()
   deliveryDate!: Date;

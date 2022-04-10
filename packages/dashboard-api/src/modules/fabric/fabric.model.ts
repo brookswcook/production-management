@@ -1,4 +1,4 @@
-import { prop as Property } from "@typegoose/typegoose";
+import { getModelForClass, prop as Property } from "@typegoose/typegoose";
 import { ColorType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
 import { FabricSample } from "../sample/fabricSample.model";
@@ -43,6 +43,8 @@ export class Fabric {
   } as FabricSamplesPropParams)
   samples!: FabricSample[];
 }
+
+export const FabricModel = getModelForClass(Fabric);
 
 type FabricSamplesPropParams = {
   localField: keyof Fabric;

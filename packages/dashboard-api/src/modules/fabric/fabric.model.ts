@@ -9,7 +9,7 @@ export class Fabric {
   @Property({ unique: true })
   code!: string;
 
-  @Field({ nullable: false })
+  @Field()
   @Property()
   colorName!: string;
 

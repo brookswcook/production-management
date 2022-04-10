@@ -23,8 +23,8 @@ export class ProductResolver {
 
   @Authorized()
   @Query(() => Product)
-  async product(@Arg("productName", { nullable: false }) productName: string) {
-    return ProductModel.findPerProductNameOrFail(productName);
+  async product(@Arg("code", { nullable: false }) code: string) {
+    return ProductModel.findPerProductCodeOrFail(code);
   }
 
   @Authorized()

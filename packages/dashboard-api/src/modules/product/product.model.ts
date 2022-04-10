@@ -17,6 +17,15 @@ import { Fabric } from "../fabric/fabric.model";
 export class Product {
   @Field()
   @Property({
+    default(this: Product) {
+      return `${this.styleCode}-${this.fabricCode}`;
+    },
+    unique: true,
+  })
+  code!: string;
+
+  @Field()
+  @Property({
     get(this: Product) {
       return `${this.style.name} in ${this.fabric.colorName}`;
     },
@@ -145,9 +154,9 @@ export class Product {
   @Property({ _id: false })
   shipping?: ProductShipping;
 
-  static async findPerProductNameOrFail(productName: string) {
+  static async findPerProductCodeOrFail(code: string) {
     const product = await ProductModel.findOne({
-      name: productName,
+      code,
     } as Product)
       .populate("fitSamples")
       .populate("style")
@@ -156,7 +165,7 @@ export class Product {
         populate: { path: "samples" },
       })
       .exec();
-    if (product == null) throw Error(`Product with given name not found`);
+    if (product == null) throw Error(`Product with given code not found`);
     return product;
   }
 

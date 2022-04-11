@@ -125,8 +125,8 @@ export class Product {
   @Field(() => [FitSample])
   @Property({
     ref: () => FitSample,
-    foreignField: "productName",
-    localField: "name",
+    foreignField: "productCode",
+    localField: "code",
   } as FitSamplePropParams)
   fitSamples!: FitSample[];
 

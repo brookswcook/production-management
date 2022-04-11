@@ -11,6 +11,12 @@ export class FabricResolver {
   }
 
   @Authorized()
+  @Query(() => Fabric, { nullable: true })
+  async fabric(@Arg("code") code: string): Promise<Fabric | null> {
+    return FabricModel.findOne({ code }).exec();
+  }
+
+  @Authorized()
   @Mutation(() => Fabric)
   async createFabric(@Arg("data") { ...data }: CreateFabricInput) {
     return (

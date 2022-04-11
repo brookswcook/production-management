@@ -9,8 +9,8 @@ export class FitSampleResolver {
   async sendFitSample(
     @Arg("data") { ...data }: SendSampleInput
   ): Promise<FitSample> {
-    const unapprovedFitSample = await FitSampleModel.getFitSamplesByProductName(
-      data.productName,
+    const unapprovedFitSample = await FitSampleModel.getFitSamplesByProductCode(
+      data.productCode,
       { delivered: false }
     );
     if (unapprovedFitSample.length > 0)
@@ -24,11 +24,11 @@ export class FitSampleResolver {
   @Authorized()
   @Mutation(() => FitSample)
   async approveFitSample(
-    @Arg("data") { productName, sku }: UniqueSampleInput
+    @Arg("data") { productCode, sku }: UniqueSampleInput
   ): Promise<FitSample> {
     const fitSample = await FitSampleModel.findOneAndUpdate(
       {
-        productName,
+        productCode,
         sku,
       } as FitSample,
       { $set: { delivered: true, approved: true } as Partial<FitSample> },

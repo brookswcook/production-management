@@ -163,7 +163,7 @@ export default function ProductGrid() {
         <DataGrid
           rows={rows}
           columns={columns}
-          getRowId={item => item.name as string}
+          getRowId={item => item.code as string}
           pageSize={10}
           loading={loading}
           error={error}

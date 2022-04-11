@@ -11,6 +11,12 @@ export class StyleResolver {
   }
 
   @Authorized()
+  @Query(() => Style, { nullable: true })
+  async style(@Arg("code") code: string): Promise<Style | null> {
+    return StyleModel.findOne({ code }).exec();
+  }
+
+  @Authorized()
   @Mutation(() => Style)
   async createStyle(@Arg("data") { ...data }: CreateStyleInput) {
     return await new StyleModel({

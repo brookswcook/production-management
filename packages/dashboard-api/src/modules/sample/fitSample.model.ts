@@ -8,20 +8,20 @@ import {
 import { ObjectType } from "type-graphql";
 import { Sample } from "./sample.model";
 
-@index<FitSample>({ productName: 1, sku: 1 }, { unique: true })
+@index<FitSample>({ productCode: 1, sku: 1 }, { unique: true })
 @ObjectType()
 @modelOptions({ schemaOptions: { collection: "fit_samples" } })
 export class FitSample extends Sample {
   //@Field({ nullable: false })
   @Property({ required: true, index: true })
-  productName!: string;
+  productCode!: string;
 
-  static getFitSamplesByProductName(
+  static getFitSamplesByProductCode(
     this: ReturnModelType<typeof FitSample>,
-    productName: string,
-    params: Partial<Omit<FitSample, "productName">> = {}
+    productCode: string,
+    params: Partial<Omit<FitSample, "productCode">> = {}
   ): Promise<FitSample[]> {
-    return this.find({ productName, ...params }).exec();
+    return this.find({ productCode, ...params }).exec();
   }
 }
 

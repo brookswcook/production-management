@@ -11,10 +11,10 @@ import { toast } from "react-toastify";
 import { Sample, useApproveFitSampleMutation } from "../../generated/graphql";
 
 export default function SampleGrid({
-  productName,
+  productCode,
   samples: rows,
 }: {
-  productName: string;
+  productCode: string;
   samples: Omit<Sample, "typename">[];
 }) {
   const [selectedGridItems, setSelectedGridItems] =
@@ -83,7 +83,7 @@ export default function SampleGrid({
     try {
       await approveFitSampleMutation({
         variables: {
-          data: { productName, sku: selectedSingleSampleSku ?? "" },
+          data: { productCode, sku: selectedSingleSampleSku ?? "" },
         },
       });
     } catch (error) {

@@ -53,10 +53,57 @@ export default function ProductGrid() {
       },
     },
     {
+      field: "styleName",
+      headerName: "Style Name",
+      minWidth: 70,
+      flex: 1,
+      type: "string",
+      valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
+        return row.style.name;
+      },
+    },
+    {
+      field: "styleCode",
+      headerName: "Style Number",
+      minWidth: 50,
+      flex: 1,
+      type: "string",
+      valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
+        return row.style.code;
+      },
+    },
+    {
+      field: "fabricCode",
+      headerName: "Fabric",
+      minWidth: 50,
+      flex: 1,
+      type: "string",
+      valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
+        return row.fabric.code;
+      },
+    },
+    {
+      field: "colorName",
+      headerName: "Color Name",
+      minWidth: 70,
+      flex: 1,
+      type: "string",
+      valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
+        return row.fabric.colorName;
+      },
+    },
+    {
+      field: "factoryName",
+      headerName: "Factory",
+      minWidth: 70,
+      flex: 1,
+      type: "string",
+    },
+    {
       field: "deliveryDate",
       headerName: "Delivery date",
-      minWidth: 80,
-      flex: 3,
+      minWidth: 70,
+      flex: 1,
       type: "date",
       valueFormatter: params => {
         return new Date(params.value as string).toLocaleDateString();
@@ -66,7 +113,7 @@ export default function ProductGrid() {
       field: "dueIn",
       headerName: "Due in",
       minWidth: 70,
-      flex: 2,
+      flex: 1,
       valueFormatter: params => {
         return `${params.value as string} days`;
       },
@@ -74,36 +121,40 @@ export default function ProductGrid() {
     {
       field: "stage",
       headerName: "Stage",
-      minWidth: 80,
-      flex: 2,
+      minWidth: 70,
+      flex: 1,
       type: "string",
     },
     {
       field: "onTime",
       headerName: "On time",
       description: "Product lifecycle based on workflow rules is on time",
-      flex: 2,
+      minWidth: 50,
+      flex: 1,
       type: "boolean",
     },
     {
       field: "techPackUploaded",
       description: "Tech pack is uploaded",
       headerName: "Tech pack",
-      flex: 2,
+      minWidth: 50,
+      flex: 1,
       type: "boolean",
     },
     {
       field: "fabricSampleDelivered",
       description: "Fabric sample is delivered",
       headerName: "Fabric Sample",
-      flex: 2,
+      minWidth: 50,
+      flex: 1,
       type: "boolean",
     },
     {
       field: "fitSampleDelivered",
       description: "Fit sample is delivered",
       headerName: "Fit Sample",
-      flex: 2,
+      minWidth: 50,
+      flex: 1,
       type: "boolean",
     },
   ];

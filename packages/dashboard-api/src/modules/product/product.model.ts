@@ -135,6 +135,7 @@ export class Product {
     get(this: Product) {
       return this.fitSamples.find(sample => sample.approved);
     },
+    excludeIndexes: true,
   })
   preProductionSample?: FitSample;
 

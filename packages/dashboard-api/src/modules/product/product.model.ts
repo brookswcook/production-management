@@ -4,7 +4,7 @@ import {
   prop as Property,
 } from "@typegoose/typegoose";
 import { Field, Int, ObjectType } from "type-graphql";
-import { FitSample } from "../sample/fitSample.model";
+import { FitSample } from "../sample/sample.model";
 import { FabricProduction } from "../fabricProduction/fabricProduction.model";
 import { ProductProduction } from "../productProduction/productProduction.model";
 import { ProductQualityControl } from "../productQualityControl/productQualityControl.model";
@@ -125,7 +125,7 @@ export class Product {
   @Field(() => [FitSample])
   @Property({
     ref: () => FitSample,
-    foreignField: "productCode",
+    foreignField: "parentCode",
     localField: "code",
   } as FitSamplePropParams)
   fitSamples!: FitSample[];

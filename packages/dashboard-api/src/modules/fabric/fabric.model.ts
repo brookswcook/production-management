@@ -1,7 +1,7 @@
 import { getModelForClass, prop as Property } from "@typegoose/typegoose";
 import { ColorType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
-import { FabricSample } from "../sample/fabricSample.model";
+import { FabricSample } from "../sample/sample.model";
 
 @ObjectType()
 export class Fabric {
@@ -38,7 +38,7 @@ export class Fabric {
   @Field(() => [FabricSample])
   @Property({
     ref: () => FabricSample,
-    foreignField: "fabricCode",
+    foreignField: "parentCode",
     localField: "code",
   } as FabricSamplesPropParams)
   samples!: FabricSample[];

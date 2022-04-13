@@ -3,7 +3,7 @@ import { Field, InputType } from "type-graphql";
 @InputType()
 export class SendSampleInput {
   @Field()
-  productCode!: string;
+  parentCode!: string;
 
   @Field()
   sku!: string;
@@ -15,7 +15,7 @@ export class SendSampleInput {
 @InputType()
 export class UniqueSampleInput {
   @Field()
-  productCode!: string;
+  parentCode!: string;
 
   @Field()
   sku!: string;

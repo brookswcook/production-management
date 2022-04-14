@@ -1,5 +1,33 @@
 mutation CreateProduct($data: CreateProductInput!) {
   createProduct(data: $data) {
-    ...productFields
+    code
+  }
+}
+
+query Style($code: String!) {
+  style(code: $code) {
+    code
+    name
+  }
+}
+
+mutation CreateStyle($data: CreateStyleInput!) {
+  createStyle(data: $data) {
+    code
+    name
+  }
+}
+
+query Fabric($code: String!) {
+  fabric(code: $code) {
+    code
+    colorName
+  }
+}
+
+mutation CreateFabric($data: CreateFabricInput!) {
+  createFabric(data: $data) {
+    code
+    colorName
   }
 }

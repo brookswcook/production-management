@@ -31,13 +31,25 @@ export class Sample {
   delivered?: boolean;
 
   static getSamplesByParentCode(
-    this: ReturnModelType<
-      typeof Sample | typeof FitSample | typeof FabricSample
-    >,
+    this: ReturnModelType<typeof Sample>,
     parentCode: string,
     params: Partial<Omit<Sample, "parentCode">> = {}
   ): Promise<Sample[]> {
     return this.find({ parentCode, ...params } as Sample).exec();
+  }
+
+  static async findOneSampleAndUpdateOrFail(
+    this: ReturnModelType<typeof Sample>,
+    query: Partial<Sample>,
+    update: Partial<Sample>
+  ): Promise<Sample> {
+    const updatedSample = await this.findOneAndUpdate(
+      query,
+      { $set: update },
+      { returnOriginal: false }
+    ).exec();
+    if (updatedSample == null) throw Error(`Sample is not found`);
+    return updatedSample;
   }
 
   static async sendSample(this: ReturnModelType<typeof Sample>, data: Sample) {
@@ -52,20 +64,27 @@ export class Sample {
     return new this(data).save();
   }
 
+  static async unApproveSample(
+    this: ReturnModelType<typeof Sample>,
+    parentCode: string,
+    sku: string
+  ) {
+    const sample = await this.findOneSampleAndUpdateOrFail(
+      { parentCode, sku },
+      { delivered: true, approved: false }
+    );
+    return sample;
+  }
+
   static async approveSample(
     this: ReturnModelType<typeof Sample>,
     parentCode: string,
     sku: string
   ) {
-    const sample = await this.findOneAndUpdate(
-      {
-        parentCode,
-        sku,
-      } as Sample,
-      { $set: { delivered: true, approved: true } as Partial<Sample> },
-      { returnOriginal: false }
-    ).exec();
-    if (sample == null) throw Error(`Sample is not found`);
+    const sample = await this.findOneSampleAndUpdateOrFail(
+      { parentCode, sku },
+      { delivered: true, approved: true }
+    );
     return sample;
   }
 }

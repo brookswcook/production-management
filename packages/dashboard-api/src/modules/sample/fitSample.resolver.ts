@@ -14,6 +14,14 @@ export class FitSampleResolver {
 
   @Authorized()
   @Mutation(() => FitSample)
+  unApproveFitSample(
+    @Arg("data") { parentCode, sku }: UniqueSampleInput
+  ): Promise<FitSample> {
+    return FitSampleModel.unApproveSample(parentCode, sku);
+  }
+
+  @Authorized()
+  @Mutation(() => FitSample)
   async approveFitSample(
     @Arg("data") { parentCode, sku }: UniqueSampleInput
   ): Promise<FitSample> {

@@ -1,19 +1,20 @@
 import { ApolloError } from "@apollo/client";
 import { Stack, FormControl, InputLabel, Input, Button } from "@mui/material";
-import { FormEvent } from "react";
+import { FormEvent, Fragment } from "react";
 import { toast } from "react-toastify";
 import {
   SendSampleInput,
   useSendFabricSampleMutation,
   useSendFitSampleMutation,
 } from "../../generated/graphql";
+import GridToolbarButton from "../GridToolbarButton";
 
 export function SendSampleParams({
-  productName,
+  parentCode,
   sampleType,
 }: {
-  productName?: string;
-  sampleType: "fabricSample" | "fitSample";
+  parentCode: string;
+  sampleType: SampleType;
 }) {
   const mutationOptions = {
     refetchQueries: ["Products"],
@@ -23,21 +24,18 @@ export function SendSampleParams({
   const [sendFitSampleMutation] = useSendFitSampleMutation(mutationOptions);
 
   const sendSampleMutation =
-    sampleType === "fabricSample"
-      ? sendFabricSampleMutation
-      : sendFitSampleMutation;
+    sampleType === "fit" ? sendFitSampleMutation : sendFabricSampleMutation;
 
-  async function sendFabricSample(event: FormEvent<HTMLFormElement>) {
+  async function sendSample(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    if (productName == null) return;
     const inputData = Object.fromEntries(data.entries()) as Omit<
       SendSampleInput,
-      "productName"
+      "parentCode"
     >;
     try {
       await sendSampleMutation({
-        variables: { data: { productName, ...inputData } },
+        variables: { data: { parentCode, ...inputData } },
       });
     } catch (error) {
       toast.error((error as ApolloError).message);
@@ -47,7 +45,7 @@ export function SendSampleParams({
   return (
     <Stack
       component="form"
-      onSubmit={sendFabricSample}
+      onSubmit={sendSample}
       spacing={2}
       autoComplete="off"
     >
@@ -65,3 +63,26 @@ export function SendSampleParams({
     </Stack>
   );
 }
+
+export default function SendSampleToolbarButton({
+  disabled = false,
+  sampleType,
+  parentCode,
+}: {
+  disabled?: boolean;
+  sampleType: SampleType;
+  parentCode: string;
+}) {
+  return (
+    <GridToolbarButton
+      icon={<Fragment />}
+      title={`Send ${sampleType == "fit" ? "FIS" : "FAS"}`}
+      children={
+        <SendSampleParams parentCode={parentCode} sampleType={sampleType} />
+      }
+      disabled={disabled}
+    />
+  );
+}
+
+export type SampleType = "fit" | "fabric";

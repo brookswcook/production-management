@@ -1,7 +1,5 @@
-import { ApolloError } from "@apollo/client";
 import {
   Box,
-  Button,
   Container,
   Grid,
   LinearProgress,
@@ -11,32 +9,23 @@ import {
 } from "@mui/material";
 import { Fragment } from "react";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import {
   ProductFieldsFragment,
-  TechPack,
   Sample,
   useProductQuery,
   FabricProduction,
   ProductProduction,
   ProductQualityControl,
   ProductShipping,
-  useMarkFabricSampleDeliveredMutation,
-  useApproveFabricSampleMutation,
 } from "../../generated/graphql";
 import { ObjectInputSet } from "../Common";
 import SampleGrid from "../SampleGrid";
+import SendSampleToolbarButton from "../SampleParams";
 
 export default function ProductDetail() {
-  const { productName = "" } = useParams();
+  const { code = "" } = useParams();
   const { data, error, loading } = useProductQuery({
-    variables: { productName },
-  });
-  const [markFabricSampleDeliveredMutation] =
-    useMarkFabricSampleDeliveredMutation();
-
-  const [approveFabricSampleMutation] = useApproveFabricSampleMutation({
-    refetchQueries: ["Product"],
+    variables: { code },
   });
 
   if (loading)
@@ -53,8 +42,7 @@ export default function ProductDetail() {
     deliveryDate,
     onTime,
     stage,
-    techPack,
-    fabricSample,
+    fabric,
     fitSamples,
     preProductionSample,
     fabricProduction,
@@ -62,23 +50,6 @@ export default function ProductDetail() {
     qualityControl,
     shipping,
   }: ProductFieldsFragment = data.product;
-
-  async function approveFabricSample() {
-    try {
-      await markFabricSampleDeliveredMutation({
-        variables: {
-          data: { productName: name, sku: fabricSample?.sku as string },
-        },
-      });
-      await approveFabricSampleMutation({
-        variables: {
-          data: { productName: name, sku: fabricSample?.sku as string },
-        },
-      });
-    } catch (error) {
-      toast.error((error as ApolloError).message);
-    }
-  }
 
   const DetailViewSection = ({
     children,
@@ -114,9 +85,11 @@ export default function ProductDetail() {
               {`${stage} stage ${onTime ? "is on time" : "is not on time"}`}
             </Typography>
             <Box>
-              <Button variant="text" size="small" onClick={approveFabricSample}>
-                Approve Fabric Sample
-              </Button>
+              <SendSampleToolbarButton
+                sampleType={"fabric"}
+                parentCode={fabric.code}
+              />
+              <SendSampleToolbarButton sampleType={"fit"} parentCode={code} />
             </Box>
           </Paper>
         </Grid>
@@ -140,20 +113,19 @@ export default function ProductDetail() {
                 variant="standard"
               />
             </DetailViewSection>
-            <DetailViewSection headerTitle="Tech pack:">
-              <ObjectInputSet<TechPack>
-                objectToRender={techPack}
-                fields={["fabricCode", "type", "pantone"]}
-              />
-            </DetailViewSection>
-            <DetailViewSection headerTitle="Fabric sample:">
-              <ObjectInputSet<Sample>
-                objectToRender={fabricSample}
-                fields={["sku", "approved", "trackNumber", "delivered"]}
+            <DetailViewSection headerTitle="Fabric samples:">
+              <SampleGrid
+                parentCode={fabric.code}
+                sampleType="fabric"
+                samples={fabric.samples as Sample[]}
               />
             </DetailViewSection>
             <DetailViewSection headerTitle="Fit samples:">
-              <SampleGrid productName={name} samples={fitSamples as Sample[]} />
+              <SampleGrid
+                parentCode={code}
+                sampleType="fit"
+                samples={fitSamples as Sample[]}
+              />
             </DetailViewSection>
             <DetailViewSection headerTitle="Pre production sample:">
               <ObjectInputSet<Sample>

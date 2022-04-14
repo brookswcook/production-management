@@ -18,7 +18,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ProductParams from "../ProductParams";
 import { Fragment, useState } from "react";
 import TechPackParams from "../TechPackParams";
-import { SendSampleParams } from "../SampleParams";
+import SendSampleToolbarButton from "../SampleParams";
 import { Link } from "react-router-dom";
 
 export default function ProductGrid() {
@@ -29,12 +29,10 @@ export default function ProductGrid() {
   const [selectedGridItems, setSelectedGridItems] =
     useState<GridSelectionModel>([]);
 
-  const selectedProductsNames = Array.from(selectedGridItems.values());
+  const selectedProductsCodes = Array.from(selectedGridItems.values());
   const selectedProducts = rows.filter(row =>
-    selectedProductsNames.some(name => row.name == name)
+    selectedProductsCodes.some(code => row.code == code)
   );
-  const selectedSingleProductName =
-    selectedProducts.length === 1 ? selectedProducts[0].name : undefined;
 
   const columns: GridColDef[] = [
     {
@@ -177,30 +175,18 @@ export default function ProductGrid() {
             icon={<Fragment />}
             title="Upload TP"
             children={
-              <TechPackParams productName={selectedSingleProductName} />
+              <TechPackParams productCode={selectedProducts[0]?.code} />
             }
             disabled={selectedProducts.length !== 1}
           />
-          <GridToolbarButton
-            icon={<Fragment />}
-            title="Send FaS"
-            children={
-              <SendSampleParams
-                productName={selectedSingleProductName}
-                sampleType="fabricSample"
-              />
-            }
+          <SendSampleToolbarButton
+            sampleType={"fabric"}
+            parentCode={selectedProducts[0]?.fabric.code}
             disabled={selectedProducts.length !== 1}
           />
-          <GridToolbarButton
-            icon={<Fragment />}
-            title="Send FiS"
-            children={
-              <SendSampleParams
-                productName={selectedSingleProductName}
-                sampleType="fitSample"
-              />
-            }
+          <SendSampleToolbarButton
+            sampleType={"fit"}
+            parentCode={selectedProducts[0]?.code}
             disabled={selectedProducts.length !== 1}
           />
         </GridToolbarContainer>

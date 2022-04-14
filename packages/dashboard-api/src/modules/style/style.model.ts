@@ -1,4 +1,8 @@
-import { getModelForClass, prop as Property } from "@typegoose/typegoose";
+import {
+  getModelForClass,
+  prop as Property,
+  ReturnModelType,
+} from "@typegoose/typegoose";
 import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
@@ -22,6 +26,20 @@ export class Style {
     },
   })
   techPackUploaded?: boolean;
+
+  static async findOneAndUpdateOrFail(
+    this: ReturnModelType<typeof Style>,
+    query: Partial<Style>,
+    update: Partial<Style>
+  ): Promise<Style> {
+    const updatedStyle = await this.findOneAndUpdate(
+      query,
+      { $set: update },
+      { returnOriginal: false }
+    ).exec();
+    if (updatedStyle == null) throw Error(`Style is not found`);
+    return updatedStyle;
+  }
 }
 
 export const StyleModel = getModelForClass(Style);

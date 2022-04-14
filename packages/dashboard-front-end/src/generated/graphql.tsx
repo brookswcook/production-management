@@ -17,11 +17,35 @@ export type Scalars = {
   DateTime: string;
 };
 
+export type CreateFabricInput = {
+  code: Scalars['String'];
+  colorCode?: InputMaybe<Scalars['String']>;
+  colorName: Scalars['String'];
+  printUrl?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
+};
+
 export type CreateProductInput = {
   deliveryDate: Scalars['DateTime'];
-  model: Scalars['String'];
-  sku: Scalars['String'];
-  style: Scalars['String'];
+  fabricCode: Scalars['String'];
+  styleCode: Scalars['String'];
+};
+
+export type CreateStyleInput = {
+  code: Scalars['String'];
+  name: Scalars['String'];
+  techPackUrl?: InputMaybe<Scalars['String']>;
+};
+
+export type Fabric = {
+  __typename?: 'Fabric';
+  code: Scalars['String'];
+  colorCode?: Maybe<Scalars['String']>;
+  colorName: Scalars['String'];
+  colorType?: Maybe<Scalars['String']>;
+  printUrl?: Maybe<Scalars['String']>;
+  samples: Array<FabricSample>;
+  type?: Maybe<Scalars['String']>;
 };
 
 export type FabricProduction = {
@@ -33,10 +57,20 @@ export type FabricProduction = {
   sufficientFabric?: Maybe<Scalars['Boolean']>;
 };
 
+export type FabricSample = {
+  __typename?: 'FabricSample';
+  approved?: Maybe<Scalars['Boolean']>;
+  delivered?: Maybe<Scalars['Boolean']>;
+  parentCode: Scalars['String'];
+  sku: Scalars['String'];
+  trackNumber: Scalars['String'];
+};
+
 export type FitSample = {
   __typename?: 'FitSample';
   approved?: Maybe<Scalars['Boolean']>;
   delivered?: Maybe<Scalars['Boolean']>;
+  parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
 };
@@ -48,16 +82,19 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  approveFabricSample: Product;
+  approveFabricSample: FabricSample;
   approveFitSample: FitSample;
+  createFabric: Fabric;
   createProduct: Product;
+  createStyle: Style;
   login: Scalars['String'];
-  markFabricSampleDelivered: Product;
-  sendFabricSample: Product;
+  sendFabricSample: FabricSample;
   sendFitSample: FitSample;
   startFabricProduction: Product;
   startProduction: Product;
-  uploadTechPack: Product;
+  unApproveFabricSample: FabricSample;
+  unApproveFitSample: FitSample;
+  uploadTechPack: Style;
 };
 
 
@@ -71,18 +108,23 @@ export type MutationApproveFitSampleArgs = {
 };
 
 
+export type MutationCreateFabricArgs = {
+  data: CreateFabricInput;
+};
+
+
 export type MutationCreateProductArgs = {
   data: CreateProductInput;
 };
 
 
-export type MutationLoginArgs = {
-  data: LoginInput;
+export type MutationCreateStyleArgs = {
+  data: CreateStyleInput;
 };
 
 
-export type MutationMarkFabricSampleDeliveredArgs = {
-  data: UniqueSampleInput;
+export type MutationLoginArgs = {
+  data: LoginInput;
 };
 
 
@@ -106,30 +148,40 @@ export type MutationStartProductionArgs = {
 };
 
 
+export type MutationUnApproveFabricSampleArgs = {
+  data: UniqueSampleInput;
+};
+
+
+export type MutationUnApproveFitSampleArgs = {
+  data: UniqueSampleInput;
+};
+
+
 export type MutationUploadTechPackArgs = {
   data: UploadTechPackInput;
 };
 
 export type Product = {
   __typename?: 'Product';
+  code: Scalars['String'];
   deliveryDate: Scalars['DateTime'];
   dueIn: Scalars['Int'];
+  fabric: Fabric;
+  fabricCode: Scalars['String'];
   fabricProduction?: Maybe<FabricProduction>;
-  fabricSample?: Maybe<Sample>;
   fabricSampleDelivered: Scalars['Boolean'];
   fitSampleDelivered: Scalars['Boolean'];
   fitSamples: Array<FitSample>;
-  model: Scalars['String'];
   name: Scalars['String'];
   onTime: Scalars['Boolean'];
   preProductionSample?: Maybe<FitSample>;
   production?: Maybe<ProductProduction>;
   qualityControl?: Maybe<ProductQualityControl>;
   shipping?: Maybe<ProductShipping>;
-  sku: Scalars['String'];
   stage: Scalars['String'];
-  style: Scalars['String'];
-  techPack?: Maybe<TechPack>;
+  style: Style;
+  styleCode: Scalars['String'];
   techPackUploaded: Scalars['Boolean'];
 };
 
@@ -161,26 +213,41 @@ export type ProductShipping = {
 
 export type Query = {
   __typename?: 'Query';
+  fabric?: Maybe<Fabric>;
+  fabrics: Array<Fabric>;
   product: Product;
   products: Array<Product>;
+  style?: Maybe<Style>;
+  styles: Array<Style>;
   users: Array<User>;
 };
 
 
+export type QueryFabricArgs = {
+  code: Scalars['String'];
+};
+
+
 export type QueryProductArgs = {
-  productName: Scalars['String'];
+  code: Scalars['String'];
+};
+
+
+export type QueryStyleArgs = {
+  code: Scalars['String'];
 };
 
 export type Sample = {
   __typename?: 'Sample';
   approved?: Maybe<Scalars['Boolean']>;
   delivered?: Maybe<Scalars['Boolean']>;
+  parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
 };
 
 export type SendSampleInput = {
-  productName: Scalars['String'];
+  parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
 };
@@ -193,44 +260,28 @@ export type StartProductionInput = {
   productName: Scalars['String'];
 };
 
-export type TechPack = {
-  __typename?: 'TechPack';
-  color?: Maybe<Scalars['String']>;
-  fabricCode: Scalars['String'];
-  pantone?: Maybe<Scalars['String']>;
-  print?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
+export type Style = {
+  __typename?: 'Style';
+  code: Scalars['String'];
+  name: Scalars['String'];
+  techPackUploaded?: Maybe<Scalars['Boolean']>;
+  techPackUrl?: Maybe<Scalars['String']>;
 };
 
 export type UniqueSampleInput = {
-  productName: Scalars['String'];
+  parentCode: Scalars['String'];
   sku: Scalars['String'];
 };
 
 export type UploadTechPackInput = {
-  fabricCode: Scalars['String'];
-  pantone?: InputMaybe<Scalars['String']>;
-  print?: InputMaybe<Scalars['String']>;
-  productName: Scalars['String'];
+  code: Scalars['String'];
+  techPackUrl: Scalars['String'];
 };
 
 export type User = {
   __typename?: 'User';
   date: Scalars['DateTime'];
   email: Scalars['String'];
-};
-
-export type Workflow = {
-  __typename?: 'Workflow';
-  fabricProduction: WorkflowStage;
-  production: WorkflowStage;
-  qualityControl: WorkflowStage;
-  shipping: WorkflowStage;
-};
-
-export type WorkflowStage = {
-  __typename?: 'WorkflowStage';
-  duration: Scalars['Float'];
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
@@ -245,58 +296,93 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login: string };
 
-export type ApproveFabricSampleMutationVariables = Exact<{
-  data: UniqueSampleInput;
-}>;
-
-
-export type ApproveFabricSampleMutation = { __typename?: 'Mutation', approveFabricSample: { __typename?: 'Product', fabricSample?: { __typename?: 'Sample', sku: string } | null } };
-
-export type MarkFabricSampleDeliveredMutationVariables = Exact<{
-  data: UniqueSampleInput;
-}>;
-
-
-export type MarkFabricSampleDeliveredMutation = { __typename?: 'Mutation', markFabricSampleDelivered: { __typename?: 'Product', fabricSample?: { __typename?: 'Sample', sku: string } | null } };
-
 export type SampleFieldsFragment = { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null };
 
 export type FitSampleFieldsFragment = { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null };
 
-export type ProductFieldsFragment = { __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null };
+export type ProductFieldsFragment = { __typename?: 'Product', code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string, techPackUrl?: string | null, techPackUploaded?: boolean | null }, fabric: { __typename?: 'Fabric', code: string, colorName: string, type?: string | null, colorType?: string | null, colorCode?: string | null, printUrl?: string | null, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null };
 
 export type ProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null }> };
+export type ProductsQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string, techPackUrl?: string | null, techPackUploaded?: boolean | null }, fabric: { __typename?: 'Fabric', code: string, colorName: string, type?: string | null, colorType?: string | null, colorCode?: string | null, printUrl?: string | null, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null }> };
 
 export type ProductQueryVariables = Exact<{
-  productName: Scalars['String'];
+  code: Scalars['String'];
 }>;
 
 
-export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null } };
+export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string, techPackUrl?: string | null, techPackUploaded?: boolean | null }, fabric: { __typename?: 'Fabric', code: string, colorName: string, type?: string | null, colorType?: string | null, colorCode?: string | null, printUrl?: string | null, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null } };
 
 export type CreateProductMutationVariables = Exact<{
   data: CreateProductInput;
 }>;
 
 
-export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'Product', name: string, model: string, style: string, sku: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null, fabricSample?: { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } | null, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null } };
+export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'Product', code: string } };
+
+export type StyleQueryVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type StyleQuery = { __typename?: 'Query', style?: { __typename?: 'Style', code: string, name: string } | null };
+
+export type CreateStyleMutationVariables = Exact<{
+  data: CreateStyleInput;
+}>;
+
+
+export type CreateStyleMutation = { __typename?: 'Mutation', createStyle: { __typename?: 'Style', code: string, name: string } };
+
+export type FabricQueryVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type FabricQuery = { __typename?: 'Query', fabric?: { __typename?: 'Fabric', code: string, colorName: string } | null };
+
+export type CreateFabricMutationVariables = Exact<{
+  data: CreateFabricInput;
+}>;
+
+
+export type CreateFabricMutation = { __typename?: 'Mutation', createFabric: { __typename?: 'Fabric', code: string, colorName: string } };
 
 export type ApproveFitSampleMutationVariables = Exact<{
   data: UniqueSampleInput;
 }>;
 
 
-export type ApproveFitSampleMutation = { __typename?: 'Mutation', approveFitSample: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null } };
+export type ApproveFitSampleMutation = { __typename?: 'Mutation', approveFitSample: { __typename?: 'FitSample', sku: string } };
+
+export type UnApproveFitSampleMutationVariables = Exact<{
+  data: UniqueSampleInput;
+}>;
+
+
+export type UnApproveFitSampleMutation = { __typename?: 'Mutation', unApproveFitSample: { __typename?: 'FitSample', sku: string } };
+
+export type ApproveFabricSampleMutationVariables = Exact<{
+  data: UniqueSampleInput;
+}>;
+
+
+export type ApproveFabricSampleMutation = { __typename?: 'Mutation', approveFabricSample: { __typename?: 'FabricSample', sku: string } };
+
+export type UnApproveFabricSampleMutationVariables = Exact<{
+  data: UniqueSampleInput;
+}>;
+
+
+export type UnApproveFabricSampleMutation = { __typename?: 'Mutation', unApproveFabricSample: { __typename?: 'FabricSample', sku: string } };
 
 export type SendFabricSampleMutationVariables = Exact<{
   data: SendSampleInput;
 }>;
 
 
-export type SendFabricSampleMutation = { __typename?: 'Mutation', sendFabricSample: { __typename?: 'Product', name: string } };
+export type SendFabricSampleMutation = { __typename?: 'Mutation', sendFabricSample: { __typename?: 'FabricSample', sku: string } };
 
 export type SendFitSampleMutationVariables = Exact<{
   data: SendSampleInput;
@@ -310,7 +396,7 @@ export type UploadTechPackMutationVariables = Exact<{
 }>;
 
 
-export type UploadTechPackMutation = { __typename?: 'Mutation', uploadTechPack: { __typename?: 'Product', name: string, deliveryDate: string, techPack?: { __typename?: 'TechPack', fabricCode: string, type?: string | null, print?: string | null, pantone?: string | null, color?: string | null } | null } };
+export type UploadTechPackMutation = { __typename?: 'Mutation', uploadTechPack: { __typename?: 'Style', code: string } };
 
 export const SampleFieldsFragmentDoc = gql`
     fragment sampleFields on Sample {
@@ -330,10 +416,8 @@ export const FitSampleFieldsFragmentDoc = gql`
     `;
 export const ProductFieldsFragmentDoc = gql`
     fragment productFields on Product {
+  code
   name
-  model
-  style
-  sku
   deliveryDate
   dueIn
   onTime
@@ -341,15 +425,25 @@ export const ProductFieldsFragmentDoc = gql`
   techPackUploaded
   fabricSampleDelivered
   fitSampleDelivered
-  techPack {
-    fabricCode
-    type
-    print
-    pantone
-    color
+  style {
+    code
+    name
+    techPackUrl
+    techPackUploaded
   }
-  fabricSample {
-    ...sampleFields
+  fabric {
+    code
+    colorName
+    type
+    colorType
+    colorCode
+    printUrl
+    samples {
+      sku
+      approved
+      trackNumber
+      delivered
+    }
   }
   fitSamples {
     ...fitSampleFields
@@ -385,8 +479,7 @@ export const ProductFieldsFragmentDoc = gql`
     delivered
   }
 }
-    ${SampleFieldsFragmentDoc}
-${FitSampleFieldsFragmentDoc}`;
+    ${FitSampleFieldsFragmentDoc}`;
 export const UsersDocument = gql`
     query Users {
   users {
@@ -453,76 +546,6 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
-export const ApproveFabricSampleDocument = gql`
-    mutation ApproveFabricSample($data: UniqueSampleInput!) {
-  approveFabricSample(data: $data) {
-    fabricSample {
-      sku
-    }
-  }
-}
-    `;
-export type ApproveFabricSampleMutationFn = Apollo.MutationFunction<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>;
-
-/**
- * __useApproveFabricSampleMutation__
- *
- * To run a mutation, you first call `useApproveFabricSampleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useApproveFabricSampleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [approveFabricSampleMutation, { data, loading, error }] = useApproveFabricSampleMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useApproveFabricSampleMutation(baseOptions?: Apollo.MutationHookOptions<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>(ApproveFabricSampleDocument, options);
-      }
-export type ApproveFabricSampleMutationHookResult = ReturnType<typeof useApproveFabricSampleMutation>;
-export type ApproveFabricSampleMutationResult = Apollo.MutationResult<ApproveFabricSampleMutation>;
-export type ApproveFabricSampleMutationOptions = Apollo.BaseMutationOptions<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>;
-export const MarkFabricSampleDeliveredDocument = gql`
-    mutation MarkFabricSampleDelivered($data: UniqueSampleInput!) {
-  markFabricSampleDelivered(data: $data) {
-    fabricSample {
-      sku
-    }
-  }
-}
-    `;
-export type MarkFabricSampleDeliveredMutationFn = Apollo.MutationFunction<MarkFabricSampleDeliveredMutation, MarkFabricSampleDeliveredMutationVariables>;
-
-/**
- * __useMarkFabricSampleDeliveredMutation__
- *
- * To run a mutation, you first call `useMarkFabricSampleDeliveredMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMarkFabricSampleDeliveredMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [markFabricSampleDeliveredMutation, { data, loading, error }] = useMarkFabricSampleDeliveredMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useMarkFabricSampleDeliveredMutation(baseOptions?: Apollo.MutationHookOptions<MarkFabricSampleDeliveredMutation, MarkFabricSampleDeliveredMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<MarkFabricSampleDeliveredMutation, MarkFabricSampleDeliveredMutationVariables>(MarkFabricSampleDeliveredDocument, options);
-      }
-export type MarkFabricSampleDeliveredMutationHookResult = ReturnType<typeof useMarkFabricSampleDeliveredMutation>;
-export type MarkFabricSampleDeliveredMutationResult = Apollo.MutationResult<MarkFabricSampleDeliveredMutation>;
-export type MarkFabricSampleDeliveredMutationOptions = Apollo.BaseMutationOptions<MarkFabricSampleDeliveredMutation, MarkFabricSampleDeliveredMutationVariables>;
 export const ProductsDocument = gql`
     query Products {
   products {
@@ -558,8 +581,8 @@ export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
 export type ProductsLazyQueryHookResult = ReturnType<typeof useProductsLazyQuery>;
 export type ProductsQueryResult = Apollo.QueryResult<ProductsQuery, ProductsQueryVariables>;
 export const ProductDocument = gql`
-    query Product($productName: String!) {
-  product(productName: $productName) {
+    query Product($code: String!) {
+  product(code: $code) {
     ...productFields
   }
 }
@@ -577,7 +600,7 @@ export const ProductDocument = gql`
  * @example
  * const { data, loading, error } = useProductQuery({
  *   variables: {
- *      productName: // value for 'productName'
+ *      code: // value for 'code'
  *   },
  * });
  */
@@ -595,10 +618,10 @@ export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVa
 export const CreateProductDocument = gql`
     mutation CreateProduct($data: CreateProductInput!) {
   createProduct(data: $data) {
-    ...productFields
+    code
   }
 }
-    ${ProductFieldsFragmentDoc}`;
+    `;
 export type CreateProductMutationFn = Apollo.MutationFunction<CreateProductMutation, CreateProductMutationVariables>;
 
 /**
@@ -625,13 +648,150 @@ export function useCreateProductMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateProductMutationHookResult = ReturnType<typeof useCreateProductMutation>;
 export type CreateProductMutationResult = Apollo.MutationResult<CreateProductMutation>;
 export type CreateProductMutationOptions = Apollo.BaseMutationOptions<CreateProductMutation, CreateProductMutationVariables>;
+export const StyleDocument = gql`
+    query Style($code: String!) {
+  style(code: $code) {
+    code
+    name
+  }
+}
+    `;
+
+/**
+ * __useStyleQuery__
+ *
+ * To run a query within a React component, call `useStyleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStyleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStyleQuery({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useStyleQuery(baseOptions: Apollo.QueryHookOptions<StyleQuery, StyleQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StyleQuery, StyleQueryVariables>(StyleDocument, options);
+      }
+export function useStyleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StyleQuery, StyleQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StyleQuery, StyleQueryVariables>(StyleDocument, options);
+        }
+export type StyleQueryHookResult = ReturnType<typeof useStyleQuery>;
+export type StyleLazyQueryHookResult = ReturnType<typeof useStyleLazyQuery>;
+export type StyleQueryResult = Apollo.QueryResult<StyleQuery, StyleQueryVariables>;
+export const CreateStyleDocument = gql`
+    mutation CreateStyle($data: CreateStyleInput!) {
+  createStyle(data: $data) {
+    code
+    name
+  }
+}
+    `;
+export type CreateStyleMutationFn = Apollo.MutationFunction<CreateStyleMutation, CreateStyleMutationVariables>;
+
+/**
+ * __useCreateStyleMutation__
+ *
+ * To run a mutation, you first call `useCreateStyleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateStyleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createStyleMutation, { data, loading, error }] = useCreateStyleMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateStyleMutation(baseOptions?: Apollo.MutationHookOptions<CreateStyleMutation, CreateStyleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateStyleMutation, CreateStyleMutationVariables>(CreateStyleDocument, options);
+      }
+export type CreateStyleMutationHookResult = ReturnType<typeof useCreateStyleMutation>;
+export type CreateStyleMutationResult = Apollo.MutationResult<CreateStyleMutation>;
+export type CreateStyleMutationOptions = Apollo.BaseMutationOptions<CreateStyleMutation, CreateStyleMutationVariables>;
+export const FabricDocument = gql`
+    query Fabric($code: String!) {
+  fabric(code: $code) {
+    code
+    colorName
+  }
+}
+    `;
+
+/**
+ * __useFabricQuery__
+ *
+ * To run a query within a React component, call `useFabricQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFabricQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFabricQuery({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useFabricQuery(baseOptions: Apollo.QueryHookOptions<FabricQuery, FabricQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FabricQuery, FabricQueryVariables>(FabricDocument, options);
+      }
+export function useFabricLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FabricQuery, FabricQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FabricQuery, FabricQueryVariables>(FabricDocument, options);
+        }
+export type FabricQueryHookResult = ReturnType<typeof useFabricQuery>;
+export type FabricLazyQueryHookResult = ReturnType<typeof useFabricLazyQuery>;
+export type FabricQueryResult = Apollo.QueryResult<FabricQuery, FabricQueryVariables>;
+export const CreateFabricDocument = gql`
+    mutation CreateFabric($data: CreateFabricInput!) {
+  createFabric(data: $data) {
+    code
+    colorName
+  }
+}
+    `;
+export type CreateFabricMutationFn = Apollo.MutationFunction<CreateFabricMutation, CreateFabricMutationVariables>;
+
+/**
+ * __useCreateFabricMutation__
+ *
+ * To run a mutation, you first call `useCreateFabricMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateFabricMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createFabricMutation, { data, loading, error }] = useCreateFabricMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateFabricMutation(baseOptions?: Apollo.MutationHookOptions<CreateFabricMutation, CreateFabricMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateFabricMutation, CreateFabricMutationVariables>(CreateFabricDocument, options);
+      }
+export type CreateFabricMutationHookResult = ReturnType<typeof useCreateFabricMutation>;
+export type CreateFabricMutationResult = Apollo.MutationResult<CreateFabricMutation>;
+export type CreateFabricMutationOptions = Apollo.BaseMutationOptions<CreateFabricMutation, CreateFabricMutationVariables>;
 export const ApproveFitSampleDocument = gql`
     mutation ApproveFitSample($data: UniqueSampleInput!) {
   approveFitSample(data: $data) {
     sku
-    approved
-    trackNumber
-    delivered
   }
 }
     `;
@@ -661,10 +821,109 @@ export function useApproveFitSampleMutation(baseOptions?: Apollo.MutationHookOpt
 export type ApproveFitSampleMutationHookResult = ReturnType<typeof useApproveFitSampleMutation>;
 export type ApproveFitSampleMutationResult = Apollo.MutationResult<ApproveFitSampleMutation>;
 export type ApproveFitSampleMutationOptions = Apollo.BaseMutationOptions<ApproveFitSampleMutation, ApproveFitSampleMutationVariables>;
+export const UnApproveFitSampleDocument = gql`
+    mutation UnApproveFitSample($data: UniqueSampleInput!) {
+  unApproveFitSample(data: $data) {
+    sku
+  }
+}
+    `;
+export type UnApproveFitSampleMutationFn = Apollo.MutationFunction<UnApproveFitSampleMutation, UnApproveFitSampleMutationVariables>;
+
+/**
+ * __useUnApproveFitSampleMutation__
+ *
+ * To run a mutation, you first call `useUnApproveFitSampleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnApproveFitSampleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unApproveFitSampleMutation, { data, loading, error }] = useUnApproveFitSampleMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUnApproveFitSampleMutation(baseOptions?: Apollo.MutationHookOptions<UnApproveFitSampleMutation, UnApproveFitSampleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnApproveFitSampleMutation, UnApproveFitSampleMutationVariables>(UnApproveFitSampleDocument, options);
+      }
+export type UnApproveFitSampleMutationHookResult = ReturnType<typeof useUnApproveFitSampleMutation>;
+export type UnApproveFitSampleMutationResult = Apollo.MutationResult<UnApproveFitSampleMutation>;
+export type UnApproveFitSampleMutationOptions = Apollo.BaseMutationOptions<UnApproveFitSampleMutation, UnApproveFitSampleMutationVariables>;
+export const ApproveFabricSampleDocument = gql`
+    mutation ApproveFabricSample($data: UniqueSampleInput!) {
+  approveFabricSample(data: $data) {
+    sku
+  }
+}
+    `;
+export type ApproveFabricSampleMutationFn = Apollo.MutationFunction<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>;
+
+/**
+ * __useApproveFabricSampleMutation__
+ *
+ * To run a mutation, you first call `useApproveFabricSampleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useApproveFabricSampleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [approveFabricSampleMutation, { data, loading, error }] = useApproveFabricSampleMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useApproveFabricSampleMutation(baseOptions?: Apollo.MutationHookOptions<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>(ApproveFabricSampleDocument, options);
+      }
+export type ApproveFabricSampleMutationHookResult = ReturnType<typeof useApproveFabricSampleMutation>;
+export type ApproveFabricSampleMutationResult = Apollo.MutationResult<ApproveFabricSampleMutation>;
+export type ApproveFabricSampleMutationOptions = Apollo.BaseMutationOptions<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>;
+export const UnApproveFabricSampleDocument = gql`
+    mutation UnApproveFabricSample($data: UniqueSampleInput!) {
+  unApproveFabricSample(data: $data) {
+    sku
+  }
+}
+    `;
+export type UnApproveFabricSampleMutationFn = Apollo.MutationFunction<UnApproveFabricSampleMutation, UnApproveFabricSampleMutationVariables>;
+
+/**
+ * __useUnApproveFabricSampleMutation__
+ *
+ * To run a mutation, you first call `useUnApproveFabricSampleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnApproveFabricSampleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unApproveFabricSampleMutation, { data, loading, error }] = useUnApproveFabricSampleMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUnApproveFabricSampleMutation(baseOptions?: Apollo.MutationHookOptions<UnApproveFabricSampleMutation, UnApproveFabricSampleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnApproveFabricSampleMutation, UnApproveFabricSampleMutationVariables>(UnApproveFabricSampleDocument, options);
+      }
+export type UnApproveFabricSampleMutationHookResult = ReturnType<typeof useUnApproveFabricSampleMutation>;
+export type UnApproveFabricSampleMutationResult = Apollo.MutationResult<UnApproveFabricSampleMutation>;
+export type UnApproveFabricSampleMutationOptions = Apollo.BaseMutationOptions<UnApproveFabricSampleMutation, UnApproveFabricSampleMutationVariables>;
 export const SendFabricSampleDocument = gql`
     mutation SendFabricSample($data: SendSampleInput!) {
   sendFabricSample(data: $data) {
-    name
+    sku
   }
 }
     `;
@@ -730,15 +989,7 @@ export type SendFitSampleMutationOptions = Apollo.BaseMutationOptions<SendFitSam
 export const UploadTechPackDocument = gql`
     mutation UploadTechPack($data: UploadTechPackInput!) {
   uploadTechPack(data: $data) {
-    name
-    deliveryDate
-    techPack {
-      fabricCode
-      type
-      print
-      pantone
-      color
-    }
+    code
   }
 }
     `;

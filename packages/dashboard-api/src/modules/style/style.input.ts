@@ -11,3 +11,12 @@ export class CreateStyleInput {
   @Field({ nullable: true })
   techPackUrl?: string;
 }
+
+@InputType()
+export class UploadTechPackInput {
+  @Field()
+  code!: string;
+
+  @Field()
+  techPackUrl!: string;
+}

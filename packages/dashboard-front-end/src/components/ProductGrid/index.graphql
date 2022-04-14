@@ -13,10 +13,8 @@ fragment fitSampleFields on FitSample {
 }
 
 fragment productFields on Product {
+  code
   name
-  model
-  style
-  sku
   deliveryDate
   dueIn
   onTime
@@ -24,15 +22,25 @@ fragment productFields on Product {
   techPackUploaded
   fabricSampleDelivered
   fitSampleDelivered
-  techPack {
-    fabricCode
-    type
-    print
-    pantone
-    color
+  style {
+    code
+    name
+    techPackUrl
+    techPackUploaded
   }
-  fabricSample {
-    ...sampleFields
+  fabric {
+    code
+    colorName
+    type
+    colorType
+    colorCode
+    printUrl
+    samples {
+      sku
+      approved
+      trackNumber
+      delivered
+    }
   }
   fitSamples {
     ...fitSampleFields
@@ -75,8 +83,8 @@ query Products {
   }
 }
 
-query Product($productName: String!) {
-  product(productName: $productName) {
+query Product($code: String!) {
+  product(code: $code) {
     ...productFields
   }
 }

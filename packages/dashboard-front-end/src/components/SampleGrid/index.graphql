@@ -1,8 +1,23 @@
 mutation ApproveFitSample($data: UniqueSampleInput!) {
   approveFitSample(data: $data) {
     sku
-    approved
-    trackNumber
-    delivered
+  }
+}
+
+mutation UnApproveFitSample($data: UniqueSampleInput!) {
+  unApproveFitSample(data: $data) {
+    sku
+  }
+}
+
+mutation ApproveFabricSample($data: UniqueSampleInput!) {
+  approveFabricSample(data: $data) {
+    sku
+  }
+}
+
+mutation UnApproveFabricSample($data: UniqueSampleInput!) {
+  unApproveFabricSample(data: $data) {
+    sku
   }
 }

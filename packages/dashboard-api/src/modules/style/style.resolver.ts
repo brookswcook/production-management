@@ -1,5 +1,5 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
-import { CreateStyleInput } from "./style.input";
+import { CreateStyleInput, UploadTechPackInput } from "./style.input";
 import { Style, StyleModel } from "./style.model";
 
 @Resolver(Style)
@@ -22,5 +22,13 @@ export class StyleResolver {
     return await new StyleModel({
       ...data,
     }).save();
+  }
+
+  @Authorized()
+  @Mutation(() => Style)
+  async uploadTechPack(
+    @Arg("data") { code, techPackUrl }: UploadTechPackInput
+  ): Promise<Style> {
+    return StyleModel.findOneAndUpdateOrFail({ code }, { techPackUrl });
   }
 }

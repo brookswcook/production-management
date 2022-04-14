@@ -62,7 +62,6 @@ export default function ProductParams() {
       }
 
       if (fabricData?.fabric) {
-        console.log(fabricData?.fabric);
         toast.info(
           `Fabric with ${fabricCode} code exists. Created product will use it.`
         );

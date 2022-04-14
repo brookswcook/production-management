@@ -8,20 +8,35 @@ import {
 } from "@mui/x-data-grid";
 import { Fragment, useState } from "react";
 import { toast } from "react-toastify";
-import { Sample, useApproveFitSampleMutation } from "../../generated/graphql";
+import {
+  Sample,
+  useApproveFabricSampleMutation,
+  useApproveFitSampleMutation,
+  useUnApproveFabricSampleMutation,
+  useUnApproveFitSampleMutation,
+} from "../../generated/graphql";
 
 export default function SampleGrid({
-  productCode,
+  parentCode,
+  sampleType,
   samples: rows,
 }: {
-  productCode: string;
+  parentCode: string;
+  sampleType: "fit" | "fabric";
   samples: Omit<Sample, "typename">[];
 }) {
+  const refetchPolicy = {
+    refetchQueries: ["Product"],
+  };
   const [selectedGridItems, setSelectedGridItems] =
     useState<GridSelectionModel>([]);
-  const [approveFitSampleMutation] = useApproveFitSampleMutation({
-    refetchQueries: ["Product"],
-  });
+  const [approveFitSampleMutation] = useApproveFitSampleMutation(refetchPolicy);
+  const [unApproveFitSampleMutation] =
+    useUnApproveFitSampleMutation(refetchPolicy);
+  const [approveFabricSampleMutation] =
+    useApproveFabricSampleMutation(refetchPolicy);
+  const [unApproveFabricSampleMutation] =
+    useUnApproveFabricSampleMutation(refetchPolicy);
 
   // TODO: reuse it since there's a similar thing in ProductGrid
   const selectedSampleSkus = Array.from(selectedGridItems.values());
@@ -44,7 +59,7 @@ export default function SampleGrid({
   ];
 
   return (
-    <Box sx={{ height: "200px", width: "100%", pt: 1 }}>
+    <Box sx={{ height: "300px", width: "100%", pt: 1 }}>
       <DataGrid
         rows={rows ?? []}
         columns={columns}
@@ -69,21 +84,45 @@ export default function SampleGrid({
           <Button
             variant="text"
             size="small"
-            onClick={approveFitSample}
+            onClick={approveSample}
             disabled={selectedSamples.length !== 1}
           >
-            Approve fit sample
+            Approve
+          </Button>
+          <Button
+            variant="text"
+            size="small"
+            onClick={declineSample}
+            disabled={selectedSamples.length !== 1}
+          >
+            Decline
           </Button>
         </GridToolbarContainer>
       </Fragment>
     );
   }
 
-  async function approveFitSample() {
+  async function approveSample() {
     try {
-      await approveFitSampleMutation({
+      await (sampleType == "fit"
+        ? approveFitSampleMutation
+        : approveFabricSampleMutation)({
         variables: {
-          data: { productCode, sku: selectedSingleSampleSku ?? "" },
+          data: { parentCode, sku: selectedSingleSampleSku ?? "" },
+        },
+      });
+    } catch (error) {
+      toast.error((error as ApolloError).message);
+    }
+  }
+
+  async function declineSample() {
+    try {
+      await (sampleType == "fit"
+        ? unApproveFitSampleMutation
+        : unApproveFabricSampleMutation)({
+        variables: {
+          data: { parentCode, sku: selectedSingleSampleSku ?? "" },
         },
       });
     } catch (error) {

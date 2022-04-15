@@ -6,6 +6,7 @@
   "scripts": {
     "start": "lerna run start",
     "dev": "lerna run dev",
+    "dev:debug": "lerna run dev:debug",
     "build": "lerna run build",
     "format": "prettier --write \"packages/*/src/**/*.{js,jsx,ts,tsx}\"",
     "lint": "npx lerna exec -- eslint --ext ts,tsx src --quiet",

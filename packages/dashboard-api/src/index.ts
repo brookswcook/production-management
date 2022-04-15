@@ -17,6 +17,7 @@ import { jwtAuth } from "./lib/jwt";
 import { buildSchema } from "type-graphql";
 import mongoose from "mongoose";
 import { authChecker } from "./lib/auth";
+import { graphqlUploadExpress } from "graphql-upload";
 
 class DashboardApolloServer extends Server {
   constructor() {
@@ -51,6 +52,7 @@ class DashboardApolloServer extends Server {
   }
 
   protected setupMiddlewares() {
+    this.app.use(graphqlUploadExpress({ maxFileSize: 2e7 }));
     this.app.use(jwt(jwtAuth));
     this.app.use(
       cors({

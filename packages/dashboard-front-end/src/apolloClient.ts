@@ -1,27 +1,15 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { REACT_APP_APOLLO_SERVER_URI } from "./config";
-import { setContext } from "@apollo/client/link/context";
+import { createUploadLink } from "apollo-upload-client";
 
 export default function createClient(authToken: string | null) {
-  const httpLink = createHttpLink({
-    uri: REACT_APP_APOLLO_SERVER_URI,
-  });
-
-  const authLink = createAuthLink(authToken);
-
   return new ApolloClient({
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
-  });
-}
-
-function createAuthLink(token: string | null) {
-  return setContext((_, { headers }: { headers: object }) => {
-    return {
+    link: createUploadLink({
+      uri: REACT_APP_APOLLO_SERVER_URI,
       headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : "",
+        authorization: authToken ? `Bearer ${authToken}` : "",
       },
-    };
+    }),
+    cache: new InMemoryCache(),
   });
 }

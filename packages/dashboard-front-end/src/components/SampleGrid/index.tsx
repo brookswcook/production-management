@@ -92,10 +92,10 @@ export default function SampleGrid({
           <Button
             variant="text"
             size="small"
-            onClick={declineSample}
+            onClick={rejectSample}
             disabled={selectedSamples.length !== 1}
           >
-            Decline
+            Reject
           </Button>
         </GridToolbarContainer>
       </Fragment>
@@ -116,7 +116,7 @@ export default function SampleGrid({
     }
   }
 
-  async function declineSample() {
+  async function rejectSample() {
     try {
       await (sampleType == "fit"
         ? unApproveFitSampleMutation

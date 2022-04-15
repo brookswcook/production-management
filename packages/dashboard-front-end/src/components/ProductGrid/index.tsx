@@ -93,7 +93,7 @@ export default function ProductGrid() {
     {
       field: "factoryName",
       headerName: "Factory",
-      minWidth: 70,
+      minWidth: 50,
       flex: 1,
       type: "string",
     },

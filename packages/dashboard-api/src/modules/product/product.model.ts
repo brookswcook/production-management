@@ -60,6 +60,10 @@ export class Product {
 
   @Field()
   @Property({ required: true })
+  factoryName!: string;
+
+  @Field()
+  @Property({ required: true })
   deliveryDate!: Date;
 
   @Field(() => Int)

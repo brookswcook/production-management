@@ -43,6 +43,7 @@ export default function ProductDetail() {
     deliveryDate,
     onTime,
     stage,
+    factoryName,
     fabric,
     fitSamples,
     preProductionSample,
@@ -110,7 +111,17 @@ export default function ProductDetail() {
                 InputProps={{
                   readOnly: true,
                 }}
+                size="small"
                 helperText={`Due In: ${dueIn} days`}
+                variant="standard"
+              />
+              <TextField
+                label="Factory"
+                defaultValue={factoryName}
+                InputProps={{
+                  readOnly: true,
+                }}
+                size="small"
                 variant="standard"
               />
             </DetailViewSection>

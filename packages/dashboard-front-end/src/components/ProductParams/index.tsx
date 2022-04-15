@@ -40,6 +40,7 @@ export default function ProductParams() {
       fabricCode,
       colorName,
       colorCode,
+      factoryName,
     } = Object.fromEntries(data.entries()) as CreateProductInput &
       CreateFabricInput &
       CreateStyleInput;
@@ -72,7 +73,9 @@ export default function ProductParams() {
       }
 
       await newProductMutation({
-        variables: { data: { styleCode, fabricCode, deliveryDate } },
+        variables: {
+          data: { styleCode, fabricCode, factoryName, deliveryDate },
+        },
       });
     } catch (error) {
       toast.error((error as ApolloError).message);
@@ -115,6 +118,7 @@ export default function ProductParams() {
         name="colorCode"
         helperText="Example: color swatch 1345. If fabric has pattern leave it empty."
       />
+      <TextField label="Factory" name="factoryName" />
       <DatePicker
         label="Delivery Date"
         value={deliveryDate}

@@ -9,5 +9,8 @@ export class CreateProductInput {
   fabricCode!: string;
 
   @Field()
+  factoryName!: string;
+
+  @Field()
   deliveryDate!: Date;
 }

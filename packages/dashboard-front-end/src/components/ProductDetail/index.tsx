@@ -17,6 +17,7 @@ import {
   ProductProduction,
   ProductQualityControl,
   ProductShipping,
+  Fabric,
 } from "../../generated/graphql";
 import { ObjectInputSet } from "../Common";
 import SampleGrid from "../SampleGrid";
@@ -111,6 +112,12 @@ export default function ProductDetail() {
                 }}
                 helperText={`Due In: ${dueIn} days`}
                 variant="standard"
+              />
+            </DetailViewSection>
+            <DetailViewSection headerTitle="Fabric:">
+              <ObjectInputSet<Fabric>
+                objectToRender={fabric}
+                fields={["code", "colorType", "colorCode"]}
               />
             </DetailViewSection>
             <DetailViewSection headerTitle="Fabric samples:">

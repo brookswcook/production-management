@@ -23,25 +23,30 @@ export default function ProductParams() {
   const [newFabricMutation] = useCreateFabricMutation();
   //const [uploadTechPackMutation] = useUploadTechPackMutation();
 
-  const [
-    getStyle,
-    // { data: styleData, error: styleError, loading: styleLoading },
-  ] = useStyleLazyQuery();
-  const [
-    getFabric,
-    // { data: fabricData, error: fabricError, loading: fabricLoading },
-  ] = useFabricLazyQuery();
+  const [getStyle] = useStyleLazyQuery();
+  const [getFabric] = useFabricLazyQuery();
   const [deliveryDate, setDeliveryDate] = useState<string>("");
-  const [file, setFile] = useState<File | undefined>(undefined);
+  const [techPackFile, setTechPackFile] = useState<File | undefined>(undefined);
+  const [printFile, setPrintFile] = useState<File | undefined>(undefined);
 
-  function onChange({
+  function onTechPackInputChange({
     target: {
       files,
       validity: { valid },
     },
   }: ChangeEvent<HTMLInputElement>) {
     const file = files?.item(0) ?? null;
-    if (valid && file) setFile(file);
+    if (valid && file) setTechPackFile(file);
+  }
+
+  function onPrintInputChange({
+    target: {
+      files,
+      validity: { valid },
+    },
+  }: ChangeEvent<HTMLInputElement>) {
+    const file = files?.item(0) ?? null;
+    if (valid && file) setPrintFile(file);
   }
 
   async function createNewProduct(event: FormEvent<HTMLFormElement>) {
@@ -74,10 +79,10 @@ export default function ProductParams() {
           code: styleCode,
           name: styleName,
         };
-        if (file) {
+        if (techPackFile) {
           newStyleData.techPack = {
-            file,
-            fileSize: file.size,
+            file: techPackFile,
+            fileSize: techPackFile.size,
           };
         }
         await newStyleMutation({
@@ -90,8 +95,19 @@ export default function ProductParams() {
           `Fabric with ${fabricCode} code exists. Created product will use it.`
         );
       } else {
+        const newFabricData: CreateFabricInput = {
+          code: fabricCode,
+          colorName,
+          colorCode,
+        };
+        if (printFile) {
+          newFabricData.print = {
+            file: printFile,
+            fileSize: printFile.size,
+          };
+        }
         await newFabricMutation({
-          variables: { data: { code: fabricCode, colorName, colorCode } },
+          variables: { data: newFabricData },
         });
       }
 
@@ -139,14 +155,21 @@ export default function ProductParams() {
       <TextField
         label="Color Code"
         name="colorCode"
-        helperText="Example: color swatch 1345. If fabric has pattern leave it empty."
+        helperText="Example: color swatch 1345. If fabric has print leave it empty."
+      />
+      <TextField
+        variant="standard"
+        label="Print"
+        type="file"
+        helperText="Upload print file if fabric has print"
+        onChange={onPrintInputChange}
       />
       <TextField
         variant="standard"
         label="Tech Pack"
         type="file"
         helperText="You can upload tech pack now or later"
-        onChange={onChange}
+        onChange={onTechPackInputChange}
       />
       <TextField
         label="Factory"

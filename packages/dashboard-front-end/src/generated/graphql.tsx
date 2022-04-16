@@ -23,7 +23,7 @@ export type CreateFabricInput = {
   code: Scalars['String'];
   colorCode?: InputMaybe<Scalars['String']>;
   colorName: Scalars['String'];
-  printUrl?: InputMaybe<Scalars['String']>;
+  print?: InputMaybe<FileUploadInput>;
   type?: InputMaybe<Scalars['String']>;
 };
 
@@ -102,6 +102,7 @@ export type Mutation = {
   startProduction: Product;
   unApproveFabricSample: FabricSample;
   unApproveFitSample: FitSample;
+  uploadPrint: Fabric;
   uploadTechPack: Style;
 };
 
@@ -163,6 +164,11 @@ export type MutationUnApproveFabricSampleArgs = {
 
 export type MutationUnApproveFitSampleArgs = {
   data: UniqueSampleInput;
+};
+
+
+export type MutationUploadPrintArgs = {
+  data: UploadPrintInput;
 };
 
 
@@ -280,6 +286,11 @@ export type Style = {
 export type UniqueSampleInput = {
   parentCode: Scalars['String'];
   sku: Scalars['String'];
+};
+
+export type UploadPrintInput = {
+  code: Scalars['String'];
+  print: FileUploadInput;
 };
 
 export type UploadTechPackInput = {

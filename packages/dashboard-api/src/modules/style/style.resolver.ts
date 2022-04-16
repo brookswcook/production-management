@@ -1,7 +1,6 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import { CreateStyleInput, UploadTechPackInput } from "./style.input";
 import { Style, StyleModel } from "./style.model";
-import { FileUpload } from "graphql-upload";
 import { uploadFile } from "../file/file.service";
 
 @Resolver(Style)

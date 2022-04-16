@@ -16,5 +16,14 @@ export class CreateFabricInput {
   colorCode?: string;
 
   @Field(() => FileUploadInput, { nullable: true })
-  printUrl?: FileUploadInput;
+  print?: FileUploadInput;
+}
+
+@InputType()
+export class UploadPrintInput {
+  @Field()
+  code!: string;
+
+  @Field(() => FileUploadInput)
+  print!: FileUploadInput;
 }

@@ -1,4 +1,8 @@
-import { getModelForClass, prop as Property } from "@typegoose/typegoose";
+import {
+  getModelForClass,
+  prop as Property,
+  ReturnModelType,
+} from "@typegoose/typegoose";
 import { ColorType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
 import { FabricSample } from "../sample/sample.model";
@@ -42,6 +46,21 @@ export class Fabric {
     localField: "code",
   } as FabricSamplesPropParams)
   samples!: FabricSample[];
+
+  // TODO: reuse
+  static async findOneAndUpdateOrFail(
+    this: ReturnModelType<typeof Fabric>,
+    query: Partial<Fabric>,
+    update: Partial<Fabric>
+  ): Promise<Fabric> {
+    const updatedFabric = await this.findOneAndUpdate(
+      query,
+      { $set: update },
+      { returnOriginal: false }
+    ).exec();
+    if (updatedFabric == null) throw Error(`Fabric is not found`);
+    return updatedFabric;
+  }
 }
 
 export const FabricModel = getModelForClass(Fabric);

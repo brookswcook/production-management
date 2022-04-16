@@ -4,7 +4,7 @@ import { upload } from "../../lib/s3";
 
 export async function uploadFile(
   parentCode: string,
-  type: "tech-pack" | "pattern",
+  type: "tech-pack" | "print",
   file: Promise<FileUpload>,
   contentLength: number
 ): Promise<string> {

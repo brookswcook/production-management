@@ -1,9 +1,8 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import { CreateStyleInput, UploadTechPackInput } from "./style.input";
 import { Style, StyleModel } from "./style.model";
-import { upload } from "../../lib/s3";
 import { FileUpload } from "graphql-upload";
-import { extname } from "path";
+import { uploadFile } from "../file/file.service";
 
 @Resolver(Style)
 export class StyleResolver {
@@ -25,8 +24,9 @@ export class StyleResolver {
     const styleData: Style = { code, name };
     if (techPack != null) {
       const { file, fileSize } = techPack;
-      styleData.techPackUrl = await this.uploadTechPackFile(
+      styleData.techPackUrl = await uploadFile(
         code,
+        "tech-pack",
         file,
         fileSize
       );
@@ -39,20 +39,7 @@ export class StyleResolver {
   async uploadTechPack(
     @Arg("data") { code, techPack: { file, fileSize } }: UploadTechPackInput
   ): Promise<Style> {
-    const techPackUrl = await this.uploadTechPackFile(code, file, fileSize);
+    const techPackUrl = await uploadFile(code, "tech-pack", file, fileSize);
     return StyleModel.findOneAndUpdateOrFail({ code }, { techPackUrl });
-  }
-
-  private async uploadTechPackFile(
-    styleCode: string,
-    file: Promise<FileUpload>,
-    contentLength: number
-  ): Promise<string> {
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    const { filename, createReadStream } = await file;
-    const extName = extname(filename);
-    const fileName = `tech-pack-${styleCode}-${Date.now()}${extName}`;
-    const content = createReadStream();
-    return await upload({ fileName, content, contentLength });
   }
 }

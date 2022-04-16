@@ -18,7 +18,7 @@ const s3Client = new S3({
   },
 });
 
-export const upload = async ({
+export async function upload({
   fileName: Key,
   content: Body,
   contentLength: ContentLength,
@@ -26,7 +26,7 @@ export const upload = async ({
   fileName: string;
   content: string | ReadStream;
   contentLength: number;
-}): Promise<string> => {
+}): Promise<string> {
   try {
     await s3Client.send(
       new PutObjectCommand({ Bucket, Key, Body, ContentLength })
@@ -38,4 +38,4 @@ export const upload = async ({
     logger.error(err);
     throw err;
   }
-};
+}

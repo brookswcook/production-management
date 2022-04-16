@@ -15,6 +15,8 @@ export type Scalars = {
   Float: number;
   /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
   DateTime: string;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 export type CreateFabricInput = {
@@ -35,7 +37,7 @@ export type CreateProductInput = {
 export type CreateStyleInput = {
   code: Scalars['String'];
   name: Scalars['String'];
-  techPackUrl?: InputMaybe<Scalars['String']>;
+  techPack?: InputMaybe<FileUploadInput>;
 };
 
 export type Fabric = {
@@ -65,6 +67,11 @@ export type FabricSample = {
   parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
+};
+
+export type FileUploadInput = {
+  file: Scalars['Upload'];
+  fileSize: Scalars['Float'];
 };
 
 export type FitSample = {
@@ -277,7 +284,7 @@ export type UniqueSampleInput = {
 
 export type UploadTechPackInput = {
   code: Scalars['String'];
-  techPackUrl: Scalars['String'];
+  techPack: FileUploadInput;
 };
 
 export type User = {

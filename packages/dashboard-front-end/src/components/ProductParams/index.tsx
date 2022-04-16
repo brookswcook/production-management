@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Stack, TextField } from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import {
@@ -10,6 +10,7 @@ import {
   useStyleLazyQuery,
   useCreateStyleMutation,
   useCreateFabricMutation,
+  //useUploadTechPackMutation,
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
 import { ApolloError } from "@apollo/client";
@@ -20,6 +21,7 @@ export default function ProductParams() {
   });
   const [newStyleMutation] = useCreateStyleMutation();
   const [newFabricMutation] = useCreateFabricMutation();
+  //const [uploadTechPackMutation] = useUploadTechPackMutation();
 
   const [
     getStyle,
@@ -30,6 +32,17 @@ export default function ProductParams() {
     // { data: fabricData, error: fabricError, loading: fabricLoading },
   ] = useFabricLazyQuery();
   const [deliveryDate, setDeliveryDate] = useState<string>("");
+  const [file, setFile] = useState<File | undefined>(undefined);
+
+  function onChange({
+    target: {
+      files,
+      validity: { valid },
+    },
+  }: ChangeEvent<HTMLInputElement>) {
+    const file = files?.item(0) ?? null;
+    if (valid && file) setFile(file);
+  }
 
   async function createNewProduct(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -41,7 +54,7 @@ export default function ProductParams() {
       colorName,
       colorCode,
       factoryName,
-    } = Object.fromEntries(data.entries()) as CreateProductInput &
+    } = Object.fromEntries(data.entries()) as unknown as CreateProductInput &
       CreateFabricInput &
       CreateStyleInput;
     try {
@@ -57,8 +70,18 @@ export default function ProductParams() {
           `Style with ${styleCode} code exists. Created product will use it.`
         );
       } else {
+        const newStyleData: CreateStyleInput = {
+          code: styleCode,
+          name: styleName,
+        };
+        if (file) {
+          newStyleData.techPack = {
+            file,
+            fileSize: file.size,
+          };
+        }
         await newStyleMutation({
-          variables: { data: { code: styleCode, name: styleName } },
+          variables: { data: newStyleData },
         });
       }
 
@@ -97,7 +120,7 @@ export default function ProductParams() {
       />
       <TextField
         label="Style Name"
-        name="styleName"
+        name="name"
         helperText="Example: The Mia Dress"
         required
       />
@@ -118,7 +141,18 @@ export default function ProductParams() {
         name="colorCode"
         helperText="Example: color swatch 1345. If fabric has pattern leave it empty."
       />
-      <TextField label="Factory" name="factoryName" />
+      <TextField
+        variant="standard"
+        label="Tech Pack"
+        type="file"
+        helperText="You can upload tech pack now or later"
+        onChange={onChange}
+      />
+      <TextField
+        label="Factory"
+        name="factoryName"
+        helperText="Example: Kevin"
+      />
       <DatePicker
         label="Delivery Date"
         value={deliveryDate}

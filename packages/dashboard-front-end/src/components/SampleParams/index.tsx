@@ -1,5 +1,12 @@
 import { ApolloError } from "@apollo/client";
-import { Stack, FormControl, InputLabel, Input, Button } from "@mui/material";
+import {
+  Stack,
+  FormControl,
+  InputLabel,
+  Input,
+  Button,
+  Typography,
+} from "@mui/material";
 import { FormEvent, Fragment } from "react";
 import { toast } from "react-toastify";
 import {
@@ -49,6 +56,9 @@ export function SendSampleParams({
       spacing={2}
       autoComplete="off"
     >
+      <Typography component="span" variant="h6">
+        {`Send ${sampleType === "fit" ? "fit" : "fabric"} sample`}
+      </Typography>
       <FormControl>
         <InputLabel htmlFor="sku-input">SKU</InputLabel>
         <Input name="sku" id="sku-input" />

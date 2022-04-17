@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import {
   CreateFabricInput,
@@ -10,7 +10,6 @@ import {
   useStyleLazyQuery,
   useCreateStyleMutation,
   useCreateFabricMutation,
-  //useUploadTechPackMutation,
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
 import { ApolloError } from "@apollo/client";
@@ -21,13 +20,12 @@ export default function ProductParams() {
   });
   const [newStyleMutation] = useCreateStyleMutation();
   const [newFabricMutation] = useCreateFabricMutation();
-  //const [uploadTechPackMutation] = useUploadTechPackMutation();
 
   const [getStyle] = useStyleLazyQuery();
   const [getFabric] = useFabricLazyQuery();
   const [deliveryDate, setDeliveryDate] = useState<string>("");
-  const [techPackFile, setTechPackFile] = useState<File | undefined>(undefined);
-  const [printFile, setPrintFile] = useState<File | undefined>(undefined);
+  const [techPackFile, setTechPackFile] = useState<File | null>(null);
+  const [printFile, setPrintFile] = useState<File | null>(null);
 
   function onTechPackInputChange({
     target: {
@@ -72,7 +70,10 @@ export default function ProductParams() {
 
       if (styleData?.style) {
         toast.info(
-          `Style with ${styleCode} code exists. Created product will use it.`
+          `Style with ${styleCode} code exists. 
+          Created product will use it. 
+          Uploaded tech pack will be ignored`,
+          { delay: 30 }
         );
       } else {
         const newStyleData: CreateStyleInput = {
@@ -92,7 +93,10 @@ export default function ProductParams() {
 
       if (fabricData?.fabric) {
         toast.info(
-          `Fabric with ${fabricCode} code exists. Created product will use it.`
+          `Fabric with ${fabricCode} code exists. 
+          Created product will use it. 
+          Uploaded fabric print will be ignored`,
+          { delay: 30 }
         );
       } else {
         const newFabricData: CreateFabricInput = {
@@ -128,6 +132,9 @@ export default function ProductParams() {
       spacing={2}
       autoComplete="off"
     >
+      <Typography component="span" variant="h6">
+        {`Create new product`}
+      </Typography>
       <TextField
         label="Style Number"
         name="styleCode"

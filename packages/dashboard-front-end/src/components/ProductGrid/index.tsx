@@ -175,7 +175,7 @@ export default function ProductGrid() {
             icon={<Fragment />}
             title="Upload TP"
             children={
-              <TechPackParams productCode={selectedProducts[0]?.code} />
+              <TechPackParams styleCode={selectedProducts[0]?.style.code} />
             }
             disabled={selectedProducts.length !== 1}
           />

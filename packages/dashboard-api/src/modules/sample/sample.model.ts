@@ -64,7 +64,7 @@ export class Sample {
     return new this(data).save();
   }
 
-  static async unApproveSample(
+  static async rejectSample(
     this: ReturnModelType<typeof Sample>,
     parentCode: string,
     sku: string

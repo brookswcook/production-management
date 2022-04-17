@@ -12,8 +12,8 @@ import {
   Sample,
   useApproveFabricSampleMutation,
   useApproveFitSampleMutation,
-  useUnApproveFabricSampleMutation,
-  useUnApproveFitSampleMutation,
+  useRejectFabricSampleMutation,
+  useRejectFitSampleMutation,
 } from "../../generated/graphql";
 
 export default function SampleGrid({
@@ -31,12 +31,11 @@ export default function SampleGrid({
   const [selectedGridItems, setSelectedGridItems] =
     useState<GridSelectionModel>([]);
   const [approveFitSampleMutation] = useApproveFitSampleMutation(refetchPolicy);
-  const [unApproveFitSampleMutation] =
-    useUnApproveFitSampleMutation(refetchPolicy);
+  const [rejectFitSampleMutation] = useRejectFitSampleMutation(refetchPolicy);
   const [approveFabricSampleMutation] =
     useApproveFabricSampleMutation(refetchPolicy);
-  const [unApproveFabricSampleMutation] =
-    useUnApproveFabricSampleMutation(refetchPolicy);
+  const [rejectFabricSampleMutation] =
+    useRejectFabricSampleMutation(refetchPolicy);
 
   // TODO: reuse it since there's a similar thing in ProductGrid
   const selectedSampleSkus = Array.from(selectedGridItems.values());
@@ -119,8 +118,8 @@ export default function SampleGrid({
   async function rejectSample() {
     try {
       await (sampleType == "fit"
-        ? unApproveFitSampleMutation
-        : unApproveFabricSampleMutation)({
+        ? rejectFitSampleMutation
+        : rejectFabricSampleMutation)({
         variables: {
           data: { parentCode, sku: selectedSingleSampleSku ?? "" },
         },

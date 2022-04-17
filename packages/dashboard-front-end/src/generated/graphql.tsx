@@ -96,12 +96,12 @@ export type Mutation = {
   createProduct: Product;
   createStyle: Style;
   login: Scalars['String'];
+  rejectFabricSample: FabricSample;
+  rejectFitSample: FitSample;
   sendFabricSample: FabricSample;
   sendFitSample: FitSample;
   startFabricProduction: Product;
   startProduction: Product;
-  unApproveFabricSample: FabricSample;
-  unApproveFitSample: FitSample;
   uploadPrint: Fabric;
   uploadTechPack: Style;
 };
@@ -137,6 +137,16 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationRejectFabricSampleArgs = {
+  data: UniqueSampleInput;
+};
+
+
+export type MutationRejectFitSampleArgs = {
+  data: UniqueSampleInput;
+};
+
+
 export type MutationSendFabricSampleArgs = {
   data: SendSampleInput;
 };
@@ -154,16 +164,6 @@ export type MutationStartFabricProductionArgs = {
 
 export type MutationStartProductionArgs = {
   data: StartProductionInput;
-};
-
-
-export type MutationUnApproveFabricSampleArgs = {
-  data: UniqueSampleInput;
-};
-
-
-export type MutationUnApproveFitSampleArgs = {
-  data: UniqueSampleInput;
 };
 
 
@@ -230,7 +230,7 @@ export type Query = {
   __typename?: 'Query';
   fabric?: Maybe<Fabric>;
   fabrics: Array<Fabric>;
-  printLink?: Maybe<Scalars['String']>;
+  printLink: Scalars['String'];
   product: Product;
   products: Array<Product>;
   style?: Maybe<Style>;
@@ -333,7 +333,7 @@ export type PrintLinkQueryVariables = Exact<{
 }>;
 
 
-export type PrintLinkQuery = { __typename?: 'Query', printLink?: string | null };
+export type PrintLinkQuery = { __typename?: 'Query', printLink: string };
 
 export type SampleFieldsFragment = { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null };
 
@@ -395,12 +395,12 @@ export type ApproveFitSampleMutationVariables = Exact<{
 
 export type ApproveFitSampleMutation = { __typename?: 'Mutation', approveFitSample: { __typename?: 'FitSample', sku: string } };
 
-export type UnApproveFitSampleMutationVariables = Exact<{
+export type RejectFitSampleMutationVariables = Exact<{
   data: UniqueSampleInput;
 }>;
 
 
-export type UnApproveFitSampleMutation = { __typename?: 'Mutation', unApproveFitSample: { __typename?: 'FitSample', sku: string } };
+export type RejectFitSampleMutation = { __typename?: 'Mutation', rejectFitSample: { __typename?: 'FitSample', sku: string } };
 
 export type ApproveFabricSampleMutationVariables = Exact<{
   data: UniqueSampleInput;
@@ -409,12 +409,12 @@ export type ApproveFabricSampleMutationVariables = Exact<{
 
 export type ApproveFabricSampleMutation = { __typename?: 'Mutation', approveFabricSample: { __typename?: 'FabricSample', sku: string } };
 
-export type UnApproveFabricSampleMutationVariables = Exact<{
+export type RejectFabricSampleMutationVariables = Exact<{
   data: UniqueSampleInput;
 }>;
 
 
-export type UnApproveFabricSampleMutation = { __typename?: 'Mutation', unApproveFabricSample: { __typename?: 'FabricSample', sku: string } };
+export type RejectFabricSampleMutation = { __typename?: 'Mutation', rejectFabricSample: { __typename?: 'FabricSample', sku: string } };
 
 export type SendFabricSampleMutationVariables = Exact<{
   data: SendSampleInput;
@@ -901,39 +901,39 @@ export function useApproveFitSampleMutation(baseOptions?: Apollo.MutationHookOpt
 export type ApproveFitSampleMutationHookResult = ReturnType<typeof useApproveFitSampleMutation>;
 export type ApproveFitSampleMutationResult = Apollo.MutationResult<ApproveFitSampleMutation>;
 export type ApproveFitSampleMutationOptions = Apollo.BaseMutationOptions<ApproveFitSampleMutation, ApproveFitSampleMutationVariables>;
-export const UnApproveFitSampleDocument = gql`
-    mutation UnApproveFitSample($data: UniqueSampleInput!) {
-  unApproveFitSample(data: $data) {
+export const RejectFitSampleDocument = gql`
+    mutation RejectFitSample($data: UniqueSampleInput!) {
+  rejectFitSample(data: $data) {
     sku
   }
 }
     `;
-export type UnApproveFitSampleMutationFn = Apollo.MutationFunction<UnApproveFitSampleMutation, UnApproveFitSampleMutationVariables>;
+export type RejectFitSampleMutationFn = Apollo.MutationFunction<RejectFitSampleMutation, RejectFitSampleMutationVariables>;
 
 /**
- * __useUnApproveFitSampleMutation__
+ * __useRejectFitSampleMutation__
  *
- * To run a mutation, you first call `useUnApproveFitSampleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUnApproveFitSampleMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useRejectFitSampleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRejectFitSampleMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [unApproveFitSampleMutation, { data, loading, error }] = useUnApproveFitSampleMutation({
+ * const [rejectFitSampleMutation, { data, loading, error }] = useRejectFitSampleMutation({
  *   variables: {
  *      data: // value for 'data'
  *   },
  * });
  */
-export function useUnApproveFitSampleMutation(baseOptions?: Apollo.MutationHookOptions<UnApproveFitSampleMutation, UnApproveFitSampleMutationVariables>) {
+export function useRejectFitSampleMutation(baseOptions?: Apollo.MutationHookOptions<RejectFitSampleMutation, RejectFitSampleMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UnApproveFitSampleMutation, UnApproveFitSampleMutationVariables>(UnApproveFitSampleDocument, options);
+        return Apollo.useMutation<RejectFitSampleMutation, RejectFitSampleMutationVariables>(RejectFitSampleDocument, options);
       }
-export type UnApproveFitSampleMutationHookResult = ReturnType<typeof useUnApproveFitSampleMutation>;
-export type UnApproveFitSampleMutationResult = Apollo.MutationResult<UnApproveFitSampleMutation>;
-export type UnApproveFitSampleMutationOptions = Apollo.BaseMutationOptions<UnApproveFitSampleMutation, UnApproveFitSampleMutationVariables>;
+export type RejectFitSampleMutationHookResult = ReturnType<typeof useRejectFitSampleMutation>;
+export type RejectFitSampleMutationResult = Apollo.MutationResult<RejectFitSampleMutation>;
+export type RejectFitSampleMutationOptions = Apollo.BaseMutationOptions<RejectFitSampleMutation, RejectFitSampleMutationVariables>;
 export const ApproveFabricSampleDocument = gql`
     mutation ApproveFabricSample($data: UniqueSampleInput!) {
   approveFabricSample(data: $data) {
@@ -967,39 +967,39 @@ export function useApproveFabricSampleMutation(baseOptions?: Apollo.MutationHook
 export type ApproveFabricSampleMutationHookResult = ReturnType<typeof useApproveFabricSampleMutation>;
 export type ApproveFabricSampleMutationResult = Apollo.MutationResult<ApproveFabricSampleMutation>;
 export type ApproveFabricSampleMutationOptions = Apollo.BaseMutationOptions<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>;
-export const UnApproveFabricSampleDocument = gql`
-    mutation UnApproveFabricSample($data: UniqueSampleInput!) {
-  unApproveFabricSample(data: $data) {
+export const RejectFabricSampleDocument = gql`
+    mutation RejectFabricSample($data: UniqueSampleInput!) {
+  rejectFabricSample(data: $data) {
     sku
   }
 }
     `;
-export type UnApproveFabricSampleMutationFn = Apollo.MutationFunction<UnApproveFabricSampleMutation, UnApproveFabricSampleMutationVariables>;
+export type RejectFabricSampleMutationFn = Apollo.MutationFunction<RejectFabricSampleMutation, RejectFabricSampleMutationVariables>;
 
 /**
- * __useUnApproveFabricSampleMutation__
+ * __useRejectFabricSampleMutation__
  *
- * To run a mutation, you first call `useUnApproveFabricSampleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUnApproveFabricSampleMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useRejectFabricSampleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRejectFabricSampleMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [unApproveFabricSampleMutation, { data, loading, error }] = useUnApproveFabricSampleMutation({
+ * const [rejectFabricSampleMutation, { data, loading, error }] = useRejectFabricSampleMutation({
  *   variables: {
  *      data: // value for 'data'
  *   },
  * });
  */
-export function useUnApproveFabricSampleMutation(baseOptions?: Apollo.MutationHookOptions<UnApproveFabricSampleMutation, UnApproveFabricSampleMutationVariables>) {
+export function useRejectFabricSampleMutation(baseOptions?: Apollo.MutationHookOptions<RejectFabricSampleMutation, RejectFabricSampleMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UnApproveFabricSampleMutation, UnApproveFabricSampleMutationVariables>(UnApproveFabricSampleDocument, options);
+        return Apollo.useMutation<RejectFabricSampleMutation, RejectFabricSampleMutationVariables>(RejectFabricSampleDocument, options);
       }
-export type UnApproveFabricSampleMutationHookResult = ReturnType<typeof useUnApproveFabricSampleMutation>;
-export type UnApproveFabricSampleMutationResult = Apollo.MutationResult<UnApproveFabricSampleMutation>;
-export type UnApproveFabricSampleMutationOptions = Apollo.BaseMutationOptions<UnApproveFabricSampleMutation, UnApproveFabricSampleMutationVariables>;
+export type RejectFabricSampleMutationHookResult = ReturnType<typeof useRejectFabricSampleMutation>;
+export type RejectFabricSampleMutationResult = Apollo.MutationResult<RejectFabricSampleMutation>;
+export type RejectFabricSampleMutationOptions = Apollo.BaseMutationOptions<RejectFabricSampleMutation, RejectFabricSampleMutationVariables>;
 export const SendFabricSampleDocument = gql`
     mutation SendFabricSample($data: SendSampleInput!) {
   sendFabricSample(data: $data) {

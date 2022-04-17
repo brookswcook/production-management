@@ -14,10 +14,10 @@ export class FabricSampleResolver {
 
   @Authorized()
   @Mutation(() => FabricSample)
-  unApproveFabricSample(
+  rejectFabricSample(
     @Arg("data") { parentCode, sku }: UniqueSampleInput
   ): Promise<FabricSample> {
-    return FabricSampleModel.unApproveSample(parentCode, sku);
+    return FabricSampleModel.rejectSample(parentCode, sku);
   }
 
   @Authorized()

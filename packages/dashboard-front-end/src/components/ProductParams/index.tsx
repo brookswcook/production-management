@@ -132,7 +132,7 @@ export default function ProductParams() {
       spacing={2}
       autoComplete="off"
     >
-      <Typography component="span" variant="h6">
+      <Typography component="h4" variant="inherit">
         {`Create new product`}
       </Typography>
       <TextField

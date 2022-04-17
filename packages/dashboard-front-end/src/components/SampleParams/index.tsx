@@ -56,7 +56,7 @@ export function SendSampleParams({
       spacing={2}
       autoComplete="off"
     >
-      <Typography component="span" variant="h6">
+      <Typography component="h4" variant="inherit">
         {`Send ${sampleType === "fit" ? "fit" : "fabric"} sample`}
       </Typography>
       <FormControl>

@@ -48,7 +48,7 @@ export default function TechPackParams({
       onSubmit={uploadTechPack}
       spacing={2}
     >
-      <Typography component="span" variant="h6">
+      <Typography component="h4" variant="inherit">
         {`Upload tech pack for style ${code}`}
       </Typography>
       <TextField

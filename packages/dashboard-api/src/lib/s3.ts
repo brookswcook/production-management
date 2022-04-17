@@ -1,4 +1,5 @@
-import { S3, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { ReadStream } from "fs";
 import logger from "./logger";
 import {
@@ -19,7 +20,7 @@ const s3Client = new S3({
 });
 
 export async function upload({
-  fileName: Key,
+  fileName,
   content: Body,
   contentLength: ContentLength,
 }: {
@@ -29,11 +30,25 @@ export async function upload({
 }): Promise<string> {
   try {
     await s3Client.send(
-      new PutObjectCommand({ Bucket, Key, Body, ContentLength })
+      new PutObjectCommand({ Bucket, Key: fileName, Body, ContentLength })
     );
-    const filePath = `${Bucket}/${Key}`;
-    logger.info(`Successfully uploaded object: ${filePath}`);
-    return filePath;
+    logger.info(`Successfully uploaded object: ${fileName}`);
+    return fileName;
+  } catch (err) {
+    logger.error(err);
+    throw err;
+  }
+}
+
+export async function getDownloadLink({
+  fileName: Key,
+}: {
+  fileName: string;
+}): Promise<string> {
+  try {
+    const command = new GetObjectCommand({ Bucket, Key });
+    const url = await getSignedUrl(s3Client, command);
+    return url;
   } catch (err) {
     logger.error(err);
     throw err;

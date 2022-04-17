@@ -17,12 +17,12 @@ export class Style {
 
   @Field({ nullable: true })
   @Property()
-  techPackUrl?: string;
+  techPackFileName?: string;
 
   @Field({ nullable: true })
   @Property({
     get(this: Style) {
-      return this.techPackUrl != null;
+      return this.techPackFileName != null;
     },
   })
   techPackUploaded?: boolean;

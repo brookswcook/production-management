@@ -26,7 +26,7 @@ fragment productFields on Product {
   style {
     code
     name
-    techPackUrl
+    techPackFileName
     techPackUploaded
   }
   fabric {
@@ -35,7 +35,7 @@ fragment productFields on Product {
     type
     colorType
     colorCode
-    printUrl
+    printFileName
     samples {
       sku
       approved

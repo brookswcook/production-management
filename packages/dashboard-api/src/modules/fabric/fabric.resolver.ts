@@ -1,5 +1,5 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
-import { uploadFile } from "../file/file.service";
+import { getDownloadFileLink, uploadFile } from "../file/file.service";
 import { CreateFabricInput, UploadPrintInput } from "./fabric.input";
 import { Fabric, FabricModel } from "./fabric.model";
 
@@ -18,12 +18,18 @@ export class FabricResolver {
   }
 
   @Authorized()
+  @Query(() => String)
+  async printLink(@Arg("fileName") fileName: string): Promise<string> {
+    return getDownloadFileLink(fileName);
+  }
+
+  @Authorized()
   @Mutation(() => Fabric)
   async createFabric(@Arg("data") { print, ...data }: CreateFabricInput) {
     const fabricData: Omit<Fabric, "samples"> = data;
     if (print != null) {
       const { file, fileSize } = print;
-      fabricData.printUrl = await uploadFile(
+      fabricData.printFileName = await uploadFile(
         data.code,
         "print",
         file,
@@ -38,7 +44,7 @@ export class FabricResolver {
   async uploadPrint(
     @Arg("data") { code, print: { file, fileSize } }: UploadPrintInput
   ): Promise<Fabric> {
-    const printUrl = await uploadFile(code, "print", file, fileSize);
-    return FabricModel.findOneAndUpdateOrFail({ code }, { printUrl });
+    const printFileName = await uploadFile(code, "print", file, fileSize);
+    return FabricModel.findOneAndUpdateOrFail({ code }, { printFileName });
   }
 }

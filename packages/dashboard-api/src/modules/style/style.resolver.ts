@@ -1,7 +1,7 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import { CreateStyleInput, UploadTechPackInput } from "./style.input";
 import { Style, StyleModel } from "./style.model";
-import { uploadFile } from "../file/file.service";
+import { getDownloadFileLink, uploadFile } from "../file/file.service";
 
 @Resolver(Style)
 export class StyleResolver {
@@ -18,12 +18,18 @@ export class StyleResolver {
   }
 
   @Authorized()
+  @Query(() => String)
+  async techPackLink(@Arg("fileName") fileName: string): Promise<string> {
+    return getDownloadFileLink(fileName);
+  }
+
+  @Authorized()
   @Mutation(() => Style)
   async createStyle(@Arg("data") { code, name, techPack }: CreateStyleInput) {
     const styleData: Style = { code, name };
     if (techPack != null) {
       const { file, fileSize } = techPack;
-      styleData.techPackUrl = await uploadFile(
+      styleData.techPackFileName = await uploadFile(
         code,
         "tech-pack",
         file,
@@ -38,7 +44,12 @@ export class StyleResolver {
   async uploadTechPack(
     @Arg("data") { code, techPack: { file, fileSize } }: UploadTechPackInput
   ): Promise<Style> {
-    const techPackUrl = await uploadFile(code, "tech-pack", file, fileSize);
-    return StyleModel.findOneAndUpdateOrFail({ code }, { techPackUrl });
+    const techPackFileName = await uploadFile(
+      code,
+      "tech-pack",
+      file,
+      fileSize
+    );
+    return StyleModel.findOneAndUpdateOrFail({ code }, { techPackFileName });
   }
 }

@@ -3,3 +3,7 @@ mutation UploadTechPack($data: UploadTechPackInput!) {
     code
   }
 }
+
+query TechPackLink($fileName: String!) {
+  techPackLink(fileName: $fileName)
+}

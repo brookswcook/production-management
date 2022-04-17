@@ -24,7 +24,7 @@ export class Fabric {
   @Field({ nullable: true })
   @Property({
     get(this: Fabric): ColorType | null {
-      if (this.printUrl != null) return "print";
+      if (this.printFileName != null) return "print";
       else if (this.colorCode != null) return "solid";
       return null;
     },
@@ -37,7 +37,7 @@ export class Fabric {
 
   @Field({ nullable: true })
   @Property()
-  printUrl?: string;
+  printFileName?: string;
 
   @Field(() => [FabricSample])
   @Property({

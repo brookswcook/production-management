@@ -1,5 +1,7 @@
+import { ApolloError } from "@apollo/client";
 import {
   Box,
+  Button,
   Container,
   Grid,
   LinearProgress,
@@ -7,8 +9,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   ProductFieldsFragment,
   Sample,
@@ -18,16 +21,32 @@ import {
   ProductQualityControl,
   ProductShipping,
   Fabric,
+  Style,
+  useTechPackLinkLazyQuery,
+  usePrintLinkLazyQuery,
 } from "../../generated/graphql";
 import { ObjectInputSet } from "../Common";
 import SampleGrid from "../SampleGrid";
 import SendSampleToolbarButton from "../SampleParams";
+import { UploadTechPackToolbarButton } from "../TechPackParams";
 
 export default function ProductDetail() {
   const { code = "" } = useParams();
   const { data, error, loading } = useProductQuery({
     variables: { code },
   });
+
+  const [getTechPackLink] = useTechPackLinkLazyQuery();
+  const [getPrintLink] = usePrintLinkLazyQuery();
+  const [techPackLink, setTechPackLink] = useState<string>("techPack");
+  const [printLink, setPrintLink] = useState<string>("print");
+
+  useEffect(() => {
+    if (loading) return;
+    void generateTechPackLink();
+    void generatePrintLink();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
 
   if (loading)
     return (
@@ -44,6 +63,7 @@ export default function ProductDetail() {
     onTime,
     stage,
     factoryName,
+    style,
     fabric,
     fitSamples,
     preProductionSample,
@@ -53,20 +73,31 @@ export default function ProductDetail() {
     shipping,
   }: ProductFieldsFragment = data.product;
 
-  const DetailViewSection = ({
-    children,
-    headerTitle,
-  }: {
-    children: JSX.Element[] | JSX.Element;
-    headerTitle: string;
-  }) => (
-    <Paper elevation={0} sx={{ p: 1 }}>
-      <Typography component="h4" variant="inherit">
-        {headerTitle}
-      </Typography>
-      {children}
-    </Paper>
-  );
+  async function generateTechPackLink() {
+    if (style.techPackFileName != null) {
+      try {
+        const { data } = await getTechPackLink({
+          variables: { fileName: style.techPackFileName },
+        });
+        setTechPackLink(data?.techPackLink ?? "#");
+      } catch (error) {
+        toast.error((error as ApolloError).message);
+      }
+    }
+  }
+
+  async function generatePrintLink() {
+    if (fabric.printFileName != null) {
+      try {
+        const { data } = await getPrintLink({
+          variables: { fileName: fabric.printFileName },
+        });
+        setPrintLink(data?.printLink ?? "#");
+      } catch (error) {
+        toast.error((error as ApolloError).message);
+      }
+    }
+  }
 
   return (
     <Container maxWidth="xl">
@@ -87,11 +118,48 @@ export default function ProductDetail() {
               {`${stage} stage ${onTime ? "is on time" : "is not on time"}`}
             </Typography>
             <Box>
+              <UploadTechPackToolbarButton styleCode={style.code} />
               <SendSampleToolbarButton
                 sampleType={"fabric"}
                 parentCode={fabric.code}
               />
               <SendSampleToolbarButton sampleType={"fit"} parentCode={code} />
+              <a
+                href={techPackLink}
+                target="_blank"
+                style={{
+                  pointerEvents: `${!style.techPackUploaded ? "none" : "auto"}`,
+                  textDecoration: "none",
+                }}
+              >
+                <Button
+                  variant="text"
+                  size="small"
+                  onClick={generateTechPackLink}
+                  disabled={!style.techPackUploaded}
+                >
+                  Download TP
+                </Button>
+              </a>
+              <a
+                href={printLink}
+                target="_blank"
+                style={{
+                  pointerEvents: `${
+                    fabric.colorType == "solid" ? "none" : "auto"
+                  }`,
+                  textDecoration: "none",
+                }}
+              >
+                <Button
+                  variant="text"
+                  size="small"
+                  onClick={generatePrintLink}
+                  disabled={fabric.colorType == "solid"}
+                >
+                  Download Print
+                </Button>
+              </a>
             </Box>
           </Paper>
         </Grid>
@@ -125,10 +193,16 @@ export default function ProductDetail() {
                 variant="standard"
               />
             </DetailViewSection>
+            <DetailViewSection headerTitle="Style:">
+              <ObjectInputSet<Style>
+                objectToRender={style}
+                fields={["code", "name", "techPackUploaded"]}
+              />
+            </DetailViewSection>
             <DetailViewSection headerTitle="Fabric:">
               <ObjectInputSet<Fabric>
                 objectToRender={fabric}
-                fields={["code", "colorType", "colorCode"]}
+                fields={["code", "colorType", "colorName"]}
               />
             </DetailViewSection>
             <DetailViewSection headerTitle="Fabric samples:">
@@ -202,4 +276,21 @@ export default function ProductDetail() {
       </Grid>
     </Container>
   );
+
+  function DetailViewSection({
+    children,
+    headerTitle,
+  }: {
+    children: JSX.Element[] | JSX.Element;
+    headerTitle: string;
+  }) {
+    return (
+      <Paper elevation={0} sx={{ p: 1 }}>
+        <Typography component="h4" variant="inherit">
+          {headerTitle}
+        </Typography>
+        {children}
+      </Paper>
+    );
+  }
 }

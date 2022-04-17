@@ -1,0 +1,3 @@
+query PrintLink($fileName: String!) {
+  printLink(fileName: $fileName)
+}

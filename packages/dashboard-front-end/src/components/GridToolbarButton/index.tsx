@@ -42,7 +42,6 @@ export default function GridToolbarButton({
             sx={{
               padding: 1,
               bgcolor: "background.paper",
-              transform: "translate3d(-4px, 58px, 0px)",
             }}
           >
             {children}

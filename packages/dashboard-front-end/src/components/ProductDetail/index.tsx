@@ -45,7 +45,6 @@ export default function ProductDetail() {
     if (loading) return;
     void generateTechPackLink();
     void generatePrintLink();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
   if (loading)

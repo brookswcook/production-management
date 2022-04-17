@@ -17,7 +17,7 @@ import GridToolbarButton from "../GridToolbarButton";
 import AddIcon from "@mui/icons-material/Add";
 import ProductParams from "../ProductParams";
 import { Fragment, useState } from "react";
-import TechPackParams from "../TechPackParams";
+import { UploadTechPackToolbarButton } from "../TechPackParams";
 import SendSampleToolbarButton from "../SampleParams";
 import { Link } from "react-router-dom";
 
@@ -171,12 +171,8 @@ export default function ProductGrid() {
             title="New"
             children={<ProductParams />}
           />
-          <GridToolbarButton
-            icon={<Fragment />}
-            title="Upload TP"
-            children={
-              <TechPackParams styleCode={selectedProducts[0]?.style.code} />
-            }
+          <UploadTechPackToolbarButton
+            styleCode={selectedProducts[0]?.style.code}
             disabled={selectedProducts.length !== 1}
           />
           <SendSampleToolbarButton

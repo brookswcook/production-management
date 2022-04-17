@@ -1,8 +1,9 @@
 import { ApolloError } from "@apollo/client";
 import { Button, Stack, TextField, Typography } from "@mui/material";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, Fragment, useState } from "react";
 import { toast } from "react-toastify";
 import { useUploadTechPackMutation } from "../../generated/graphql";
+import GridToolbarButton from "../GridToolbarButton";
 
 export default function TechPackParams({
   styleCode: code,
@@ -62,5 +63,23 @@ export default function TechPackParams({
         Upload
       </Button>
     </Stack>
+  );
+}
+
+export function UploadTechPackToolbarButton({
+  disabled = false,
+  styleCode,
+}: {
+  disabled?: boolean;
+  styleCode: string;
+}) {
+  return (
+    <GridToolbarButton
+      icon={<Fragment />}
+      title="Upload TP"
+      disabled={disabled}
+    >
+      <TechPackParams styleCode={styleCode} />
+    </GridToolbarButton>
   );
 }

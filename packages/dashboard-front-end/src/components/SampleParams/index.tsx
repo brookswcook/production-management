@@ -87,11 +87,10 @@ export default function SendSampleToolbarButton({
     <GridToolbarButton
       icon={<Fragment />}
       title={`Send ${sampleType == "fit" ? "FIS" : "FAS"}`}
-      children={
-        <SendSampleParams parentCode={parentCode} sampleType={sampleType} />
-      }
       disabled={disabled}
-    />
+    >
+      <SendSampleParams parentCode={parentCode} sampleType={sampleType} />
+    </GridToolbarButton>
   );
 }
 

@@ -163,7 +163,7 @@ export class Product {
     const product = await ProductModel.findOne({
       code,
     } as Product)
-      .populate("fitSamples")
+      .populate({ path: "fitSamples", populate: { path: "note" } })
       .populate("style")
       .populate({
         path: "fabric",

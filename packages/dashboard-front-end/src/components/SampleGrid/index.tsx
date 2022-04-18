@@ -1,12 +1,12 @@
 import { ApolloError } from "@apollo/client";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Stack, TextField } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
   GridSelectionModel,
   GridToolbarContainer,
 } from "@mui/x-data-grid";
-import { Fragment, useState } from "react";
+import { FormEvent, Fragment, useState } from "react";
 import { toast } from "react-toastify";
 import {
   Sample,
@@ -15,6 +15,7 @@ import {
   useRejectFabricSampleMutation,
   useRejectFitSampleMutation,
 } from "../../generated/graphql";
+import GridToolbarButton from "../GridToolbarButton";
 
 export default function SampleGrid({
   parentCode,
@@ -55,6 +56,15 @@ export default function SampleGrid({
     },
     { field: "delivered", headerName: "Delivered", type: "boolean", flex: 1 },
     { field: "approved", headerName: "Approved", type: "boolean", flex: 1 },
+    {
+      field: "comment",
+      headerName: "Rejection Comment",
+      type: "string",
+      flex: 2,
+      valueGetter: ({ row }: { row: Sample }) => {
+        return row.note?.text;
+      },
+    },
   ];
 
   return (
@@ -77,6 +87,7 @@ export default function SampleGrid({
   );
 
   function CustomToolbar() {
+    const [rejectionText, setRejectionText] = useState<string>("");
     return (
       <Fragment>
         <GridToolbarContainer>
@@ -88,44 +99,64 @@ export default function SampleGrid({
           >
             Approve
           </Button>
-          <Button
-            variant="text"
-            size="small"
-            onClick={rejectSample}
+          <GridToolbarButton
+            icon={<Fragment />}
+            title={"Reject"}
             disabled={selectedSamples.length !== 1}
           >
-            Reject
-          </Button>
+            <Stack
+              component="form"
+              onSubmit={rejectSample}
+              spacing={2}
+              autoComplete="off"
+            >
+              <TextField
+                label="Rejection comment"
+                name="styleCode"
+                onChange={({ target: { value } }) => {
+                  setRejectionText(value);
+                }}
+                required
+              />
+              <Button variant="contained" type="submit">
+                Submit
+              </Button>
+            </Stack>
+          </GridToolbarButton>
         </GridToolbarContainer>
       </Fragment>
     );
-  }
-
-  async function approveSample() {
-    try {
-      await (sampleType == "fit"
-        ? approveFitSampleMutation
-        : approveFabricSampleMutation)({
-        variables: {
-          data: { parentCode, sku: selectedSingleSampleSku ?? "" },
-        },
-      });
-    } catch (error) {
-      toast.error((error as ApolloError).message);
+    async function approveSample() {
+      try {
+        await (sampleType == "fit"
+          ? approveFitSampleMutation
+          : approveFabricSampleMutation)({
+          variables: {
+            data: { parentCode, sku: selectedSingleSampleSku ?? "" },
+          },
+        });
+      } catch (error) {
+        toast.error((error as ApolloError).message);
+      }
     }
-  }
 
-  async function rejectSample() {
-    try {
-      await (sampleType == "fit"
-        ? rejectFitSampleMutation
-        : rejectFabricSampleMutation)({
-        variables: {
-          data: { parentCode, sku: selectedSingleSampleSku ?? "" },
-        },
-      });
-    } catch (error) {
-      toast.error((error as ApolloError).message);
+    async function rejectSample(event: FormEvent<HTMLFormElement>) {
+      event.preventDefault();
+      try {
+        await (sampleType == "fit"
+          ? rejectFitSampleMutation
+          : rejectFabricSampleMutation)({
+          variables: {
+            data: {
+              parentCode,
+              sku: selectedSingleSampleSku ?? "",
+              rejectionText,
+            },
+          },
+        });
+      } catch (error) {
+        toast.error((error as ApolloError).message);
+      }
     }
   }
 }

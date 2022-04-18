@@ -11,7 +11,10 @@ export default function TechPackParams({
   styleCode: string;
 }) {
   const [techPackFile, setTechPackFile] = useState<File>();
-  const [uploadTechPackMutation] = useUploadTechPackMutation();
+  const mutationOptions = {
+    refetchQueries: ["Products", "Product"],
+  };
+  const [uploadTechPackMutation] = useUploadTechPackMutation(mutationOptions);
 
   async function uploadTechPack(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

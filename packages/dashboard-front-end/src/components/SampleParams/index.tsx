@@ -24,7 +24,7 @@ export function SendSampleParams({
   sampleType: SampleType;
 }) {
   const mutationOptions = {
-    refetchQueries: ["Products"],
+    refetchQueries: ["Products", "Product"],
   };
   const [sendFabricSampleMutation] =
     useSendFabricSampleMutation(mutationOptions);

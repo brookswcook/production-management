@@ -167,7 +167,12 @@ export class Product {
       .populate("style")
       .populate({
         path: "fabric",
-        populate: { path: "samples" },
+        populate: {
+          path: "samples",
+          populate: {
+            path: "notes",
+          },
+        },
       })
       .exec();
     if (product == null) throw Error(`Product with given code not found`);

@@ -20,3 +20,9 @@ export class UniqueSampleInput {
   @Field()
   sku!: string;
 }
+
+@InputType()
+export class RejectSampleInput extends UniqueSampleInput {
+  @Field({ nullable: true })
+  rejectionText?: string;
+}

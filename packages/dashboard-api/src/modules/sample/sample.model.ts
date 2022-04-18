@@ -6,6 +6,7 @@ import {
   ReturnModelType,
 } from "@typegoose/typegoose";
 import { Field, ObjectType } from "type-graphql";
+import { Note } from "../note/note.model";
 
 @index<Sample>({ parentCode: 1, sku: 1 }, { unique: true })
 @ObjectType()
@@ -30,6 +31,17 @@ export class Sample {
   @Property({ default: false })
   delivered?: boolean;
 
+  @Field(() => Note, { nullable: true })
+  @Property({
+    ref: () => Note,
+    foreignField: "parentId" as Partial<Note>,
+    localField: "_id",
+    match: { type: "sampleRejectionComment" } as Partial<Note>,
+    options: { sort: { _id: -1 } },
+    justOne: true,
+  })
+  note?: Note;
+
   static getSamplesByParentCode(
     this: ReturnModelType<typeof Sample>,
     parentCode: string,
@@ -42,7 +54,7 @@ export class Sample {
     this: ReturnModelType<typeof Sample>,
     query: Partial<Sample>,
     update: Partial<Sample>
-  ): Promise<Sample> {
+  ) {
     const updatedSample = await this.findOneAndUpdate(
       query,
       { $set: update },

@@ -64,6 +64,7 @@ export type FabricSample = {
   __typename?: 'FabricSample';
   approved?: Maybe<Scalars['Boolean']>;
   delivered?: Maybe<Scalars['Boolean']>;
+  note?: Maybe<Note>;
   parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
@@ -78,6 +79,7 @@ export type FitSample = {
   __typename?: 'FitSample';
   approved?: Maybe<Scalars['Boolean']>;
   delivered?: Maybe<Scalars['Boolean']>;
+  note?: Maybe<Note>;
   parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
@@ -138,12 +140,12 @@ export type MutationLoginArgs = {
 
 
 export type MutationRejectFabricSampleArgs = {
-  data: UniqueSampleInput;
+  data: RejectSampleInput;
 };
 
 
 export type MutationRejectFitSampleArgs = {
-  data: UniqueSampleInput;
+  data: RejectSampleInput;
 };
 
 
@@ -174,6 +176,14 @@ export type MutationUploadPrintArgs = {
 
 export type MutationUploadTechPackArgs = {
   data: UploadTechPackInput;
+};
+
+export type Note = {
+  __typename?: 'Note';
+  parentId: Scalars['String'];
+  text: Scalars['String'];
+  type: Scalars['String'];
+  user?: Maybe<Scalars['String']>;
 };
 
 export type Product = {
@@ -264,10 +274,17 @@ export type QueryTechPackLinkArgs = {
   fileName: Scalars['String'];
 };
 
+export type RejectSampleInput = {
+  parentCode: Scalars['String'];
+  rejectionText: Scalars['String'];
+  sku: Scalars['String'];
+};
+
 export type Sample = {
   __typename?: 'Sample';
   approved?: Maybe<Scalars['Boolean']>;
   delivered?: Maybe<Scalars['Boolean']>;
+  note?: Maybe<Note>;
   parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
@@ -396,7 +413,7 @@ export type ApproveFitSampleMutationVariables = Exact<{
 export type ApproveFitSampleMutation = { __typename?: 'Mutation', approveFitSample: { __typename?: 'FitSample', sku: string } };
 
 export type RejectFitSampleMutationVariables = Exact<{
-  data: UniqueSampleInput;
+  data: RejectSampleInput;
 }>;
 
 
@@ -410,7 +427,7 @@ export type ApproveFabricSampleMutationVariables = Exact<{
 export type ApproveFabricSampleMutation = { __typename?: 'Mutation', approveFabricSample: { __typename?: 'FabricSample', sku: string } };
 
 export type RejectFabricSampleMutationVariables = Exact<{
-  data: UniqueSampleInput;
+  data: RejectSampleInput;
 }>;
 
 
@@ -902,7 +919,7 @@ export type ApproveFitSampleMutationHookResult = ReturnType<typeof useApproveFit
 export type ApproveFitSampleMutationResult = Apollo.MutationResult<ApproveFitSampleMutation>;
 export type ApproveFitSampleMutationOptions = Apollo.BaseMutationOptions<ApproveFitSampleMutation, ApproveFitSampleMutationVariables>;
 export const RejectFitSampleDocument = gql`
-    mutation RejectFitSample($data: UniqueSampleInput!) {
+    mutation RejectFitSample($data: RejectSampleInput!) {
   rejectFitSample(data: $data) {
     sku
   }
@@ -968,7 +985,7 @@ export type ApproveFabricSampleMutationHookResult = ReturnType<typeof useApprove
 export type ApproveFabricSampleMutationResult = Apollo.MutationResult<ApproveFabricSampleMutation>;
 export type ApproveFabricSampleMutationOptions = Apollo.BaseMutationOptions<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>;
 export const RejectFabricSampleDocument = gql`
-    mutation RejectFabricSample($data: UniqueSampleInput!) {
+    mutation RejectFabricSample($data: RejectSampleInput!) {
   rejectFabricSample(data: $data) {
     sku
   }

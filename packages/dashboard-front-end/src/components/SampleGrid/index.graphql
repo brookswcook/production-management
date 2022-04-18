@@ -4,7 +4,7 @@ mutation ApproveFitSample($data: UniqueSampleInput!) {
   }
 }
 
-mutation RejectFitSample($data: UniqueSampleInput!) {
+mutation RejectFitSample($data: RejectSampleInput!) {
   rejectFitSample(data: $data) {
     sku
   }
@@ -16,7 +16,7 @@ mutation ApproveFabricSample($data: UniqueSampleInput!) {
   }
 }
 
-mutation RejectFabricSample($data: UniqueSampleInput!) {
+mutation RejectFabricSample($data: RejectSampleInput!) {
   rejectFabricSample(data: $data) {
     sku
   }

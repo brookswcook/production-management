@@ -170,7 +170,7 @@ export class Product {
         populate: {
           path: "samples",
           populate: {
-            path: "notes",
+            path: "note",
           },
         },
       })

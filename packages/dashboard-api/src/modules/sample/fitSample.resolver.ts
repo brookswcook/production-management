@@ -1,6 +1,10 @@
 import { Arg, Authorized, Mutation, Resolver } from "type-graphql";
 import { FitSample, FitSampleModel } from "./sample.model";
-import { SendSampleInput, UniqueSampleInput } from "./sample.input";
+import {
+  RejectSampleInput,
+  SendSampleInput,
+  UniqueSampleInput,
+} from "./sample.input";
 
 @Resolver(FitSample)
 export class FitSampleResolver {
@@ -14,10 +18,10 @@ export class FitSampleResolver {
 
   @Authorized()
   @Mutation(() => FitSample)
-  rejectFitSample(
-    @Arg("data") { parentCode, sku }: UniqueSampleInput
+  async rejectFitSample(
+    @Arg("data") { parentCode, sku, rejectionText }: RejectSampleInput
   ): Promise<FitSample> {
-    return FitSampleModel.rejectSample(parentCode, sku);
+    return FitSampleModel.rejectSample(parentCode, sku, rejectionText);
   }
 
   @Authorized()

@@ -6,7 +6,7 @@ import {
   ReturnModelType,
 } from "@typegoose/typegoose";
 import { Field, ObjectType } from "type-graphql";
-import { Note } from "../note/note.model";
+import { Note, NoteModel } from "../note/note.model";
 
 @index<Sample>({ parentCode: 1, sku: 1 }, { unique: true })
 @ObjectType()
@@ -79,12 +79,19 @@ export class Sample {
   static async rejectSample(
     this: ReturnModelType<typeof Sample>,
     parentCode: string,
-    sku: string
+    sku: string,
+    rejectionText: string
   ) {
     const sample = await this.findOneSampleAndUpdateOrFail(
       { parentCode, sku },
       { delivered: true, approved: false }
     );
+    const { id: parentId } = sample as { id: unknown };
+    await new NoteModel({
+      parentId,
+      text: rejectionText,
+      type: "sampleRejectionComment",
+    } as Note).save();
     return sample;
   }
 

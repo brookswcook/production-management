@@ -13,6 +13,7 @@ export class Note extends TimeStamps {
   @Property()
   parentId!: string;
 
+  // TODO: maybe note should not know about given types; create service with needed functions instead
   @Field()
   @Property()
   type!: "sampleRejectionComment" | "productNote";

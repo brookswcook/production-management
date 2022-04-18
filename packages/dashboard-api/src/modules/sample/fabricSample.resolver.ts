@@ -5,7 +5,6 @@ import {
   SendSampleInput,
   UniqueSampleInput,
 } from "./sample.input";
-import { Note, NoteModel } from "../note/note.model";
 
 @Resolver(FabricSample)
 export class FabricSampleResolver {
@@ -20,19 +19,9 @@ export class FabricSampleResolver {
   @Authorized()
   @Mutation(() => FabricSample)
   async rejectFabricSample(
-    @Arg("data") { parentCode, sku, rejectionText: text }: RejectSampleInput
+    @Arg("data") { parentCode, sku, rejectionText }: RejectSampleInput
   ): Promise<FabricSample> {
-    const sample = await FabricSampleModel.rejectSample(parentCode, sku);
-    if (text) {
-      const { id: parentId } = sample as { id: unknown };
-      const note = await new NoteModel({
-        parentId,
-        text,
-        type: "sampleRejectionComment",
-      } as Note).save();
-      console.log(note);
-    }
-    return sample;
+    return FabricSampleModel.rejectSample(parentCode, sku, rejectionText);
   }
 
   @Authorized()

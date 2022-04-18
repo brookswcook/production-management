@@ -23,6 +23,6 @@ export class UniqueSampleInput {
 
 @InputType()
 export class RejectSampleInput extends UniqueSampleInput {
-  @Field({ nullable: true })
-  rejectionText?: string;
+  @Field()
+  rejectionText!: string;
 }

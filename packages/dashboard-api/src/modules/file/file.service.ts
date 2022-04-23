@@ -4,7 +4,7 @@ import { getDownloadLink, upload } from "../../lib/s3";
 
 export async function uploadFile(
   parentCode: string,
-  type: "tech-pack" | "print",
+  type: "tech-pack" | "print" | "note-image",
   file: Promise<FileUpload>,
   contentLength: number
 ): Promise<string> {

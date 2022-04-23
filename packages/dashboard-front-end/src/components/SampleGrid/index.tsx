@@ -9,9 +9,12 @@ import {
 import { FormEvent, Fragment, useState } from "react";
 import { toast } from "react-toastify";
 import {
+  RejectFabricSampleMutation,
+  RejectFitSampleMutation,
   Sample,
   useApproveFabricSampleMutation,
   useApproveFitSampleMutation,
+  useCreateNoteMutation,
   useRejectFabricSampleMutation,
   useRejectFitSampleMutation,
 } from "../../generated/graphql";
@@ -37,6 +40,7 @@ export default function SampleGrid({
     useApproveFabricSampleMutation(refetchPolicy);
   const [rejectFabricSampleMutation] =
     useRejectFabricSampleMutation(refetchPolicy);
+  const [createNoteMutation] = useCreateNoteMutation(refetchPolicy);
 
   // TODO: reuse it since there's a similar thing in ProductGrid
   const selectedSampleSkus = Array.from(selectedGridItems.values());
@@ -143,17 +147,34 @@ export default function SampleGrid({
     async function rejectSample(event: FormEvent<HTMLFormElement>) {
       event.preventDefault();
       try {
-        await (sampleType == "fit"
+        const { data: rejectSampleMutationResult } = await (sampleType == "fit"
           ? rejectFitSampleMutation
           : rejectFabricSampleMutation)({
           variables: {
             data: {
               parentCode,
               sku: selectedSingleSampleSku ?? "",
-              rejectionText,
             },
           },
         });
+        if (rejectSampleMutationResult != null) {
+          const { id: parentId } =
+            sampleType == "fit"
+              ? (rejectSampleMutationResult as RejectFitSampleMutation)
+                  .rejectFitSample
+              : (rejectSampleMutationResult as RejectFabricSampleMutation)
+                  .rejectFabricSample;
+          // TODO: add images
+          await createNoteMutation({
+            variables: {
+              data: {
+                parentId,
+                text: rejectionText,
+                type: "sampleRejectionComment",
+              },
+            },
+          });
+        }
       } catch (error) {
         toast.error((error as ApolloError).message);
       }

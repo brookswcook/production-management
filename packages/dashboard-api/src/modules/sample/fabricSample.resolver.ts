@@ -1,10 +1,6 @@
 import { Arg, Authorized, Mutation, Resolver } from "type-graphql";
 import { FabricSample, FabricSampleModel } from "./sample.model";
-import {
-  RejectSampleInput,
-  SendSampleInput,
-  UniqueSampleInput,
-} from "./sample.input";
+import { SendSampleInput, UniqueSampleInput } from "./sample.input";
 
 @Resolver(FabricSample)
 export class FabricSampleResolver {
@@ -19,9 +15,9 @@ export class FabricSampleResolver {
   @Authorized()
   @Mutation(() => FabricSample)
   async rejectFabricSample(
-    @Arg("data") { parentCode, sku, rejectionText }: RejectSampleInput
+    @Arg("data") { parentCode, sku }: UniqueSampleInput
   ): Promise<FabricSample> {
-    return FabricSampleModel.rejectSample(parentCode, sku, rejectionText);
+    return FabricSampleModel.rejectSample(parentCode, sku);
   }
 
   @Authorized()

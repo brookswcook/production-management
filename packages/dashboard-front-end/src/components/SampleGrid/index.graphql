@@ -1,23 +1,33 @@
 mutation ApproveFitSample($data: UniqueSampleInput!) {
   approveFitSample(data: $data) {
+    id
     sku
   }
 }
 
-mutation RejectFitSample($data: RejectSampleInput!) {
+mutation RejectFitSample($data: UniqueSampleInput!) {
   rejectFitSample(data: $data) {
+    id
     sku
   }
 }
 
 mutation ApproveFabricSample($data: UniqueSampleInput!) {
   approveFabricSample(data: $data) {
+    id
     sku
   }
 }
 
-mutation RejectFabricSample($data: RejectSampleInput!) {
+mutation RejectFabricSample($data: UniqueSampleInput!) {
   rejectFabricSample(data: $data) {
+    id
     sku
+  }
+}
+
+mutation CreateNote($data: CreateNoteInput!) {
+  createNote(data: $data) {
+    parentId
   }
 }

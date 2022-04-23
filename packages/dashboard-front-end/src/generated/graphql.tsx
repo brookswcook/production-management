@@ -27,6 +27,13 @@ export type CreateFabricInput = {
   type?: InputMaybe<Scalars['String']>;
 };
 
+export type CreateNoteInput = {
+  images?: InputMaybe<FileUploadInput>;
+  parentId: Scalars['String'];
+  text: Scalars['String'];
+  type: Scalars['String'];
+};
+
 export type CreateProductInput = {
   deliveryDate: Scalars['DateTime'];
   fabricCode: Scalars['String'];
@@ -64,6 +71,7 @@ export type FabricSample = {
   __typename?: 'FabricSample';
   approved?: Maybe<Scalars['Boolean']>;
   delivered?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
   note?: Maybe<Note>;
   parentCode: Scalars['String'];
   sku: Scalars['String'];
@@ -79,6 +87,7 @@ export type FitSample = {
   __typename?: 'FitSample';
   approved?: Maybe<Scalars['Boolean']>;
   delivered?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
   note?: Maybe<Note>;
   parentCode: Scalars['String'];
   sku: Scalars['String'];
@@ -95,6 +104,7 @@ export type Mutation = {
   approveFabricSample: FabricSample;
   approveFitSample: FitSample;
   createFabric: Fabric;
+  createNote: Note;
   createProduct: Product;
   createStyle: Style;
   login: Scalars['String'];
@@ -124,6 +134,11 @@ export type MutationCreateFabricArgs = {
 };
 
 
+export type MutationCreateNoteArgs = {
+  data: CreateNoteInput;
+};
+
+
 export type MutationCreateProductArgs = {
   data: CreateProductInput;
 };
@@ -140,12 +155,12 @@ export type MutationLoginArgs = {
 
 
 export type MutationRejectFabricSampleArgs = {
-  data: RejectSampleInput;
+  data: UniqueSampleInput;
 };
 
 
 export type MutationRejectFitSampleArgs = {
-  data: RejectSampleInput;
+  data: UniqueSampleInput;
 };
 
 
@@ -180,6 +195,7 @@ export type MutationUploadTechPackArgs = {
 
 export type Note = {
   __typename?: 'Note';
+  imageFileNames: Array<Scalars['String']>;
   parentId: Scalars['String'];
   text: Scalars['String'];
   type: Scalars['String'];
@@ -274,16 +290,11 @@ export type QueryTechPackLinkArgs = {
   fileName: Scalars['String'];
 };
 
-export type RejectSampleInput = {
-  parentCode: Scalars['String'];
-  rejectionText: Scalars['String'];
-  sku: Scalars['String'];
-};
-
 export type Sample = {
   __typename?: 'Sample';
   approved?: Maybe<Scalars['Boolean']>;
   delivered?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
   note?: Maybe<Note>;
   parentCode: Scalars['String'];
   sku: Scalars['String'];
@@ -410,28 +421,35 @@ export type ApproveFitSampleMutationVariables = Exact<{
 }>;
 
 
-export type ApproveFitSampleMutation = { __typename?: 'Mutation', approveFitSample: { __typename?: 'FitSample', sku: string } };
+export type ApproveFitSampleMutation = { __typename?: 'Mutation', approveFitSample: { __typename?: 'FitSample', id: string, sku: string } };
 
 export type RejectFitSampleMutationVariables = Exact<{
-  data: RejectSampleInput;
+  data: UniqueSampleInput;
 }>;
 
 
-export type RejectFitSampleMutation = { __typename?: 'Mutation', rejectFitSample: { __typename?: 'FitSample', sku: string } };
+export type RejectFitSampleMutation = { __typename?: 'Mutation', rejectFitSample: { __typename?: 'FitSample', id: string, sku: string } };
 
 export type ApproveFabricSampleMutationVariables = Exact<{
   data: UniqueSampleInput;
 }>;
 
 
-export type ApproveFabricSampleMutation = { __typename?: 'Mutation', approveFabricSample: { __typename?: 'FabricSample', sku: string } };
+export type ApproveFabricSampleMutation = { __typename?: 'Mutation', approveFabricSample: { __typename?: 'FabricSample', id: string, sku: string } };
 
 export type RejectFabricSampleMutationVariables = Exact<{
-  data: RejectSampleInput;
+  data: UniqueSampleInput;
 }>;
 
 
-export type RejectFabricSampleMutation = { __typename?: 'Mutation', rejectFabricSample: { __typename?: 'FabricSample', sku: string } };
+export type RejectFabricSampleMutation = { __typename?: 'Mutation', rejectFabricSample: { __typename?: 'FabricSample', id: string, sku: string } };
+
+export type CreateNoteMutationVariables = Exact<{
+  data: CreateNoteInput;
+}>;
+
+
+export type CreateNoteMutation = { __typename?: 'Mutation', createNote: { __typename?: 'Note', parentId: string } };
 
 export type SendFabricSampleMutationVariables = Exact<{
   data: SendSampleInput;
@@ -894,6 +912,7 @@ export type CreateFabricMutationOptions = Apollo.BaseMutationOptions<CreateFabri
 export const ApproveFitSampleDocument = gql`
     mutation ApproveFitSample($data: UniqueSampleInput!) {
   approveFitSample(data: $data) {
+    id
     sku
   }
 }
@@ -925,8 +944,9 @@ export type ApproveFitSampleMutationHookResult = ReturnType<typeof useApproveFit
 export type ApproveFitSampleMutationResult = Apollo.MutationResult<ApproveFitSampleMutation>;
 export type ApproveFitSampleMutationOptions = Apollo.BaseMutationOptions<ApproveFitSampleMutation, ApproveFitSampleMutationVariables>;
 export const RejectFitSampleDocument = gql`
-    mutation RejectFitSample($data: RejectSampleInput!) {
+    mutation RejectFitSample($data: UniqueSampleInput!) {
   rejectFitSample(data: $data) {
+    id
     sku
   }
 }
@@ -960,6 +980,7 @@ export type RejectFitSampleMutationOptions = Apollo.BaseMutationOptions<RejectFi
 export const ApproveFabricSampleDocument = gql`
     mutation ApproveFabricSample($data: UniqueSampleInput!) {
   approveFabricSample(data: $data) {
+    id
     sku
   }
 }
@@ -991,8 +1012,9 @@ export type ApproveFabricSampleMutationHookResult = ReturnType<typeof useApprove
 export type ApproveFabricSampleMutationResult = Apollo.MutationResult<ApproveFabricSampleMutation>;
 export type ApproveFabricSampleMutationOptions = Apollo.BaseMutationOptions<ApproveFabricSampleMutation, ApproveFabricSampleMutationVariables>;
 export const RejectFabricSampleDocument = gql`
-    mutation RejectFabricSample($data: RejectSampleInput!) {
+    mutation RejectFabricSample($data: UniqueSampleInput!) {
   rejectFabricSample(data: $data) {
+    id
     sku
   }
 }
@@ -1023,6 +1045,39 @@ export function useRejectFabricSampleMutation(baseOptions?: Apollo.MutationHookO
 export type RejectFabricSampleMutationHookResult = ReturnType<typeof useRejectFabricSampleMutation>;
 export type RejectFabricSampleMutationResult = Apollo.MutationResult<RejectFabricSampleMutation>;
 export type RejectFabricSampleMutationOptions = Apollo.BaseMutationOptions<RejectFabricSampleMutation, RejectFabricSampleMutationVariables>;
+export const CreateNoteDocument = gql`
+    mutation CreateNote($data: CreateNoteInput!) {
+  createNote(data: $data) {
+    parentId
+  }
+}
+    `;
+export type CreateNoteMutationFn = Apollo.MutationFunction<CreateNoteMutation, CreateNoteMutationVariables>;
+
+/**
+ * __useCreateNoteMutation__
+ *
+ * To run a mutation, you first call `useCreateNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNoteMutation, { data, loading, error }] = useCreateNoteMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateNoteMutation(baseOptions?: Apollo.MutationHookOptions<CreateNoteMutation, CreateNoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateNoteMutation, CreateNoteMutationVariables>(CreateNoteDocument, options);
+      }
+export type CreateNoteMutationHookResult = ReturnType<typeof useCreateNoteMutation>;
+export type CreateNoteMutationResult = Apollo.MutationResult<CreateNoteMutation>;
+export type CreateNoteMutationOptions = Apollo.BaseMutationOptions<CreateNoteMutation, CreateNoteMutationVariables>;
 export const SendFabricSampleDocument = gql`
     mutation SendFabricSample($data: SendSampleInput!) {
   sendFabricSample(data: $data) {

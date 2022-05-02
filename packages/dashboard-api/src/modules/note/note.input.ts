@@ -9,8 +9,8 @@ export class CreateNoteInput {
   @Field()
   text!: string;
 
-  @Field(() => FileUploadInput, { nullable: true, defaultValue: [] })
-  images!: [FileUploadInput];
+  @Field(() => [FileUploadInput], { nullable: true, defaultValue: [] })
+  images!: FileUploadInput[];
 
   @Field()
   type!: "sampleRejectionComment" | "productNote";

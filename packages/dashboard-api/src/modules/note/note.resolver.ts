@@ -1,5 +1,5 @@
-import { Arg, Authorized, Mutation, Resolver } from "type-graphql";
-import { uploadFile } from "../file/file.service";
+import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
+import { getDownloadFileLink, uploadFile } from "../file/file.service";
 import { CreateNoteInput } from "./note.input";
 import { Note, NoteModel } from "./note.model";
 
@@ -24,5 +24,11 @@ export class NoteResolver {
       noteData.imageFileNames = imageFileNames;
     }
     return new NoteModel(noteData).save();
+  }
+
+  @Authorized()
+  @Query(() => String)
+  imageLink(@Arg("fileName") fileName: string): Promise<string> {
+    return getDownloadFileLink(fileName);
   }
 }

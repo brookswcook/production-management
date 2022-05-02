@@ -134,7 +134,6 @@ export default function ProductDetail() {
                 <Button
                   variant="text"
                   size="small"
-                  onClick={generateTechPackLink}
                   disabled={!style.techPackUploaded}
                 >
                   Download TP

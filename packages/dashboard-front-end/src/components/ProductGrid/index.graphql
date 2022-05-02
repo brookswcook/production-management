@@ -1,8 +1,18 @@
+fragment noteFields on Note {
+  type
+  text
+  imageFileNames
+  user
+}
+
 fragment sampleFields on Sample {
   sku
   approved
   trackNumber
   delivered
+  note {
+    ...noteFields
+  }
 }
 
 fragment fitSampleFields on FitSample {
@@ -11,7 +21,17 @@ fragment fitSampleFields on FitSample {
   trackNumber
   delivered
   note {
-    text
+    ...noteFields
+  }
+}
+
+fragment fabricSampleFields on FabricSample {
+  sku
+  approved
+  trackNumber
+  delivered
+  note {
+    ...noteFields
   }
 }
 
@@ -40,13 +60,7 @@ fragment productFields on Product {
     colorCode
     printFileName
     samples {
-      sku
-      approved
-      trackNumber
-      delivered
-      note {
-        text
-      }
+      ...fabricSampleFields
     }
   }
   fitSamples {

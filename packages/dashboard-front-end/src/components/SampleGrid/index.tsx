@@ -6,15 +6,18 @@ import {
   GridSelectionModel,
   GridToolbarContainer,
 } from "@mui/x-data-grid";
-import { FormEvent, Fragment, useState } from "react";
+import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
+  CreateNoteInput,
+  FileUploadInput,
   RejectFabricSampleMutation,
   RejectFitSampleMutation,
   Sample,
   useApproveFabricSampleMutation,
   useApproveFitSampleMutation,
   useCreateNoteMutation,
+  useImageLinkLazyQuery,
   useRejectFabricSampleMutation,
   useRejectFitSampleMutation,
 } from "../../generated/graphql";
@@ -47,8 +50,6 @@ export default function SampleGrid({
   const selectedSamples = rows.filter(row =>
     selectedSampleSkus.some(sku => row.sku == sku)
   );
-  const selectedSingleSampleSku =
-    selectedSamples.length === 1 ? selectedSamples[0].sku : undefined;
 
   const columns: GridColDef[] = [
     { field: "sku", headerName: "SKU", type: "string", flex: 2 },
@@ -67,6 +68,18 @@ export default function SampleGrid({
       flex: 2,
       valueGetter: ({ row }: { row: Sample }) => {
         return row.note?.text;
+      },
+    },
+    {
+      field: "attachment",
+      headerName: "Attachment",
+      type: "boolean",
+      flex: 1,
+      valueGetter: ({ row }: { row: Sample }) => {
+        return (
+          row.note?.imageFileNames != null &&
+          row.note?.imageFileNames.length > 0
+        );
       },
     },
   ];
@@ -92,6 +105,24 @@ export default function SampleGrid({
 
   function CustomToolbar() {
     const [rejectionText, setRejectionText] = useState<string>("");
+    const [imageFiles, setImageFiles] = useState<FileList>();
+    const [noteFileLink, setNoteFileLink] = useState<string>();
+    const [getImageFileLink] = useImageLinkLazyQuery();
+
+    useEffect(() => {
+      void generateNoteFileLink();
+      return () => {};
+    }, [selectedGridItems]);
+
+    function onImagesInputChange({
+      target: {
+        files,
+        validity: { valid },
+      },
+    }: ChangeEvent<HTMLInputElement>) {
+      if (valid && files) setImageFiles(files);
+    }
+
     return (
       <Fragment>
         <GridToolbarContainer>
@@ -115,6 +146,7 @@ export default function SampleGrid({
               autoComplete="off"
             >
               <TextField
+                variant="standard"
                 label="Rejection comment"
                 name="styleCode"
                 onChange={({ target: { value } }) => {
@@ -122,11 +154,34 @@ export default function SampleGrid({
                 }}
                 required
               />
+              <TextField
+                variant="standard"
+                label="Images"
+                type="file"
+                helperText="Images associated with rejection comment. Put them in archive if you want to upload more than one image"
+                onChange={onImagesInputChange}
+              />
               <Button variant="contained" type="submit">
                 Submit
               </Button>
             </Stack>
           </GridToolbarButton>
+          <a
+            href={noteFileLink}
+            target="_blank"
+            style={{
+              pointerEvents: `${selectedSamples.length == 1 ? "auto" : "none"}`,
+              textDecoration: "none",
+            }}
+          >
+            <Button
+              variant="text"
+              size="small"
+              disabled={selectedSamples.length !== 1}
+            >
+              Download Attachment
+            </Button>
+          </a>
         </GridToolbarContainer>
       </Fragment>
     );
@@ -136,7 +191,7 @@ export default function SampleGrid({
           ? approveFitSampleMutation
           : approveFabricSampleMutation)({
           variables: {
-            data: { parentCode, sku: selectedSingleSampleSku ?? "" },
+            data: { parentCode, sku: selectedSamples[0].sku ?? "" },
           },
         });
       } catch (error) {
@@ -153,7 +208,7 @@ export default function SampleGrid({
           variables: {
             data: {
               parentCode,
-              sku: selectedSingleSampleSku ?? "",
+              sku: selectedSamples[0].sku ?? "",
             },
           },
         });
@@ -164,19 +219,47 @@ export default function SampleGrid({
                   .rejectFitSample
               : (rejectSampleMutationResult as RejectFabricSampleMutation)
                   .rejectFabricSample;
-          // TODO: add images
+          const newNoteData = {
+            parentId,
+            text: rejectionText,
+            type: "sampleRejectionComment",
+            images: [],
+          } as CreateNoteInput & { images: FileUploadInput[] };
+
+          if (imageFiles) {
+            for (let i = 0; i < imageFiles.length; i++) {
+              newNoteData.images.push({
+                file: imageFiles[i],
+                fileSize: imageFiles[i].size,
+              });
+            }
+          }
+
           await createNoteMutation({
             variables: {
-              data: {
-                parentId,
-                text: rejectionText,
-                type: "sampleRejectionComment",
-              },
+              data: newNoteData,
             },
           });
         }
       } catch (error) {
         toast.error((error as ApolloError).message);
+      }
+    }
+
+    // TODO: create and use common way for getting files
+    async function generateNoteFileLink() {
+      const selectedSample = selectedSamples[0];
+      if (selectedSample?.note != null) {
+        if (selectedSample.note.imageFileNames.length > 0) {
+          try {
+            const { data } = await getImageFileLink({
+              variables: { fileName: selectedSample.note.imageFileNames[0] },
+            });
+            setNoteFileLink(data?.imageLink ?? "#");
+          } catch (error) {
+            toast.error((error as ApolloError).message);
+          }
+        }
       }
     }
   }

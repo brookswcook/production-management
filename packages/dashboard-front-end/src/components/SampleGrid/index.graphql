@@ -31,3 +31,7 @@ mutation CreateNote($data: CreateNoteInput!) {
     parentId
   }
 }
+
+query ImageLink($fileName: String!) {
+  imageLink(fileName: $fileName)
+}

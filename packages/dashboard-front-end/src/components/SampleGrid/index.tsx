@@ -72,7 +72,7 @@ export default function SampleGrid({
     },
     {
       field: "attachment",
-      headerName: "Attachment",
+      headerName: "Comment Attachment",
       type: "boolean",
       flex: 1,
       valueGetter: ({ row }: { row: Sample }) => {

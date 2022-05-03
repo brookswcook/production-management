@@ -16,16 +16,14 @@ import {
   ProductFieldsFragment,
   Sample,
   useProductQuery,
-  FabricProduction,
-  ProductProduction,
-  ProductQualityControl,
-  ProductShipping,
   Fabric,
   Style,
   useTechPackLinkLazyQuery,
   usePrintLinkLazyQuery,
+  Note,
 } from "../../generated/graphql";
 import { ObjectInputSet } from "../Common";
+import NoteGrid from "../NoteGrid";
 import SampleGrid from "../SampleGrid";
 import SendSampleToolbarButton from "../SampleParams";
 import { UploadTechPackToolbarButton } from "../TechPackParams";
@@ -66,10 +64,7 @@ export default function ProductDetail() {
     fabric,
     fitSamples,
     preProductionSample,
-    fabricProduction,
-    production,
-    qualityControl,
-    shipping,
+    notes,
   }: ProductFieldsFragment = data.product;
 
   async function generateTechPackLink() {
@@ -203,6 +198,12 @@ export default function ProductDetail() {
                 fields={["code", "colorType", "colorName"]}
               />
             </DetailViewSection>
+            <DetailViewSection headerTitle="Pre production sample:">
+              <ObjectInputSet<Sample>
+                objectToRender={preProductionSample}
+                fields={["sku", "approved", "trackNumber", "delivered"]}
+              />
+            </DetailViewSection>
             <DetailViewSection headerTitle="Fabric samples:">
               <SampleGrid
                 parentCode={fabric.code}
@@ -217,13 +218,7 @@ export default function ProductDetail() {
                 samples={fitSamples as Sample[]}
               />
             </DetailViewSection>
-            <DetailViewSection headerTitle="Pre production sample:">
-              <ObjectInputSet<Sample>
-                objectToRender={preProductionSample}
-                fields={["sku", "approved", "trackNumber", "delivered"]}
-              />
-            </DetailViewSection>
-            <DetailViewSection headerTitle="Fabric production:">
+            {/* <DetailViewSection headerTitle="Fabric production:">
               <ObjectInputSet<FabricProduction>
                 objectToRender={fabricProduction}
                 fields={[
@@ -268,6 +263,9 @@ export default function ProductDetail() {
                   "delivered",
                 ]}
               />
+            </DetailViewSection> */}
+            <DetailViewSection headerTitle="Notes:">
+              <NoteGrid notes={notes as Note[]} />
             </DetailViewSection>
           </Box>
         </Grid>

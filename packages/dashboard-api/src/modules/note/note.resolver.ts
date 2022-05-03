@@ -1,10 +1,23 @@
-import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
 import { getDownloadFileLink, uploadFile } from "../file/file.service";
 import { CreateNoteInput } from "./note.input";
 import { Note, NoteModel } from "./note.model";
 
 @Resolver(Note)
 export class NoteResolver {
+  @FieldResolver(() => Date, { nullable: true })
+  createdAt(@Root() { createdAt }: Note) {
+    return createdAt ? new Date(createdAt) : null;
+  }
+
   @Authorized()
   @Mutation(() => Note)
   async createNote(@Arg("data") data: CreateNoteInput): Promise<Note> {

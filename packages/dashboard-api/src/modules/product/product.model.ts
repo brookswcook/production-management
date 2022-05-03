@@ -11,6 +11,7 @@ import { ProductQualityControl } from "../productQualityControl/productQualityCo
 import { ProductShipping } from "../productShipping/productShipping.model";
 import { Style } from "../style/style.model";
 import { Fabric } from "../fabric/fabric.model";
+import { Note } from "../note/note.model";
 
 @index<Product>({ styleCode: 1, fabricCode: 1 }, { unique: true })
 @ObjectType()
@@ -143,6 +144,16 @@ export class Product {
   })
   preProductionSample?: FitSample;
 
+  @Field(() => [Note])
+  @Property({
+    ref: () => Note,
+    foreignField: "parentId" as Partial<Note>,
+    localField: "_id",
+    match: { type: "productNote" } as Partial<Note>,
+    options: { sort: { _id: -1 } },
+  })
+  notes!: Note[];
+
   @Field(() => FabricProduction, { nullable: true })
   @Property({ _id: false })
   fabricProduction?: FabricProduction;
@@ -163,6 +174,7 @@ export class Product {
     const product = await ProductModel.findOne({
       code,
     } as Product)
+      .populate("notes")
       .populate({ path: "fitSamples", populate: { path: "note" } })
       .populate("style")
       .populate({

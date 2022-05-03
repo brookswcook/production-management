@@ -26,7 +26,7 @@ export class Note extends TimeStamps {
   text!: string;
 
   @Field(() => [String])
-  @Property({ default: [] })
+  @Property({ type: () => [String], default: [] })
   imageFileNames?: string[];
 
   //TODO: decide

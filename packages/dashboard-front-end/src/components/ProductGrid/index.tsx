@@ -166,11 +166,9 @@ export default function ProductGrid() {
           <GridToolbarExport />
         </GridToolbarContainer>
         <GridToolbarContainer>
-          <GridToolbarButton
-            icon={<AddIcon />}
-            title="New"
-            children={<ProductParams />}
-          />
+          <GridToolbarButton icon={<AddIcon />} title="New">
+            <ProductParams />
+          </GridToolbarButton>
           <UploadTechPackToolbarButton
             styleCode={selectedProducts[0]?.style.code}
             disabled={selectedProducts.length !== 1}

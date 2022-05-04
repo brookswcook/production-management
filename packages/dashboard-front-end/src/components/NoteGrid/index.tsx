@@ -1,12 +1,46 @@
-import { Box } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Note } from "../../generated/graphql";
+import { Box, Button, Stack, TextField } from "@mui/material";
+import { DataGrid, GridColDef, GridToolbarContainer } from "@mui/x-data-grid";
+import {
+  CreateNoteInput,
+  FileUploadInput,
+  Note,
+  useCreateNoteMutation,
+} from "../../generated/graphql";
+import GridToolbarButton from "../GridToolbarButton";
+import { FormEvent, useState } from "react";
+import { toast } from "react-toastify";
+import { NoteType } from "dashboard-core";
+import { ApolloError } from "@apollo/client";
+import { renderCellExpand } from "../Common/GridCellExpand";
 
-export default function NoteGrid({ notes: rows }: { notes: Note[] }) {
+export default function NoteGrid({
+  parentId,
+  notes: rows,
+  type,
+}: {
+  parentId: string;
+  notes: Note[];
+  type: NoteType;
+}) {
   const columns: GridColDef[] = [
-    { field: "text", headerName: "Text", type: "string", flex: 2 },
-    { field: "user", headerName: "User", type: "string", flex: 2 },
-    { field: "createdAt", headerName: "CreatedAt", type: "date", flex: 2 },
+    {
+      field: "text",
+      headerName: "Text",
+      type: "string",
+      flex: 4,
+      renderCell: renderCellExpand,
+    },
+    {
+      field: "createdAt",
+      headerName: "CreatedAt",
+      type: "date",
+      flex: 1,
+      valueFormatter: params => {
+        const date = new Date(params.value as string);
+        return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+      },
+    },
+    { field: "user", headerName: "User", type: "string", flex: 1 },
   ];
 
   return (
@@ -15,9 +49,66 @@ export default function NoteGrid({ notes: rows }: { notes: Note[] }) {
         rows={rows}
         columns={columns}
         pageSize={5}
+        getRowId={item => item.id as string}
         rowsPerPageOptions={[5]}
-        checkboxSelection
+        disableSelectionOnClick
+        components={{ Toolbar: CustomToolbar }}
       />
     </Box>
   );
+
+  function CustomToolbar() {
+    const refetchPolicy = {
+      refetchQueries: ["Product"],
+    };
+    const [createNoteMutation] = useCreateNoteMutation(refetchPolicy);
+    const [noteText, setNoteText] = useState<string>("");
+
+    async function createNewNote(event: FormEvent<HTMLFormElement>) {
+      event.preventDefault();
+
+      try {
+        const newNoteData = {
+          parentId,
+          text: noteText,
+          type,
+          images: [],
+        } as CreateNoteInput & { images: FileUploadInput[] };
+
+        await createNoteMutation({
+          variables: {
+            data: newNoteData,
+          },
+        });
+      } catch (error) {
+        toast.error((error as ApolloError).message);
+      }
+    }
+
+    return (
+      <GridToolbarContainer>
+        <GridToolbarButton title="New">
+          <Stack
+            component="form"
+            onSubmit={createNewNote}
+            spacing={2}
+            autoComplete="off"
+          >
+            <TextField
+              variant="standard"
+              label="Note text"
+              multiline
+              onChange={({ target: { value } }) => {
+                setNoteText(value);
+              }}
+              required
+            />
+            <Button variant="contained" type="submit">
+              Submit
+            </Button>
+          </Stack>
+        </GridToolbarButton>
+      </GridToolbarContainer>
+    );
+  }
 }

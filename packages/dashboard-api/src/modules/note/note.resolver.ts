@@ -14,8 +14,8 @@ import { Note, NoteModel } from "./note.model";
 @Resolver(Note)
 export class NoteResolver {
   @FieldResolver(() => Date, { nullable: true })
-  createdAt(@Root() { createdAt }: Note) {
-    return createdAt ? new Date(createdAt) : null;
+  createdAt(@Root("_doc") note: Note) {
+    return note.createdAt;
   }
 
   @Authorized()

@@ -58,19 +58,10 @@ export default function SampleGrid({
       field: "trackNumber",
       headerName: "Track Number",
       type: "string",
-      flex: 2,
+      flex: 1,
     },
     { field: "delivered", headerName: "Delivered", type: "boolean", flex: 1 },
     { field: "approved", headerName: "Approved", type: "boolean", flex: 1 },
-    {
-      field: "comment",
-      headerName: "Rejection Comment",
-      type: "string",
-      flex: 2,
-      valueGetter: ({ row }: { row: Sample }) => {
-        return row.note?.text;
-      },
-    },
     {
       field: "attachment",
       headerName: "Comment Attachment",
@@ -81,6 +72,15 @@ export default function SampleGrid({
           row.note?.imageFileNames != null &&
           row.note?.imageFileNames.length > 0
         );
+      },
+    },
+    {
+      field: "comment",
+      headerName: "Rejection Comment",
+      type: "string",
+      flex: 3,
+      valueGetter: ({ row }: { row: Sample }) => {
+        return row.note?.text;
       },
     },
   ];
@@ -136,7 +136,6 @@ export default function SampleGrid({
             Approve
           </Button>
           <GridToolbarButton
-            icon={<Fragment />}
             title={"Reject"}
             disabled={selectedSamples.length !== 1}
           >
@@ -149,7 +148,6 @@ export default function SampleGrid({
               <TextField
                 variant="standard"
                 label="Rejection comment"
-                name="styleCode"
                 onChange={({ target: { value } }) => {
                   setRejectionText(value);
                 }}
@@ -180,7 +178,7 @@ export default function SampleGrid({
               size="small"
               disabled={selectedSamples.length !== 1}
             >
-              Download Attachment
+              Download Comment Attachment
             </Button>
           </a>
         </GridToolbarContainer>

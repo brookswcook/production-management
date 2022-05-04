@@ -7,11 +7,15 @@ import {
 } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
+import { NoteType } from "dashboard-core";
 
 @ModelOptions({ schemaOptions: { timestamps: true } })
 @index({ type: 1, parentId: 1 })
 @ObjectType()
 export class Note extends TimeStamps {
+  @Field()
+  id?: string;
+
   @Field(() => String)
   @Property({ required: true })
   parentId!: string;

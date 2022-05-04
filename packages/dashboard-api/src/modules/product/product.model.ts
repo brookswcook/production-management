@@ -18,6 +18,9 @@ import { NoteType } from "dashboard-core";
 @ObjectType()
 export class Product {
   @Field()
+  id?: string;
+
+  @Field()
   @Property({
     default(this: Product) {
       return `${this.styleCode}-${this.fabricCode}`;

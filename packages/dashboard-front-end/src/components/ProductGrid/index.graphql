@@ -1,8 +1,10 @@
 fragment noteFields on Note {
+  id
   type
   text
   imageFileNames
   user
+  createdAt
 }
 
 fragment sampleFields on Sample {
@@ -36,6 +38,7 @@ fragment fabricSampleFields on FabricSample {
 }
 
 fragment productFields on Product {
+  id
   code
   name
   deliveryDate

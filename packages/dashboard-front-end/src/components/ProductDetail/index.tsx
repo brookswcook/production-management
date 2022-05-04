@@ -9,6 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { NoteType } from "dashboard-core";
 import { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -22,7 +23,7 @@ import {
   usePrintLinkLazyQuery,
   Note,
 } from "../../generated/graphql";
-import { ObjectInputSet } from "../Common";
+import { ObjectInputSet } from "../Common/ObjectInputSet";
 import NoteGrid from "../NoteGrid";
 import SampleGrid from "../SampleGrid";
 import SendSampleToolbarButton from "../SampleParams";
@@ -54,6 +55,7 @@ export default function ProductDetail() {
   if (data == null || error) return <Fragment>Wrong path!</Fragment>;
 
   const {
+    id,
     name,
     dueIn,
     deliveryDate,
@@ -265,7 +267,11 @@ export default function ProductDetail() {
               />
             </DetailViewSection> */}
             <DetailViewSection headerTitle="Notes:">
-              <NoteGrid notes={notes as Note[]} />
+              <NoteGrid
+                notes={notes as Note[]}
+                type={"productNote" as NoteType}
+                parentId={id}
+              />
             </DetailViewSection>
           </Box>
         </Grid>

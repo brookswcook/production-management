@@ -3,6 +3,7 @@ FROM node:16-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json lerna.json tsconfig.base.json ./
 ADD packages/dashboard-front-end ./packages/dashboard-front-end
+ADD packages/dashboard-core ./packages/dashboard-core
 RUN npm install
 RUN npx lerna bootstrap
 RUN npm run build

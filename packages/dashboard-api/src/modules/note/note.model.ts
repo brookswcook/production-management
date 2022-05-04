@@ -19,7 +19,7 @@ export class Note extends TimeStamps {
   // TODO: maybe note should not know about given types; create service with needed functions instead
   @Field()
   @Property({ required: true })
-  type!: "sampleRejectionComment" | "productNote";
+  type!: NoteType;
 
   @Field()
   @Property({ required: true })

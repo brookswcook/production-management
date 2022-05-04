@@ -12,6 +12,7 @@ import { ProductShipping } from "../productShipping/productShipping.model";
 import { Style } from "../style/style.model";
 import { Fabric } from "../fabric/fabric.model";
 import { Note } from "../note/note.model";
+import { NoteType } from "dashboard-core";
 
 @index<Product>({ styleCode: 1, fabricCode: 1 }, { unique: true })
 @ObjectType()
@@ -149,7 +150,7 @@ export class Product {
     ref: () => Note,
     foreignField: "parentId" as Partial<Note>,
     localField: "_id",
-    match: { type: "productNote" } as Partial<Note>,
+    match: { type: "productNote" as NoteType } as Partial<Note>,
     options: { sort: { _id: -1 } },
   })
   notes!: Note[];

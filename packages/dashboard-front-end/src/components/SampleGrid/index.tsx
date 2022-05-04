@@ -22,6 +22,7 @@ import {
   useRejectFitSampleMutation,
 } from "../../generated/graphql";
 import GridToolbarButton from "../GridToolbarButton";
+import { NoteType } from "dashboard-core";
 
 export default function SampleGrid({
   parentCode,
@@ -222,7 +223,7 @@ export default function SampleGrid({
           const newNoteData = {
             parentId,
             text: rejectionText,
-            type: "sampleRejectionComment",
+            type: "sampleRejectionComment" as NoteType,
             images: [],
           } as CreateNoteInput & { images: FileUploadInput[] };
 

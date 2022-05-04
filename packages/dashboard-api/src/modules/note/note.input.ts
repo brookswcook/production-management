@@ -1,5 +1,6 @@
 import { Field, InputType } from "type-graphql";
 import { FileUploadInput } from "../file/file.input";
+import { NoteType } from "dashboard-core";
 
 @InputType()
 export class CreateNoteInput {
@@ -13,5 +14,5 @@ export class CreateNoteInput {
   images!: FileUploadInput[];
 
   @Field()
-  type!: "sampleRejectionComment" | "productNote";
+  type!: NoteType;
 }

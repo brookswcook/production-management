@@ -5,6 +5,7 @@ import {
   prop as Property,
   ReturnModelType,
 } from "@typegoose/typegoose";
+import { NoteType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
 import { Note } from "../note/note.model";
 
@@ -39,7 +40,7 @@ export class Sample {
     ref: () => Note,
     foreignField: "parentId" as Partial<Note>,
     localField: "_id",
-    match: { type: "sampleRejectionComment" } as Partial<Note>,
+    match: { type: "sampleRejectionComment" as NoteType } as Partial<Note>,
     options: { sort: { _id: -1 } },
     justOne: true,
   })

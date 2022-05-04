@@ -85,7 +85,6 @@ export default function SendSampleToolbarButton({
 }) {
   return (
     <GridToolbarButton
-      icon={<Fragment />}
       title={`Send ${sampleType == "fit" ? "FIS" : "FAS"}`}
       disabled={disabled}
     >

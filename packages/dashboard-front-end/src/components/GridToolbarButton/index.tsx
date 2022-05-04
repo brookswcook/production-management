@@ -7,7 +7,7 @@ export default function GridToolbarButton({
   children,
   disabled,
 }: {
-  icon: ReactElement;
+  icon?: ReactElement;
   title: string;
   children: ReactElement;
   disabled?: boolean;
@@ -32,7 +32,7 @@ export default function GridToolbarButton({
         size="small"
         onClick={togglePopper}
       >
-        {icon}
+        {icon ? icon : <Fragment />}
         {title}
       </Button>
       <Popper open={open} anchorEl={anchorEl} placement="bottom-start">

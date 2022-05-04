@@ -77,11 +77,7 @@ export function UploadTechPackToolbarButton({
   styleCode: string;
 }) {
   return (
-    <GridToolbarButton
-      icon={<Fragment />}
-      title="Upload TP"
-      disabled={disabled}
-    >
+    <GridToolbarButton title="Upload TP" disabled={disabled}>
       <TechPackParams styleCode={styleCode} />
     </GridToolbarButton>
   );

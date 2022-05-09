@@ -1,12 +1,19 @@
 import {
   getModelForClass,
+  ModelOptions,
   prop as Property,
   ReturnModelType,
 } from "@typegoose/typegoose";
+import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
+import { UserRole } from "dashboard-core";
 
+@ModelOptions({ schemaOptions: { timestamps: true } })
 @ObjectType()
-export class User {
+export class User extends TimeStamps {
+  @Field()
+  id?: string;
+
   @Field()
   @Property({ unique: true, required: true })
   email!: string;
@@ -15,8 +22,16 @@ export class User {
   password!: string;
 
   @Field()
-  @Property({ default: new Date(), required: true })
-  date!: Date;
+  @Property({ required: true })
+  firstName!: string;
+
+  @Field()
+  @Property({ required: true })
+  lastName!: string;
+
+  @Field()
+  @Property({ required: true })
+  role!: UserRole;
 
   static async getUserByEmailOrFail(
     this: ReturnModelType<typeof User>,

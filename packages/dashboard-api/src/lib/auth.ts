@@ -1,12 +1,23 @@
 import { Context } from "apollo-server-core";
 import { AuthChecker } from "type-graphql";
 import { compare } from "bcrypt";
+import { UserTokenData } from "./jwt";
 
-export const authChecker: AuthChecker<Context<{ user: object }>> = (
+// TODO: later it might make sense to use class class authChecker see typegraphql-authorization page
+export const authChecker: AuthChecker<Context<{ user: UserTokenData }>> = (
   { root, args, context, info },
   roles
 ) => {
-  return context.user != null;
+  const {
+    user: { role },
+  } = context;
+  if (context.user == null) return false;
+  if (roles.length > 0) {
+    return (
+      context.user != null && roles.some(expectedRole => role === expectedRole)
+    );
+  }
+  return true;
 };
 
 export function isPasswordCorrect(data: string, encrypted: string) {

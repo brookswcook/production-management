@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Button, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import {
   CreateFabricInput,
@@ -165,6 +165,17 @@ export default function ProductParams() {
         helperText="Example: color swatch 1345. If fabric has print leave it empty."
       />
       <TextField
+        select
+        label="Factory"
+        name="factoryName"
+        SelectProps={{
+          MenuProps: { disablePortal: true },
+        }}
+      >
+        <MenuItem value={"Amy"}>Amy</MenuItem>
+        <MenuItem value={"Kevin"}>Kevin</MenuItem>
+      </TextField>
+      <TextField
         variant="standard"
         label="Print"
         type="file"
@@ -177,11 +188,6 @@ export default function ProductParams() {
         type="file"
         helperText="You can upload tech pack now or later"
         onChange={onTechPackInputChange}
-      />
-      <TextField
-        label="Factory"
-        name="factoryName"
-        helperText="Example: Kevin"
       />
       <DatePicker
         label="Delivery Date"

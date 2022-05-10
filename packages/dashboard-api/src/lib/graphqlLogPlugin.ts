@@ -6,15 +6,20 @@ import logger from "./logger";
 export const logPlugin = {
   async requestDidStart({
     request: { query, operationName: name, variables: variablesObject },
-    context: {
-      user: { id: userId },
-    },
+    context: { user },
   }: GraphQLRequestContext<ResolverContext>) {
-    if (query == null || name == null || variablesObject == null) return;
+    if (
+      query == null ||
+      name == null ||
+      variablesObject == null ||
+      user.id == null
+    )
+      return;
+    const userId = user.id;
     const isMutation = query.match(/^\w+/)?.pop() === "mutation";
     if (isMutation) {
       try {
-        const variables = JSON.stringify(variablesObject);
+        const variables = JSON.stringify(variablesObject, null, 2);
         await OperationLogModel.createLogRecord({ name, variables, userId });
       } catch (err) {
         logger.error(err);

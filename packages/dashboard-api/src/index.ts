@@ -18,6 +18,7 @@ import { buildSchema } from "type-graphql";
 import mongoose from "mongoose";
 import { authChecker } from "./lib/auth";
 import { graphqlUploadExpress } from "graphql-upload";
+import { logPlugin } from "./lib/graphqlLogPlugin";
 
 class DashboardApolloServer extends Server {
   constructor() {
@@ -42,6 +43,7 @@ class DashboardApolloServer extends Server {
       plugins: [
         ApolloServerPluginLandingPageGraphQLPlayground(),
         ApolloServerPluginDrainHttpServer({ httpServer: this.httpServer }),
+        logPlugin,
       ],
       introspection: true,
       schema,

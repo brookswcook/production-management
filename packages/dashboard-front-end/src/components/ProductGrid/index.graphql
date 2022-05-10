@@ -3,8 +3,10 @@ fragment noteFields on Note {
   type
   text
   imageFileNames
-  user
   createdAt
+  user {
+    firstName
+  }
 }
 
 fragment sampleFields on Sample {

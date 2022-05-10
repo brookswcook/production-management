@@ -12,7 +12,7 @@ export class ProductResolver {
   @Query(() => [Product])
   async products() {
     return ProductModel.find()
-      .populate("notes")
+      .populate({ path: "notes", populate: { path: "user" } })
       .populate("fitSamples")
       .populate("style")
       .populate({

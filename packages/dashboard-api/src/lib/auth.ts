@@ -1,10 +1,10 @@
 import { Context } from "apollo-server-core";
 import { AuthChecker } from "type-graphql";
 import { compare } from "bcrypt";
-import { UserTokenData } from "./jwt";
+import { ResolverContext } from "./graphql";
 
 // TODO: later it might make sense to use class class authChecker see typegraphql-authorization page
-export const authChecker: AuthChecker<Context<{ user: UserTokenData }>> = (
+export const authChecker: AuthChecker<Context<ResolverContext>> = (
   { root, args, context, info },
   roles
 ) => {

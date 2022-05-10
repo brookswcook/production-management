@@ -9,11 +9,11 @@ export const jwtAuth: jwt.Options = {
   algorithms: ["HS256"],
 };
 
-export function signUserToken(payload: UserTokenData) {
+export function signUserToken(payload: UserPayload) {
   return sign(payload, JWT_SECRET, { expiresIn });
 }
 
-export type UserTokenData = {
+export type UserPayload = {
   id: string;
   role: UserRole;
   firstName: string;

@@ -16,13 +16,23 @@ export class UserResolver {
   @Mutation(() => String)
   async login(@Arg("data") { email, password }: LoginInput): Promise<string> {
     try {
-      const user = await UserModel.getUserByEmailOrFail(email);
-      const passwordIsRight = await isPasswordCorrect(password, user.password);
+      const {
+        id,
+        role,
+        firstName,
+        password: encryptedPassword,
+      } = (await UserModel.getUserByEmailOrFail(email)) as {
+        id: string;
+      } & User;
+      const passwordIsRight = await isPasswordCorrect(
+        password,
+        encryptedPassword
+      );
       if (!passwordIsRight) {
         throw new UserInputError("Wrong password");
       }
 
-      return signUserToken({ id: user.id as string });
+      return signUserToken({ id, role, firstName });
     } catch (error) {
       throw new UserInputError("Wrong login details");
     }

@@ -5,6 +5,7 @@ import {
   FileUploadInput,
   Note,
   useCreateNoteMutation,
+  User,
 } from "../../generated/graphql";
 import GridToolbarButton from "../GridToolbarButton";
 import { FormEvent, useState } from "react";
@@ -40,7 +41,16 @@ export default function NoteGrid({
         return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
       },
     },
-    { field: "user", headerName: "User", type: "string", flex: 1 },
+    {
+      field: "user",
+      headerName: "User",
+      type: "string",
+      flex: 1,
+      valueFormatter: params => {
+        const user = params.value as User;
+        return user.firstName;
+      },
+    },
   ];
 
   return (

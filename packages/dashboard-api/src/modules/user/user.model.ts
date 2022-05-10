@@ -30,6 +30,14 @@ export class User extends TimeStamps {
   lastName!: string;
 
   @Field()
+  @Property({
+    get(this: User) {
+      return `${this.firstName} ${this.lastName}`;
+    },
+  })
+  fullName!: string;
+
+  @Field()
   @Property({ required: true })
   role!: UserRole;
 
@@ -38,6 +46,15 @@ export class User extends TimeStamps {
     email: string
   ) {
     const user = await this.findOne({ email }).exec();
+    if (user == null) throw new Error("User not found");
+    return user;
+  }
+
+  static async getUserByIdOrFail(
+    this: ReturnModelType<typeof User>,
+    id: string
+  ) {
+    const user = await this.findOne({ _id: id }).exec();
     if (user == null) throw new Error("User not found");
     return user;
   }

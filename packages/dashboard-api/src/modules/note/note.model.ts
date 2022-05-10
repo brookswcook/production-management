@@ -8,6 +8,7 @@ import {
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
 import { NoteType } from "dashboard-core";
+import { User } from "../user/user.model";
 
 @ModelOptions({ schemaOptions: { timestamps: true } })
 @index({ type: 1, parentId: 1 })
@@ -33,10 +34,18 @@ export class Note extends TimeStamps {
   @Property({ type: () => [String], default: [] })
   imageFileNames?: string[];
 
-  //TODO: decide
-  @Field(() => String, { nullable: true })
-  @Property()
-  user?: string;
+  @Field(() => String)
+  @Property({ required: true })
+  userId!: string;
+
+  @Field(() => User, { nullable: true })
+  @Property({
+    ref: () => User,
+    foreignField: "_id",
+    localField: "userId",
+    justOne: true,
+  })
+  user!: User;
 
   static async findOneAndUpdateOrFail(
     this: ReturnModelType<typeof Note>,

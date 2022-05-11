@@ -12,7 +12,7 @@ export const logPlugin = {
       query == null ||
       name == null ||
       variablesObject == null ||
-      user.id == null
+      user == null
     )
       return;
     const userId = user.id;

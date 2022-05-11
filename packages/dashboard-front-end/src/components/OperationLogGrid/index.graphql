@@ -1,0 +1,15 @@
+fragment operationLogFields on OperationLog {
+  id
+  name
+  variables
+  user {
+    firstName
+  }
+  createdAt
+}
+
+query OperationLogs {
+  operationLogs {
+    ...operationLogFields
+  }
+}

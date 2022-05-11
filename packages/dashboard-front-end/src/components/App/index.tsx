@@ -1,8 +1,11 @@
 import {
   AppBar,
+  Box,
   Button,
   createTheme,
   IconButton,
+  Menu,
+  MenuItem,
   ThemeProvider,
   Toolbar,
   Typography,
@@ -27,10 +30,23 @@ import { AuthContext, AuthProvider } from "../Auth/AuthProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProductDetail from "../ProductDetail";
+import React from "react";
+import OperationLogGrid from "../OperationLogGrid";
 
 function Dashboard({ children }: { children: ReactElement }) {
   const { signOut } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null
+  );
+
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
 
   function onSignOut() {
     signOut();
@@ -42,15 +58,54 @@ function Dashboard({ children }: { children: ReactElement }) {
       <Fragment>
         <AppBar position="static">
           <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
+            <Box>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                onClick={handleOpenNavMenu}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+              >
+                <MenuItem key="Products" onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">
+                    <Link
+                      to="/"
+                      style={{ textDecoration: "none", color: "black" }}
+                    >
+                      Products
+                    </Link>
+                  </Typography>
+                </MenuItem>
+                <MenuItem key="Operation Logs" onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">
+                    <Link
+                      to="/oplog"
+                      style={{ textDecoration: "none", color: "black" }}
+                    >
+                      Operation Logs
+                    </Link>
+                  </Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
             <Button variant="text" size="small">
               <Typography variant="h6" sx={{ color: "white" }}>
                 <Link to="/" style={{ textDecoration: "none", color: "white" }}>
@@ -86,6 +141,10 @@ function ApolloApp() {
             <Route
               path="/products/:code"
               element={<Dashboard children={<ProductDetail />} />}
+            />
+            <Route
+              path="/oplog"
+              element={<Dashboard children={<OperationLogGrid />} />}
             />
           </Routes>
         </Router>

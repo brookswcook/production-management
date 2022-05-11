@@ -11,6 +11,9 @@ import { User } from "../user/user.model";
 @ObjectType()
 export class OperationLog extends TimeStamps {
   @Field()
+  id?: string;
+
+  @Field()
   @Property({ required: true })
   name!: string;
 

@@ -119,5 +119,10 @@ const CellExpand = React.memo(function CellExpand(props: CellExpandProps) {
 });
 
 export function renderCellExpand(params: GridCellParams) {
-  return <CellExpand value={String(params.value)} width={Number(300)} />;
+  return (
+    <CellExpand
+      value={String(params.value)}
+      width={params.colDef.computedWidth}
+    />
+  );
 }

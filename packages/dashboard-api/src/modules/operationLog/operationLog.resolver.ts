@@ -8,7 +8,7 @@ export class OperationLogResolver {
     return opLog.createdAt;
   }
 
-  @Authorized()
+  @Authorized("Admin")
   @Query(() => [OperationLog])
   operationLogs() {
     return OperationLogModel.find().sort({ _id: -1 }).populate("user").exec();

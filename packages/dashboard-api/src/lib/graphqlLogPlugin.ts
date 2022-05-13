@@ -10,8 +10,11 @@ export const logPlugin = {
     context: { user },
   }: GraphQLRequestContext<ResolverContext>) {
     return {
-      async executionDidStart() {
+      async willSendResponse(requestContext: {
+        errors?: unknown;
+      }): Promise<void> {
         if (
+          requestContext.errors != null ||
           query == null ||
           name == null ||
           variablesObject == null ||

@@ -4,27 +4,36 @@ import { ResolverContext } from "./graphql";
 import logger from "./logger";
 
 export const logPlugin = {
+  // eslint-disable-next-line @typescript-eslint/require-await
   async requestDidStart({
     request: { query, operationName: name, variables: variablesObject },
     context: { user },
   }: GraphQLRequestContext<ResolverContext>) {
-    if (
-      query == null ||
-      name == null ||
-      variablesObject == null ||
-      user == null
-    )
-      return;
-    const userId = user.id;
-    const isMutation = query.match(/^\w+/)?.pop() === "mutation";
-    if (isMutation) {
-      try {
-        const variables = JSON.stringify(variablesObject, null, 2);
-        await OperationLogModel.createLogRecord({ name, variables, userId });
-      } catch (err) {
-        logger.error(err);
-        throw err;
-      }
-    }
+    return {
+      async executionDidStart() {
+        if (
+          query == null ||
+          name == null ||
+          variablesObject == null ||
+          user == null
+        )
+          return;
+        const userId = user.id;
+        const isMutation = query.match(/^\w+/)?.pop() === "mutation";
+        if (isMutation) {
+          try {
+            const variables = JSON.stringify(variablesObject, null, 2);
+            await OperationLogModel.createLogRecord({
+              name,
+              variables,
+              userId,
+            });
+          } catch (err) {
+            logger.error(err);
+            throw err;
+          }
+        }
+      },
+    };
   },
 };

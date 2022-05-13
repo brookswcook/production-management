@@ -1,4 +1,4 @@
-import { Container, Grid } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import {
   OperationLogFieldsFragment,
   useOperationLogsQuery,
@@ -67,6 +67,13 @@ export default function OperationLogGrid() {
           autoHeight
           components={{
             Toolbar: GridToolbar,
+            ErrorOverlay: () => {
+              return (
+                <Typography variant="h6" style={{ whiteSpace: "nowrap" }}>
+                  {error?.message}
+                </Typography>
+              );
+            },
           }}
           rowsPerPageOptions={[10]}
           disableSelectionOnClick

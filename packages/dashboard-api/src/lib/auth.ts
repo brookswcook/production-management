@@ -8,10 +8,10 @@ export const authChecker: AuthChecker<Context<ResolverContext>> = (
   { root, args, context, info },
   roles
 ) => {
+  if (context.user == null) return false;
   const {
     user: { role },
   } = context;
-  if (context.user == null) return false;
   if (roles.length > 0) {
     return (
       context.user != null && roles.some(expectedRole => role === expectedRole)

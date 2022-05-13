@@ -1,10 +1,11 @@
 import { Arg, Authorized, Mutation, Resolver } from "type-graphql";
 import { FitSample, FitSampleModel } from "./sample.model";
 import { SendSampleInput, UniqueSampleInput } from "./sample.input";
+import { UserRole } from "dashboard-core";
 
 @Resolver(FitSample)
 export class FitSampleResolver {
-  @Authorized()
+  @Authorized(["Admin", "Factory"] as UserRole[])
   @Mutation(() => FitSample)
   async sendFitSample(
     @Arg("data") { ...data }: SendSampleInput
@@ -12,7 +13,7 @@ export class FitSampleResolver {
     return FitSampleModel.sendSample(data);
   }
 
-  @Authorized()
+  @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FitSample)
   async rejectFitSample(
     @Arg("data") { parentCode, sku }: UniqueSampleInput
@@ -20,7 +21,7 @@ export class FitSampleResolver {
     return FitSampleModel.rejectSample(parentCode, sku);
   }
 
-  @Authorized()
+  @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FitSample)
   async approveFitSample(
     @Arg("data") { parentCode, sku }: UniqueSampleInput

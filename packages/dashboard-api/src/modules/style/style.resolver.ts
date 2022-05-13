@@ -2,6 +2,7 @@ import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import { CreateStyleInput, UploadTechPackInput } from "./style.input";
 import { Style, StyleModel } from "./style.model";
 import { getDownloadFileLink, uploadFile } from "../file/file.service";
+import { UserRole } from "dashboard-core";
 
 @Resolver(Style)
 export class StyleResolver {
@@ -23,7 +24,7 @@ export class StyleResolver {
     return getDownloadFileLink(fileName);
   }
 
-  @Authorized()
+  @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Style)
   async createStyle(@Arg("data") { code, name, techPack }: CreateStyleInput) {
     const styleData: Style = { code, name };
@@ -39,7 +40,7 @@ export class StyleResolver {
     return await new StyleModel(styleData).save();
   }
 
-  @Authorized()
+  @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Style)
   async uploadTechPack(
     @Arg("data") { code, techPack: { file, fileSize } }: UploadTechPackInput

@@ -3,6 +3,7 @@ import { CreateProductInput } from "./product.input";
 import { Product, ProductModel } from "./product.model";
 import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
 import { StartProductionInput } from "../productProduction/productProduction.input";
+import { UserRole } from "dashboard-core";
 
 @Resolver(Product)
 export class ProductResolver {
@@ -29,7 +30,7 @@ export class ProductResolver {
     return ProductModel.findPerProductCodeOrFail(code);
   }
 
-  @Authorized()
+  @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Product)
   async createProduct(@Arg("data") data: CreateProductInput) {
     // TODO: use workflow saved in db. Calculate it based on delivery date
@@ -53,7 +54,7 @@ export class ProductResolver {
     }).save();
   }
 
-  @Authorized()
+  @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Product)
   async startFabricProduction(
     @Arg("data") { productName }: StartFabricProductionInput
@@ -65,7 +66,7 @@ export class ProductResolver {
     });
   }
 
-  @Authorized()
+  @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Product)
   async startProduction(
     @Arg("data") { productName }: StartProductionInput

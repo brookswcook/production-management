@@ -1,10 +1,11 @@
 import { Arg, Authorized, Mutation, Resolver } from "type-graphql";
 import { FabricSample, FabricSampleModel } from "./sample.model";
 import { SendSampleInput, UniqueSampleInput } from "./sample.input";
+import { UserRole } from "dashboard-core";
 
 @Resolver(FabricSample)
 export class FabricSampleResolver {
-  @Authorized()
+  @Authorized(["Admin", "Factory"] as UserRole[])
   @Mutation(() => FabricSample)
   async sendFabricSample(
     @Arg("data") { ...data }: SendSampleInput
@@ -12,7 +13,7 @@ export class FabricSampleResolver {
     return FabricSampleModel.sendSample(data);
   }
 
-  @Authorized()
+  @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FabricSample)
   async rejectFabricSample(
     @Arg("data") { parentCode, sku }: UniqueSampleInput
@@ -20,7 +21,7 @@ export class FabricSampleResolver {
     return FabricSampleModel.rejectSample(parentCode, sku);
   }
 
-  @Authorized()
+  @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FabricSample)
   async approveFabricSample(
     @Arg("data") { parentCode, sku }: UniqueSampleInput

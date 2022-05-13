@@ -1,3 +1,4 @@
+import { UserRole } from "dashboard-core";
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import { getDownloadFileLink, uploadFile } from "../file/file.service";
 import { CreateFabricInput, UploadPrintInput } from "./fabric.input";
@@ -23,7 +24,7 @@ export class FabricResolver {
     return getDownloadFileLink(fileName);
   }
 
-  @Authorized()
+  @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
   async createFabric(@Arg("data") { print, ...data }: CreateFabricInput) {
     const fabricData: Omit<Fabric, "samples"> = data;
@@ -39,7 +40,7 @@ export class FabricResolver {
     return (await new FabricModel(fabricData).save()).populate("samples");
   }
 
-  @Authorized()
+  @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
   async uploadPrint(
     @Arg("data") { code, print: { file, fileSize } }: UploadPrintInput

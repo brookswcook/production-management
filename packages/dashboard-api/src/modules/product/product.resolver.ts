@@ -1,5 +1,5 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
-import { CreateProductInput } from "./product.input";
+import { CreateProductInput, GetProductsInput } from "./product.input";
 import { Product, ProductModel } from "./product.model";
 import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
 import { StartProductionInput } from "../productProduction/productProduction.input";
@@ -11,8 +11,9 @@ export class ProductResolver {
   // TODO: populate fitSamples only when needed; analyze AST
   @Authorized()
   @Query(() => [Product])
-  async products() {
-    return ProductModel.find()
+  async products(@Arg("data", { nullable: true }) data?: GetProductsInput) {
+    const query = data ? ({ ...data } as Product) : {};
+    return ProductModel.find(query)
       .sort({ _id: -1 })
       .populate({ path: "notes", populate: { path: "user" } })
       .populate("fitSamples")

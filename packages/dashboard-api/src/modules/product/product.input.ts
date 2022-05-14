@@ -14,3 +14,9 @@ export class CreateProductInput {
   @Field()
   deliveryDate!: Date;
 }
+
+@InputType()
+export class GetProductsInput {
+  @Field()
+  factoryName!: string;
+}

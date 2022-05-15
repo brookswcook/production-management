@@ -1,9 +1,11 @@
-import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { CreateProductInput, GetProductsInput } from "./product.input";
 import { Product, ProductModel } from "./product.model";
 import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
 import { StartProductionInput } from "../productProduction/productProduction.input";
 import { UserRole } from "dashboard-core";
+import { ResolverContext } from "../../lib/graphql";
+import { UserModel } from "../user/user.model";
 
 @Resolver(Product)
 export class ProductResolver {
@@ -11,8 +13,13 @@ export class ProductResolver {
   // TODO: populate fitSamples only when needed; analyze AST
   @Authorized()
   @Query(() => [Product])
-  async products(@Arg("data", { nullable: true }) data?: GetProductsInput) {
-    const query = data ? ({ ...data } as Product) : {};
+  async products(
+    @Ctx() { user: { role } }: ResolverContext,
+    @Arg("data", { nullable: true }) data?: GetProductsInput
+  ) {
+    const factoryName = UserModel.parseFactoryNameRole(role);
+    const query: Partial<Product> = data ? ({ ...data } as Product) : {};
+    factoryName && Object.assign(query, { factoryName });
     return ProductModel.find(query)
       .sort({ _id: -1 })
       .populate({ path: "notes", populate: { path: "user" } })

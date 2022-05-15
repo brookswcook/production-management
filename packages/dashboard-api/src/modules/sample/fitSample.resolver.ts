@@ -5,7 +5,7 @@ import { UserRole } from "dashboard-core";
 
 @Resolver(FitSample)
 export class FitSampleResolver {
-  @Authorized(["Admin", "Factory"] as UserRole[])
+  @Authorized(["Admin", "Factory:.+"] as UserRole[])
   @Mutation(() => FitSample)
   async sendFitSample(
     @Arg("data") { ...data }: SendSampleInput

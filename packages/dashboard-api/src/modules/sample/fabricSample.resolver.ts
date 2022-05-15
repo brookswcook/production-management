@@ -5,7 +5,7 @@ import { UserRole } from "dashboard-core";
 
 @Resolver(FabricSample)
 export class FabricSampleResolver {
-  @Authorized(["Admin", "Factory"] as UserRole[])
+  @Authorized(["Admin", "Factory:.+"] as UserRole[])
   @Mutation(() => FabricSample)
   async sendFabricSample(
     @Arg("data") { ...data }: SendSampleInput

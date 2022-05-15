@@ -6,15 +6,18 @@ import { ResolverContext } from "./graphql";
 // TODO: later it might make sense to use class class authChecker see typegraphql-authorization page
 export const authChecker: AuthChecker<Context<ResolverContext>> = (
   { root, args, context, info },
-  roles
+  authRuleRoles
 ) => {
   if (context.user == null) return false;
   const {
-    user: { role },
+    user: { role: userRole },
   } = context;
-  if (roles.length > 0) {
+  if (authRuleRoles.length > 0) {
     return (
-      context.user != null && roles.some(expectedRole => role === expectedRole)
+      context.user != null &&
+      authRuleRoles.some(authRuleRole =>
+        new RegExp(`^${authRuleRole}$`).test(userRole)
+      )
     );
   }
   return true;

@@ -58,6 +58,13 @@ export class User extends TimeStamps {
     if (user == null) throw new Error("User not found");
     return user;
   }
+
+  static parseFactoryNameRole(role: string) {
+    const factoryRoleMatch = role.match(/(?<=^Factory:)\w+$/);
+    if (factoryRoleMatch != null && factoryRoleMatch.length > 0) {
+      return factoryRoleMatch.pop();
+    } else return null;
+  }
 }
 
 export const UserModel = getModelForClass(User);

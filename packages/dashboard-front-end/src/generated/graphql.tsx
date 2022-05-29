@@ -94,9 +94,19 @@ export type FitSample = {
   trackNumber: Scalars['String'];
 };
 
+export type GetProductsInput = {
+  factoryName: Scalars['String'];
+};
+
 export type LoginInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type LoginResult = {
+  __typename?: 'LoginResult';
+  role: Scalars['String'];
+  token: Scalars['String'];
 };
 
 export type Mutation = {
@@ -107,7 +117,7 @@ export type Mutation = {
   createNote: Note;
   createProduct: Product;
   createStyle: Style;
-  login: Scalars['String'];
+  login: LoginResult;
   rejectFabricSample: FabricSample;
   rejectFitSample: FitSample;
   sendFabricSample: FabricSample;
@@ -303,6 +313,11 @@ export type QueryProductArgs = {
 };
 
 
+export type QueryProductsArgs = {
+  data?: InputMaybe<GetProductsInput>;
+};
+
+
 export type QueryStyleArgs = {
   code: Scalars['String'];
 };
@@ -380,7 +395,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: string };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResult', token: string, role: string } };
 
 export type OperationLogFieldsFragment = { __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null };
 
@@ -685,7 +700,10 @@ export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
 export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($data: LoginInput!) {
-  login(data: $data)
+  login(data: $data) {
+    token
+    role
+  }
 }
     `;
 export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;

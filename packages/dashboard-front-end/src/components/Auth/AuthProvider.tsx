@@ -1,31 +1,49 @@
 import { createContext } from "react";
+import useRole from "./useRole";
 import useToken from "./useToken";
 
 interface AuthContextType {
   token: string | null;
-  signIn: (token: string | null) => void;
+  role: string | null;
+  signIn: ({
+    token,
+    role,
+  }: {
+    token: string | null;
+    role: string | null;
+  }) => void;
   signOut: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({
   token: null,
+  role: null,
   signIn() {},
   signOut() {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { token, setToken } = useToken();
+  const { role, setRole } = useRole();
 
-  function signIn(token: string | null) {
+  function signIn({
+    token,
+    role,
+  }: {
+    token: string | null;
+    role: string | null;
+  }) {
     setToken(token);
+    setRole(role);
   }
 
   function signOut() {
     setToken(null);
+    setRole(null);
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, signOut, token }}>
+    <AuthContext.Provider value={{ signIn, signOut, token, role }}>
       {children}
     </AuthContext.Provider>
   );

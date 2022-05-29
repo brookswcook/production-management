@@ -67,4 +67,13 @@ export class User extends TimeStamps {
   }
 }
 
+@ObjectType()
+export class LoginResult {
+  @Field()
+  token!: string;
+
+  @Field()
+  role!: string;
+}
+
 export const UserModel = getModelForClass(User);

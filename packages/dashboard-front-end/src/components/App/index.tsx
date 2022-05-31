@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ProductGrid from "../ProductGrid";
-import { Fragment, ReactElement, useContext } from "react";
+import { Fragment, MouseEventHandler, ReactElement, useContext } from "react";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { ApolloProvider } from "@apollo/client";
@@ -34,7 +34,7 @@ import React from "react";
 import OperationLogGrid from "../OperationLogGrid";
 
 function Dashboard({ children }: { children: ReactElement }) {
-  const { signOut } = useContext(AuthContext);
+  const { signOut, role } = useContext(AuthContext);
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -94,16 +94,10 @@ function Dashboard({ children }: { children: ReactElement }) {
                     </Link>
                   </Typography>
                 </MenuItem>
-                <MenuItem key="Operation Logs" onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
-                    <Link
-                      to="/oplog"
-                      style={{ textDecoration: "none", color: "black" }}
-                    >
-                      Operation Logs
-                    </Link>
-                  </Typography>
-                </MenuItem>
+                <OperationLog
+                  role={role}
+                  onClick={handleCloseNavMenu}
+                ></OperationLog>
               </Menu>
             </Box>
             <Button variant="text" size="small">
@@ -121,6 +115,26 @@ function Dashboard({ children }: { children: ReactElement }) {
         {children}
       </Fragment>
     </RequireAuth>
+  );
+}
+
+function OperationLog({
+  role,
+  onClick,
+}: {
+  role: string | null;
+  onClick?: MouseEventHandler<HTMLLIElement>;
+}) {
+  return role === "Admin" ? (
+    <MenuItem key="Operation Logs" onClick={onClick}>
+      <Typography textAlign="center">
+        <Link to="/oplog" style={{ textDecoration: "none", color: "black" }}>
+          Operation Logs
+        </Link>
+      </Typography>
+    </MenuItem>
+  ) : (
+    <Fragment />
   );
 }
 

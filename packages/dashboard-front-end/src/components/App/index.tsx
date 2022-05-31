@@ -95,7 +95,7 @@ function Dashboard({ children }: { children: ReactElement }) {
                   </Typography>
                 </MenuItem>
                 <OperationLog
-                  role={role}
+                  visible={role === "Admin"}
                   onClick={handleCloseNavMenu}
                 ></OperationLog>
               </Menu>
@@ -119,13 +119,13 @@ function Dashboard({ children }: { children: ReactElement }) {
 }
 
 function OperationLog({
-  role,
   onClick,
+  visible = false,
 }: {
-  role: string | null;
+  visible?: boolean;
   onClick?: MouseEventHandler<HTMLLIElement>;
 }) {
-  return role === "Admin" ? (
+  return visible ? (
     <MenuItem key="Operation Logs" onClick={onClick}>
       <Typography textAlign="center">
         <Link to="/oplog" style={{ textDecoration: "none", color: "black" }}>

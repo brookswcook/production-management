@@ -14,11 +14,7 @@ import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./AuthProvider";
-import {
-  LoginMutation,
-  LoginResult,
-  useLoginMutation,
-} from "../../generated/graphql";
+import { useLoginMutation } from "../../generated/graphql";
 import { toast } from "react-toastify";
 
 type JSONValue = string | number | { [x: string]: JSONValue };

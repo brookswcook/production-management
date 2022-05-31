@@ -1,16 +1,17 @@
+import { UserRole } from "dashboard-core";
 import { createContext } from "react";
 import useRole from "./useRole";
 import useToken from "./useToken";
 
 interface AuthContextType {
   token: string | null;
-  role: string | null;
+  role: UserRole | null;
   signIn: ({
     token,
     role,
   }: {
     token: string | null;
-    role: string | null;
+    role: UserRole | null;
   }) => void;
   signOut: () => void;
 }
@@ -31,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     role,
   }: {
     token: string | null;
-    role: string | null;
+    role: UserRole | null;
   }) {
     setToken(token);
     setRole(role);

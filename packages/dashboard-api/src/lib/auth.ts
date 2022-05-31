@@ -2,6 +2,7 @@ import { Context } from "apollo-server-core";
 import { AuthChecker } from "type-graphql";
 import { compare } from "bcrypt";
 import { ResolverContext } from "./graphql";
+import { authorizeByRole } from "dashboard-core";
 
 // TODO: later it might make sense to use class class authChecker see typegraphql-authorization page
 export const authChecker: AuthChecker<Context<ResolverContext>> = (
@@ -12,15 +13,7 @@ export const authChecker: AuthChecker<Context<ResolverContext>> = (
   const {
     user: { role: userRole },
   } = context;
-  if (authRuleRoles.length > 0) {
-    return (
-      context.user != null &&
-      authRuleRoles.some(authRuleRole =>
-        new RegExp(`^${authRuleRole}$`).test(userRole)
-      )
-    );
-  }
-  return true;
+  return authorizeByRole(userRole, authRuleRoles);
 };
 
 export function isPasswordCorrect(data: string, encrypted: string) {

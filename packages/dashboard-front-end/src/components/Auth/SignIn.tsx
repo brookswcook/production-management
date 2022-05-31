@@ -14,8 +14,9 @@ import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./AuthProvider";
-import { useLoginMutation } from "../../generated/graphql";
+import { LoginResult, useLoginMutation } from "../../generated/graphql";
 import { toast } from "react-toastify";
+import { UserRole } from "dashboard-core";
 
 type JSONValue = string | number | { [x: string]: JSONValue };
 
@@ -54,7 +55,14 @@ export default function SignIn() {
         variables: { data: { email, password } },
       });
 
-      signIn(loginData?.login ?? { token: null, role: null });
+      const { token, role } = (loginData?.login as LoginResult & {
+        role: UserRole;
+      }) ?? {
+        token: null,
+        role: null,
+      };
+
+      signIn({ token, role });
       navigate("/", { replace: true });
     } catch (error) {
       toast.error("Login failed");

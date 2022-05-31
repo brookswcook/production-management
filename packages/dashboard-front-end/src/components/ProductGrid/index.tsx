@@ -20,6 +20,7 @@ import { Fragment, useState } from "react";
 import { UploadTechPackToolbarButton } from "../TechPackParams";
 import SendSampleToolbarButton from "../SampleParams";
 import { Link } from "react-router-dom";
+import RequireRole from "../Auth/RequireRole";
 
 export default function ProductGrid() {
   const { data, loading, error } = useProductsQuery({
@@ -34,7 +35,7 @@ export default function ProductGrid() {
     selectedProductsCodes.some(code => row.code == code)
   );
 
-  const columns: GridColDef[] = [
+  const columns: GridColDef<ProductFieldsFragment>[] = [
     {
       field: "name",
       headerName: "Title",
@@ -169,10 +170,12 @@ export default function ProductGrid() {
           <GridToolbarButton icon={<AddIcon />} title="New">
             <ProductParams />
           </GridToolbarButton>
-          <UploadTechPackToolbarButton
-            styleCode={selectedProducts[0]?.style.code}
-            disabled={selectedProducts.length !== 1}
-          />
+          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+            <UploadTechPackToolbarButton
+              styleCode={selectedProducts[0]?.style.code}
+              disabled={selectedProducts.length !== 1}
+            />
+          </RequireRole>
           <SendSampleToolbarButton
             sampleType={"fabric"}
             parentCode={selectedProducts[0]?.fabric.code}
@@ -194,7 +197,7 @@ export default function ProductGrid() {
         <DataGrid
           rows={rows}
           columns={columns}
-          getRowId={item => item.code as string}
+          getRowId={item => item.code}
           pageSize={100}
           loading={loading}
           error={error}

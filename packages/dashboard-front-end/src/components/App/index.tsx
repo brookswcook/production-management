@@ -32,9 +32,10 @@ import "react-toastify/dist/ReactToastify.css";
 import ProductDetail from "../ProductDetail";
 import React from "react";
 import OperationLogGrid from "../OperationLogGrid";
+import RequireRole from "../Auth/RequireRole";
 
 function Dashboard({ children }: { children: ReactElement }) {
-  const { signOut, role } = useContext(AuthContext);
+  const { signOut } = useContext(AuthContext);
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -94,10 +95,9 @@ function Dashboard({ children }: { children: ReactElement }) {
                     </Link>
                   </Typography>
                 </MenuItem>
-                <OperationLog
-                  visible={role === "Admin"}
-                  onClick={handleCloseNavMenu}
-                ></OperationLog>
+                <RequireRole authorizedRoles={["Admin"]}>
+                  <OperationLog onClick={handleCloseNavMenu}></OperationLog>
+                </RequireRole>
               </Menu>
             </Box>
             <Button variant="text" size="small">
@@ -120,12 +120,10 @@ function Dashboard({ children }: { children: ReactElement }) {
 
 function OperationLog({
   onClick,
-  visible = false,
 }: {
-  visible?: boolean;
   onClick?: MouseEventHandler<HTMLLIElement>;
 }) {
-  return visible ? (
+  return (
     <MenuItem key="Operation Logs" onClick={onClick}>
       <Typography textAlign="center">
         <Link to="/oplog" style={{ textDecoration: "none", color: "black" }}>
@@ -133,8 +131,6 @@ function OperationLog({
         </Link>
       </Typography>
     </MenuItem>
-  ) : (
-    <Fragment />
   );
 }
 

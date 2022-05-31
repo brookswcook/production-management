@@ -23,6 +23,7 @@ import {
 } from "../../generated/graphql";
 import GridToolbarButton from "../GridToolbarButton";
 import { NoteType } from "dashboard-core";
+import RequireRole from "../Auth/RequireRole";
 
 export default function SampleGrid({
   parentCode,
@@ -52,7 +53,7 @@ export default function SampleGrid({
     selectedSampleSkus.some(sku => row.sku == sku)
   );
 
-  const columns: GridColDef[] = [
+  const columns: GridColDef<Sample>[] = [
     { field: "sku", headerName: "SKU", type: "string", flex: 2 },
     {
       field: "trackNumber",
@@ -91,7 +92,7 @@ export default function SampleGrid({
         rows={rows ?? []}
         columns={columns}
         pageSize={5}
-        getRowId={item => item.sku as string}
+        getRowId={item => item.sku}
         rowsPerPageOptions={[5]}
         checkboxSelection
         onSelectionModelChange={selectionModel =>
@@ -127,44 +128,48 @@ export default function SampleGrid({
     return (
       <Fragment>
         <GridToolbarContainer>
-          <Button
-            variant="text"
-            size="small"
-            onClick={approveSample}
-            disabled={selectedSamples.length !== 1}
-          >
-            Approve
-          </Button>
-          <GridToolbarButton
-            title={"Reject"}
-            disabled={selectedSamples.length !== 1}
-          >
-            <Stack
-              component="form"
-              onSubmit={rejectSample}
-              spacing={2}
-              autoComplete="off"
+          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+            <Button
+              variant="text"
+              size="small"
+              onClick={approveSample}
+              disabled={selectedSamples.length !== 1}
             >
-              <TextField
-                variant="standard"
-                label="Rejection comment"
-                onChange={({ target: { value } }) => {
-                  setRejectionText(value);
-                }}
-                required
-              />
-              <TextField
-                variant="standard"
-                label="Images"
-                type="file"
-                helperText="Images associated with rejection comment. Put them in archive if you want to upload more than one image"
-                onChange={onImagesInputChange}
-              />
-              <Button variant="contained" type="submit">
-                Submit
-              </Button>
-            </Stack>
-          </GridToolbarButton>
+              Approve
+            </Button>
+          </RequireRole>
+          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+            <GridToolbarButton
+              title={"Reject"}
+              disabled={selectedSamples.length !== 1}
+            >
+              <Stack
+                component="form"
+                onSubmit={rejectSample}
+                spacing={2}
+                autoComplete="off"
+              >
+                <TextField
+                  variant="standard"
+                  label="Rejection comment"
+                  onChange={({ target: { value } }) => {
+                    setRejectionText(value);
+                  }}
+                  required
+                />
+                <TextField
+                  variant="standard"
+                  label="Images"
+                  type="file"
+                  helperText="Images associated with rejection comment. Put them in archive if you want to upload more than one image"
+                  onChange={onImagesInputChange}
+                />
+                <Button variant="contained" type="submit">
+                  Submit
+                </Button>
+              </Stack>
+            </GridToolbarButton>
+          </RequireRole>
           <a
             href={noteFileLink}
             target="_blank"

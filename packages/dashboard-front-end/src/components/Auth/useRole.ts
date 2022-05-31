@@ -1,13 +1,14 @@
+import { UserRole } from "dashboard-core";
 import { useState } from "react";
 
 export default function useRole() {
   function getRole() {
-    return sessionStorage.getItem("role");
+    return sessionStorage.getItem("role") as UserRole;
   }
 
-  const [role, setRole] = useState<string | null>(getRole());
+  const [role, setRole] = useState<UserRole | null>(getRole());
 
-  function saveRole(role: string | null) {
+  function saveRole(role: UserRole | null) {
     if (role == null) {
       sessionStorage.removeItem("role");
     } else {

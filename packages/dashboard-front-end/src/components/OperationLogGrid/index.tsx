@@ -12,7 +12,7 @@ export default function OperationLogGrid() {
     variables: {},
   });
 
-  const columns: GridColDef[] = [
+  const columns: GridColDef<OperationLogFieldsFragment>[] = [
     {
       field: "user",
       headerName: "User",
@@ -60,7 +60,7 @@ export default function OperationLogGrid() {
         <DataGrid
           rows={rows}
           columns={columns}
-          getRowId={item => item.id as string}
+          getRowId={item => item.id}
           pageSize={100}
           loading={loading}
           error={error}

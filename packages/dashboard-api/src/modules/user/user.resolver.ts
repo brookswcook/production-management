@@ -4,6 +4,7 @@ import { LoginInput } from "./user.input";
 import { LoginResult, User, UserModel } from "./user.model";
 import { signUserToken } from "../../lib/jwt";
 import { isPasswordCorrect } from "../../lib/auth";
+import { UserRole } from "dashboard-core";
 
 @Resolver(User)
 export class UserResolver {
@@ -16,7 +17,7 @@ export class UserResolver {
   @Mutation(() => LoginResult)
   async login(
     @Arg("data") { email, password }: LoginInput
-  ): Promise<{ token: string; role: string }> {
+  ): Promise<{ token: string; role: UserRole }> {
     try {
       const {
         id,

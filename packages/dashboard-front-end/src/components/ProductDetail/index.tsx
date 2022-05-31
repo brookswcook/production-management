@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { NoteType } from "dashboard-core";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -23,6 +23,8 @@ import {
   usePrintLinkLazyQuery,
   Note,
 } from "../../generated/graphql";
+import { AuthContext } from "../Auth/AuthProvider";
+import RequireRole from "../Auth/RequireRole";
 import { ObjectInputSet } from "../Common/ObjectInputSet";
 import NoteGrid from "../NoteGrid";
 import SampleGrid from "../SampleGrid";
@@ -39,6 +41,7 @@ export default function ProductDetail() {
   const [getPrintLink] = usePrintLinkLazyQuery();
   const [techPackLink, setTechPackLink] = useState<string>("techPack");
   const [printLink, setPrintLink] = useState<string>("print");
+  const { role } = useContext(AuthContext);
 
   useEffect(() => {
     if (loading) return;
@@ -114,7 +117,9 @@ export default function ProductDetail() {
               {`${stage} stage ${onTime ? "is on time" : "is not on time"}`}
             </Typography>
             <Box>
-              <UploadTechPackToolbarButton styleCode={style.code} />
+              <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+                <UploadTechPackToolbarButton styleCode={style.code} />
+              </RequireRole>
               <SendSampleToolbarButton
                 sampleType={"fabric"}
                 parentCode={fabric.code}

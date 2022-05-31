@@ -73,7 +73,7 @@ export class LoginResult {
   token!: string;
 
   @Field()
-  role!: string;
+  role!: UserRole;
 }
 
 export const UserModel = getModelForClass(User);

@@ -23,7 +23,7 @@ export default function NoteGrid({
   notes: Note[];
   type: NoteType;
 }) {
-  const columns: GridColDef[] = [
+  const columns: GridColDef<Note>[] = [
     {
       field: "text",
       headerName: "Text",
@@ -59,7 +59,7 @@ export default function NoteGrid({
         rows={rows}
         columns={columns}
         pageSize={5}
-        getRowId={item => item.id as string}
+        getRowId={item => item.id}
         rowsPerPageOptions={[5]}
         disableSelectionOnClick
         components={{ Toolbar: CustomToolbar }}

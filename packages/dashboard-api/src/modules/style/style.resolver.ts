@@ -21,7 +21,7 @@ export class StyleResolver {
   @Authorized()
   @Query(() => [String])
   async techPackLinks(
-    @Arg("fileNames") fileNames: string[]
+    @Arg("fileNames", () => [String]) fileNames: string[]
   ): Promise<string[]> {
     return getDownloadFileLinks(fileNames);
   }

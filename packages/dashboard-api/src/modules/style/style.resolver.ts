@@ -1,7 +1,7 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import { CreateStyleInput, UploadTechPackInput } from "./style.input";
 import { Style, StyleModel } from "./style.model";
-import { getDownloadFileLink, uploadFile } from "../file/file.service";
+import { getDownloadFileLinks, uploadFiles } from "../file/file.service";
 import { UserRole } from "dashboard-core";
 
 @Resolver(Style)
@@ -19,22 +19,22 @@ export class StyleResolver {
   }
 
   @Authorized()
-  @Query(() => String)
-  async techPackLink(@Arg("fileName") fileName: string): Promise<string> {
-    return getDownloadFileLink(fileName);
+  @Query(() => [String])
+  async techPackLinks(
+    @Arg("fileNames") fileNames: string[]
+  ): Promise<string[]> {
+    return getDownloadFileLinks(fileNames);
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Style)
   async createStyle(@Arg("data") { code, name, techPack }: CreateStyleInput) {
     const styleData: Style = { code, name };
-    if (techPack != null) {
-      const { file, fileSize } = techPack;
-      styleData.techPackFileName = await uploadFile(
+    if (techPack != null && techPack.length > 0) {
+      styleData.techPackFileNames = await uploadFiles(
         code,
         "tech-pack",
-        file,
-        fileSize
+        techPack
       );
     }
     return await new StyleModel(styleData).save();
@@ -43,14 +43,9 @@ export class StyleResolver {
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Style)
   async uploadTechPack(
-    @Arg("data") { code, techPack: { file, fileSize } }: UploadTechPackInput
+    @Arg("data") { code, techPack }: UploadTechPackInput
   ): Promise<Style> {
-    const techPackFileName = await uploadFile(
-      code,
-      "tech-pack",
-      file,
-      fileSize
-    );
-    return StyleModel.findOneAndUpdateOrFail({ code }, { techPackFileName });
+    const techPackFileNames = await uploadFiles(code, "tech-pack", techPack);
+    return StyleModel.findOneAndUpdateOrFail({ code }, { techPackFileNames });
   }
 }

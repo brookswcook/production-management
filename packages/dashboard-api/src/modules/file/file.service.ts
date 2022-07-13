@@ -35,3 +35,12 @@ export async function uploadFiles(
 export function getDownloadFileLink(fileName: string): Promise<string> {
   return getDownloadLink({ fileName });
 }
+
+export async function getDownloadFileLinks(fileNames: string[]) {
+  const fileLinks = [];
+  for await (const fileName of fileNames) {
+    const fileLink = await getDownloadLink({ fileName });
+    fileLinks.push(fileLink);
+  }
+  return fileLinks;
+}

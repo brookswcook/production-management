@@ -1,8 +1,9 @@
 import { ApolloError } from "@apollo/client";
-import { Button, Stack, TextField, Typography } from "@mui/material";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { Button, Stack, Typography } from "@mui/material";
+import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { useUploadTechPackMutation } from "../../generated/graphql";
+import FilePreload from "../FilePreload";
 import GridToolbarButton from "../GridToolbarButton";
 
 export default function TechPackParams({
@@ -10,7 +11,7 @@ export default function TechPackParams({
 }: {
   styleCode: string;
 }) {
-  const [techPackFile, setTechPackFile] = useState<File>();
+  const [techPackFiles, setTechPackFiles] = useState<File[]>();
   const mutationOptions = {
     refetchQueries: ["Products", "Product"],
   };
@@ -19,12 +20,15 @@ export default function TechPackParams({
   async function uploadTechPack(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      if (techPackFile) {
+      if (techPackFiles) {
         await uploadTechPackMutation({
           variables: {
             data: {
               code,
-              techPack: { file: techPackFile, fileSize: techPackFile.size },
+              techPack: techPackFiles.map(file => ({
+                file,
+                fileSize: file.size,
+              })),
             },
           },
         });
@@ -32,16 +36,6 @@ export default function TechPackParams({
     } catch (error) {
       toast.error((error as ApolloError).message);
     }
-  }
-
-  function onTechPackInputChange({
-    target: {
-      files,
-      validity: { valid },
-    },
-  }: ChangeEvent<HTMLInputElement>) {
-    const file = files?.item(0) ?? null;
-    if (valid && file) setTechPackFile(file);
   }
 
   return (
@@ -54,13 +48,12 @@ export default function TechPackParams({
       <Typography component="h4" variant="inherit">
         {`Upload tech pack for style ${code}`}
       </Typography>
-      <TextField
-        variant="standard"
+      <FilePreload
         label="Tech Pack"
-        type="file"
-        helperText={`Important: it will override tech pack of all products based on given style`}
-        onChange={onTechPackInputChange}
-        required
+        setFiles={setTechPackFiles}
+        helperText={
+          "Important: it will override tech pack of all products based on given style"
+        }
       />
       <Button variant="contained" type="submit">
         Upload

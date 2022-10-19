@@ -4,6 +4,6 @@ mutation UploadTechPack($data: UploadTechPackInput!) {
   }
 }
 
-query TechPackLink($fileName: String!) {
-  techPackLink(fileName: $fileName)
+query TechPackLinks($fileNames: [String!]!) {
+  techPackLinks(fileNames: $fileNames)
 }

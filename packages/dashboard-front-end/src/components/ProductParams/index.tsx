@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { Button, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import {
@@ -13,6 +13,7 @@ import {
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
 import { ApolloError } from "@apollo/client";
+import FilePreload from "../FilePreload";
 
 export default function ProductParams() {
   const [newProductMutation] = useCreateProductMutation({
@@ -24,28 +25,8 @@ export default function ProductParams() {
   const [getStyle] = useStyleLazyQuery();
   const [getFabric] = useFabricLazyQuery();
   const [deliveryDate, setDeliveryDate] = useState<string>("");
-  const [techPackFile, setTechPackFile] = useState<File | null>(null);
-  const [printFile, setPrintFile] = useState<File | null>(null);
-
-  function onTechPackInputChange({
-    target: {
-      files,
-      validity: { valid },
-    },
-  }: ChangeEvent<HTMLInputElement>) {
-    const file = files?.item(0) ?? null;
-    if (valid && file) setTechPackFile(file);
-  }
-
-  function onPrintInputChange({
-    target: {
-      files,
-      validity: { valid },
-    },
-  }: ChangeEvent<HTMLInputElement>) {
-    const file = files?.item(0) ?? null;
-    if (valid && file) setPrintFile(file);
-  }
+  const [techPackFiles, setTechPackFiles] = useState<File[]>(null!);
+  const [printFiles, setPrintFiles] = useState<File[] | null>(null);
 
   async function createNewProduct(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -80,11 +61,11 @@ export default function ProductParams() {
           code: styleCode,
           name: styleName,
         };
-        if (techPackFile) {
-          newStyleData.techPack = {
-            file: techPackFile,
-            fileSize: techPackFile.size,
-          };
+        if (techPackFiles) {
+          newStyleData.techPack = techPackFiles.map(file => ({
+            file,
+            fileSize: file.size,
+          }));
         }
         await newStyleMutation({
           variables: { data: newStyleData },
@@ -104,11 +85,11 @@ export default function ProductParams() {
           colorName,
           colorCode,
         };
-        if (printFile) {
-          newFabricData.print = {
-            file: printFile,
-            fileSize: printFile.size,
-          };
+        if (printFiles) {
+          newFabricData.print = printFiles.map(file => ({
+            file,
+            fileSize: file.size,
+          }))[0];
         }
         await newFabricMutation({
           variables: { data: newFabricData },
@@ -175,19 +156,15 @@ export default function ProductParams() {
         <MenuItem value={"Amy"}>Amy</MenuItem>
         <MenuItem value={"Kevin"}>Kevin</MenuItem>
       </TextField>
-      <TextField
-        variant="standard"
+      <FilePreload
         label="Print"
-        type="file"
-        helperText="Upload print file if fabric has print"
-        onChange={onPrintInputChange}
+        setFiles={setPrintFiles}
+        helperText={"Upload print file if fabric has print"}
       />
-      <TextField
-        variant="standard"
+      <FilePreload
         label="Tech Pack"
-        type="file"
-        helperText="You can upload tech pack now or later"
-        onChange={onTechPackInputChange}
+        setFiles={setTechPackFiles}
+        helperText={"You can upload tech pack now or later"}
       />
       <DatePicker
         label="Delivery Date"

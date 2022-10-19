@@ -9,7 +9,7 @@ import {
   Root,
 } from "type-graphql";
 import { ResolverContext } from "../../lib/graphql";
-import { getDownloadFileLink, uploadFile } from "../file/file.service";
+import { getDownloadFileLink, uploadFiles } from "../file/file.service";
 import { CreateNoteInput } from "./note.input";
 import { Note, NoteModel } from "./note.model";
 
@@ -28,18 +28,11 @@ export class NoteResolver {
   ): Promise<Note> {
     const noteData = data as unknown as Note;
     if (data.images.length > 0) {
-      const imageFileNames = [];
-      for await (const image of data.images) {
-        const { file, fileSize } = image;
-        const uploadedImageFileName = await uploadFile(
-          data.parentId,
-          "note-image",
-          file,
-          fileSize
-        );
-        imageFileNames.push(uploadedImageFileName);
-      }
-      noteData.imageFileNames = imageFileNames;
+      noteData.imageFileNames = await uploadFiles(
+        data.parentId,
+        "note-image",
+        data.images
+      );
     }
     noteData.userId = user.id;
     return new NoteModel(noteData).save();

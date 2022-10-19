@@ -9,8 +9,8 @@ export class CreateStyleInput {
   @Field()
   name!: string;
 
-  @Field(() => FileUploadInput, { nullable: true })
-  techPack?: FileUploadInput;
+  @Field(() => [FileUploadInput], { nullable: true })
+  techPack?: FileUploadInput[];
 }
 
 @InputType()
@@ -18,6 +18,6 @@ export class UploadTechPackInput {
   @Field()
   code!: string;
 
-  @Field(() => FileUploadInput)
-  techPack!: FileUploadInput;
+  @Field(() => [FileUploadInput])
+  techPack!: FileUploadInput[];
 }

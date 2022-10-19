@@ -15,14 +15,14 @@ export class Style {
   @Property({ required: true })
   name!: string;
 
-  @Field({ nullable: true })
-  @Property()
-  techPackFileName?: string;
+  @Field(() => [String])
+  @Property({ default: [] })
+  techPackFileNames?: string[];
 
   @Field({ nullable: true })
   @Property({
     get(this: Style) {
-      return this.techPackFileName != null;
+      return this.techPackFileNames!.length > 0;
     },
   })
   techPackUploaded?: boolean;

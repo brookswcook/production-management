@@ -3,14 +3,18 @@ import {
   Box,
   Button,
   Container,
+  FormControl,
   Grid,
+  InputLabel,
   LinearProgress,
+  MenuItem,
   Paper,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
 import { NoteType } from "dashboard-core";
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -19,11 +23,10 @@ import {
   useProductQuery,
   Fabric,
   Style,
-  useTechPackLinkLazyQuery,
+  useTechPackLinksLazyQuery,
   usePrintLinkLazyQuery,
   Note,
 } from "../../generated/graphql";
-import { AuthContext } from "../Auth/AuthProvider";
 import RequireRole from "../Auth/RequireRole";
 import { ObjectInputSet } from "../Common/ObjectInputSet";
 import NoteGrid from "../NoteGrid";
@@ -37,15 +40,14 @@ export default function ProductDetail() {
     variables: { code },
   });
 
-  const [getTechPackLink] = useTechPackLinkLazyQuery();
+  const [getTechPackLinks] = useTechPackLinksLazyQuery();
   const [getPrintLink] = usePrintLinkLazyQuery();
-  const [techPackLink, setTechPackLink] = useState<string>("techPack");
+  const [techPackLinks, setTechPackLinks] = useState<string[]>(["techPack"]);
   const [printLink, setPrintLink] = useState<string>("print");
-  const { role } = useContext(AuthContext);
 
   useEffect(() => {
     if (loading) return;
-    void generateTechPackLink();
+    void generateTechPackLinks();
     void generatePrintLink();
   }, [loading]);
 
@@ -72,13 +74,13 @@ export default function ProductDetail() {
     notes,
   }: ProductFieldsFragment = data.product;
 
-  async function generateTechPackLink() {
-    if (style.techPackFileName != null) {
+  async function generateTechPackLinks() {
+    if (style.techPackFileNames.length > 0) {
       try {
-        const { data } = await getTechPackLink({
-          variables: { fileName: style.techPackFileName },
+        const { data } = await getTechPackLinks({
+          variables: { fileNames: style.techPackFileNames },
         });
-        setTechPackLink(data?.techPackLink ?? "#");
+        setTechPackLinks(data?.techPackLinks ?? ["#"]);
       } catch (error) {
         toast.error((error as ApolloError).message);
       }
@@ -125,22 +127,29 @@ export default function ProductDetail() {
                 parentCode={fabric.code}
               />
               <SendSampleToolbarButton sampleType={"fit"} parentCode={code} />
-              <a
-                href={techPackLink}
-                target="_blank"
-                style={{
-                  pointerEvents: `${!style.techPackUploaded ? "none" : "auto"}`,
-                  textDecoration: "none",
-                }}
-              >
-                <Button
-                  variant="text"
-                  size="small"
-                  disabled={!style.techPackUploaded}
-                >
-                  Download TP
-                </Button>
-              </a>
+              {techPackLinks.map((techPackLink, index) => {
+                return (
+                  <a
+                    href={techPackLink}
+                    target="_blank"
+                    key={index}
+                    style={{
+                      pointerEvents: `${
+                        !style.techPackUploaded ? "none" : "auto"
+                      }`,
+                      textDecoration: "none",
+                    }}
+                  >
+                    <Button
+                      variant="text"
+                      size="small"
+                      disabled={!style.techPackUploaded}
+                    >
+                      {`Download TP file ${index + 1}`}
+                    </Button>
+                  </a>
+                );
+              })}
               <a
                 href={printLink}
                 target="_blank"

@@ -1,0 +1,10 @@
+fragment fabricFields on Fabric {
+  code
+  colorName
+}
+
+query Fabrics {
+  fabrics {
+    ...fabricFields
+  }
+}

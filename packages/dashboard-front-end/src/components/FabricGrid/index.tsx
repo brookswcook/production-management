@@ -10,10 +10,16 @@ export default function FabricGrid() {
     {
       field: "code",
       headerName: "Code",
+      minWidth: 50,
+      flex: 1,
+      type: "string",
     },
     {
       field: "colorName",
       headerName: "Color Name",
+      minWidth: 120,
+      flex: 3,
+      type: "string",
     },
   ];
 
@@ -28,7 +34,6 @@ export default function FabricGrid() {
           loading={loading}
           error={error}
           autoHeight
-          checkboxSelection
           disableSelectionOnClick
           sx={{ mt: 1 }}
         />

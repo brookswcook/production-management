@@ -55,6 +55,7 @@ export type Fabric = {
   colorType?: Maybe<Scalars['String']>;
   printFileName?: Maybe<Scalars['String']>;
   samples: Array<FabricSample>;
+  stage: Scalars['String'];
   title?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
 };
@@ -398,12 +399,12 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResult', token: string, role: string } };
 
-export type FabricFieldsFragment = { __typename?: 'Fabric', code: string, title?: string | null, colorName: string };
+export type FabricFieldsFragment = { __typename?: 'Fabric', code: string, title?: string | null, colorName: string, stage: string };
 
 export type FabricsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', code: string, title?: string | null, colorName: string }> };
+export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', code: string, title?: string | null, colorName: string, stage: string }> };
 
 export type OperationLogFieldsFragment = { __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null };
 
@@ -551,6 +552,7 @@ export const FabricFieldsFragmentDoc = gql`
   code
   title
   colorName
+  stage
 }
     `;
 export const OperationLogFieldsFragmentDoc = gql`

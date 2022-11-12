@@ -11,7 +11,7 @@ export default function FabricGrid() {
       field: "title",
       headerName: "Title",
       minWidth: 70,
-      flex: 1,
+      flex: 2,
       type: "string",
     },
     {
@@ -25,7 +25,14 @@ export default function FabricGrid() {
       field: "colorName",
       headerName: "Color Name",
       minWidth: 120,
-      flex: 3,
+      flex: 2,
+      type: "string",
+    },
+    {
+      field: "stage",
+      headerName: "Stage",
+      minWidth: 70,
+      flex: 10,
       type: "string",
     },
   ];

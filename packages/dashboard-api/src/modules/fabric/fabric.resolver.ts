@@ -27,7 +27,7 @@ export class FabricResolver {
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
   async createFabric(@Arg("data") { print, ...data }: CreateFabricInput) {
-    const fabricData: Omit<Fabric, "samples"> = data;
+    const fabricData: Omit<Fabric, "samples" | "stage"> = data;
     if (print != null) {
       const { file, fileSize } = print;
       fabricData.printFileName = await uploadFile(

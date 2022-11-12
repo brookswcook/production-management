@@ -8,6 +8,13 @@ export default function FabricGrid() {
 
   const columns: GridColDef<FabricFieldsFragment>[] = [
     {
+      field: "title",
+      headerName: "Title",
+      minWidth: 70,
+      flex: 1,
+      type: "string",
+    },
+    {
       field: "code",
       headerName: "Code",
       minWidth: 50,

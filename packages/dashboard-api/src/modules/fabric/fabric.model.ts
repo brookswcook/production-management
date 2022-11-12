@@ -13,6 +13,10 @@ export class Fabric {
   @Property({ unique: true })
   code!: string;
 
+  @Field({ nullable: true })
+  @Property()
+  title?: string;
+
   @Field()
   @Property()
   colorName!: string;

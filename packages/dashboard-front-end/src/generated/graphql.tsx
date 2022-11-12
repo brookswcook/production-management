@@ -55,6 +55,7 @@ export type Fabric = {
   colorType?: Maybe<Scalars['String']>;
   printFileName?: Maybe<Scalars['String']>;
   samples: Array<FabricSample>;
+  title?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
 };
 
@@ -397,12 +398,12 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResult', token: string, role: string } };
 
-export type FabricFieldsFragment = { __typename?: 'Fabric', code: string, colorName: string };
+export type FabricFieldsFragment = { __typename?: 'Fabric', code: string, title?: string | null, colorName: string };
 
 export type FabricsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', code: string, colorName: string }> };
+export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', code: string, title?: string | null, colorName: string }> };
 
 export type OperationLogFieldsFragment = { __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null };
 
@@ -548,6 +549,7 @@ export type TechPackLinkQuery = { __typename?: 'Query', techPackLink: string };
 export const FabricFieldsFragmentDoc = gql`
     fragment fabricFields on Fabric {
   code
+  title
   colorName
 }
     `;

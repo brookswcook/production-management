@@ -3,6 +3,7 @@ fragment fabricFields on Fabric {
   title
   colorName
   stage
+  productCodes
 }
 
 query Fabrics {

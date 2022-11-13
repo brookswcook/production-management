@@ -52,7 +52,9 @@ export class Fabric {
   samples!: FabricSample[];
 
   // TODO: it depends on populate in fabrics query;
-  //       it's better to run specific query here
+  //       it's better to run specific query and move it to resolver as fieldresolver
+  //       then some loader is needed to load samples
+  //       right now it's KISS until we have some issues with query performance
   @Field()
   @Property({
     get(this: Fabric): FabricStage {

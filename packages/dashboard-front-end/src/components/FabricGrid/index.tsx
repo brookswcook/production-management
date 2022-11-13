@@ -1,5 +1,6 @@
 import { Container, Grid } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Link } from "react-router-dom";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { FabricFieldsFragment, useFabricsQuery } from "../../generated/graphql";
 
 export default function FabricGrid() {
@@ -32,8 +33,29 @@ export default function FabricGrid() {
       field: "stage",
       headerName: "Stage",
       minWidth: 70,
-      flex: 10,
+      flex: 2,
       type: "string",
+    },
+    {
+      field: "productCodes",
+      headerName: "Associated Products",
+      minWidth: 100,
+      flex: 5,
+      valueGetter: ({ row }: { row: FabricFieldsFragment }) => {
+        return row.productCodes;
+      },
+      renderCell({
+        value: productCodes,
+      }: GridRenderCellParams<string[], FabricFieldsFragment>) {
+        return productCodes?.map(code => (
+          <div key={code} style={{ whiteSpace: "pre" }}>
+            <Link to={`/products/${code}`} style={{ textDecoration: "none" }}>
+              {code}
+            </Link>
+            {"  "}
+          </div>
+        ));
+      },
     },
   ];
 

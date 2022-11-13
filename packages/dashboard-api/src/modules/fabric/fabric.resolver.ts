@@ -1,11 +1,31 @@
 import { UserRole } from "dashboard-core";
-import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
 import { getDownloadFileLink, uploadFile } from "../file/file.service";
+import { ProductService } from "../product/product.service";
 import { CreateFabricInput, UploadPrintInput } from "./fabric.input";
 import { Fabric, FabricModel } from "./fabric.model";
 
-@Resolver(Fabric)
+@Resolver(() => Fabric)
 export class FabricResolver {
+  constructor(private readonly productService: ProductService) {
+    // TODO: use DI as typedi if it gets annoying
+    this.productService = new ProductService();
+  }
+
+  @FieldResolver(() => [String])
+  async productCodes(@Root("_doc") { code }: Fabric): Promise<string[]> {
+    // TODO: add loader to run query once
+    return this.productService.getProductCodesByFabricCode(code);
+  }
+
   @Authorized()
   @Query(() => [Fabric])
   async fabrics() {
@@ -27,7 +47,7 @@ export class FabricResolver {
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
   async createFabric(@Arg("data") { print, ...data }: CreateFabricInput) {
-    const fabricData: Omit<Fabric, "samples" | "stage"> = data;
+    const fabricData: Omit<Fabric, "samples" | "stage" | "products"> = data;
     if (print != null) {
       const { file, fileSize } = print;
       fabricData.printFileName = await uploadFile(

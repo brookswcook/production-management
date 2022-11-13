@@ -1,7 +1,16 @@
 import { Container, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarExport,
+  GridToolbarFilterButton,
+} from "@mui/x-data-grid";
 import { FabricFieldsFragment, useFabricsQuery } from "../../generated/graphql";
+import { Fragment } from "react";
 
 export default function FabricGrid() {
   const { data, loading, error } = useFabricsQuery({});
@@ -59,6 +68,18 @@ export default function FabricGrid() {
     },
   ];
 
+  function CustomToolbar() {
+    return (
+      <Fragment>
+        <GridToolbarContainer>
+          <GridToolbarColumnsButton />
+          <GridToolbarFilterButton />
+          <GridToolbarExport />
+        </GridToolbarContainer>
+      </Fragment>
+    );
+  }
+
   return (
     <Container>
       <Grid item xs={12}>
@@ -70,6 +91,9 @@ export default function FabricGrid() {
           loading={loading}
           error={error}
           autoHeight
+          components={{
+            Toolbar: CustomToolbar,
+          }}
           disableSelectionOnClick
           sx={{ mt: 1 }}
         />

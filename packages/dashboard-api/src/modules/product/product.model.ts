@@ -209,6 +209,11 @@ export class Product {
     if (product == null) throw Error(`Product with given title not found`);
     return product;
   }
+
+  static async getProductCodes(query: Partial<Product>): Promise<string[]> {
+    const codes = await ProductModel.find(query, { _id: 0, code: 1 }).lean();
+    return codes.map(item => item.code);
+  }
 }
 
 export const ProductModel = getModelForClass(Product);

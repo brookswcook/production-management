@@ -54,7 +54,10 @@ export type Fabric = {
   colorName: Scalars['String'];
   colorType?: Maybe<Scalars['String']>;
   printFileName?: Maybe<Scalars['String']>;
+  productCodes: Array<Scalars['String']>;
   samples: Array<FabricSample>;
+  stage: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
 };
 
@@ -397,6 +400,13 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResult', token: string, role: string } };
 
+export type FabricFieldsFragment = { __typename?: 'Fabric', code: string, title?: string | null, colorName: string, stage: string, productCodes: Array<string> };
+
+export type FabricsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', code: string, title?: string | null, colorName: string, stage: string, productCodes: Array<string> }> };
+
 export type OperationLogFieldsFragment = { __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null };
 
 export type OperationLogsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -538,6 +548,15 @@ export type TechPackLinksQueryVariables = Exact<{
 
 export type TechPackLinksQuery = { __typename?: 'Query', techPackLinks: Array<string> };
 
+export const FabricFieldsFragmentDoc = gql`
+    fragment fabricFields on Fabric {
+  code
+  title
+  colorName
+  stage
+  productCodes
+}
+    `;
 export const OperationLogFieldsFragmentDoc = gql`
     fragment operationLogFields on OperationLog {
   id
@@ -732,6 +751,40 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const FabricsDocument = gql`
+    query Fabrics {
+  fabrics {
+    ...fabricFields
+  }
+}
+    ${FabricFieldsFragmentDoc}`;
+
+/**
+ * __useFabricsQuery__
+ *
+ * To run a query within a React component, call `useFabricsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFabricsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFabricsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFabricsQuery(baseOptions?: Apollo.QueryHookOptions<FabricsQuery, FabricsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FabricsQuery, FabricsQueryVariables>(FabricsDocument, options);
+      }
+export function useFabricsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FabricsQuery, FabricsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FabricsQuery, FabricsQueryVariables>(FabricsDocument, options);
+        }
+export type FabricsQueryHookResult = ReturnType<typeof useFabricsQuery>;
+export type FabricsLazyQueryHookResult = ReturnType<typeof useFabricsLazyQuery>;
+export type FabricsQueryResult = Apollo.QueryResult<FabricsQuery, FabricsQueryVariables>;
 export const OperationLogsDocument = gql`
     query OperationLogs {
   operationLogs {

@@ -13,6 +13,10 @@ export class Fabric {
   @Property({ unique: true })
   code!: string;
 
+  @Field({ nullable: true })
+  @Property()
+  title?: string;
+
   @Field()
   @Property()
   colorName!: string;
@@ -47,6 +51,20 @@ export class Fabric {
   } as FabricSamplesPropParams)
   samples!: FabricSample[];
 
+  // TODO: it depends on populate in fabrics query;
+  //       it's better to run specific query and move it to resolver as fieldresolver
+  //       then some loader is needed to load samples
+  //       right now it's KISS until we have some issues with query performance
+  @Field()
+  @Property({
+    get(this: Fabric): FabricStage {
+      if (this.samples.some(sample => sample.approved)) return "Approved";
+      else if (this.samples.length > 0) return "Fabric Sampling";
+      else return "In development";
+    },
+  })
+  stage!: string;
+
   // TODO: reuse
   static async findOneAndUpdateOrFail(
     this: ReturnModelType<typeof Fabric>,
@@ -69,3 +87,5 @@ type FabricSamplesPropParams = {
   localField: keyof Fabric;
   foreignField: keyof FabricSample;
 };
+
+type FabricStage = "In development" | "Fabric Sampling" | "Approved";

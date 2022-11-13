@@ -23,6 +23,7 @@ import {
   Routes,
   useNavigate,
   Link,
+  To,
 } from "react-router-dom";
 import SignIn from "../Auth/SignIn";
 import RequireAuth from "../Auth/RequireAuth";
@@ -33,6 +34,7 @@ import ProductDetail from "../ProductDetail";
 import React from "react";
 import OperationLogGrid from "../OperationLogGrid";
 import RequireRole from "../Auth/RequireRole";
+import FabricGrid from "../FabricGrid";
 
 function Dashboard({ children }: { children: ReactElement }) {
   const { signOut } = useContext(AuthContext);
@@ -85,18 +87,10 @@ function Dashboard({ children }: { children: ReactElement }) {
                 open={Boolean(anchorElNav)}
                 onClose={handleCloseNavMenu}
               >
-                <MenuItem key="Products" onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
-                    <Link
-                      to="/"
-                      style={{ textDecoration: "none", color: "black" }}
-                    >
-                      Products
-                    </Link>
-                  </Typography>
-                </MenuItem>
+                <MenuItemLink onClick={handleCloseNavMenu} name="Products" to="/products"/>
+                <MenuItemLink onClick={handleCloseNavMenu} name="Fabrics" to="/fabrics"/>
                 <RequireRole authorizedRoles={["Admin"]}>
-                  <OperationLog onClick={handleCloseNavMenu}></OperationLog>
+                  <MenuItemLink onClick={handleCloseNavMenu} name="Operation logs" to="/oplog"/>
                 </RequireRole>
               </Menu>
             </Box>
@@ -118,16 +112,20 @@ function Dashboard({ children }: { children: ReactElement }) {
   );
 }
 
-function OperationLog({
+function MenuItemLink({
   onClick,
+  name,
+  to
 }: {
   onClick?: MouseEventHandler<HTMLLIElement>;
+  name: string
+  to: To
 }) {
   return (
-    <MenuItem key="Operation Logs" onClick={onClick}>
+    <MenuItem key={name.toLowerCase()} onClick={onClick}>
       <Typography textAlign="center">
-        <Link to="/oplog" style={{ textDecoration: "none", color: "black" }}>
-          Operation Logs
+        <Link to={to} style={{ textDecoration: "none", color: "black" }}>
+          {name}
         </Link>
       </Typography>
     </MenuItem>
@@ -149,8 +147,20 @@ function ApolloApp() {
               element={<Dashboard children={<ProductGrid />} />}
             />
             <Route
+              path="/products"
+              element={<Dashboard children={<ProductGrid />} />}
+            />
+            <Route
               path="/products/:code"
               element={<Dashboard children={<ProductDetail />} />}
+            />
+            <Route
+              path="/fabrics"
+              element={<Dashboard children={<FabricGrid />} />}
+            />
+            <Route
+              path="/fabrics/:code"
+              element={<Dashboard children={<FabricGrid />} />}
             />
             <Route
               path="/oplog"

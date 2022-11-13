@@ -1,7 +1,7 @@
 FROM node:16-alpine AS build
 
 WORKDIR /app
-COPY package.json package-lock.json lerna.json tsconfig.base.json ./
+COPY package.json package-lock.json lerna.json tsconfig.base.json .eslintrc ./
 ADD packages/dashboard-front-end ./packages/dashboard-front-end
 ADD packages/dashboard-core ./packages/dashboard-core
 RUN npm install

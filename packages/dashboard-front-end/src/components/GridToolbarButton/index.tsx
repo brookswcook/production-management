@@ -6,11 +6,13 @@ export default function GridToolbarButton({
   title,
   children,
   disabled,
+  closeCounter,
 }: {
   icon?: ReactElement;
   title: string;
   children: ReactElement;
   disabled?: boolean;
+  closeCounter?: number;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -19,6 +21,10 @@ export default function GridToolbarButton({
   useEffect(() => {
     setOpen(Boolean(anchorEl));
   }, [anchorEl]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [closeCounter]);
 
   function togglePopper(event: MouseEvent<HTMLElement>) {
     setAnchorEl(anchorEl ? null : event.currentTarget);

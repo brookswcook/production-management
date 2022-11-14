@@ -1,5 +1,12 @@
 import { FormEvent, useState } from "react";
-import { Button, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  MenuItem,
+  Stack,
+  TextField,
+  TextFieldProps,
+  Typography,
+} from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import {
   CreateFabricInput,
@@ -169,10 +176,10 @@ export default function ProductParams() {
       <DatePicker
         label="Delivery Date"
         value={deliveryDate}
-        onChange={newValue => {
+        onChange={(newValue: string | null) => {
           setDeliveryDate(newValue ?? "");
         }}
-        renderInput={params => (
+        renderInput={(params: TextFieldProps) => (
           <TextField name="deliveryDate" {...params} required />
         )}
       />

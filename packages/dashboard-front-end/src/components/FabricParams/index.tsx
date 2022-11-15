@@ -1,8 +1,8 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
-import { FormEvent, Fragment, MouseEventHandler, useState } from "react";
-import { useCreateFabricMutation } from "../../generated/graphql";
+import { Button, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { FormEvent, Fragment, useState } from "react";
 import GridToolbarButton from "../GridToolbarButton";
 import AddIcon from "@mui/icons-material/Add";
+import { ColorType } from "dashboard-core";
 
 export default function CreateFabricButton({
   disabled = false,
@@ -20,6 +20,8 @@ export default function CreateFabricButton({
     await Promise.resolve("");
     console.log(data);
   }
+
+  const colorTypes: ColorType[] = ["print", "solid"];
 
   return (
     <Fragment>
@@ -51,10 +53,20 @@ export default function CreateFabricButton({
             required
           />
           <TextField
-            label="Color Code"
-            name="colorCode"
-            helperText="Example: color swatch 1345. If fabric has print leave it empty."
-          />
+            select
+            label="Color Type"
+            name="colorType"
+            SelectProps={{
+              MenuProps: {
+                disablePortal: true,
+              },
+            }}
+            required
+          >
+            {colorTypes.map(colorType => (
+              <MenuItem value={colorType}>{colorType}</MenuItem>
+            ))}
+          </TextField>
           <Fragment>
             <Button variant="contained" type="submit">
               Add Fabric

@@ -59,6 +59,13 @@ export default function CreateFabricButton({
             SelectProps={{
               MenuProps: {
                 disablePortal: true,
+                // TODO: Find better option to set correct position of it
+                sx: {
+                  ".MuiPaper-root": {
+                    left: "0 !important;",
+                    position: "sticky",
+                  },
+                },
               },
             }}
             required

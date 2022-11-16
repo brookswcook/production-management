@@ -4,19 +4,58 @@ import { PopperButton } from "../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
 import { ColorType } from "dashboard-core";
 import FilePreload from "../FilePreload";
+import {
+  CreateFabricInput,
+  useCreateFabricMutation,
+  useFabricLazyQuery,
+} from "../../generated/graphql";
+import { toast } from "react-toastify";
 
 export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
   const [selectedColorType, setSelectedColorType] = useState<string>("");
   const [printFiles, setPrintFiles] = useState<File[] | null>(null);
+  const [newFabricMutation] = useCreateFabricMutation({
+    refetchQueries: ["Fabrics"],
+  });
+  const [getFabric] = useFabricLazyQuery();
+  const colorTypes: ColorType[] = ["solid", "print"];
 
   async function createNewFabric(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    await Promise.resolve("");
-    console.log(data);
-  }
+    const { code, colorName, colorCode } = Object.fromEntries(
+      data.entries()
+    ) as unknown as CreateFabricInput;
 
-  const colorTypes: ColorType[] = ["solid", "print"];
+    try {
+      const { data: fabricData } = await getFabric({
+        variables: { code },
+      });
+      if (fabricData?.fabric) {
+        toast.info(
+          `Fabric with ${code} code already exists. Choose another code`,
+          { delay: 10 }
+        );
+      } else {
+        const newFabricData: CreateFabricInput = {
+          code,
+          colorName,
+          colorCode,
+        };
+        if (printFiles) {
+          newFabricData.print = printFiles.map(file => ({
+            file,
+            fileSize: file.size,
+          }))[0];
+        }
+        await newFabricMutation({
+          variables: { data: newFabricData },
+        });
+      }
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  }
 
   return (
     <Stack
@@ -30,7 +69,7 @@ export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
       </Typography>
       <TextField
         label="Fabric Code"
-        name="fabricCode"
+        name="code"
         helperText="Example: K865"
         required
       />

@@ -3,6 +3,7 @@ import { FormEvent, Fragment, useState } from "react";
 import GridToolbarButton from "../GridToolbarButton";
 import AddIcon from "@mui/icons-material/Add";
 import { ColorType } from "dashboard-core";
+import FilePreload from "../FilePreload";
 
 export default function CreateFabricButton({
   disabled = false,
@@ -10,6 +11,8 @@ export default function CreateFabricButton({
   disabled?: boolean;
 }) {
   const [cancelleCount, setCancelledCount] = useState<number>(0);
+  const [selectedColorType, setSelectedColorType] = useState<ColorType>();
+  const [printFiles, setPrintFiles] = useState<File[] | null>(null);
   function cancel() {
     setCancelledCount(cancelleCount + 1);
   }
@@ -21,7 +24,7 @@ export default function CreateFabricButton({
     console.log(data);
   }
 
-  const colorTypes: ColorType[] = ["print", "solid"];
+  const colorTypes: ColorType[] = ["solid", "print"];
 
   return (
     <Fragment>
@@ -68,12 +71,31 @@ export default function CreateFabricButton({
                 },
               },
             }}
+            onChange={e => setSelectedColorType(e.target.value as ColorType)}
             required
           >
             {colorTypes.map(colorType => (
-              <MenuItem value={colorType}>{colorType}</MenuItem>
+              <MenuItem key={colorType} value={colorType}>
+                {`${colorType[0].toUpperCase()}${colorType.slice(1)}`}
+              </MenuItem>
             ))}
           </TextField>
+          {selectedColorType === "solid" && (
+            <TextField
+              label="Color Code"
+              name="colorCode"
+              helperText="Example: color swatch 1345."
+              required
+            />
+          )}
+          {selectedColorType === "print" && (
+            <FilePreload
+              label="Print file"
+              setFiles={setPrintFiles}
+              helperText={"Please upload file (.tiff or another)"}
+              multiple={false}
+            />
+          )}
           <Fragment>
             <Button variant="contained" type="submit">
               Add Fabric

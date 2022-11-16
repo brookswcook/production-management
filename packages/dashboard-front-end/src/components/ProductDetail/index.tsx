@@ -27,8 +27,8 @@ import RequireRole from "../Auth/RequireRole";
 import { ObjectInputSet } from "../Common/ObjectInputSet";
 import NoteGrid from "../NoteGrid";
 import SampleGrid from "../SampleGrid";
-import SendSampleToolbarButton from "../SampleParams";
-import { UploadTechPackToolbarButton } from "../TechPackParams";
+import SendSampleToolbarButton from "../SampleForm";
+import { UploadTechPackPooperButton } from "../TechPackForm";
 
 export default function ProductDetail() {
   const { code = "" } = useParams();
@@ -116,7 +116,7 @@ export default function ProductDetail() {
             </Typography>
             <Box>
               <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-                <UploadTechPackToolbarButton styleCode={style.code} />
+                <UploadTechPackPooperButton styleCode={style.code} />
               </RequireRole>
               <SendSampleToolbarButton
                 sampleType={"fabric"}

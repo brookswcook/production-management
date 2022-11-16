@@ -13,12 +13,12 @@ import {
   ProductFieldsFragment,
   useProductsQuery,
 } from "../../generated/graphql";
-import GridToolbarButton from "../GridToolbarButton";
+import { PopperButton } from "../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
-import ProductParams from "../ProductParams";
+import { CreateProductForm } from "../ProductForm";
 import { Fragment, useState } from "react";
-import { UploadTechPackToolbarButton } from "../TechPackParams";
-import SendSampleToolbarButton from "../SampleParams";
+import { UploadTechPackPooperButton } from "../TechPackForm";
+import SendSampleToolbarButton from "../SampleForm";
 import { Link } from "react-router-dom";
 import RequireRole from "../Auth/RequireRole";
 
@@ -167,11 +167,11 @@ export default function ProductGrid() {
           <GridToolbarExport />
         </GridToolbarContainer>
         <GridToolbarContainer>
-          <GridToolbarButton icon={<AddIcon />} title="New">
-            <ProductParams />
-          </GridToolbarButton>
+          <PopperButton icon={<AddIcon />} title="New">
+            <CreateProductForm />
+          </PopperButton>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <UploadTechPackToolbarButton
+            <UploadTechPackPooperButton
               styleCode={selectedProducts[0]?.style.code}
               disabled={selectedProducts.length !== 1}
             />

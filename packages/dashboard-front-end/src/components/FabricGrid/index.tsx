@@ -11,6 +11,8 @@ import {
 } from "@mui/x-data-grid";
 import { FabricFieldsFragment, useFabricsQuery } from "../../generated/graphql";
 import { Fragment } from "react";
+import { CreateFabricPopperButton } from "../FabricForm";
+import RequireRole from "../Auth/RequireRole";
 
 export default function FabricGrid() {
   const { data, loading, error } = useFabricsQuery({});
@@ -75,6 +77,11 @@ export default function FabricGrid() {
           <GridToolbarColumnsButton />
           <GridToolbarFilterButton />
           <GridToolbarExport />
+        </GridToolbarContainer>
+        <GridToolbarContainer>
+          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+            <CreateFabricPopperButton />
+          </RequireRole>
         </GridToolbarContainer>
       </Fragment>
     );

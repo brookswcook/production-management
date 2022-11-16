@@ -35,7 +35,7 @@ export async function upload({
     logger.info(`Successfully uploaded object: ${fileName}`);
     return fileName;
   } catch (err) {
-    logger.error(err);
+    logger.error(`s3 upload error: `, err);
     throw err;
   }
 }

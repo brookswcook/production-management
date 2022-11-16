@@ -5,10 +5,12 @@ export default function FilePreload({
   label,
   setFiles,
   helperText,
+  multiple = true,
 }: {
   label: string;
   setFiles: (files: File[]) => void;
   helperText?: string;
+  multiple?: boolean;
 }) {
   function onInputChange({
     target: {
@@ -34,7 +36,7 @@ export default function FilePreload({
       helperText={helperText}
       onChange={onInputChange}
       inputProps={{
-        multiple: true,
+        multiple,
       }}
       required
     />

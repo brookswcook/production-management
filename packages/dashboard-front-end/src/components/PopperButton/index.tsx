@@ -1,16 +1,18 @@
 import { Fragment, MouseEvent, useEffect, useState, ReactElement } from "react";
 import { Button, ClickAwayListener, Paper, Popper } from "@mui/material";
 
-export default function GridToolbarButton({
+export function PopperButton({
   icon,
   title,
   children,
   disabled,
+  popperCloseCounter,
 }: {
   icon?: ReactElement;
   title: string;
   children: ReactElement;
   disabled?: boolean;
+  popperCloseCounter?: number;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -19,6 +21,10 @@ export default function GridToolbarButton({
   useEffect(() => {
     setOpen(Boolean(anchorEl));
   }, [anchorEl]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [popperCloseCounter]);
 
   function togglePopper(event: MouseEvent<HTMLElement>) {
     setAnchorEl(anchorEl ? null : event.currentTarget);

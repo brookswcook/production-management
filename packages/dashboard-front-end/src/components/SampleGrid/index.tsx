@@ -21,7 +21,7 @@ import {
   useRejectFabricSampleMutation,
   useRejectFitSampleMutation,
 } from "../../generated/graphql";
-import GridToolbarButton from "../GridToolbarButton";
+import { PopperButton } from "../PopperButton";
 import { NoteType } from "dashboard-core";
 import RequireRole from "../Auth/RequireRole";
 
@@ -139,7 +139,7 @@ export default function SampleGrid({
             </Button>
           </RequireRole>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <GridToolbarButton
+            <PopperButton
               title={"Reject"}
               disabled={selectedSamples.length !== 1}
             >
@@ -168,7 +168,7 @@ export default function SampleGrid({
                   Submit
                 </Button>
               </Stack>
-            </GridToolbarButton>
+            </PopperButton>
           </RequireRole>
           <a
             href={noteFileLink}

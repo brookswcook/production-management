@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 import { ApolloError } from "@apollo/client";
 import FilePreload from "../FilePreload";
 
-export default function ProductParams() {
+export function CreateProductForm() {
   const [newProductMutation] = useCreateProductMutation({
     refetchQueries: ["Products"],
   });

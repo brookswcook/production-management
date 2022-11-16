@@ -7,7 +7,7 @@ import {
   useCreateNoteMutation,
   User,
 } from "../../generated/graphql";
-import GridToolbarButton from "../GridToolbarButton";
+import { PopperButton } from "../PopperButton";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { NoteType } from "dashboard-core";
@@ -97,7 +97,7 @@ export default function NoteGrid({
 
     return (
       <GridToolbarContainer>
-        <GridToolbarButton title="New">
+        <PopperButton title="New">
           <Stack
             component="form"
             onSubmit={createNewNote}
@@ -117,7 +117,7 @@ export default function NoteGrid({
               Submit
             </Button>
           </Stack>
-        </GridToolbarButton>
+        </PopperButton>
       </GridToolbarContainer>
     );
   }

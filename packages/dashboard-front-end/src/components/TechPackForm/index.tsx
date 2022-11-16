@@ -4,13 +4,9 @@ import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { useUploadTechPackMutation } from "../../generated/graphql";
 import FilePreload from "../FilePreload";
-import GridToolbarButton from "../GridToolbarButton";
+import { PopperButton } from "../PopperButton";
 
-export default function TechPackParams({
-  styleCode: code,
-}: {
-  styleCode: string;
-}) {
+export function UploadTechPackForm({ styleCode: code }: { styleCode: string }) {
   const [techPackFiles, setTechPackFiles] = useState<File[]>();
   const mutationOptions = {
     refetchQueries: ["Products", "Product"],
@@ -62,7 +58,7 @@ export default function TechPackParams({
   );
 }
 
-export function UploadTechPackToolbarButton({
+export function UploadTechPackPooperButton({
   disabled = false,
   styleCode,
 }: {
@@ -70,8 +66,8 @@ export function UploadTechPackToolbarButton({
   styleCode: string;
 }) {
   return (
-    <GridToolbarButton title="Upload TP" disabled={disabled}>
-      <TechPackParams styleCode={styleCode} />
-    </GridToolbarButton>
+    <PopperButton title="Upload TP" disabled={disabled}>
+      <UploadTechPackForm styleCode={styleCode} />
+    </PopperButton>
   );
 }

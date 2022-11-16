@@ -14,9 +14,9 @@ import {
   useSendFabricSampleMutation,
   useSendFitSampleMutation,
 } from "../../generated/graphql";
-import GridToolbarButton from "../GridToolbarButton";
+import { PopperButton } from "../PopperButton";
 
-export function SendSampleParams({
+export function SendSampleForm({
   parentCode,
   sampleType,
 }: {
@@ -74,7 +74,7 @@ export function SendSampleParams({
   );
 }
 
-export default function SendSampleToolbarButton({
+export default function SendSamplePopperButton({
   disabled = false,
   sampleType,
   parentCode,
@@ -84,12 +84,12 @@ export default function SendSampleToolbarButton({
   parentCode: string;
 }) {
   return (
-    <GridToolbarButton
+    <PopperButton
       title={`Send ${sampleType == "fit" ? "FIS" : "FAS"}`}
       disabled={disabled}
     >
-      <SendSampleParams parentCode={parentCode} sampleType={sampleType} />
-    </GridToolbarButton>
+      <SendSampleForm parentCode={parentCode} sampleType={sampleType} />
+    </PopperButton>
   );
 }
 

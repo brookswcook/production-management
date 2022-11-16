@@ -6,7 +6,7 @@ import { ColorType } from "dashboard-core";
 import FilePreload from "../FilePreload";
 
 export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
-  const [selectedColorType, setSelectedColorType] = useState<ColorType>();
+  const [selectedColorType, setSelectedColorType] = useState<string>("");
   const [printFiles, setPrintFiles] = useState<File[] | null>(null);
 
   async function createNewFabric(event: FormEvent<HTMLFormElement>) {
@@ -56,7 +56,8 @@ export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
             },
           },
         }}
-        onChange={e => setSelectedColorType(e.target.value as ColorType)}
+        value={selectedColorType}
+        onChange={({ target: { value } }) => setSelectedColorType(value)}
         required
       >
         {colorTypes.map(colorType => (

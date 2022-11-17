@@ -17,17 +17,3 @@ mutation CreateStyle($data: CreateStyleInput!) {
     name
   }
 }
-
-query Fabric($code: String!) {
-  fabric(code: $code) {
-    code
-    colorName
-  }
-}
-
-mutation CreateFabric($data: CreateFabricInput!) {
-  createFabric(data: $data) {
-    code
-    colorName
-  }
-}

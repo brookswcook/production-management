@@ -4,10 +4,3 @@ mutation CreateFabric($data: CreateFabricInput!) {
     colorName
   }
 }
-
-query Fabric($code: String!) {
-  fabric(code: $code) {
-    code
-    colorName
-  }
-}

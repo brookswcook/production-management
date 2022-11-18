@@ -24,7 +24,15 @@ export default function FabricGrid() {
       headerName: "Title",
       minWidth: 70,
       flex: 2,
-      type: "string",
+      renderCell({ id, formattedValue }: GridRenderCellParams) {
+        const linkPath = `/fabrics/${id}`;
+        const linkText = `${String(formattedValue)}`;
+        return (
+          <Link to={linkPath} style={{ textDecoration: "none" }}>
+            {linkText}
+          </Link>
+        );
+      },
     },
     {
       field: "code",

@@ -33,9 +33,9 @@ export class FabricResolver {
   }
 
   @Authorized()
-  @Query(() => Fabric, { nullable: true })
+  @Query(() => Fabric, { nullable: false })
   async fabric(@Arg("code") code: string): Promise<Fabric | null> {
-    return FabricModel.findOne({ code }).exec();
+    return FabricModel.findByCodeOrFail(code);
   }
 
   @Authorized()

@@ -79,6 +79,18 @@ export class Fabric {
     if (updatedFabric == null) throw Error(`Fabric is not found`);
     return updatedFabric;
   }
+
+  // TODO: reuse
+  static async findByCodeOrFail(
+    this: ReturnModelType<typeof Fabric>,
+    code: string
+  ): Promise<Fabric> {
+    const fabric = await this.findOne({
+      code,
+    }).exec();
+    if (fabric == null) throw Error(`Fabric with given code not found`);
+    return fabric;
+  }
 }
 
 export const FabricModel = getModelForClass(Fabric);

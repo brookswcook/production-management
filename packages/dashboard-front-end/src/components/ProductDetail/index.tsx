@@ -29,6 +29,7 @@ import NoteGrid from "../NoteGrid";
 import SampleGrid from "../SampleGrid";
 import SendSampleToolbarButton from "../SampleForm";
 import { UploadTechPackPooperButton } from "../TechPackForm";
+import { DetailViewSection } from "../Common/DetailViewSection";
 
 export default function ProductDetail() {
   const { code = "" } = useParams();
@@ -288,21 +289,4 @@ export default function ProductDetail() {
       </Grid>
     </Container>
   );
-
-  function DetailViewSection({
-    children,
-    headerTitle,
-  }: {
-    children: JSX.Element[] | JSX.Element;
-    headerTitle: string;
-  }) {
-    return (
-      <Paper elevation={0} sx={{ p: 1 }}>
-        <Typography component="h4" variant="inherit">
-          {headerTitle}
-        </Typography>
-        {children}
-      </Paper>
-    );
-  }
 }

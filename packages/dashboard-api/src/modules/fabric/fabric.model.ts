@@ -87,7 +87,9 @@ export class Fabric {
   ): Promise<Fabric> {
     const fabric = await this.findOne({
       code,
-    }).exec();
+    })
+      .populate("samples")
+      .exec();
     if (fabric == null) throw Error(`Fabric with given code not found`);
     return fabric;
   }

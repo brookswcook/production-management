@@ -35,6 +35,10 @@ export class Fabric {
   })
   colorType?: ColorType;
 
+  @Field()
+  @Property({ required: true })
+  factoryName!: string;
+
   @Field({ nullable: true })
   @Property()
   colorCode?: string;

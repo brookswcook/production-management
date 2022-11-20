@@ -5,7 +5,7 @@ export function ObjectProperty({
   value,
 }: {
   title: string;
-  value: Record<string, unknown>;
+  value: Record<string, string>;
 }) {
   return (
     <Grid
@@ -28,7 +28,7 @@ export function ObjectProperty({
         >
           {Object.entries(value).map(([key, entryValue]) => {
             return (
-              <Grid sx={{ pl: 3 }} key={key}>
+              <Grid item sx={{ pl: 3 }} key={key}>
                 <Typography component="div" variant="caption">
                   {key}
                 </Typography>

@@ -10,7 +10,7 @@ export function TextProperty({
   return (
     <Typography component="span" variant="subtitle2">
       {title}
-      <Typography component="span" variant="body2" sx={{ pl: 3 }}>
+      <Typography component="span" variant="overline" sx={{ pl: 3 }}>
         {value}
       </Typography>
     </Typography>

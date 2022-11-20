@@ -25,12 +25,11 @@ export class Fabric {
   @Property()
   type?: string;
 
-  @Field({ nullable: true })
+  @Field({ nullable: false })
   @Property({
     get(this: Fabric): ColorType | null {
       if (this.printFileName != null) return "print";
-      else if (this.colorCode != null) return "solid";
-      return null;
+      else return "solid";
     },
   })
   colorType?: ColorType;
@@ -39,8 +38,8 @@ export class Fabric {
   @Property({ required: true })
   factoryName!: string;
 
-  @Field({ nullable: true })
-  @Property()
+  @Field({ nullable: false })
+  @Property({ default: "" })
   colorCode?: string;
 
   @Field({ nullable: true })

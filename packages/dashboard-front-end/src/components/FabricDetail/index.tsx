@@ -10,6 +10,7 @@ import { Fragment } from "react";
 import { useParams } from "react-router-dom";
 import { FabricFieldsFragment, useFabricQuery } from "../../generated/graphql";
 import { BooleanProperty, TextProperty } from "../Properties";
+import { LinkProperty } from "../Properties/LinkProperty";
 import { ObjectProperty } from "../Properties/ObjectProperty";
 
 export function FabricDetail() {
@@ -32,6 +33,7 @@ export function FabricDetail() {
     colorName,
     colorType,
     colorCode,
+    productCodes,
   }: FabricFieldsFragment = data.fabric;
 
   return (
@@ -68,9 +70,11 @@ export function FabricDetail() {
                 "Color Code": colorCode,
               }}
             />
-            <Typography component="span" variant="subtitle2">
-              Products
-            </Typography>
+            <LinkProperty
+              title="Products"
+              baseUrl="products"
+              resources={productCodes.map(code => ({ id: code, text: code }))}
+            />
           </Stack>
         </Grid>
       </Grid>

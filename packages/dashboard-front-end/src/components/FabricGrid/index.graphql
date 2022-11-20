@@ -2,6 +2,8 @@ fragment fabricFields on Fabric {
   code
   title
   colorName
+  colorType
+  colorCode
   productCodes
   stage
 }

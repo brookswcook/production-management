@@ -405,7 +405,7 @@ export type FabricQueryVariables = Exact<{
 }>;
 
 
-export type FabricQuery = { __typename?: 'Query', fabric: { __typename?: 'Fabric', code: string, colorName: string, title?: string | null, productCodes: Array<string>, stage: string } };
+export type FabricQuery = { __typename?: 'Query', fabric: { __typename?: 'Fabric', code: string, colorName: string, title?: string | null, colorType?: string | null, colorCode?: string | null, productCodes: Array<string>, stage: string } };
 
 export type CreateFabricMutationVariables = Exact<{
   data: CreateFabricInput;
@@ -414,12 +414,12 @@ export type CreateFabricMutationVariables = Exact<{
 
 export type CreateFabricMutation = { __typename?: 'Mutation', createFabric: { __typename?: 'Fabric', code: string, colorName: string } };
 
-export type FabricFieldsFragment = { __typename?: 'Fabric', code: string, title?: string | null, colorName: string, productCodes: Array<string>, stage: string };
+export type FabricFieldsFragment = { __typename?: 'Fabric', code: string, title?: string | null, colorName: string, colorType?: string | null, colorCode?: string | null, productCodes: Array<string>, stage: string };
 
 export type FabricsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', code: string, title?: string | null, colorName: string, productCodes: Array<string>, stage: string }> };
+export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', code: string, title?: string | null, colorName: string, colorType?: string | null, colorCode?: string | null, productCodes: Array<string>, stage: string }> };
 
 export type OperationLogFieldsFragment = { __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null };
 
@@ -553,6 +553,8 @@ export const FabricFieldsFragmentDoc = gql`
   code
   title
   colorName
+  colorType
+  colorCode
   productCodes
   stage
 }

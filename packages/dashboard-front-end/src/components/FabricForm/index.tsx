@@ -23,9 +23,8 @@ export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
   async function createNewFabric(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const { code, colorName, colorCode } = Object.fromEntries(
-      data.entries()
-    ) as unknown as CreateFabricInput;
+    const { code, title, factoryName, colorName, colorCode } =
+      Object.fromEntries(data.entries()) as unknown as CreateFabricInput;
 
     try {
       const { data: fabricData } = await getFabric({
@@ -39,6 +38,8 @@ export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
       } else {
         const newFabricData: CreateFabricInput = {
           code,
+          title,
+          factoryName,
           colorName,
           colorCode,
         };
@@ -67,6 +68,18 @@ export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
       <Typography component="h4" variant="inherit">
         {`Create new Fabric`}
       </Typography>
+      <TextField
+        label="Fabric Title"
+        name="title"
+        helperText="Example: Cotton organza in white rose print"
+        required
+      />
+      <TextField
+        label="Factory Name"
+        name="factoryName"
+        helperText="Example: Kevin"
+        required
+      />
       <TextField
         label="Fabric Code"
         name="code"

@@ -30,6 +30,7 @@ export function FabricDetail() {
   const {
     title,
     stage,
+    factoryName,
     colorName,
     colorType,
     colorCode,
@@ -59,9 +60,7 @@ export function FabricDetail() {
               value={stage === "Approved"}
             />
             <TextProperty title="Stage" value={stage} />
-            <Typography component="span" variant="subtitle2">
-              Factory
-            </Typography>
+            <TextProperty title="Factory" value={factoryName} />
             <ObjectProperty
               title="Color"
               value={{

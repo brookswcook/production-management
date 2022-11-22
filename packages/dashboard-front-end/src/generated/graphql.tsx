@@ -408,7 +408,7 @@ export type FabricQueryVariables = Exact<{
 }>;
 
 
-export type FabricQuery = { __typename?: 'Query', fabric: { __typename?: 'Fabric', code: string, colorName: string, title?: string | null, colorType: string, colorCode: string, productCodes: Array<string>, stage: string } };
+export type FabricQuery = { __typename?: 'Query', fabric: { __typename?: 'Fabric', code: string, colorName: string, title?: string | null, factoryName: string, colorType: string, colorCode: string, productCodes: Array<string>, stage: string } };
 
 export type CreateFabricMutationVariables = Exact<{
   data: CreateFabricInput;
@@ -417,12 +417,12 @@ export type CreateFabricMutationVariables = Exact<{
 
 export type CreateFabricMutation = { __typename?: 'Mutation', createFabric: { __typename?: 'Fabric', code: string, colorName: string } };
 
-export type FabricFieldsFragment = { __typename?: 'Fabric', code: string, title?: string | null, colorName: string, colorType: string, colorCode: string, productCodes: Array<string>, stage: string };
+export type FabricFieldsFragment = { __typename?: 'Fabric', code: string, title?: string | null, factoryName: string, colorName: string, colorType: string, colorCode: string, productCodes: Array<string>, stage: string };
 
 export type FabricsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', code: string, title?: string | null, colorName: string, colorType: string, colorCode: string, productCodes: Array<string>, stage: string }> };
+export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', code: string, title?: string | null, factoryName: string, colorName: string, colorType: string, colorCode: string, productCodes: Array<string>, stage: string }> };
 
 export type OperationLogFieldsFragment = { __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null };
 
@@ -555,6 +555,7 @@ export const FabricFieldsFragmentDoc = gql`
     fragment fabricFields on Fabric {
   code
   title
+  factoryName
   colorName
   colorType
   colorCode

@@ -1,6 +1,7 @@
 fragment fabricFields on Fabric {
   code
   title
+  factoryName
   colorName
   colorType
   colorCode

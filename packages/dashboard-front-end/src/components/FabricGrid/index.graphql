@@ -5,6 +5,7 @@ fragment fabricFields on Fabric {
   colorName
   colorType
   colorCode
+  printFileName
   productCodes
   stage
 }

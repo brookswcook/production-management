@@ -38,8 +38,8 @@ export class Fabric {
   @Property({ required: true })
   factoryName!: string;
 
-  @Field({ nullable: false })
-  @Property({ default: "" })
+  @Field({ nullable: true })
+  @Property()
   colorCode?: string;
 
   @Field({ nullable: true })

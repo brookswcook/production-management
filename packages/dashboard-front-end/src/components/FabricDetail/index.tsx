@@ -34,8 +34,24 @@ export function FabricDetail() {
     colorName,
     colorType,
     colorCode,
+    printFileName,
     productCodes,
   }: FabricFieldsFragment = data.fabric;
+
+  const colorFieldSet: {
+    "Color Type": string;
+    "Color Name": string;
+    "Color Code"?: string;
+    "Print File"?: string;
+  } = {
+    "Color Type": colorType,
+    "Color Name": colorName,
+  };
+  if (colorType === "solid") {
+    colorFieldSet["Color Code"] = String(colorCode);
+  } else {
+    colorFieldSet["Print File"] = String(printFileName);
+  }
 
   return (
     <Container maxWidth="xl">
@@ -61,14 +77,7 @@ export function FabricDetail() {
             />
             <TextProperty title="Stage" value={stage} />
             <TextProperty title="Factory" value={factoryName} />
-            <ObjectProperty
-              title="Color"
-              value={{
-                "Color Type": colorType,
-                "Color Name": colorName,
-                "Color Code": colorCode,
-              }}
-            />
+            <ObjectProperty title="Color" value={colorFieldSet} />
             <LinkProperty
               title="Products"
               baseUrl="products"

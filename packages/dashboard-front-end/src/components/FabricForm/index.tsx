@@ -75,11 +75,22 @@ export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
         required
       />
       <TextField
-        label="Factory Name"
+        select
+        label="Factory"
         name="factoryName"
-        helperText="Example: Kevin"
-        required
-      />
+        SelectProps={{
+          MenuProps: { disablePortal: true },
+          sx: {
+            ".MuiPaper-root": {
+              left: "0 !important;",
+              position: "sticky",
+            },
+          },
+        }}
+      >
+        <MenuItem value={"Amy"}>Amy</MenuItem>
+        <MenuItem value={"Kevin"}>Kevin</MenuItem>
+      </TextField>
       <TextField
         label="Fabric Code"
         name="code"

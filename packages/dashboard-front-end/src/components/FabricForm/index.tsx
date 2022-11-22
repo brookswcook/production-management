@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 
 export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
   const [selectedColorType, setSelectedColorType] = useState<string>("");
+  const [selectedFactoryName, setSelectedFactoryName] = useState<string>("");
   const [printFiles, setPrintFiles] = useState<File[] | null>(null);
   const [newFabricMutation] = useCreateFabricMutation({
     refetchQueries: ["Fabrics"],
@@ -87,6 +88,9 @@ export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
             },
           },
         }}
+        value={selectedFactoryName}
+        onChange={({ target: { value } }) => setSelectedFactoryName(value)}
+        required
       >
         <MenuItem value={"Amy"}>Amy</MenuItem>
         <MenuItem value={"Kevin"}>Kevin</MenuItem>

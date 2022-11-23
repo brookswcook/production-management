@@ -91,12 +91,14 @@ export function FabricDetail() {
           p: 1,
         }}
       >
-        <Grid item xs={12} sx={{ p: 1 }}>
+        <Grid item xs={12} sx={{ pl: 1, pt: 1 }}>
           <Box sx={{ mb: 2 }}>
             <Typography component="span" variant="h6">
               {title?.toUpperCase()}
             </Typography>
           </Box>
+        </Grid>
+        <Grid item xs={12} md={6} sx={{ pl: 1 }}>
           <Stack spacing={3} sx={{ pl: 0.5 }}>
             <BooleanProperty
               title="Fabric approved"
@@ -122,6 +124,17 @@ export function FabricDetail() {
               resources={productCodes.map(code => ({ id: code, text: code }))}
             />
           </Stack>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Box
+            component="img"
+            sx={{
+              maxHeight: { xs: 200, sm: 300, md: 400 },
+              maxWidth: { xs: 200, sm: 300, md: 400 },
+            }}
+            alt="print image"
+            src=""
+          />
         </Grid>
       </Grid>
     </Container>

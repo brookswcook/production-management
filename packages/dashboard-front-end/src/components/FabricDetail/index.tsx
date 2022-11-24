@@ -25,7 +25,7 @@ export function FabricDetail() {
     variables: { code },
   });
   const [getPrintLink] = usePrintLinkLazyQuery();
-  const [printLink, setPrintLink] = useState<string>("print");
+  const [printLink, setPrintLink] = useState<string>(null!);
 
   useEffect(() => {
     if (loading) return;
@@ -125,16 +125,19 @@ export function FabricDetail() {
             />
           </Stack>
         </Grid>
-        {/* <Grid item xs={12} lg={4}>
-          <Box
-            component="img"
-            sx={{
-              maxWidth: { xs: 300, lg: 370 },
-            }}
-            alt="print image"
-            src={printLink}
-          />
-        </Grid> */}
+        {printLink != null && (
+          <Grid item xs={12} lg={4}>
+            <Box
+              component="img"
+              sx={{
+                maxWidth: { xs: 300, lg: 370 },
+                backgroundColor: "#D9D9D9",
+              }}
+              alt="print image"
+              src={printLink}
+            />
+          </Grid>
+        )}
       </Grid>
     </Container>
   );

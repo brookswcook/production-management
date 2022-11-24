@@ -81,13 +81,13 @@ export function FabricDetail() {
 
   return (
     <Container maxWidth="xl">
+      <Box sx={{ p: 1 }}>
       <Grid
         justifyContent={"left"}
         container
         sx={{
-          border: "1px solid #AAAAAA",
+            border: "1px solid rgba(224, 224, 224, 1)",
           borderRadius: "5px",
-          m: 1,
           p: 1,
         }}
       >

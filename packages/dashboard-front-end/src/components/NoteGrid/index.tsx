@@ -26,29 +26,29 @@ export default function NoteGrid({
   const columns: GridColDef<Note>[] = [
     {
       field: "text",
-      headerName: "Text",
+      headerName: "Note",
       type: "string",
-      flex: 4,
+      flex: 5,
       renderCell: renderCellExpand,
     },
     {
-      field: "createdAt",
-      headerName: "CreatedAt",
-      type: "date",
-      flex: 1,
-      valueFormatter: params => {
-        const date = new Date(params.value as string);
-        return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-      },
-    },
-    {
       field: "user",
-      headerName: "User",
+      headerName: "Author",
       type: "string",
       flex: 1,
       valueFormatter: params => {
         const user = params.value as User;
-        return user.firstName;
+        return user.fullName;
+      },
+    },
+    {
+      field: "createdAt",
+      headerName: "Date",
+      type: "date",
+      flex: 1,
+      valueFormatter: params => {
+        const date = new Date(params.value as string);
+        return date.toLocaleDateString();
       },
     },
   ];
@@ -97,7 +97,7 @@ export default function NoteGrid({
 
     return (
       <GridToolbarContainer>
-        <PopperButton title="New">
+        <PopperButton title="New note">
           <Stack
             component="form"
             onSubmit={createNewNote}

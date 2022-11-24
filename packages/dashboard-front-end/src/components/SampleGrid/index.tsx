@@ -24,6 +24,8 @@ import {
 import { PopperButton } from "../PopperButton";
 import { NoteType } from "dashboard-core";
 import RequireRole from "../Auth/RequireRole";
+import SendSamplePopperButton from "../SampleForm";
+import { renderCellExpand } from "../Common/GridCellExpand";
 
 export default function SampleGrid({
   parentCode,
@@ -35,7 +37,7 @@ export default function SampleGrid({
   samples: Omit<Sample, "typename">[];
 }) {
   const refetchPolicy = {
-    refetchQueries: ["Product"],
+    refetchQueries: ["Fabric"],
   };
   const [selectedGridItems, setSelectedGridItems] =
     useState<GridSelectionModel>([]);
@@ -54,10 +56,10 @@ export default function SampleGrid({
   );
 
   const columns: GridColDef<Sample>[] = [
-    { field: "sku", headerName: "SKU", type: "string", flex: 2 },
+    { field: "sku", headerName: "Sample Number", type: "string", flex: 1 },
     {
       field: "trackNumber",
-      headerName: "Track Number",
+      headerName: "Tracking Number",
       type: "string",
       flex: 1,
     },
@@ -80,8 +82,28 @@ export default function SampleGrid({
       headerName: "Rejection Comment",
       type: "string",
       flex: 3,
+      renderCell: renderCellExpand,
       valueGetter: ({ row }: { row: Sample }) => {
         return row.note?.text;
+      },
+    },
+    {
+      field: "commentAuthor",
+      headerName: "Comment author",
+      type: "string",
+      flex: 1,
+      valueGetter: ({ row }: { row: Sample }) => {
+        return row.note?.user?.fullName;
+      },
+    },
+    {
+      field: "commentDate",
+      headerName: "Comment date",
+      type: "date",
+      flex: 1,
+      valueGetter: ({ row }: { row: Sample }) => {
+        if (row.note?.createdAt == null) return "";
+        return new Date(row.note?.createdAt).toLocaleDateString();
       },
     },
   ];
@@ -128,6 +150,10 @@ export default function SampleGrid({
     return (
       <Fragment>
         <GridToolbarContainer>
+          <SendSamplePopperButton
+            sampleType={sampleType}
+            parentCode={parentCode}
+          />
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
             <Button
               variant="text"

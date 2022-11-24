@@ -27,7 +27,6 @@ import RequireRole from "../Auth/RequireRole";
 import { ObjectInputSet } from "../Common/ObjectInputSet";
 import NoteGrid from "../NoteGrid";
 import SampleGrid from "../SampleGrid";
-import SendSampleToolbarButton from "../SampleForm";
 import { UploadTechPackPooperButton } from "../TechPackForm";
 import { DetailViewSection } from "../Common/DetailViewSection";
 
@@ -119,11 +118,6 @@ export default function ProductDetail() {
               <RequireRole authorizedRoles={["Admin", "VChapman"]}>
                 <UploadTechPackPooperButton styleCode={style.code} />
               </RequireRole>
-              <SendSampleToolbarButton
-                sampleType={"fabric"}
-                parentCode={fabric.code}
-              />
-              <SendSampleToolbarButton sampleType={"fit"} parentCode={code} />
               {techPackLinks.map((techPackLink, index) => {
                 return (
                   <a

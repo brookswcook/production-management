@@ -85,7 +85,7 @@ export default function SendSamplePopperButton({
 }) {
   return (
     <PopperButton
-      title={`Send ${sampleType == "fit" ? "FIS" : "FAS"}`}
+      title={`New ${sampleType == "fit" ? "fit" : "fabric"} sample`}
       disabled={disabled}
     >
       <SendSampleForm parentCode={parentCode} sampleType={sampleType} />

@@ -89,6 +89,7 @@ export function CreateProductForm() {
       } else {
         const newFabricData: CreateFabricInput = {
           code: fabricCode,
+          factoryName,
           colorName,
           colorCode,
         };

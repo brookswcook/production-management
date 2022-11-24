@@ -35,7 +35,7 @@ export class ProductResolver {
   @Authorized()
   @Query(() => Product)
   async product(@Arg("code", { nullable: false }) code: string) {
-    return ProductModel.findPerProductCodeOrFail(code);
+    return ProductModel.findByCodeOrFail(code);
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])

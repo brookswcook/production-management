@@ -174,7 +174,7 @@ export class Product {
   @Property({ _id: false })
   shipping?: ProductShipping;
 
-  static async findPerProductCodeOrFail(code: string) {
+  static async findByCodeOrFail(code: string) {
     const product = await ProductModel.findOne({
       code,
     } as Product)

@@ -1,9 +1,20 @@
 fragment fabricFields on Fabric {
+  id
   code
   title
+  factoryName
   colorName
-  stage
+  colorType
+  colorCode
+  printFileName
   productCodes
+  stage
+  notes {
+    ...noteFields
+  }
+  samples {
+    ...fabricSampleFields
+  }
 }
 
 query Fabrics {

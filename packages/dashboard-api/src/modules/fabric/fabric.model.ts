@@ -3,12 +3,16 @@ import {
   prop as Property,
   ReturnModelType,
 } from "@typegoose/typegoose";
-import { ColorType } from "dashboard-core";
+import { ColorType, NoteType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
+import { Note } from "../note/note.model";
 import { FabricSample } from "../sample/sample.model";
 
 @ObjectType()
 export class Fabric {
+  @Field()
+  id?: string;
+
   @Field()
   @Property({ unique: true })
   code!: string;
@@ -25,15 +29,18 @@ export class Fabric {
   @Property()
   type?: string;
 
-  @Field({ nullable: true })
+  @Field({ nullable: false })
   @Property({
     get(this: Fabric): ColorType | null {
       if (this.printFileName != null) return "print";
-      else if (this.colorCode != null) return "solid";
-      return null;
+      else return "solid";
     },
   })
   colorType?: ColorType;
+
+  @Field()
+  @Property({ required: true })
+  factoryName!: string;
 
   @Field({ nullable: true })
   @Property()
@@ -43,7 +50,7 @@ export class Fabric {
   @Property()
   printFileName?: string;
 
-  @Field(() => [FabricSample])
+  @Field(() => [FabricSample], { nullable: false })
   @Property({
     ref: () => FabricSample,
     foreignField: "parentCode",
@@ -65,6 +72,16 @@ export class Fabric {
   })
   stage!: string;
 
+  @Field(() => [Note])
+  @Property({
+    ref: () => Note,
+    foreignField: "parentId" as Partial<Note>,
+    localField: "_id",
+    match: { type: "fabricNote" as NoteType } as Partial<Note>,
+    options: { sort: { _id: -1 } },
+  })
+  notes!: Note[];
+
   // TODO: reuse
   static async findOneAndUpdateOrFail(
     this: ReturnModelType<typeof Fabric>,
@@ -78,6 +95,29 @@ export class Fabric {
     ).exec();
     if (updatedFabric == null) throw Error(`Fabric is not found`);
     return updatedFabric;
+  }
+
+  // TODO: reuse
+  static async findByCodeOrFail(
+    this: ReturnModelType<typeof Fabric>,
+    code: string
+  ): Promise<Fabric> {
+    const fabric = await this.findOne({
+      code,
+    })
+      .populate({ path: "notes", populate: { path: "user" } })
+      .populate({
+        path: "samples",
+        populate: {
+          path: "note",
+          populate: {
+            path: "user",
+          },
+        },
+      })
+      .exec();
+    if (fabric == null) throw Error(`Fabric with given code not found`);
+    return fabric;
   }
 }
 

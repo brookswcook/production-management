@@ -1,0 +1,6 @@
+mutation CreateFabric($data: CreateFabricInput!) {
+  createFabric(data: $data) {
+    code
+    colorName
+  }
+}

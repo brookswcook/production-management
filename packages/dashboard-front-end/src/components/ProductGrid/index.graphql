@@ -6,6 +6,7 @@ fragment noteFields on Note {
   createdAt
   user {
     firstName
+    fullName
   }
 }
 

@@ -29,13 +29,21 @@ export class FabricResolver {
   @Authorized()
   @Query(() => [Fabric])
   async fabrics() {
-    return FabricModel.find().populate("samples").exec();
+    return FabricModel.find()
+      .populate({
+        path: "samples",
+        populate: {
+          path: "note",
+        },
+      })
+      .populate({ path: "notes", populate: { path: "user" } })
+      .exec();
   }
 
   @Authorized()
-  @Query(() => Fabric, { nullable: true })
+  @Query(() => Fabric, { nullable: false })
   async fabric(@Arg("code") code: string): Promise<Fabric | null> {
-    return FabricModel.findOne({ code }).exec();
+    return FabricModel.findByCodeOrFail(code);
   }
 
   @Authorized()
@@ -47,7 +55,10 @@ export class FabricResolver {
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
   async createFabric(@Arg("data") { print, ...data }: CreateFabricInput) {
-    const fabricData: Omit<Fabric, "samples" | "stage" | "products"> = data;
+    const fabricData: Omit<
+      Fabric,
+      "samples" | "stage" | "products" | "factoryName" | "notes"
+    > = data;
     if (print != null) {
       const { file, fileSize } = print;
       fabricData.printFileName = await uploadFile(

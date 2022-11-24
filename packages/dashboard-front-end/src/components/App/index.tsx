@@ -35,6 +35,7 @@ import React from "react";
 import OperationLogGrid from "../OperationLogGrid";
 import RequireRole from "../Auth/RequireRole";
 import FabricGrid from "../FabricGrid";
+import { FabricDetail } from "../FabricDetail";
 
 function Dashboard({ children }: { children: ReactElement }) {
   const { signOut } = useContext(AuthContext);
@@ -87,10 +88,22 @@ function Dashboard({ children }: { children: ReactElement }) {
                 open={Boolean(anchorElNav)}
                 onClose={handleCloseNavMenu}
               >
-                <MenuItemLink onClick={handleCloseNavMenu} name="Products" to="/products"/>
-                <MenuItemLink onClick={handleCloseNavMenu} name="Fabrics" to="/fabrics"/>
+                <MenuItemLink
+                  onClick={handleCloseNavMenu}
+                  name="Products"
+                  to="/products"
+                />
+                <MenuItemLink
+                  onClick={handleCloseNavMenu}
+                  name="Fabrics"
+                  to="/fabrics"
+                />
                 <RequireRole authorizedRoles={["Admin"]}>
-                  <MenuItemLink onClick={handleCloseNavMenu} name="Operation logs" to="/oplog"/>
+                  <MenuItemLink
+                    onClick={handleCloseNavMenu}
+                    name="Operation logs"
+                    to="/oplog"
+                  />
                 </RequireRole>
               </Menu>
             </Box>
@@ -115,11 +128,11 @@ function Dashboard({ children }: { children: ReactElement }) {
 function MenuItemLink({
   onClick,
   name,
-  to
+  to,
 }: {
   onClick?: MouseEventHandler<HTMLLIElement>;
-  name: string
-  to: To
+  name: string;
+  to: To;
 }) {
   return (
     <MenuItem key={name.toLowerCase()} onClick={onClick}>
@@ -160,7 +173,7 @@ function ApolloApp() {
             />
             <Route
               path="/fabrics/:code"
-              element={<Dashboard children={<FabricGrid />} />}
+              element={<Dashboard children={<FabricDetail />} />}
             />
             <Route
               path="/oplog"

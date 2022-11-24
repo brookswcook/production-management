@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   FabricFieldsFragment,
+  Note,
   Sample,
   useFabricQuery,
   usePrintLinkLazyQuery,
@@ -56,6 +57,7 @@ export function FabricDetail() {
     printFileName,
     productCodes,
     samples,
+    notes,
   }: FabricFieldsFragment = data.fabric;
 
   const colorFieldSet: {
@@ -156,8 +158,8 @@ export function FabricDetail() {
       </DetailViewSection>
       <DetailViewSection headerTitle="Notes:">
         <NoteGrid
-          notes={[]}
-          type={"productNote" as NoteType}
+          notes={notes as Note[]}
+          type={"fabricNote" as NoteType}
           parentId={String(id)}
         />
       </DetailViewSection>

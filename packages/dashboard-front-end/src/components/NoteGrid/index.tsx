@@ -68,8 +68,11 @@ export default function NoteGrid({
   );
 
   function CustomToolbar() {
+    const refetchQueries = [];
+    if (type === "productNote") refetchQueries.push("Product");
+    if (type === "fabricNote") refetchQueries.push("Fabric");
     const refetchPolicy = {
-      refetchQueries: ["Product"],
+      refetchQueries,
     };
     const [createNoteMutation] = useCreateNoteMutation(refetchPolicy);
     const [noteText, setNoteText] = useState<string>("");

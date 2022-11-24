@@ -9,6 +9,9 @@ fragment fabricFields on Fabric {
   printFileName
   productCodes
   stage
+  notes {
+    ...noteFields
+  }
   samples {
     ...fabricSampleFields
   }

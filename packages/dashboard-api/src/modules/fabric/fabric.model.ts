@@ -3,8 +3,9 @@ import {
   prop as Property,
   ReturnModelType,
 } from "@typegoose/typegoose";
-import { ColorType } from "dashboard-core";
+import { ColorType, NoteType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
+import { Note } from "../note/note.model";
 import { FabricSample } from "../sample/sample.model";
 
 @ObjectType()
@@ -71,6 +72,16 @@ export class Fabric {
   })
   stage!: string;
 
+  @Field(() => [Note])
+  @Property({
+    ref: () => Note,
+    foreignField: "parentId" as Partial<Note>,
+    localField: "_id",
+    match: { type: "fabricNote" as NoteType } as Partial<Note>,
+    options: { sort: { _id: -1 } },
+  })
+  notes!: Note[];
+
   // TODO: reuse
   static async findOneAndUpdateOrFail(
     this: ReturnModelType<typeof Fabric>,
@@ -94,6 +105,7 @@ export class Fabric {
     const fabric = await this.findOne({
       code,
     })
+      .populate({ path: "notes", populate: { path: "user" } })
       .populate({
         path: "samples",
         populate: {

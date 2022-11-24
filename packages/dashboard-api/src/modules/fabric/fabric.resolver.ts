@@ -36,6 +36,7 @@ export class FabricResolver {
           path: "note",
         },
       })
+      .populate({ path: "notes", populate: { path: "user" } })
       .exec();
   }
 
@@ -56,7 +57,7 @@ export class FabricResolver {
   async createFabric(@Arg("data") { print, ...data }: CreateFabricInput) {
     const fabricData: Omit<
       Fabric,
-      "samples" | "stage" | "products" | "factoryName"
+      "samples" | "stage" | "products" | "factoryName" | "notes"
     > = data;
     if (print != null) {
       const { file, fileSize } = print;

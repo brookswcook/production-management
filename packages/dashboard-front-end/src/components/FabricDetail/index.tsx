@@ -4,7 +4,6 @@ import {
   Container,
   Grid,
   LinearProgress,
-  Link,
   Stack,
   Typography,
 } from "@mui/material";
@@ -83,6 +82,7 @@ export function FabricDetail() {
   return (
     <Container maxWidth="xl">
       <Grid
+        justifyContent={"left"}
         container
         sx={{
           border: "1px solid #AAAAAA",
@@ -98,7 +98,7 @@ export function FabricDetail() {
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} md={6} sx={{ pl: 1 }}>
+        <Grid item xs={12} lg={8} sx={{ pl: 1 }}>
           <Stack spacing={3} sx={{ pl: 0.5 }}>
             <BooleanProperty
               title="Fabric approved"
@@ -107,11 +107,11 @@ export function FabricDetail() {
             <TextProperty title="Stage" value={stage} />
             <TextProperty title="Factory" value={factoryName} />
             <Grid container direction={"row"} alignItems={"center"}>
-              <Grid item xs={12} sm={5} md={4}>
+              <Grid item xs={12} sm={8} xl={6}>
                 <ObjectProperty title="Color" value={colorFieldSet} />
               </Grid>
               {colorType === "print" && (
-                <Grid item xs={12} sm={2}>
+                <Grid item xs={12} sm={4} xl={2}>
                   <Button href={printLink} variant={"contained"}>
                     Download print
                   </Button>
@@ -125,17 +125,16 @@ export function FabricDetail() {
             />
           </Stack>
         </Grid>
-        <Grid item xs={12} md={6}>
+        {/* <Grid item xs={12} lg={4}>
           <Box
             component="img"
             sx={{
-              maxHeight: { xs: 200, sm: 300, md: 400 },
-              maxWidth: { xs: 200, sm: 300, md: 400 },
+              maxWidth: { xs: 300, lg: 370 },
             }}
             alt="print image"
-            src=""
+            src={printLink}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
     </Container>
   );

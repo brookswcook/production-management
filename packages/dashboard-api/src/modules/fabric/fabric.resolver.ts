@@ -29,7 +29,14 @@ export class FabricResolver {
   @Authorized()
   @Query(() => [Fabric])
   async fabrics() {
-    return FabricModel.find().populate("samples").exec();
+    return FabricModel.find()
+      .populate({
+        path: "samples",
+        populate: {
+          path: "note",
+        },
+      })
+      .exec();
   }
 
   @Authorized()

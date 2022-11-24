@@ -94,7 +94,15 @@ export class Fabric {
     const fabric = await this.findOne({
       code,
     })
-      .populate("samples")
+      .populate({
+        path: "samples",
+        populate: {
+          path: "note",
+          populate: {
+            path: "user",
+          },
+        },
+      })
       .exec();
     if (fabric == null) throw Error(`Fabric with given code not found`);
     return fabric;

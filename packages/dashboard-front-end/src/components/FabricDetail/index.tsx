@@ -7,17 +7,22 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { NoteType } from "dashboard-core";
 import { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   FabricFieldsFragment,
+  Sample,
   useFabricQuery,
   usePrintLinkLazyQuery,
 } from "../../generated/graphql";
+import { DetailViewSection } from "../Common/DetailViewSection";
+import NoteGrid from "../NoteGrid";
 import { BooleanProperty, TextProperty } from "../Properties";
 import { LinkProperty } from "../Properties/LinkProperty";
 import { ObjectProperty } from "../Properties/ObjectProperty";
+import SampleGrid from "../SampleGrid";
 
 export function FabricDetail() {
   const { code = "" } = useParams();
@@ -41,6 +46,7 @@ export function FabricDetail() {
   if (data == null || error) return <Fragment>Wrong path!</Fragment>;
 
   const {
+    id,
     title,
     stage,
     factoryName,
@@ -49,6 +55,7 @@ export function FabricDetail() {
     colorCode,
     printFileName,
     productCodes,
+    samples,
   }: FabricFieldsFragment = data.fabric;
 
   const colorFieldSet: {
@@ -82,63 +89,78 @@ export function FabricDetail() {
   return (
     <Container maxWidth="xl">
       <Box sx={{ p: 1 }}>
-      <Grid
-        justifyContent={"left"}
-        container
-        sx={{
+        <Grid
+          justifyContent={"left"}
+          container
+          sx={{
             border: "1px solid rgba(224, 224, 224, 1)",
-          borderRadius: "5px",
-          p: 1,
-        }}
-      >
-        <Grid item xs={12} sx={{ pl: 1, pt: 1 }}>
-          <Box sx={{ mb: 2 }}>
-            <Typography component="span" variant="h6">
-              {title?.toUpperCase()}
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={12} lg={8} sx={{ pl: 1 }}>
-          <Stack spacing={3} sx={{ pl: 0.5 }}>
-            <BooleanProperty
-              title="Fabric approved"
-              value={stage === "Approved"}
-            />
-            <TextProperty title="Stage" value={stage} />
-            <TextProperty title="Factory" value={factoryName} />
-            <Grid container direction={"row"} alignItems={"center"}>
-              <Grid item xs={12} sm={8} xl={6}>
-                <ObjectProperty title="Color" value={colorFieldSet} />
-              </Grid>
-              {colorType === "print" && (
-                <Grid item xs={12} sm={4} xl={2}>
-                  <Button href={printLink} variant={"contained"}>
-                    Download print
-                  </Button>
-                </Grid>
-              )}
-            </Grid>
-            <LinkProperty
-              title="Products"
-              baseUrl="products"
-              resources={productCodes.map(code => ({ id: code, text: code }))}
-            />
-          </Stack>
-        </Grid>
-        {printLink != null && (
-          <Grid item xs={12} lg={4}>
-            <Box
-              component="img"
-              sx={{
-                maxWidth: { xs: 300, lg: 370 },
-                backgroundColor: "#D9D9D9",
-              }}
-              alt="print image"
-              src={printLink}
-            />
+            borderRadius: "5px",
+            p: 1,
+          }}
+        >
+          <Grid item xs={12} sx={{ pl: 1, pt: 1 }}>
+            <Box sx={{ mb: 2 }}>
+              <Typography component="span" variant="h6">
+                {title?.toUpperCase()}
+              </Typography>
+            </Box>
           </Grid>
-        )}
-      </Grid>
+          <Grid item xs={12} lg={8} sx={{ pl: 1 }}>
+            <Stack spacing={3} sx={{ pl: 0.5 }}>
+              <BooleanProperty
+                title="Fabric approved"
+                value={stage === "Approved"}
+              />
+              <TextProperty title="Stage" value={stage} />
+              <TextProperty title="Factory" value={factoryName} />
+              <Grid container direction={"row"} alignItems={"center"}>
+                <Grid item xs={12} sm={8} xl={6}>
+                  <ObjectProperty title="Color" value={colorFieldSet} />
+                </Grid>
+                {colorType === "print" && (
+                  <Grid item xs={12} sm={4} xl={2}>
+                    <Button href={printLink} variant={"contained"}>
+                      Download print
+                    </Button>
+                  </Grid>
+                )}
+              </Grid>
+              <LinkProperty
+                title="Products"
+                baseUrl="products"
+                resources={productCodes.map(code => ({ id: code, text: code }))}
+              />
+            </Stack>
+          </Grid>
+          {printLink != null && (
+            <Grid item xs={12} lg={4}>
+              <Box
+                component="img"
+                sx={{
+                  maxWidth: { xs: 300, lg: 370 },
+                  backgroundColor: "#D9D9D9",
+                }}
+                alt="print image"
+                src={printLink}
+              />
+            </Grid>
+          )}
+        </Grid>
+      </Box>
+      <DetailViewSection headerTitle="Fabric samples:">
+        <SampleGrid
+          parentCode={code}
+          sampleType="fabric"
+          samples={samples as Sample[]}
+        />
+      </DetailViewSection>
+      <DetailViewSection headerTitle="Notes:">
+        <NoteGrid
+          notes={[]}
+          type={"productNote" as NoteType}
+          parentId={String(id)}
+        />
+      </DetailViewSection>
     </Container>
   );
 }

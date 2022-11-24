@@ -56,6 +56,7 @@ export type Fabric = {
   colorName: Scalars['String'];
   colorType: Scalars['String'];
   factoryName: Scalars['String'];
+  id: Scalars['String'];
   printFileName?: Maybe<Scalars['String']>;
   productCodes: Array<Scalars['String']>;
   samples: Array<FabricSample>;
@@ -408,7 +409,7 @@ export type FabricQueryVariables = Exact<{
 }>;
 
 
-export type FabricQuery = { __typename?: 'Query', fabric: { __typename?: 'Fabric', code: string, colorName: string, title?: string | null, factoryName: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string } };
+export type FabricQuery = { __typename?: 'Query', fabric: { __typename?: 'Fabric', code: string, colorName: string, id: string, title?: string | null, factoryName: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null } | null }> } };
 
 export type CreateFabricMutationVariables = Exact<{
   data: CreateFabricInput;
@@ -417,12 +418,12 @@ export type CreateFabricMutationVariables = Exact<{
 
 export type CreateFabricMutation = { __typename?: 'Mutation', createFabric: { __typename?: 'Fabric', code: string, colorName: string } };
 
-export type FabricFieldsFragment = { __typename?: 'Fabric', code: string, title?: string | null, factoryName: string, colorName: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string };
+export type FabricFieldsFragment = { __typename?: 'Fabric', id: string, code: string, title?: string | null, factoryName: string, colorName: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null } | null }> };
 
 export type FabricsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', code: string, title?: string | null, factoryName: string, colorName: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string }> };
+export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', id: string, code: string, title?: string | null, factoryName: string, colorName: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null } | null }> }> };
 
 export type OperationLogFieldsFragment = { __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null };
 
@@ -551,30 +552,6 @@ export type TechPackLinksQueryVariables = Exact<{
 
 export type TechPackLinksQuery = { __typename?: 'Query', techPackLinks: Array<string> };
 
-export const FabricFieldsFragmentDoc = gql`
-    fragment fabricFields on Fabric {
-  code
-  title
-  factoryName
-  colorName
-  colorType
-  colorCode
-  printFileName
-  productCodes
-  stage
-}
-    `;
-export const OperationLogFieldsFragmentDoc = gql`
-    fragment operationLogFields on OperationLog {
-  id
-  name
-  variables
-  user {
-    firstName
-  }
-  createdAt
-}
-    `;
 export const NoteFieldsFragmentDoc = gql`
     fragment noteFields on Note {
   id
@@ -587,8 +564,8 @@ export const NoteFieldsFragmentDoc = gql`
   }
 }
     `;
-export const SampleFieldsFragmentDoc = gql`
-    fragment sampleFields on Sample {
+export const FabricSampleFieldsFragmentDoc = gql`
+    fragment fabricSampleFields on FabricSample {
   sku
   approved
   trackNumber
@@ -598,8 +575,36 @@ export const SampleFieldsFragmentDoc = gql`
   }
 }
     ${NoteFieldsFragmentDoc}`;
-export const FabricSampleFieldsFragmentDoc = gql`
-    fragment fabricSampleFields on FabricSample {
+export const FabricFieldsFragmentDoc = gql`
+    fragment fabricFields on Fabric {
+  id
+  code
+  title
+  factoryName
+  colorName
+  colorType
+  colorCode
+  printFileName
+  productCodes
+  stage
+  samples {
+    ...fabricSampleFields
+  }
+}
+    ${FabricSampleFieldsFragmentDoc}`;
+export const OperationLogFieldsFragmentDoc = gql`
+    fragment operationLogFields on OperationLog {
+  id
+  name
+  variables
+  user {
+    firstName
+  }
+  createdAt
+}
+    `;
+export const SampleFieldsFragmentDoc = gql`
+    fragment sampleFields on Sample {
   sku
   approved
   trackNumber

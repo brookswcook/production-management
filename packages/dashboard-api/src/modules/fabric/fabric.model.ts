@@ -10,6 +10,9 @@ import { FabricSample } from "../sample/sample.model";
 @ObjectType()
 export class Fabric {
   @Field()
+  id?: string;
+
+  @Field()
   @Property({ unique: true })
   code!: string;
 
@@ -46,7 +49,7 @@ export class Fabric {
   @Property()
   printFileName?: string;
 
-  @Field(() => [FabricSample])
+  @Field(() => [FabricSample], { nullable: false })
   @Property({
     ref: () => FabricSample,
     foreignField: "parentCode",

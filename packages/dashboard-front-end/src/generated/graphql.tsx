@@ -454,6 +454,11 @@ export type StyleQueryVariables = Exact<{
 
 export type StyleQuery = { __typename?: 'Query', style?: { __typename?: 'Style', code: string, name: string } | null };
 
+export type StylesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StylesQuery = { __typename?: 'Query', styles: Array<{ __typename?: 'Style', code: string, name: string }> };
+
 export type CreateStyleMutationVariables = Exact<{
   data: CreateStyleInput;
 }>;
@@ -1010,6 +1015,41 @@ export function useStyleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Styl
 export type StyleQueryHookResult = ReturnType<typeof useStyleQuery>;
 export type StyleLazyQueryHookResult = ReturnType<typeof useStyleLazyQuery>;
 export type StyleQueryResult = Apollo.QueryResult<StyleQuery, StyleQueryVariables>;
+export const StylesDocument = gql`
+    query Styles {
+  styles {
+    code
+    name
+  }
+}
+    `;
+
+/**
+ * __useStylesQuery__
+ *
+ * To run a query within a React component, call `useStylesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStylesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStylesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStylesQuery(baseOptions?: Apollo.QueryHookOptions<StylesQuery, StylesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StylesQuery, StylesQueryVariables>(StylesDocument, options);
+      }
+export function useStylesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StylesQuery, StylesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StylesQuery, StylesQueryVariables>(StylesDocument, options);
+        }
+export type StylesQueryHookResult = ReturnType<typeof useStylesQuery>;
+export type StylesLazyQueryHookResult = ReturnType<typeof useStylesLazyQuery>;
+export type StylesQueryResult = Apollo.QueryResult<StylesQuery, StylesQueryVariables>;
 export const CreateStyleDocument = gql`
     mutation CreateStyle($data: CreateStyleInput!) {
   createStyle(data: $data) {

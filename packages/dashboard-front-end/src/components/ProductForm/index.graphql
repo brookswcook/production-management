@@ -11,6 +11,13 @@ query Style($code: String!) {
   }
 }
 
+query Styles {
+  styles {
+    code
+    name
+  }
+}
+
 mutation CreateStyle($data: CreateStyleInput!) {
   createStyle(data: $data) {
     code

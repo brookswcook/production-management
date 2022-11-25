@@ -167,7 +167,7 @@ export default function ProductGrid() {
           <GridToolbarExport />
         </GridToolbarContainer>
         <GridToolbarContainer>
-          <PopperButton icon={<AddIcon />} title="New">
+          <PopperButton icon={<AddIcon />} title="Add product">
             <CreateProductForm />
           </PopperButton>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>

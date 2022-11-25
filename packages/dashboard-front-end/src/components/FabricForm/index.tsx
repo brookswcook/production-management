@@ -145,7 +145,7 @@ export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
         <FilePreload
           label="Print file"
           setFiles={setPrintFiles}
-          helperText={"Please upload file (.tiff or another)"}
+          helperText={"Please upload tiff file"}
           multiple={false}
         />
       )}

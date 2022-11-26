@@ -52,7 +52,7 @@ export function CreateProductForm() {
       autoComplete="off"
     >
       <Typography component="h4" variant="inherit">
-        {`Create new product`}
+        {`Create new Product`}
       </Typography>
       <Autocomplete
         disablePortal

@@ -108,7 +108,7 @@ export function FabricDetail() {
             </Box>
           </Grid>
           <Grid item xs={12} lg={8} sx={{ pl: 1 }}>
-            <Stack spacing={3} sx={{ pl: 0.5 }}>
+            <Stack spacing={2} sx={{ pl: 0.5 }}>
               <BooleanProperty
                 title="Fabric approved"
                 value={stage === "Approved"}

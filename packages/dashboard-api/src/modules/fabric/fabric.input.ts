@@ -6,8 +6,8 @@ export class CreateFabricInput {
   @Field()
   code!: string;
 
-  @Field({ nullable: true })
-  title?: string;
+  @Field({ nullable: false })
+  title!: string;
 
   @Field({ nullable: false })
   factoryName!: string;

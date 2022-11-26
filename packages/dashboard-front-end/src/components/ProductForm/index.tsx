@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import {
   Autocomplete,
+  Box,
   Button,
   Stack,
   TextField,
@@ -55,27 +56,31 @@ export function CreateProductForm() {
         {`Create new Product`}
       </Typography>
       <Autocomplete
-        disablePortal
         options={styles}
-        sx={{ width: 300 }}
         getOptionLabel={option => option.code}
+        renderOption={(props, option) => (
+          <Box component="li" {...props}>
+            {`${option.code} ${option.name}`}
+          </Box>
+        )}
         renderInput={params => (
           <TextField {...params} name="styleCode" label="Style" required />
         )}
       />
       <Autocomplete
-        disablePortal
         options={fabrics}
-        sx={{ width: 300 }}
         getOptionLabel={option => option.code}
+        renderOption={(props, option) => (
+          <Box component="li" {...props}>
+            {`${option.code} ${option.title}`}
+          </Box>
+        )}
         renderInput={params => (
           <TextField {...params} name="fabricCode" label="Fabric" required />
         )}
       />
       <Autocomplete
-        disablePortal
         options={["Amy", "Kevin"]}
-        sx={{ width: 300 }}
         renderInput={params => (
           <TextField {...params} name="factoryName" label="Factory" required />
         )}

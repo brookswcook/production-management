@@ -16,7 +16,6 @@ import { useContext } from "react";
 import { AuthContext } from "./AuthProvider";
 import { LoginResult, useLoginMutation } from "../../generated/graphql";
 import { toast } from "react-toastify";
-import { UserRole } from "dashboard-core";
 
 type JSONValue = string | number | { [x: string]: JSONValue };
 
@@ -55,14 +54,11 @@ export default function SignIn() {
         variables: { data: { email, password } },
       });
 
-      const { token, role } = (loginData?.login as LoginResult & {
-        role: UserRole;
-      }) ?? {
+      const { token } = (loginData?.login as LoginResult) ?? {
         token: null,
-        role: null,
       };
 
-      signIn({ token, role });
+      signIn({ token });
       navigate("/", { replace: true });
     } catch (error) {
       toast.error("Login failed");

@@ -1,50 +1,42 @@
-import { UserRole } from "dashboard-core";
-import { createContext } from "react";
-import useRole from "./useRole";
+import { decodeToken, UserPayload } from "dashboard-core";
+import { createContext, useEffect, useState } from "react";
 import useToken from "./useToken";
 
 interface AuthContextType {
   token: string | null;
-  role: UserRole | null;
-  signIn: ({
-    token,
-    role,
-  }: {
-    token: string | null;
-    role: UserRole | null;
-  }) => void;
+  decodedToken: UserPayload | null;
+  signIn: ({ token }: { token: string | null }) => void;
   signOut: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({
   token: null,
-  role: null,
+  decodedToken: null,
   signIn() {},
   signOut() {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { token, setToken } = useToken();
-  const { role, setRole } = useRole();
+  const [decodedToken, setDecodedToken] = useState<UserPayload | null>(null);
 
-  function signIn({
-    token,
-    role,
-  }: {
-    token: string | null;
-    role: UserRole | null;
-  }) {
+  useEffect(() => {
+    if (token != null) {
+      const decodedToken = decodeToken<UserPayload>(token);
+      setDecodedToken(decodedToken);
+    }
+  }, [token]);
+
+  function signIn({ token }: { token: string | null }) {
     setToken(token);
-    setRole(role);
   }
 
   function signOut() {
     setToken(null);
-    setRole(null);
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, signOut, token, role }}>
+    <AuthContext.Provider value={{ signIn, signOut, token, decodedToken }}>
       {children}
     </AuthContext.Provider>
   );

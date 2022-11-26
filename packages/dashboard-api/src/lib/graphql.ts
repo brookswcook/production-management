@@ -1,4 +1,4 @@
-import { UserPayload } from "./jwt";
+import { UserPayload } from "dashboard-core";
 
 export type ResolverContext = {
   user: UserPayload;

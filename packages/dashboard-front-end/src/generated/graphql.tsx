@@ -113,7 +113,6 @@ export type LoginInput = {
 
 export type LoginResult = {
   __typename?: 'LoginResult';
-  role: Scalars['String'];
   token: Scalars['String'];
 };
 
@@ -403,7 +402,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResult', token: string, role: string } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResult', token: string } };
 
 export type FabricQueryVariables = Exact<{
   code: Scalars['String'];
@@ -744,7 +743,6 @@ export const LoginDocument = gql`
     mutation Login($data: LoginInput!) {
   login(data: $data) {
     token
-    role
   }
 }
     `;

@@ -98,134 +98,136 @@ export default function ProductDetail() {
 
   return (
     <Container maxWidth="xl">
-      <Grid
-        container
-        sx={{
-          border: "1px solid rgba(224, 224, 224, 1)",
-          borderRadius: "4px",
-          m: 1,
-        }}
-      >
-        <Grid item xs={12} sx={{ mb: 1 }}>
-          <Paper elevation={1} sx={{ pl: 1, mb: 1 }}>
-            <Typography component="span" variant="h6">
-              {name}
-            </Typography>
-            <Typography component="span" ml={1}>
-              {`${stage} stage ${onTime ? "is on time" : "is not on time"}`}
-            </Typography>
-            <Box>
-              <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-                <UploadTechPackPooperButton styleCode={style.code} />
-              </RequireRole>
-              {techPackLinks.map((techPackLink, index) => {
-                return (
-                  <a
-                    href={techPackLink}
-                    target="_blank"
-                    key={index}
-                    style={{
-                      pointerEvents: `${
-                        !style.techPackUploaded ? "none" : "auto"
-                      }`,
-                      textDecoration: "none",
-                    }}
-                  >
-                    <Button
-                      variant="text"
-                      size="small"
-                      disabled={!style.techPackUploaded}
+      <Box sx={{ p: 1 }}>
+        <Grid
+          justifyContent={"left"}
+          container
+          sx={{
+            border: "1px solid rgba(224, 224, 224, 1)",
+            borderRadius: "4px",
+            p: 1,
+          }}
+        >
+          <Grid item xs={12} sx={{ mb: 1 }}>
+            <Paper elevation={1} sx={{ pl: 1, mb: 1 }}>
+              <Typography component="span" variant="h6">
+                {name}
+              </Typography>
+              <Typography component="span" ml={1}>
+                {`${stage} stage ${onTime ? "is on time" : "is not on time"}`}
+              </Typography>
+              <Box>
+                <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+                  <UploadTechPackPooperButton styleCode={style.code} />
+                </RequireRole>
+                {techPackLinks.map((techPackLink, index) => {
+                  return (
+                    <a
+                      href={techPackLink}
+                      target="_blank"
+                      key={index}
+                      style={{
+                        pointerEvents: `${
+                          !style.techPackUploaded ? "none" : "auto"
+                        }`,
+                        textDecoration: "none",
+                      }}
                     >
-                      {`Download TP file ${index + 1}`}
-                    </Button>
-                  </a>
-                );
-              })}
-              <a
-                href={printLink}
-                target="_blank"
-                style={{
-                  pointerEvents: `${
-                    fabric.colorType == "solid" ? "none" : "auto"
-                  }`,
-                  textDecoration: "none",
-                }}
-              >
-                <Button
-                  variant="text"
-                  size="small"
-                  onClick={generatePrintLink}
-                  disabled={fabric.colorType == "solid"}
+                      <Button
+                        variant="text"
+                        size="small"
+                        disabled={!style.techPackUploaded}
+                      >
+                        {`Download TP file ${index + 1}`}
+                      </Button>
+                    </a>
+                  );
+                })}
+                <a
+                  href={printLink}
+                  target="_blank"
+                  style={{
+                    pointerEvents: `${
+                      fabric.colorType == "solid" ? "none" : "auto"
+                    }`,
+                    textDecoration: "none",
+                  }}
                 >
-                  Download Print
-                </Button>
-              </a>
-            </Box>
-          </Paper>
-        </Grid>
-        <Grid item xs={12}>
-          <Box
-            component="form"
-            sx={{
-              "& .MuiTextField-root": { m: 1, width: "25ch" },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <DetailViewSection headerTitle="Details:">
-              <TextField
-                label="Expected delivery date"
-                defaultValue={new Date(deliveryDate).toLocaleDateString()}
-                InputProps={{
-                  readOnly: true,
-                }}
-                size="small"
-                helperText={`Due In: ${dueIn} days`}
-                variant="standard"
-              />
-              <TextField
-                label="Factory"
-                defaultValue={factoryName}
-                InputProps={{
-                  readOnly: true,
-                }}
-                size="small"
-                variant="standard"
-              />
-            </DetailViewSection>
-            <DetailViewSection headerTitle="Style:">
-              <ObjectInputSet<Style>
-                objectToRender={style}
-                fields={["code", "name", "techPackUploaded"]}
-              />
-            </DetailViewSection>
-            <DetailViewSection headerTitle="Fabric:">
-              <ObjectInputSet<Fabric>
-                objectToRender={fabric}
-                fields={["code", "colorType", "colorName"]}
-              />
-            </DetailViewSection>
-            <DetailViewSection headerTitle="Pre production sample:">
-              <ObjectInputSet<Sample>
-                objectToRender={preProductionSample}
-                fields={["sku", "approved", "trackNumber", "delivered"]}
-              />
-            </DetailViewSection>
-            <DetailViewSection headerTitle="Fabric samples:">
-              <SampleGrid
-                parentCode={fabric.code}
-                sampleType="fabric"
-                samples={fabric.samples as Sample[]}
-              />
-            </DetailViewSection>
-            <DetailViewSection headerTitle="Fit samples:">
-              <SampleGrid
-                parentCode={code}
-                sampleType="fit"
-                samples={fitSamples as Sample[]}
-              />
-            </DetailViewSection>
-            {/* <DetailViewSection headerTitle="Fabric production:">
+                  <Button
+                    variant="text"
+                    size="small"
+                    onClick={generatePrintLink}
+                    disabled={fabric.colorType == "solid"}
+                  >
+                    Download Print
+                  </Button>
+                </a>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Box
+              component="form"
+              sx={{
+                "& .MuiTextField-root": { m: 1, width: "25ch" },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <DetailViewSection headerTitle="Details:">
+                <TextField
+                  label="Expected delivery date"
+                  defaultValue={new Date(deliveryDate).toLocaleDateString()}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  size="small"
+                  helperText={`Due In: ${dueIn} days`}
+                  variant="standard"
+                />
+                <TextField
+                  label="Factory"
+                  defaultValue={factoryName}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  size="small"
+                  variant="standard"
+                />
+              </DetailViewSection>
+              <DetailViewSection headerTitle="Style:">
+                <ObjectInputSet<Style>
+                  objectToRender={style}
+                  fields={["code", "name", "techPackUploaded"]}
+                />
+              </DetailViewSection>
+              <DetailViewSection headerTitle="Fabric:">
+                <ObjectInputSet<Fabric>
+                  objectToRender={fabric}
+                  fields={["code", "colorType", "colorName"]}
+                />
+              </DetailViewSection>
+              <DetailViewSection headerTitle="Pre production sample:">
+                <ObjectInputSet<Sample>
+                  objectToRender={preProductionSample}
+                  fields={["sku", "approved", "trackNumber", "delivered"]}
+                />
+              </DetailViewSection>
+              <DetailViewSection headerTitle="Fabric samples:">
+                <SampleGrid
+                  parentCode={fabric.code}
+                  sampleType="fabric"
+                  samples={fabric.samples as Sample[]}
+                />
+              </DetailViewSection>
+              <DetailViewSection headerTitle="Fit samples:">
+                <SampleGrid
+                  parentCode={code}
+                  sampleType="fit"
+                  samples={fitSamples as Sample[]}
+                />
+              </DetailViewSection>
+              {/* <DetailViewSection headerTitle="Fabric production:">
               <ObjectInputSet<FabricProduction>
                 objectToRender={fabricProduction}
                 fields={[
@@ -271,16 +273,17 @@ export default function ProductDetail() {
                 ]}
               />
             </DetailViewSection> */}
-            <DetailViewSection headerTitle="Notes:">
-              <NoteGrid
-                notes={notes as Note[]}
-                type={"productNote" as NoteType}
-                parentId={id}
-              />
-            </DetailViewSection>
-          </Box>
+              <DetailViewSection headerTitle="Notes:">
+                <NoteGrid
+                  notes={notes as Note[]}
+                  type={"productNote" as NoteType}
+                  parentId={id}
+                />
+              </DetailViewSection>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
     </Container>
   );
 }

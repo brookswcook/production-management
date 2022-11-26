@@ -96,7 +96,7 @@ export default function FabricGrid() {
   }
 
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Grid item xs={12}>
         <DataGrid
           rows={rows}

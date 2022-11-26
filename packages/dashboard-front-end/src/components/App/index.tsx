@@ -65,68 +65,93 @@ function Dashboard({ children }: { children: ReactElement }) {
       <Fragment>
         <AppBar position="static">
           <Toolbar>
-            <Grid container direction={"row"} alignItems={"center"}>
-              <Grid item xs={1}>
-                <IconButton
-                  size="large"
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
-                  sx={{ mr: 2 }}
-                  onClick={handleOpenNavMenu}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorElNav}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "left",
-                  }}
-                  open={Boolean(anchorElNav)}
-                  onClose={handleCloseNavMenu}
-                >
-                  <MenuItemLink
-                    onClick={handleCloseNavMenu}
-                    name="Products"
-                    to="/products"
-                  />
-                  <MenuItemLink
-                    onClick={handleCloseNavMenu}
-                    name="Fabrics"
-                    to="/fabrics"
-                  />
-                  <RequireRole authorizedRoles={["Admin"]}>
+            <Grid
+              container
+              direction={"row"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+            >
+              <Grid
+                container
+                item
+                xs={8}
+                md={10}
+                alignItems={"center"}
+                justifyContent={"left"}
+              >
+                <Grid item xs="auto">
+                  <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    sx={{ mr: 2 }}
+                    onClick={handleOpenNavMenu}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorElNav}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    open={Boolean(anchorElNav)}
+                    onClose={handleCloseNavMenu}
+                  >
                     <MenuItemLink
                       onClick={handleCloseNavMenu}
-                      name="Operation logs"
-                      to="/oplog"
+                      name="Products"
+                      to="/products"
                     />
-                  </RequireRole>
-                </Menu>
+                    <MenuItemLink
+                      onClick={handleCloseNavMenu}
+                      name="Fabrics"
+                      to="/fabrics"
+                    />
+                    <RequireRole authorizedRoles={["Admin"]}>
+                      <MenuItemLink
+                        onClick={handleCloseNavMenu}
+                        name="Operation logs"
+                        to="/oplog"
+                      />
+                    </RequireRole>
+                  </Menu>
+                </Grid>
+                <Grid item xs={10}>
+                  <Button variant="text" size="small">
+                    <Typography variant="h6" sx={{ color: "white" }}>
+                      <Link
+                        to="/"
+                        style={{ textDecoration: "none", color: "white" }}
+                      >
+                        Production Management Tool
+                      </Link>
+                    </Typography>
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item xs={9}>
-                <Button variant="text" size="small">
-                  <Typography variant="h6" sx={{ color: "white" }}>
-                    <Link
-                      to="/"
-                      style={{ textDecoration: "none", color: "white" }}
-                    >
-                      Production Management Tool
-                    </Link>
-                  </Typography>
-                </Button>
-              </Grid>
-              <Grid container item xs={1} alignItems={"center"}>
+              <Grid
+                container
+                item
+                xs={4}
+                md={2}
+                alignItems={"center"}
+                justifyContent={"end"}
+              >
                 <Grid item>
-                  <Typography component={"span"} variant={"button"}>
-                    Hi {firstName},{" "}
+                  <Typography
+                    component={"span"}
+                    variant={"button"}
+                    sx={{ whiteSpace: "nowrap", overflow: "hidden" }}
+                  >
+                    {`Hi ${firstName}, `}
                   </Typography>
                 </Grid>
                 <Grid item>

@@ -37,6 +37,7 @@ import OperationLogGrid from "../OperationLogGrid";
 import RequireRole from "../Auth/RequireRole";
 import FabricGrid from "../FabricGrid";
 import { FabricDetail } from "../FabricDetail";
+import { StyleDetail } from "../Style";
 
 function Dashboard({ children }: { children: ReactElement }) {
   const { signOut } = useContext(AuthContext);
@@ -218,6 +219,10 @@ function ApolloApp() {
             <Route
               path="/fabrics/:code"
               element={<Dashboard children={<FabricDetail />} />}
+            />
+            <Route
+              path="/styles/:code"
+              element={<Dashboard children={<StyleDetail />} />}
             />
             <Route
               path="/oplog"

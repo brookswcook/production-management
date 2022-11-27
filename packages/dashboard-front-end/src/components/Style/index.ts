@@ -1,0 +1,1 @@
+export { StyleDetail } from "./DetailView";

@@ -19,13 +19,25 @@ export class Style {
   @Property({ default: [] })
   techPackFileNames?: string[];
 
-  @Field({ nullable: true })
+  @Field({ nullable: false })
   @Property({
     get(this: Style) {
-      return this.techPackFileNames!.length > 0;
+      return this.techPackFileNames!.length > 0 ?? false;
     },
   })
   techPackUploaded?: boolean;
+
+  // TODO: reuse
+  static async findByCodeOrFail(
+    this: ReturnModelType<typeof Style>,
+    code: string
+  ): Promise<Style> {
+    const style = await this.findOne({
+      code,
+    }).exec();
+    if (style == null) throw Error(`Style with given code not found`);
+    return style;
+  }
 
   static async findOneAndUpdateOrFail(
     this: ReturnModelType<typeof Style>,

@@ -1,0 +1,28 @@
+import { Container, Box, Grid } from "@mui/material";
+
+export function DetailView({
+  headerSections,
+  bottomSections,
+}: {
+  headerSections: JSX.Element[] | JSX.Element;
+  bottomSections: JSX.Element[] | JSX.Element;
+}) {
+  return (
+    <Container maxWidth="xl">
+      <Box sx={{ p: 1 }}>
+        <Grid
+          justifyContent={"left"}
+          container
+          sx={{
+            border: "1px solid rgba(224, 224, 224, 1)",
+            borderRadius: "4px",
+            p: 1,
+          }}
+        >
+          {headerSections}
+        </Grid>
+      </Box>
+      {bottomSections}
+    </Container>
+  );
+}

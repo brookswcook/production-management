@@ -121,7 +121,11 @@ export function FabricDetail() {
                 </Grid>
                 {colorType === "print" && (
                   <Grid item xs={12} sm={4} xl={2}>
-                    <Button href={printLink} variant={"contained"}>
+                    <Button
+                      href={printLink}
+                      size={"small"}
+                      variant={"contained"}
+                    >
                       Download print
                     </Button>
                   </Grid>

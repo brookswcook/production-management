@@ -177,7 +177,6 @@ export default function ProductGrid() {
           components={{
             Toolbar: CustomToolbar,
           }}
-          checkboxSelection
           disableSelectionOnClick
           sx={{ mt: 1 }}
         />

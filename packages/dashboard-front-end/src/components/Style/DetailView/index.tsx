@@ -12,7 +12,7 @@ import { DetailView } from "../../Common/DetailView";
 import { DetailViewHeaderTitle } from "../../Common/DetailViewHeaderTitle";
 import { BooleanProperty, TextProperty } from "../../Properties";
 import { LinkProperty } from "../../Properties/LinkProperty";
-import { UploadTechPackPooperButton } from "../../TechPackForm";
+import { UploadTechPackPopperButton } from "../../TechPackForm";
 
 function StyleHeaderSection({
   style: {
@@ -76,7 +76,7 @@ function StyleHeaderSection({
               })}
             <RequireRole authorizedRoles={["Admin", "VChapman"]}>
               <Grid item>
-                <UploadTechPackPooperButton
+                <UploadTechPackPopperButton
                   variant="contained"
                   styleCode={code}
                 />

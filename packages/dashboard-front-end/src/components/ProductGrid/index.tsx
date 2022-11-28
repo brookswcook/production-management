@@ -17,7 +17,7 @@ import { PopperButton } from "../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
 import { CreateProductForm } from "../ProductForm";
 import { Fragment, useState } from "react";
-import { UploadTechPackPooperButton } from "../TechPackForm";
+import { UploadTechPackPopperButton } from "../TechPackForm";
 import SendSampleToolbarButton from "../SampleForm";
 import { Link } from "react-router-dom";
 import RequireRole from "../Auth/RequireRole";
@@ -171,7 +171,7 @@ export default function ProductGrid() {
             <CreateProductForm />
           </PopperButton>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <UploadTechPackPooperButton
+            <UploadTechPackPopperButton
               styleCode={selectedProducts[0]?.style.code}
               disabled={selectedProducts.length !== 1}
             />

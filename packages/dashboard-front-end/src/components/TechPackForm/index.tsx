@@ -64,7 +64,7 @@ export function UploadTechPackForm({ styleCode: code }: { styleCode: string }) {
   );
 }
 
-export function UploadTechPackPooperButton({
+export function UploadTechPackPopperButton({
   disabled = false,
   styleCode,
   variant = "text",

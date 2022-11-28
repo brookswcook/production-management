@@ -37,7 +37,7 @@ import OperationLogGrid from "../OperationLogGrid";
 import RequireRole from "../Auth/RequireRole";
 import FabricGrid from "../FabricGrid";
 import { FabricDetail } from "../FabricDetail";
-import { StyleDetail } from "../Style";
+import { StyleDetail, StyleList } from "../Style";
 
 function Dashboard({ children }: { children: ReactElement }) {
   const { signOut } = useContext(AuthContext);
@@ -115,6 +115,11 @@ function Dashboard({ children }: { children: ReactElement }) {
                       onClick={handleCloseNavMenu}
                       name="Fabrics"
                       to="/fabrics"
+                    />
+                    <MenuItemLink
+                      onClick={handleCloseNavMenu}
+                      name="Styles"
+                      to="/styles"
                     />
                     <RequireRole authorizedRoles={["Admin"]}>
                       <MenuItemLink
@@ -219,6 +224,10 @@ function ApolloApp() {
             <Route
               path="/fabrics/:code"
               element={<Dashboard children={<FabricDetail />} />}
+            />
+            <Route
+              path="/styles"
+              element={<Dashboard children={<StyleList />} />}
             />
             <Route
               path="/styles/:code"

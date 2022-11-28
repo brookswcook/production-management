@@ -15,7 +15,7 @@ import { OverridableStringUnion } from "@mui/types";
 export function UploadTechPackForm({ styleCode: code }: { styleCode: string }) {
   const [techPackFiles, setTechPackFiles] = useState<File[]>();
   const mutationOptions = {
-    refetchQueries: ["Products", "Product"],
+    refetchQueries: ["Style"],
   };
   const [uploadTechPackMutation] = useUploadTechPackMutation(mutationOptions);
 

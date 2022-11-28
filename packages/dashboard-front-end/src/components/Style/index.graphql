@@ -12,6 +12,9 @@ query Styles {
   styles {
     code
     name
+    techPackUploaded
+    techPackFileNames
+    productCodes
   }
 }
 

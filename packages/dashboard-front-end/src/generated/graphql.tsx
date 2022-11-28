@@ -535,7 +535,7 @@ export type StyleQuery = { __typename?: 'Query', style: { __typename?: 'Style', 
 export type StylesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StylesQuery = { __typename?: 'Query', styles: Array<{ __typename?: 'Style', code: string, name: string }> };
+export type StylesQuery = { __typename?: 'Query', styles: Array<{ __typename?: 'Style', code: string, name: string, techPackUploaded: boolean, techPackFileNames: Array<string>, productCodes: Array<string> }> };
 
 export type CreateStyleMutationVariables = Exact<{
   data: CreateStyleInput;
@@ -1361,6 +1361,9 @@ export const StylesDocument = gql`
   styles {
     code
     name
+    techPackUploaded
+    techPackFileNames
+    productCodes
   }
 }
     `;

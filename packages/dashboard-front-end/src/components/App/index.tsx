@@ -79,7 +79,7 @@ function Dashboard({ children }: { children: ReactElement }) {
                 alignItems={"center"}
                 justifyContent={"left"}
               >
-                <Grid item xs="auto">
+                <Grid item xs="auto" sx={{ display: { md: "none" } }}>
                   <IconButton
                     size="large"
                     edge="start"
@@ -129,17 +129,45 @@ function Dashboard({ children }: { children: ReactElement }) {
                     </RequireRole>
                   </Menu>
                 </Grid>
-                <Grid item xs={10}>
-                  <Button variant="text" size="small">
-                    <Typography variant="h6" sx={{ color: "white" }}>
-                      <Link
-                        to="/"
-                        style={{ textDecoration: "none", color: "white" }}
-                      >
-                        Production Management Tool
-                      </Link>
-                    </Typography>
-                  </Button>
+                <Grid item container alignItems={"center"} gap={3} xs={10}>
+                  <Grid item xs={"auto"}>
+                    <Button variant="text" size="small">
+                      <Typography variant="h6" sx={{ color: "white" }}>
+                        <Link
+                          to="/"
+                          style={{ textDecoration: "none", color: "white" }}
+                        >
+                          Production Management Tool
+                        </Link>
+                      </Typography>
+                    </Button>
+                  </Grid>
+                  <Grid item sx={{ display: { xs: "none", md: "inline" } }}>
+                    {["products", "fabrics", "styles"].map(item => (
+                      <Button variant="text" size="small" key={item}>
+                        <Typography variant="inherit" sx={{ color: "white" }}>
+                          <Link
+                            to={`/${item}`}
+                            style={{ textDecoration: "none", color: "white" }}
+                          >
+                            {item}
+                          </Link>
+                        </Typography>
+                      </Button>
+                    ))}
+                    <RequireRole authorizedRoles={["Admin"]}>
+                      <Button variant="text" size="small">
+                        <Typography variant="inherit" sx={{ color: "white" }}>
+                          <Link
+                            to={`/oplog`}
+                            style={{ textDecoration: "none", color: "white" }}
+                          >
+                            Operation logs
+                          </Link>
+                        </Typography>
+                      </Button>
+                    </RequireRole>
+                  </Grid>
                 </Grid>
               </Grid>
               <Grid

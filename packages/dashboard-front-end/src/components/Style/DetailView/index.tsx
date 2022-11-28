@@ -83,14 +83,18 @@ function StyleHeaderSection({
               </Grid>
             </RequireRole>
           </Grid>
-          <LinkProperty
-            title="Products"
-            baseUrl="products"
-            resources={productCodes.map(code => ({
-              id: code,
-              text: code,
-            }))}
-          />
+          {productCodes.length > 0 ? (
+            <LinkProperty
+              title="Products"
+              baseUrl="products"
+              resources={productCodes.map(code => ({
+                id: code,
+                text: code,
+              }))}
+            />
+          ) : (
+            <TextProperty title="Products" value="no associated products" />
+          )}
         </Stack>
       </Grid>
     </Fragment>

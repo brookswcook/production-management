@@ -1,6 +1,5 @@
 import {
   AppBar,
-  Box,
   Button,
   createTheme,
   Grid,

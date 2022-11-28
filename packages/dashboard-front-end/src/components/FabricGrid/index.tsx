@@ -82,14 +82,12 @@ export default function FabricGrid() {
     return (
       <Fragment>
         <GridToolbarContainer>
-          <GridToolbarColumnsButton />
-          <GridToolbarFilterButton />
-          <GridToolbarExport />
-        </GridToolbarContainer>
-        <GridToolbarContainer>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
             <CreateFabricPopperButton />
           </RequireRole>
+          <GridToolbarColumnsButton />
+          <GridToolbarFilterButton />
+          <GridToolbarExport />
         </GridToolbarContainer>
       </Fragment>
     );

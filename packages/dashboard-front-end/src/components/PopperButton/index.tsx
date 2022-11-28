@@ -1,16 +1,28 @@
 import { Fragment, MouseEvent, useEffect, useState, ReactElement } from "react";
-import { Button, ClickAwayListener, Paper, Popper } from "@mui/material";
+import {
+  Button,
+  ButtonPropsVariantOverrides,
+  ClickAwayListener,
+  Paper,
+  Popper,
+} from "@mui/material";
+import { OverridableStringUnion } from "@mui/types";
 
 export function PopperButton({
   icon,
   title,
   children,
+  variant = "text",
   disabled,
   popperCloseCounter,
 }: {
   icon?: ReactElement;
   title: string;
   children: ReactElement;
+  variant?: OverridableStringUnion<
+    "text" | "outlined" | "contained",
+    ButtonPropsVariantOverrides
+  >;
   disabled?: boolean;
   popperCloseCounter?: number;
 }) {
@@ -34,7 +46,7 @@ export function PopperButton({
     <Fragment>
       <Button
         disabled={disabled}
-        variant="text"
+        variant={variant}
         size="small"
         onClick={togglePopper}
       >

@@ -1,15 +1,21 @@
 import { ApolloError } from "@apollo/client";
-import { Button, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  ButtonPropsVariantOverrides,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { useUploadTechPackMutation } from "../../generated/graphql";
 import FilePreload from "../FilePreload";
 import { PopperButton } from "../PopperButton";
+import { OverridableStringUnion } from "@mui/types";
 
 export function UploadTechPackForm({ styleCode: code }: { styleCode: string }) {
   const [techPackFiles, setTechPackFiles] = useState<File[]>();
   const mutationOptions = {
-    refetchQueries: ["Products", "Product"],
+    refetchQueries: ["Style"],
   };
   const [uploadTechPackMutation] = useUploadTechPackMutation(mutationOptions);
 
@@ -58,15 +64,24 @@ export function UploadTechPackForm({ styleCode: code }: { styleCode: string }) {
   );
 }
 
-export function UploadTechPackPooperButton({
+export function UploadTechPackPopperButton({
   disabled = false,
   styleCode,
+  variant = "text",
 }: {
   disabled?: boolean;
   styleCode: string;
+  variant?: OverridableStringUnion<
+    "text" | "outlined" | "contained",
+    ButtonPropsVariantOverrides
+  >;
 }) {
   return (
-    <PopperButton title="Upload TP" disabled={disabled}>
+    <PopperButton
+      variant={variant}
+      title="Upload Tech Pack"
+      disabled={disabled}
+    >
       <UploadTechPackForm styleCode={styleCode} />
     </PopperButton>
   );

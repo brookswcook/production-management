@@ -3,17 +3,3 @@ mutation CreateProduct($data: CreateProductInput!) {
     code
   }
 }
-
-query Style($code: String!) {
-  style(code: $code) {
-    code
-    name
-  }
-}
-
-mutation CreateStyle($data: CreateStyleInput!) {
-  createStyle(data: $data) {
-    code
-    name
-  }
-}

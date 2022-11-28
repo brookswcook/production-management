@@ -17,9 +17,9 @@ export class Fabric {
   @Property({ unique: true })
   code!: string;
 
-  @Field({ nullable: true })
+  @Field({ nullable: false })
   @Property()
-  title?: string;
+  title!: string;
 
   @Field()
   @Property()

@@ -1,7 +1,6 @@
 import jwt from "express-jwt";
 import { JWT_SECRET, JWT_EXPIRE as expiresIn } from "../config";
-import { sign } from "jsonwebtoken";
-import { UserRole } from "dashboard-core";
+import { signToken, UserPayload } from "dashboard-core";
 
 export const jwtAuth: jwt.Options = {
   secret: JWT_SECRET,
@@ -10,11 +9,5 @@ export const jwtAuth: jwt.Options = {
 };
 
 export function signUserToken(payload: UserPayload) {
-  return sign(payload, JWT_SECRET, { expiresIn });
+  return signToken<UserPayload>(payload, JWT_SECRET, expiresIn);
 }
-
-export type UserPayload = {
-  id: string;
-  role: UserRole;
-  firstName: string;
-};

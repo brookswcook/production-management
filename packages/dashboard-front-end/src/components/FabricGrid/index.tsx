@@ -82,21 +82,19 @@ export default function FabricGrid() {
     return (
       <Fragment>
         <GridToolbarContainer>
-          <GridToolbarColumnsButton />
-          <GridToolbarFilterButton />
-          <GridToolbarExport />
-        </GridToolbarContainer>
-        <GridToolbarContainer>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
             <CreateFabricPopperButton />
           </RequireRole>
+          <GridToolbarColumnsButton />
+          <GridToolbarFilterButton />
+          <GridToolbarExport />
         </GridToolbarContainer>
       </Fragment>
     );
   }
 
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Grid item xs={12}>
         <DataGrid
           rows={rows}

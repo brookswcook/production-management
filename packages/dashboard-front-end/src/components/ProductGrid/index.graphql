@@ -60,11 +60,13 @@ fragment productFields on Product {
   }
   fabric {
     code
+    title
     colorName
     type
     colorType
     colorCode
     printFileName
+    stage
     samples {
       ...fabricSampleFields
     }

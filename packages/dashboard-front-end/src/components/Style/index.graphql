@@ -1,0 +1,26 @@
+query Style($code: String!) {
+  style(code: $code) {
+    code
+    name
+    techPackUploaded
+    techPackFileNames
+    productCodes
+  }
+}
+
+query Styles {
+  styles {
+    code
+    name
+    techPackUploaded
+    techPackFileNames
+    productCodes
+  }
+}
+
+mutation CreateStyle($data: CreateStyleInput!) {
+  createStyle(data: $data) {
+    code
+    name
+  }
+}

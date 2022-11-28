@@ -3,7 +3,6 @@ import {
   DataGrid,
   GridColDef,
   GridRenderCellParams,
-  GridSelectionModel,
   GridToolbarColumnsButton,
   GridToolbarContainer,
   GridToolbarExport,
@@ -16,24 +15,14 @@ import {
 import { PopperButton } from "../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
 import { CreateProductForm } from "../ProductForm";
-import { Fragment, useState } from "react";
-import { UploadTechPackPooperButton } from "../TechPackForm";
-import SendSampleToolbarButton from "../SampleForm";
+import { Fragment } from "react";
 import { Link } from "react-router-dom";
-import RequireRole from "../Auth/RequireRole";
 
 export default function ProductGrid() {
   const { data, loading, error } = useProductsQuery({
     variables: {},
   });
   const rows: ProductFieldsFragment[] = data ? data.products : [];
-  const [selectedGridItems, setSelectedGridItems] =
-    useState<GridSelectionModel>([]);
-
-  const selectedProductsCodes = Array.from(selectedGridItems.values());
-  const selectedProducts = rows.filter(row =>
-    selectedProductsCodes.some(code => row.code == code)
-  );
 
   const columns: GridColDef<ProductFieldsFragment>[] = [
     {
@@ -162,30 +151,12 @@ export default function ProductGrid() {
     return (
       <Fragment>
         <GridToolbarContainer>
+          <PopperButton icon={<AddIcon />} title="Add product">
+            <CreateProductForm />
+          </PopperButton>
           <GridToolbarColumnsButton />
           <GridToolbarFilterButton />
           <GridToolbarExport />
-        </GridToolbarContainer>
-        <GridToolbarContainer>
-          <PopperButton icon={<AddIcon />} title="New">
-            <CreateProductForm />
-          </PopperButton>
-          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <UploadTechPackPooperButton
-              styleCode={selectedProducts[0]?.style.code}
-              disabled={selectedProducts.length !== 1}
-            />
-          </RequireRole>
-          <SendSampleToolbarButton
-            sampleType={"fabric"}
-            parentCode={selectedProducts[0]?.fabric.code}
-            disabled={selectedProducts.length !== 1}
-          />
-          <SendSampleToolbarButton
-            sampleType={"fit"}
-            parentCode={selectedProducts[0]?.code}
-            disabled={selectedProducts.length !== 1}
-          />
         </GridToolbarContainer>
       </Fragment>
     );
@@ -202,14 +173,10 @@ export default function ProductGrid() {
           loading={loading}
           error={error}
           autoHeight
-          onSelectionModelChange={selectionModel =>
-            setSelectedGridItems(selectionModel)
-          }
           rowsPerPageOptions={[10]}
           components={{
             Toolbar: CustomToolbar,
           }}
-          checkboxSelection
           disableSelectionOnClick
           sx={{ mt: 1 }}
         />

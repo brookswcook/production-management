@@ -3,14 +3,20 @@ import { Typography } from "@mui/material";
 export function TextProperty({
   title,
   value,
+  vertical = false,
 }: {
   title: string;
   value: string;
+  vertical?: boolean;
 }) {
   return (
-    <Typography component="span" variant="subtitle2">
+    <Typography component={vertical ? "div" : "span"} variant="subtitle2">
       {title}
-      <Typography component="span" variant="overline" sx={{ pl: 3 }}>
+      <Typography
+        component={vertical ? "div" : "span"}
+        variant="overline"
+        sx={{ pl: 3 }}
+      >
         {value}
       </Typography>
     </Typography>

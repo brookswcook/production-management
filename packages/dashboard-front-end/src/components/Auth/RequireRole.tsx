@@ -9,8 +9,9 @@ export default function RequireRole({
   authorizedRoles: string[];
   children: ReactElement;
 }) {
-  const { role } = useContext(AuthContext);
-  return role != null && authorizeByRole(role, authorizedRoles) ? (
+  const { decodedToken } = useContext(AuthContext);
+  return decodedToken?.role != null &&
+    authorizeByRole(decodedToken.role, authorizedRoles) ? (
     <Fragment>{children}</Fragment>
   ) : (
     <Fragment />

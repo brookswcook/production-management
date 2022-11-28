@@ -1,8 +1,8 @@
 import {
   AppBar,
-  Box,
   Button,
   createTheme,
+  Grid,
   IconButton,
   Menu,
   MenuItem,
@@ -36,6 +36,7 @@ import OperationLogGrid from "../OperationLogGrid";
 import RequireRole from "../Auth/RequireRole";
 import FabricGrid from "../FabricGrid";
 import { FabricDetail } from "../FabricDetail";
+import { StyleDetail, StyleList } from "../Style";
 
 function Dashboard({ children }: { children: ReactElement }) {
   const { signOut } = useContext(AuthContext);
@@ -43,6 +44,8 @@ function Dashboard({ children }: { children: ReactElement }) {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
+  const { decodedToken } = useContext(AuthContext);
+  const firstName = decodedToken?.firstName ?? "";
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -62,61 +65,135 @@ function Dashboard({ children }: { children: ReactElement }) {
       <Fragment>
         <AppBar position="static">
           <Toolbar>
-            <Box>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-                onClick={handleOpenNavMenu}
+            <Grid
+              container
+              direction={"row"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+            >
+              <Grid
+                container
+                item
+                xs={8}
+                md={10}
+                alignItems={"center"}
+                justifyContent={"left"}
               >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
+                <Grid item xs="auto" sx={{ display: { md: "none" } }}>
+                  <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    sx={{ mr: 2 }}
+                    onClick={handleOpenNavMenu}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorElNav}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    open={Boolean(anchorElNav)}
+                    onClose={handleCloseNavMenu}
+                  >
+                    <MenuItemLink
+                      onClick={handleCloseNavMenu}
+                      name="Products"
+                      to="/products"
+                    />
+                    <MenuItemLink
+                      onClick={handleCloseNavMenu}
+                      name="Fabrics"
+                      to="/fabrics"
+                    />
+                    <MenuItemLink
+                      onClick={handleCloseNavMenu}
+                      name="Styles"
+                      to="/styles"
+                    />
+                    <RequireRole authorizedRoles={["Admin"]}>
+                      <MenuItemLink
+                        onClick={handleCloseNavMenu}
+                        name="Operation logs"
+                        to="/oplog"
+                      />
+                    </RequireRole>
+                  </Menu>
+                </Grid>
+                <Grid item container alignItems={"center"} gap={3} xs={10}>
+                  <Grid item xs={"auto"}>
+                    <Button variant="text" size="small">
+                      <Typography variant="h6" sx={{ color: "white" }}>
+                        <Link
+                          to="/"
+                          style={{ textDecoration: "none", color: "white" }}
+                        >
+                          Production Management Tool
+                        </Link>
+                      </Typography>
+                    </Button>
+                  </Grid>
+                  <Grid item sx={{ display: { xs: "none", md: "inline" } }}>
+                    {["products", "fabrics", "styles"].map(item => (
+                      <Button variant="text" size="small" key={item}>
+                        <Typography variant="inherit" sx={{ color: "white" }}>
+                          <Link
+                            to={`/${item}`}
+                            style={{ textDecoration: "none", color: "white" }}
+                          >
+                            {item}
+                          </Link>
+                        </Typography>
+                      </Button>
+                    ))}
+                    <RequireRole authorizedRoles={["Admin"]}>
+                      <Button variant="text" size="small">
+                        <Typography variant="inherit" sx={{ color: "white" }}>
+                          <Link
+                            to={`/oplog`}
+                            style={{ textDecoration: "none", color: "white" }}
+                          >
+                            Operation logs
+                          </Link>
+                        </Typography>
+                      </Button>
+                    </RequireRole>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                item
+                xs={4}
+                md={2}
+                alignItems={"center"}
+                justifyContent={"end"}
               >
-                <MenuItemLink
-                  onClick={handleCloseNavMenu}
-                  name="Products"
-                  to="/products"
-                />
-                <MenuItemLink
-                  onClick={handleCloseNavMenu}
-                  name="Fabrics"
-                  to="/fabrics"
-                />
-                <RequireRole authorizedRoles={["Admin"]}>
-                  <MenuItemLink
-                    onClick={handleCloseNavMenu}
-                    name="Operation logs"
-                    to="/oplog"
-                  />
-                </RequireRole>
-              </Menu>
-            </Box>
-            <Button variant="text" size="small">
-              <Typography variant="h6" sx={{ color: "white" }}>
-                <Link to="/" style={{ textDecoration: "none", color: "white" }}>
-                  Production Management
-                </Link>
-              </Typography>
-            </Button>
-            <Button color="inherit" onClick={onSignOut} sx={{ ml: "auto" }}>
-              Logout
-            </Button>
+                <Grid item>
+                  <Typography
+                    component={"span"}
+                    variant={"button"}
+                    sx={{ whiteSpace: "nowrap", overflow: "hidden" }}
+                  >
+                    {`Hi ${firstName}, `}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Button color="inherit" onClick={onSignOut}>
+                    Logout
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
           </Toolbar>
         </AppBar>
         {children}
@@ -174,6 +251,14 @@ function ApolloApp() {
             <Route
               path="/fabrics/:code"
               element={<Dashboard children={<FabricDetail />} />}
+            />
+            <Route
+              path="/styles"
+              element={<Dashboard children={<StyleList />} />}
+            />
+            <Route
+              path="/styles/:code"
+              element={<Dashboard children={<StyleDetail />} />}
             />
             <Route
               path="/oplog"

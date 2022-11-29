@@ -84,7 +84,7 @@ export default function SampleGrid({
       flex: 3,
       renderCell: renderCellExpand,
       valueGetter: ({ row }: { row: Sample }) => {
-        return row.note?.text;
+        return row.note?.text ?? "";
       },
     },
     {

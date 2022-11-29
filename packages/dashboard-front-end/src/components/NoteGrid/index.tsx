@@ -1,5 +1,10 @@
 import { Box, Button, Stack, TextField } from "@mui/material";
-import { DataGrid, GridColDef, GridToolbarContainer } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridToolbarContainer,
+  GridToolbarFilterButton,
+} from "@mui/x-data-grid";
 import {
   CreateNoteInput,
   FileUploadInput,
@@ -121,6 +126,7 @@ export default function NoteGrid({
             </Button>
           </Stack>
         </PopperButton>
+        <GridToolbarFilterButton />
       </GridToolbarContainer>
     );
   }

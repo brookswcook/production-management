@@ -5,6 +5,7 @@ import {
   GridColDef,
   GridSelectionModel,
   GridToolbarContainer,
+  GridToolbarFilterButton,
 } from "@mui/x-data-grid";
 import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -212,6 +213,7 @@ export default function SampleGrid({
               Download Comment Attachment
             </Button>
           </a>
+          <GridToolbarFilterButton />
         </GridToolbarContainer>
       </Fragment>
     );

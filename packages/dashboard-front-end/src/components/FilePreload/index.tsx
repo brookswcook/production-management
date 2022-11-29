@@ -6,11 +6,13 @@ export default function FilePreload({
   setFiles,
   helperText,
   multiple = true,
+  required = false,
 }: {
   label: string;
   setFiles: (files: File[]) => void;
   helperText?: string;
   multiple?: boolean;
+  required?: boolean;
 }) {
   function onInputChange({
     target: {
@@ -38,7 +40,7 @@ export default function FilePreload({
       inputProps={{
         multiple,
       }}
-      required
+      required={required}
     />
   );
 }

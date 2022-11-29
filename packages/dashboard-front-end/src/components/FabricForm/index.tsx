@@ -1,4 +1,10 @@
-import { Button, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { FormEvent, Fragment, ReactElement, useState } from "react";
 import { PopperButton } from "../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -13,7 +19,6 @@ import { toast } from "react-toastify";
 
 export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
   const [selectedColorType, setSelectedColorType] = useState<string>("");
-  const [selectedFactoryName, setSelectedFactoryName] = useState<string>("");
   const [printFiles, setPrintFiles] = useState<File[] | null>(null);
   const [newFabricMutation] = useCreateFabricMutation({
     refetchQueries: ["Fabrics"],
@@ -75,26 +80,12 @@ export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
         helperText="Example: Cotton organza in white rose print"
         required
       />
-      <TextField
-        select
-        label="Factory"
-        name="factoryName"
-        SelectProps={{
-          MenuProps: { disablePortal: true },
-          sx: {
-            ".MuiPaper-root": {
-              left: "0 !important;",
-              position: "sticky",
-            },
-          },
-        }}
-        value={selectedFactoryName}
-        onChange={({ target: { value } }) => setSelectedFactoryName(value)}
-        required
-      >
-        <MenuItem value={"Amy"}>Amy</MenuItem>
-        <MenuItem value={"Kevin"}>Kevin</MenuItem>
-      </TextField>
+      <Autocomplete
+        options={["Amy", "Kevin"]}
+        renderInput={params => (
+          <TextField {...params} name="factoryName" label="Factory" required />
+        )}
+      />
       <TextField
         label="Fabric Code"
         name="code"
@@ -107,32 +98,13 @@ export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
         helperText="Example: Cinnamon Stick"
         required
       />
-      <TextField
-        select
-        label="Color Type"
-        name="colorType"
-        SelectProps={{
-          MenuProps: {
-            disablePortal: true,
-            // TODO: Find better option to set correct position of it
-            sx: {
-              ".MuiPaper-root": {
-                left: "0 !important;",
-                position: "sticky",
-              },
-            },
-          },
-        }}
-        value={selectedColorType}
-        onChange={({ target: { value } }) => setSelectedColorType(value)}
-        required
-      >
-        {colorTypes.map(colorType => (
-          <MenuItem key={colorType} value={colorType}>
-            {`${colorType[0].toUpperCase()}${colorType.slice(1)}`}
-          </MenuItem>
-        ))}
-      </TextField>
+      <Autocomplete
+        options={colorTypes}
+        onChange={(_, value) => setSelectedColorType(String(value))}
+        renderInput={params => (
+          <TextField {...params} name="colorType" label="Color Type" required />
+        )}
+      />
       {selectedColorType === "solid" && (
         <TextField
           label="Color Code"

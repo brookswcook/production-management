@@ -145,26 +145,22 @@ function Dashboard({ children }: { children: ReactElement }) {
                   <Grid item sx={{ display: { xs: "none", md: "inline" } }}>
                     {["products", "fabrics", "styles"].map(item => (
                       <Button variant="text" size="small" key={item}>
-                        <Typography variant="inherit" sx={{ color: "white" }}>
-                          <Link
-                            to={`/${item}`}
-                            style={{ textDecoration: "none", color: "white" }}
-                          >
-                            {item}
-                          </Link>
-                        </Typography>
+                        <Link
+                          to={`/${item}`}
+                          style={{ textDecoration: "none", color: "white" }}
+                        >
+                          {item}
+                        </Link>
                       </Button>
                     ))}
                     <RequireRole authorizedRoles={["Admin"]}>
                       <Button variant="text" size="small">
-                        <Typography variant="inherit" sx={{ color: "white" }}>
-                          <Link
-                            to={`/oplog`}
-                            style={{ textDecoration: "none", color: "white" }}
-                          >
-                            Operation logs
-                          </Link>
-                        </Typography>
+                        <Link
+                          to={`/oplog`}
+                          style={{ textDecoration: "none", color: "white" }}
+                        >
+                          Operation logs
+                        </Link>
                       </Button>
                     </RequireRole>
                   </Grid>

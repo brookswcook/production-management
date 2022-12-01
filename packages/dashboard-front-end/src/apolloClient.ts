@@ -3,7 +3,7 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
 } from "@apollo/client";
-import { REACT_APP_APOLLO_SERVER_URI } from "./config";
+import { config } from "./config";
 import { createUploadLink } from "apollo-upload-client";
 
 export default function createClient(
@@ -11,7 +11,7 @@ export default function createClient(
 ): ApolloClient<NormalizedCacheObject> {
   return new ApolloClient({
     link: createUploadLink({
-      uri: REACT_APP_APOLLO_SERVER_URI,
+      uri: config.apolloURI,
       headers: {
         authorization: authToken ? `Bearer ${authToken}` : "",
       },

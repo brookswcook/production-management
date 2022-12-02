@@ -2,22 +2,9 @@ import { S3, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { ReadStream } from "fs-capacitor";
 import logger from "./logger";
-import {
-  S3_ACCESS_KEY_ID,
-  S3_ENDPOINT,
-  S3_REGION,
-  S3_SECRET_ACCESS_KEY,
-  S3_BUCKET_NAME as Bucket,
-} from "../config";
+import config from "../config";
 
-const s3Client = new S3({
-  endpoint: S3_ENDPOINT,
-  region: S3_REGION,
-  credentials: {
-    accessKeyId: S3_ACCESS_KEY_ID,
-    secretAccessKey: S3_SECRET_ACCESS_KEY,
-  },
-});
+const s3Client = new S3(config.s3.client);
 
 export async function upload({
   key,
@@ -30,7 +17,12 @@ export async function upload({
 }): Promise<string> {
   try {
     await s3Client.send(
-      new PutObjectCommand({ Bucket, Key: key, Body, ContentLength })
+      new PutObjectCommand({
+        Bucket: config.s3.bucketName,
+        Key: fileName,
+        Body,
+        ContentLength,
+      })
     );
     logger.info(`Successfully uploaded object: ${key}`);
     return key;
@@ -46,7 +38,7 @@ export async function getDownloadLink({
   key: string;
 }): Promise<string> {
   try {
-    const command = new GetObjectCommand({ Bucket, Key });
+    const command = new GetObjectCommand({ Bucket: config.s3.bucketName, Key });
     const url = await getSignedUrl(s3Client, command);
     return url;
   } catch (err) {

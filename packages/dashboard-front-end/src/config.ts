@@ -6,6 +6,8 @@ const {
   REACT_APP_FIREBASE_STORAGE_BUCKET,
   REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   REACT_APP_FIREBASE_APP_ID,
+  NODE_ENV,
+  REACT_APP_USE_AUTH_EMULATOR,
 } = process.env;
 
 export const config = {
@@ -18,4 +20,6 @@ export const config = {
     messagingSenderId: REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
     appId: REACT_APP_FIREBASE_APP_ID,
   },
+  nodeEnv: NODE_ENV,
+  enableAuthEmulator: REACT_APP_USE_AUTH_EMULATOR,
 };

@@ -121,8 +121,7 @@ export type GetProductsInput = {
 };
 
 export type LoginInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  token: Scalars['String'];
 };
 
 export type LoginResult = {

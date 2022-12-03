@@ -15,6 +15,10 @@ import { ReactElement, useContext } from "react";
 import { AuthContext } from "./AuthProvider";
 import { LoginResult, useLoginMutation } from "../../generated/graphql";
 import { toast } from "react-toastify";
+import { signInWithEmailAndPassword, signInWithEmailLink } from "firebase/auth";
+import { auth } from "./firebaseAuth";
+import { FirebaseError } from "firebase/app";
+import { ApolloError } from "@apollo/client";
 
 type JSONValue = string | number | { [x: string]: JSONValue };
 
@@ -49,8 +53,15 @@ export default function SignIn(): ReactElement {
       const email = data.get("email") as string;
       const password = data.get("password") as string;
 
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const firebaseToken = await userCredentials.user.getIdToken(true);
+
       const { data: loginData } = await loginMutation({
-        variables: { data: { email, password } },
+        variables: { data: { token: firebaseToken } },
       });
 
       const { token } = (loginData?.login as LoginResult) ?? {
@@ -60,7 +71,9 @@ export default function SignIn(): ReactElement {
       signIn({ token });
       navigate("/", { replace: true });
     } catch (error) {
-      toast.error("Login failed");
+      if (error instanceof FirebaseError) toast.error(error.code);
+      else if (error instanceof ApolloError) toast.error(error.message);
+      else toast.error("Unknown error");
     }
   }
 

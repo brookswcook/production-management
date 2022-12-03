@@ -22,7 +22,7 @@ export class UserResolver {
         throw new AuthenticationError("Not possible to associate logged user");
 
       if (!email_verified)
-        throw new AuthenticationError("User is not verified");
+        throw new AuthenticationError("User email is not verified");
 
       const { id, role, firstName } = (await UserModel.getUserByEmailOrFail(
         email

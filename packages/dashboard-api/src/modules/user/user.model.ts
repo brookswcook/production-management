@@ -18,9 +18,6 @@ export class User extends TimeStamps {
   @Property({ unique: true, required: true })
   email!: string;
 
-  @Property({ required: true })
-  password!: string;
-
   @Field()
   @Property({ required: true })
   firstName!: string;
@@ -46,7 +43,7 @@ export class User extends TimeStamps {
     email: string
   ) {
     const user = await this.findOne({ email }).exec();
-    if (user == null) throw new Error("User not found");
+    if (user == null) throw new Error("User is not found");
     return user;
   }
 
@@ -55,7 +52,7 @@ export class User extends TimeStamps {
     id: string
   ) {
     const user = await this.findOne({ _id: id }).exec();
-    if (user == null) throw new Error("User not found");
+    if (user == null) throw new Error("User is not found");
     return user;
   }
 

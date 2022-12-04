@@ -15,10 +15,13 @@ import { ReactElement, useContext } from "react";
 import { AuthContext } from "./AuthProvider";
 import { LoginResult, useLoginMutation } from "../../generated/graphql";
 import { toast } from "react-toastify";
-import { signInWithEmailAndPassword, signInWithEmailLink } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  signInWithEmailLink,
+  sendEmailVerification,
+} from "firebase/auth";
 import { auth } from "./firebaseAuth";
 import { FirebaseError } from "firebase/app";
-import { ApolloError } from "@apollo/client";
 
 type JSONValue = string | number | { [x: string]: JSONValue };
 
@@ -53,12 +56,18 @@ export default function SignIn(): ReactElement {
       const email = data.get("email") as string;
       const password = data.get("password") as string;
 
-      const userCredentials = await signInWithEmailAndPassword(
+      const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
-      const firebaseToken = await userCredentials.user.getIdToken(true);
+
+      if (!userCredential.user.emailVerified) {
+        toast.error("User email is not verified. Verification email was sent");
+        return await sendEmailVerification(userCredential.user);
+      }
+
+      const firebaseToken = await userCredential.user.getIdToken(true);
 
       const { data: loginData } = await loginMutation({
         variables: { data: { token: firebaseToken } },
@@ -72,7 +81,7 @@ export default function SignIn(): ReactElement {
       navigate("/", { replace: true });
     } catch (error) {
       if (error instanceof FirebaseError) toast.error(error.code);
-      else if (error instanceof ApolloError) toast.error(error.message);
+      else if (error instanceof Error) toast.error(error.message);
       else toast.error("Unknown error");
     }
   }

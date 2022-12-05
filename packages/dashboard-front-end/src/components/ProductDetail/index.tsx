@@ -43,6 +43,7 @@ export default function ProductDetail() {
     deliveryDate,
     stage,
     factoryName,
+    techPackUploaded,
     style,
     fabric,
     fitSamples,
@@ -84,7 +85,7 @@ export default function ProductDetail() {
                     title="Style"
                     value={{
                       Code: style.code,
-                      "Tech Pack Uploaded": style.techPackUploaded ?? false,
+                      "Tech Pack Uploaded": techPackUploaded,
                     }}
                   />
                 </Grid>

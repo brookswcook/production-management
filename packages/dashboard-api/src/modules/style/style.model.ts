@@ -4,9 +4,14 @@ import {
   ReturnModelType,
 } from "@typegoose/typegoose";
 import { Field, ObjectType } from "type-graphql";
+import { File } from "../file/file.model";
+import { FileType } from "../file/file.types";
 
 @ObjectType()
 export class Style {
+  @Field()
+  id!: string;
+
   @Field()
   @Property({ required: true, unique: true })
   code!: string;
@@ -15,14 +20,20 @@ export class Style {
   @Property({ required: true })
   name!: string;
 
-  @Field(() => [String])
-  @Property({ default: [] })
-  techPackFileNames?: string[];
+  @Field(() => [File])
+  @Property({
+    ref: () => File,
+    foreignField: "parentId" as Partial<File>,
+    localField: "_id",
+    match: { type: "tech-pack" as FileType } as Partial<File>,
+    options: { sort: { _id: -1 } },
+  })
+  techPacks!: File[];
 
   @Field({ nullable: false })
   @Property({
     get(this: Style) {
-      return this.techPackFileNames!.length > 0 ?? false;
+      return this.techPacks.length > 0;
     },
   })
   techPackUploaded?: boolean;
@@ -34,7 +45,9 @@ export class Style {
   ): Promise<Style> {
     const style = await this.findOne({
       code,
-    }).exec();
+    })
+      .populate("techPacks")
+      .exec();
     if (style == null) throw Error(`Style with given code not found`);
     return style;
   }

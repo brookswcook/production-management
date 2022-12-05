@@ -55,8 +55,6 @@ fragment productFields on Product {
   style {
     code
     name
-    techPackFileNames
-    techPackUploaded
   }
   fabric {
     code

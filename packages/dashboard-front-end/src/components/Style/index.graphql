@@ -1,21 +1,28 @@
 query Style($code: String!) {
   style(code: $code) {
-    code
-    name
-    techPackUploaded
-    techPackFileNames
-    productCodes
+    ...styleFields
   }
 }
 
 query Styles {
   styles {
-    code
-    name
-    techPackUploaded
-    techPackFileNames
-    productCodes
+    ...styleFields
   }
+}
+
+fragment styleFields on Style {
+  code
+  name
+  techPackUploaded
+  techPacks {
+    name
+    extName
+    uploadingKey
+    user {
+      fullName
+    }
+  }
+  productCodes
 }
 
 mutation CreateStyle($data: CreateStyleInput!) {

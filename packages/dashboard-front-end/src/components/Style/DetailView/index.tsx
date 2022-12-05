@@ -3,6 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
+  File,
   Style,
   useStyleQuery,
   useTechPackLinksLazyQuery,
@@ -15,28 +16,26 @@ import { LinkProperty } from "../../Properties/LinkProperty";
 import { UploadTechPackPopperButton } from "../../TechPackForm";
 
 function StyleHeaderSection({
-  style: {
-    code,
-    name: title,
-    techPackUploaded,
-    techPackFileNames,
-    productCodes,
-  },
+  style: { code, name: title, techPackUploaded, techPacks, productCodes },
 }: {
-  style: Style;
+  style: Pick<Style, "code" | "name" | "techPackUploaded" | "productCodes"> & {
+    techPacks: Pick<File, "uploadingKey">[];
+  };
 }) {
   const [getTechPackLinks] = useTechPackLinksLazyQuery();
   const [techPackLinks, setTechPackLinks] = useState<string[]>(["#"]);
 
   useEffect(() => {
     void generateTechPackLinks();
-  }, [techPackFileNames]);
+  }, [techPacks]);
 
   async function generateTechPackLinks() {
-    if (techPackFileNames.length > 0) {
+    if (techPacks.length > 0) {
       try {
         const { data } = await getTechPackLinks({
-          variables: { fileNames: techPackFileNames },
+          variables: {
+            uploadingKeys: techPacks.map(({ uploadingKey }) => uploadingKey),
+          },
         });
         if (data == null) return;
         setTechPackLinks(data.techPackLinks);
@@ -120,8 +119,7 @@ export function StyleDetail() {
   if (data == null || error)
     return <Fragment>No data or unexpected error has happened!</Fragment>;
 
-  const { name, techPackUploaded, techPackFileNames, productCodes } =
-    data.style;
+  const { name, techPackUploaded, techPacks, productCodes } = data.style;
 
   return (
     <DetailView
@@ -131,7 +129,7 @@ export function StyleDetail() {
             code,
             name,
             techPackUploaded: Boolean(techPackUploaded),
-            techPackFileNames,
+            techPacks,
             productCodes,
           }}
         />

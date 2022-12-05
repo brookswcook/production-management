@@ -1,6 +1,7 @@
 import {
   Arg,
   Authorized,
+  Ctx,
   FieldResolver,
   Mutation,
   Query,
@@ -13,6 +14,7 @@ import { getDownloadFileLinks, uploadFiles } from "../file/file.service";
 import { UserRole } from "dashboard-core";
 import { ProductService } from "../product/product.service";
 import { Fabric } from "../fabric/fabric.model";
+import { ResolverContext } from "../../lib/graphql";
 
 @Resolver(Style)
 export class StyleResolver {
@@ -30,7 +32,7 @@ export class StyleResolver {
   @Authorized()
   @Query(() => [Style])
   async styles() {
-    return StyleModel.find().exec();
+    return StyleModel.find().populate("techPacks").exec();
   }
 
   @Authorized()
@@ -42,31 +44,36 @@ export class StyleResolver {
   @Authorized()
   @Query(() => [String])
   async techPackLinks(
-    @Arg("fileNames", () => [String]) fileNames: string[]
+    @Arg("uploadingKeys", () => [String]) uploadingKeys: string[]
   ): Promise<string[]> {
-    return getDownloadFileLinks(fileNames);
+    return getDownloadFileLinks(uploadingKeys);
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Style)
-  async createStyle(@Arg("data") { code, name, techPack }: CreateStyleInput) {
-    const styleData: Style = { code, name };
+  async createStyle(
+    @Arg("data") { code, name, techPack }: CreateStyleInput,
+    @Ctx() { user: { id: userId } }: ResolverContext
+  ) {
+    const styleData: Partial<Style> = { code, name };
+    const style = (await new StyleModel(styleData).save()) as Style;
+    const { id: styleId } = style;
+
     if (techPack != null && techPack.length > 0) {
-      styleData.techPackFileNames = await uploadFiles(
-        code,
-        "tech-pack",
-        techPack
-      );
+      await uploadFiles(styleId, userId, "tech-pack", techPack);
     }
-    return await new StyleModel(styleData).save();
+    return style;
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Style)
   async uploadTechPack(
-    @Arg("data") { code, techPack }: UploadTechPackInput
+    @Arg("data") { code, techPack }: UploadTechPackInput,
+    @Ctx() { user: { id: userId } }: ResolverContext
   ): Promise<Style> {
-    const techPackFileNames = await uploadFiles(code, "tech-pack", techPack);
-    return StyleModel.findOneAndUpdateOrFail({ code }, { techPackFileNames });
+    const style = await StyleModel.findByCodeOrFail(code);
+    const { id: styleId } = style;
+    await uploadFiles(styleId, userId, "tech-pack", techPack);
+    return style;
   }
 }

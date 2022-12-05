@@ -20,20 +20,20 @@ const s3Client = new S3({
 });
 
 export async function upload({
-  fileName,
+  key,
   content: Body,
   contentLength: ContentLength,
 }: {
-  fileName: string;
+  key: string;
   content: string | ReadStream;
   contentLength: number;
 }): Promise<string> {
   try {
     await s3Client.send(
-      new PutObjectCommand({ Bucket, Key: fileName, Body, ContentLength })
+      new PutObjectCommand({ Bucket, Key: key, Body, ContentLength })
     );
-    logger.info(`Successfully uploaded object: ${fileName}`);
-    return fileName;
+    logger.info(`Successfully uploaded object: ${key}`);
+    return key;
   } catch (err) {
     logger.error(`s3 upload error: `, err);
     throw err;
@@ -41,9 +41,9 @@ export async function upload({
 }
 
 export async function getDownloadLink({
-  fileName: Key,
+  key: Key,
 }: {
-  fileName: string;
+  key: string;
 }): Promise<string> {
   try {
     const command = new GetObjectCommand({ Bucket, Key });

@@ -11,16 +11,12 @@ query Styles {
 }
 
 fragment styleFields on Style {
+  id
   code
   name
   techPackUploaded
   techPacks {
-    name
-    extName
-    uploadingKey
-    user {
-      fullName
-    }
+    ...fileFields
   }
   productCodes
 }

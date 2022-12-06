@@ -1,0 +1,10 @@
+fragment fileFields on File {
+  id
+  name
+  extName
+  uploadingKey
+  createdAt
+  user {
+    fullName
+  }
+}

@@ -1,8 +1,9 @@
+import { FileType } from "dashboard-core";
 import { FileUpload } from "graphql-upload";
 import { extname } from "path";
 import { getDownloadLink, upload } from "../../lib/s3";
 import { FileModel, File } from "./file.model";
-import { FileType, IFileUpload } from "./file.types";
+import { IFileUpload } from "./file.types";
 
 export async function uploadFile(
   parentId: string,

@@ -3,9 +3,9 @@ import {
   prop as Property,
   ReturnModelType,
 } from "@typegoose/typegoose";
+import { FileType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
 import { File } from "../file/file.model";
-import { FileType } from "../file/file.types";
 
 @ObjectType()
 export class Style {
@@ -46,7 +46,7 @@ export class Style {
     const style = await this.findOne({
       code,
     })
-      .populate("techPacks")
+      .populate({ path: "techPacks", populate: "user" })
       .exec();
     if (style == null) throw Error(`Style with given code not found`);
     return style;

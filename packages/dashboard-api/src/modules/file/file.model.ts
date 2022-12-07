@@ -5,9 +5,9 @@ import {
   prop as Property,
 } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
+import { FileType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
 import { User } from "../user/user.model";
-import { FileType } from "./file.types";
 
 @ModelOptions({ schemaOptions: { timestamps: true } })
 @index({ type: 1, parentId: 1 })

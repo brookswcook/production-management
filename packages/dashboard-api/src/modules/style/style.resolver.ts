@@ -32,7 +32,9 @@ export class StyleResolver {
   @Authorized()
   @Query(() => [Style])
   async styles() {
-    return StyleModel.find().populate("techPacks").exec();
+    return StyleModel.find()
+      .populate({ path: "techPacks", populate: "user" })
+      .exec();
   }
 
   @Authorized()

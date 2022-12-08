@@ -10,7 +10,7 @@ import {
 } from "type-graphql";
 import { CreateStyleInput, UploadTechPackInput } from "./style.input";
 import { Style, StyleModel } from "./style.model";
-import { getDownloadFileLinks, uploadFiles } from "../file/file.service";
+import { uploadFiles } from "../file/file.service";
 import { UserRole } from "dashboard-core";
 import { ProductService } from "../product/product.service";
 import { Fabric } from "../fabric/fabric.model";
@@ -41,14 +41,6 @@ export class StyleResolver {
   @Query(() => Style)
   async style(@Arg("code") code: string): Promise<Style> {
     return StyleModel.findByCodeOrFail(code);
-  }
-
-  @Authorized()
-  @Query(() => [String])
-  async techPackLinks(
-    @Arg("uploadingKeys", () => [String]) uploadingKeys: string[]
-  ): Promise<string[]> {
-    return getDownloadFileLinks(uploadingKeys);
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])

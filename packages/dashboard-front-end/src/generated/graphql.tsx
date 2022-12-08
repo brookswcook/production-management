@@ -91,6 +91,7 @@ export type File = {
   createdAt?: Maybe<Scalars['DateTime']>;
   extName: Scalars['String'];
   id: Scalars['String'];
+  link: Scalars['String'];
   name: Scalars['String'];
   parentId: Scalars['String'];
   type: Scalars['String'];
@@ -440,7 +441,7 @@ export type FabricsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', id: string, code: string, title: string, factoryName: string, colorName: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }> };
 
-export type FileFieldsFragment = { __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null };
+export type FileFieldsFragment = { __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null };
 
 export type OperationLogFieldsFragment = { __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null };
 
@@ -546,14 +547,14 @@ export type StyleQueryVariables = Exact<{
 }>;
 
 
-export type StyleQuery = { __typename?: 'Query', style: { __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null }> } };
+export type StyleQuery = { __typename?: 'Query', style: { __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null }> } };
 
 export type StylesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StylesQuery = { __typename?: 'Query', styles: Array<{ __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null }> }> };
+export type StylesQuery = { __typename?: 'Query', styles: Array<{ __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null }> }> };
 
-export type StyleFieldsFragment = { __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null }> };
+export type StyleFieldsFragment = { __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null }> };
 
 export type CreateStyleMutationVariables = Exact<{
   data: CreateStyleInput;
@@ -730,6 +731,7 @@ export const FileFieldsFragmentDoc = gql`
   name
   extName
   uploadingKey
+  link
   createdAt
   user {
     fullName

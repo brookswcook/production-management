@@ -3,6 +3,7 @@ fragment fileFields on File {
   name
   extName
   uploadingKey
+  link
   createdAt
   user {
     fullName

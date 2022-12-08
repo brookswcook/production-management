@@ -3,7 +3,10 @@ import { useState } from "react";
 // TODO: Use refreshToken
 // TODO: Use refreshToken rotation and refresh token reuse detection
 // TODO: consider using httpOnly cookie session to avoid possible XSS attack on session storage
-export default function useToken() {
+export default function useToken(): {
+  token: string | null;
+  setToken: (token: string | null) => void;
+} {
   function getToken() {
     return sessionStorage.getItem("token");
   }

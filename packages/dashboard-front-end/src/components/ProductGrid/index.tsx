@@ -15,10 +15,10 @@ import {
 import { PopperButton } from "../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
 import { CreateProductForm } from "../ProductForm";
-import { Fragment } from "react";
+import { Fragment, ReactElement } from "react";
 import { Link } from "react-router-dom";
 
-export default function ProductGrid() {
+export default function ProductGrid(): ReactElement {
   const { data, loading, error } = useProductsQuery({
     variables: {},
   });
@@ -147,7 +147,7 @@ export default function ProductGrid() {
     },
   ];
 
-  function CustomToolbar() {
+  function CustomToolbar(): ReactElement {
     return (
       <Fragment>
         <GridToolbarContainer>

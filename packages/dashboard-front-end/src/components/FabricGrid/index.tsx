@@ -10,11 +10,11 @@ import {
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
 import { FabricFieldsFragment, useFabricsQuery } from "../../generated/graphql";
-import { Fragment } from "react";
+import { Fragment, ReactElement } from "react";
 import { CreateFabricPopperButton } from "../FabricForm";
 import RequireRole from "../Auth/RequireRole";
 
-export default function FabricGrid() {
+export default function FabricGrid(): ReactElement {
   const { data, loading, error } = useFabricsQuery({});
   const rows: FabricFieldsFragment[] = data?.fabrics ?? [];
 

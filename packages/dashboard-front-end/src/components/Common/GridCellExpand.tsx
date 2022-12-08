@@ -1,6 +1,6 @@
 import { Paper, Popper, Typography } from "@mui/material";
 import { GridCellParams } from "@mui/x-data-grid";
-import React from "react";
+import React, { ReactElement } from "react";
 import { createStyles, makeStyles } from "@mui/styles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -36,7 +36,9 @@ const useStyles = makeStyles(() =>
 );
 const theme = createTheme();
 
-const CellExpand = React.memo(function CellExpand(props: CellExpandProps) {
+const CellExpand = React.memo(function CellExpand(
+  props: CellExpandProps
+): ReactElement {
   const { value, width } = props;
   const classes = useStyles();
 
@@ -118,7 +120,7 @@ const CellExpand = React.memo(function CellExpand(props: CellExpandProps) {
   );
 });
 
-export function renderCellExpand(params: GridCellParams) {
+export function renderCellExpand(params: GridCellParams): ReactElement {
   return (
     <CellExpand
       value={String(params.value)}

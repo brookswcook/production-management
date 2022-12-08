@@ -8,17 +8,20 @@ import {
   GridToolbarExport,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { Fragment } from "react";
+import { Fragment, ReactElement } from "react";
 import { Link } from "react-router-dom";
-import { Style, useStylesQuery } from "../../../generated/graphql";
+import {
+  StyleFieldsFragment,
+  useStylesQuery,
+} from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
 import { CreateStylePopperButton } from "../Form";
 
-export function StyleList() {
+export function StyleList(): ReactElement {
   const { data, loading, error } = useStylesQuery({});
-  const rows: Style[] = data?.styles ?? [];
+  const rows: StyleFieldsFragment[] = data?.styles ?? [];
 
-  const columns: GridColDef<Style>[] = [
+  const columns: GridColDef<StyleFieldsFragment>[] = [
     {
       field: "name",
       headerName: "Name",
@@ -54,13 +57,13 @@ export function StyleList() {
       headerName: "Associated Products",
       minWidth: 100,
       flex: 5,
-      valueGetter: ({ row }: { row: Style }) => {
+      valueGetter: ({ row }: { row: StyleFieldsFragment }) => {
         return row.productCodes;
       },
       // TODO: reuse
       renderCell({
         value: productCodes,
-      }: GridRenderCellParams<string[], Style>) {
+      }: GridRenderCellParams<string[], StyleFieldsFragment>) {
         return productCodes?.map(code => (
           <Box key={code} sx={{ whiteSpace: "pre" }}>
             <Link to={`/products/${code}`} style={{ textDecoration: "none" }}>

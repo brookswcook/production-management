@@ -24,7 +24,7 @@ export class ProductResolver {
       .sort({ _id: -1 })
       .populate({ path: "notes", populate: { path: "user" } })
       .populate("fitSamples")
-      .populate("style")
+      .populate({ path: "style", populate: { path: "techPacks" } })
       .populate({
         path: "fabric",
         populate: { path: "samples" },

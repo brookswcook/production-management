@@ -1,6 +1,7 @@
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import { SxProps, Theme, Typography } from "@mui/material";
+import { ReactElement } from "react";
 
 export function BooleanProperty({
   title,
@@ -12,7 +13,7 @@ export function BooleanProperty({
   value: boolean;
   //fontSize?: "inherit" | "large" | "medium" | "small";
   sx?: SxProps<Theme>;
-}) {
+}): ReactElement {
   const fontSize = "small";
   return (
     <Typography component="span" variant="subtitle2">

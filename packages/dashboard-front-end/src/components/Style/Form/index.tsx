@@ -10,7 +10,11 @@ import {
 import { toast } from "react-toastify";
 import FilePreload from "../../FilePreload";
 
-export function CreateStyleForm({ footerEl }: { footerEl?: ReactElement }) {
+export function CreateStyleForm({
+  footerEl,
+}: {
+  footerEl?: ReactElement;
+}): ReactElement {
   const [getStyle] = useStyleLazyQuery();
   const [newStyleMutation] = useCreateStyleMutation({
     refetchQueries: ["Styles"],
@@ -95,7 +99,7 @@ export function CreateStylePopperButton({
   disabled = false,
 }: {
   disabled?: boolean;
-}) {
+}): ReactElement {
   const [closeCount, setCloseCount] = useState<number>(0);
   function cancel() {
     setCloseCount(closeCount + 1);

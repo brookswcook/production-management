@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { NoteType } from "dashboard-core";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, ReactElement, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -25,13 +25,13 @@ import { LinkProperty } from "../Properties/LinkProperty";
 import { ObjectProperty } from "../Properties/ObjectProperty";
 import SampleGrid from "../SampleGrid";
 
-export function FabricDetail() {
+export function FabricDetail(): ReactElement {
   const { code = "" } = useParams();
   const { data, error, loading } = useFabricQuery({
     variables: { code },
   });
   const [getPrintLink] = usePrintLinkLazyQuery();
-  const [printLink, setPrintLink] = useState<string>(null!);
+  const [printLink, setPrintLink] = useState<string>("#");
 
   useEffect(() => {
     if (loading) return;

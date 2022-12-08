@@ -7,7 +7,7 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { FormEvent } from "react";
+import { FormEvent, ReactElement } from "react";
 import { toast } from "react-toastify";
 import {
   SendSampleInput,
@@ -22,7 +22,7 @@ export function SendSampleForm({
 }: {
   parentCode: string;
   sampleType: SampleType;
-}) {
+}): ReactElement {
   const mutationOptions = {
     refetchQueries: ["Products", "Product"],
   };
@@ -82,7 +82,7 @@ export default function SendSamplePopperButton({
   disabled?: boolean;
   sampleType: SampleType;
   parentCode: string;
-}) {
+}): ReactElement {
   return (
     <PopperButton
       title={`New ${sampleType == "fit" ? "fit" : "fabric"} sample`}

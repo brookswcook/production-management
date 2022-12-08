@@ -2,12 +2,14 @@ import { UserRole } from "dashboard-core";
 import {
   Arg,
   Authorized,
+  Ctx,
   FieldResolver,
   Mutation,
   Query,
   Resolver,
   Root,
 } from "type-graphql";
+import { ResolverContext } from "../../lib/graphql";
 import { getDownloadFileLink, uploadFile } from "../file/file.service";
 import { ProductService } from "../product/product.service";
 import { CreateFabricInput, UploadPrintInput } from "./fabric.input";
@@ -54,7 +56,10 @@ export class FabricResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
-  async createFabric(@Arg("data") { print, ...data }: CreateFabricInput) {
+  async createFabric(
+    @Arg("data") { print, ...data }: CreateFabricInput,
+    @Ctx() { user: { id: userId } }: ResolverContext
+  ) {
     const fabricData: Omit<
       Fabric,
       "samples" | "stage" | "products" | "factoryName" | "notes"
@@ -63,6 +68,7 @@ export class FabricResolver {
       const { file, fileSize } = print;
       fabricData.printFileName = await uploadFile(
         data.code,
+        userId,
         "print",
         file,
         fileSize
@@ -74,9 +80,16 @@ export class FabricResolver {
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
   async uploadPrint(
-    @Arg("data") { code, print: { file, fileSize } }: UploadPrintInput
+    @Arg("data") { code, print: { file, fileSize } }: UploadPrintInput,
+    @Ctx() { user: { id: userId } }: ResolverContext
   ): Promise<Fabric> {
-    const printFileName = await uploadFile(code, "print", file, fileSize);
+    const printFileName = await uploadFile(
+      code,
+      userId,
+      "print",
+      file,
+      fileSize
+    );
     return FabricModel.findOneAndUpdateOrFail({ code }, { printFileName });
   }
 }

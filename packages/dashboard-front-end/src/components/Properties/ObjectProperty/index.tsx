@@ -1,6 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
+import { ReactElement } from "react";
 
 export function ObjectProperty({
   title,
@@ -8,7 +9,7 @@ export function ObjectProperty({
 }: {
   title: string;
   value: Record<string, string | boolean>;
-}) {
+}): ReactElement {
   const stringValueProperty = (value: string) => (
     <Typography component="div" variant="overline">
       {value}

@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, ReactElement, useState } from "react";
 import {
   Autocomplete,
   Box,
@@ -18,7 +18,7 @@ import {
 import { toast } from "react-toastify";
 import { ApolloError } from "@apollo/client";
 
-export function CreateProductForm() {
+export function CreateProductForm(): ReactElement {
   const [newProductMutation] = useCreateProductMutation({
     refetchQueries: ["Products"],
   });

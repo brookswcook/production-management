@@ -1,4 +1,5 @@
 import { Grid, Typography } from "@mui/material";
+import { ReactElement } from "react";
 import { Link } from "react-router-dom";
 
 export function LinkProperty({
@@ -9,7 +10,7 @@ export function LinkProperty({
   title: string;
   baseUrl: string;
   resources: { id: string; text: string }[];
-}) {
+}): ReactElement {
   return (
     <Grid
       container

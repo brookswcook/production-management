@@ -1,4 +1,3 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,14 +11,14 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { ReactElement, useContext } from "react";
 import { AuthContext } from "./AuthProvider";
 import { LoginResult, useLoginMutation } from "../../generated/graphql";
 import { toast } from "react-toastify";
 
 type JSONValue = string | number | { [x: string]: JSONValue };
 
-function Copyright(props: { [x: string]: JSONValue }) {
+function Copyright(props: { [x: string]: JSONValue }): ReactElement {
   return (
     <Typography
       variant="body2"
@@ -37,7 +36,7 @@ function Copyright(props: { [x: string]: JSONValue }) {
   );
 }
 
-export default function SignIn() {
+export default function SignIn(): ReactElement {
   const navigate = useNavigate();
   const { signIn } = useContext(AuthContext);
   const [loginMutation] = useLoginMutation();

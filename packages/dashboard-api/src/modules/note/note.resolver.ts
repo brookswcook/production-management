@@ -24,17 +24,18 @@ export class NoteResolver {
   @Mutation(() => Note)
   async createNote(
     @Arg("data") data: CreateNoteInput,
-    @Ctx() { user }: ResolverContext
+    @Ctx() { user: { id: userId } }: ResolverContext
   ): Promise<Note> {
     const noteData = data as unknown as Note;
     if (data.images.length > 0) {
       noteData.imageFileNames = await uploadFiles(
         data.parentId,
+        userId,
         "note-image",
         data.images
       );
     }
-    noteData.userId = user.id;
+    noteData.userId = userId;
     return new NoteModel(noteData).save();
   }
 

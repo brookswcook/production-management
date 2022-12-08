@@ -6,8 +6,9 @@ import {
 } from "../../generated/graphql";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { renderCellExpand } from "../Common/GridCellExpand";
+import { ReactElement } from "react";
 
-export default function OperationLogGrid() {
+export default function OperationLogGrid(): ReactElement {
   const { data, loading, error } = useOperationLogsQuery({
     variables: {},
   });

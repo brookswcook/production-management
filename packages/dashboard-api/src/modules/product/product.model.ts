@@ -180,7 +180,7 @@ export class Product {
     } as Product)
       .populate({ path: "notes", populate: { path: "user" } })
       .populate({ path: "fitSamples", populate: { path: "note" } })
-      .populate("style")
+      .populate({ path: "style", populate: { path: "techPacks" } })
       .populate({
         path: "fabric",
         populate: {

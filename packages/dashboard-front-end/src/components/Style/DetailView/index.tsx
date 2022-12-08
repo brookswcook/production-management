@@ -1,51 +1,21 @@
-import { Box, Button, Grid, LinearProgress, Stack } from "@mui/material";
-import { Fragment, useEffect, useState } from "react";
+import { Box, Grid, LinearProgress, Stack } from "@mui/material";
+import { Fragment, ReactElement } from "react";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import {
-  Style,
-  useStyleQuery,
-  useTechPackLinksLazyQuery,
-} from "../../../generated/graphql";
+import { StyleFieldsFragment, useStyleQuery } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
 import { DetailView } from "../../Common/DetailView";
 import { DetailViewHeaderTitle } from "../../Common/DetailViewHeaderTitle";
+import { DetailViewSection } from "../../Common/DetailViewSection";
+import { FileGrid } from "../../FileGrid";
 import { BooleanProperty, TextProperty } from "../../Properties";
 import { LinkProperty } from "../../Properties/LinkProperty";
 import { UploadTechPackPopperButton } from "../../TechPackForm";
 
 function StyleHeaderSection({
-  style: {
-    code,
-    name: title,
-    techPackUploaded,
-    techPackFileNames,
-    productCodes,
-  },
+  style: { code, name: title, techPackUploaded, productCodes },
 }: {
-  style: Style;
-}) {
-  const [getTechPackLinks] = useTechPackLinksLazyQuery();
-  const [techPackLinks, setTechPackLinks] = useState<string[]>(["#"]);
-
-  useEffect(() => {
-    void generateTechPackLinks();
-  }, [techPackFileNames]);
-
-  async function generateTechPackLinks() {
-    if (techPackFileNames.length > 0) {
-      try {
-        const { data } = await getTechPackLinks({
-          variables: { fileNames: techPackFileNames },
-        });
-        if (data == null) return;
-        setTechPackLinks(data.techPackLinks);
-      } catch (error) {
-        toast.error((error as Error).message);
-      }
-    }
-  }
-
+  style: StyleFieldsFragment;
+}): ReactElement {
   return (
     <Fragment>
       <DetailViewHeaderTitle title={`${title} style`} />
@@ -59,21 +29,6 @@ function StyleHeaderSection({
                 value={techPackUploaded}
               />
             </Grid>
-            {techPackUploaded &&
-              techPackLinks.map((techPackLink, index) => {
-                return (
-                  <Grid key={index} item>
-                    <Button
-                      href={techPackLink}
-                      target="_blank"
-                      variant={"contained"}
-                      size={"small"}
-                    >
-                      Download tech pack
-                    </Button>
-                  </Grid>
-                );
-              })}
             <RequireRole authorizedRoles={["Admin", "VChapman"]}>
               <Grid item>
                 <UploadTechPackPopperButton
@@ -101,11 +56,7 @@ function StyleHeaderSection({
   );
 }
 
-function StyleBottomSection() {
-  return <Fragment></Fragment>;
-}
-
-export function StyleDetail() {
+export function StyleDetail(): ReactElement {
   const { code = "" } = useParams();
   const { data, error, loading } = useStyleQuery({
     variables: { code },
@@ -118,25 +69,19 @@ export function StyleDetail() {
       </Box>
     );
   if (data == null || error)
-    return <Fragment>No data or unexpected error has happened!</Fragment>;
+    return (
+      <Fragment>
+        There's no data to show or unexpected error has happened!
+      </Fragment>
+    );
 
-  const { name, techPackUploaded, techPackFileNames, productCodes } =
-    data.style;
+  const { id, techPacks } = data.style;
 
   return (
-    <DetailView
-      headerSections={
-        <StyleHeaderSection
-          style={{
-            code,
-            name,
-            techPackUploaded: Boolean(techPackUploaded),
-            techPackFileNames,
-            productCodes,
-          }}
-        />
-      }
-      bottomSections={<StyleBottomSection />}
-    ></DetailView>
+    <DetailView headerSections={<StyleHeaderSection style={data.style} />}>
+      <DetailViewSection headerTitle="Tech pack:">
+        <FileGrid fileType="tech-pack" parentID={id} files={techPacks} />
+      </DetailViewSection>
+    </DetailView>
   );
 }

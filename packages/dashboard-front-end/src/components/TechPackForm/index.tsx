@@ -5,14 +5,18 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { FormEvent, useState } from "react";
+import { FormEvent, ReactElement, useState } from "react";
 import { toast } from "react-toastify";
 import { useUploadTechPackMutation } from "../../generated/graphql";
 import FilePreload from "../FilePreload";
 import { PopperButton } from "../PopperButton";
 import { OverridableStringUnion } from "@mui/types";
 
-export function UploadTechPackForm({ styleCode: code }: { styleCode: string }) {
+export function UploadTechPackForm({
+  styleCode: code,
+}: {
+  styleCode: string;
+}): ReactElement {
   const [techPackFiles, setTechPackFiles] = useState<File[]>();
   const mutationOptions = {
     refetchQueries: ["Style"],
@@ -75,7 +79,7 @@ export function UploadTechPackPopperButton({
     "text" | "outlined" | "contained",
     ButtonPropsVariantOverrides
   >;
-}) {
+}): ReactElement {
   return (
     <PopperButton
       variant={variant}

@@ -25,7 +25,7 @@ export function PopperButton({
   >;
   disabled?: boolean;
   popperCloseCounter?: number;
-}) {
+}): ReactElement {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const [open, setOpen] = useState<boolean>(false);

@@ -1,12 +1,13 @@
 import { Container, Box, Grid } from "@mui/material";
+import { ReactElement } from "react";
 
 export function DetailView({
   headerSections,
-  bottomSections,
+  children,
 }: {
   headerSections: JSX.Element[] | JSX.Element;
-  bottomSections: JSX.Element[] | JSX.Element;
-}) {
+  children: JSX.Element[] | JSX.Element;
+}): ReactElement {
   return (
     <Container maxWidth="xl">
       <Box sx={{ p: 1 }}>
@@ -22,7 +23,7 @@ export function DetailView({
           {headerSections}
         </Grid>
       </Box>
-      {bottomSections}
+      {children}
     </Container>
   );
 }

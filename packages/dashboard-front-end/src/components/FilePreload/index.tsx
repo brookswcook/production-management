@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { ChangeEvent } from "react";
+import { ChangeEvent, ReactElement } from "react";
 
 export default function FilePreload({
   label,
@@ -13,7 +13,7 @@ export default function FilePreload({
   helperText?: string;
   multiple?: boolean;
   required?: boolean;
-}) {
+}): ReactElement {
   function onInputChange({
     target: {
       files: filesList,

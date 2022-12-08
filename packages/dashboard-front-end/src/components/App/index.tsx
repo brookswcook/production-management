@@ -38,7 +38,7 @@ import FabricGrid from "../FabricGrid";
 import { FabricDetail } from "../FabricDetail";
 import { StyleDetail, StyleList } from "../Style";
 
-function Dashboard({ children }: { children: ReactElement }) {
+function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const { signOut } = useContext(AuthContext);
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -206,7 +206,7 @@ function MenuItemLink({
   onClick?: MouseEventHandler<HTMLLIElement>;
   name: string;
   to: To;
-}) {
+}): ReactElement {
   return (
     <MenuItem key={name.toLowerCase()} onClick={onClick}>
       <Typography textAlign="center">
@@ -268,7 +268,7 @@ function ApolloApp() {
   );
 }
 
-export default function App() {
+export default function App(): ReactElement {
   const theme = createTheme();
   return (
     <Fragment>

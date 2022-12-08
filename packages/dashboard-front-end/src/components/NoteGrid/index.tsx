@@ -13,7 +13,7 @@ import {
   User,
 } from "../../generated/graphql";
 import { PopperButton } from "../PopperButton";
-import { FormEvent, useState } from "react";
+import { FormEvent, ReactElement, useState } from "react";
 import { toast } from "react-toastify";
 import { NoteType } from "dashboard-core";
 import { ApolloError } from "@apollo/client";
@@ -27,7 +27,7 @@ export default function NoteGrid({
   parentId: string;
   notes: Note[];
   type: NoteType;
-}) {
+}): ReactElement {
   const columns: GridColDef<Note>[] = [
     {
       field: "text",

@@ -6,3 +6,4 @@ export type UserPayload = {
   role: UserRole;
   firstName: string;
 };
+export type FileType = "tech-pack" | "print" | "note-image";

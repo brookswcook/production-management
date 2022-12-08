@@ -3,6 +3,7 @@ import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { FileType } from "dashboard-core";
 import { FileFieldsFragment } from "../../generated/graphql";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+import { ReactElement } from "react";
 
 export function FileGrid({
   files,
@@ -10,7 +11,7 @@ export function FileGrid({
   parentID: string;
   fileType: FileType;
   files: FileFieldsFragment[];
-}) {
+}): ReactElement {
   const columns: GridColDef<FileFieldsFragment>[] = [
     {
       field: "createdAt",

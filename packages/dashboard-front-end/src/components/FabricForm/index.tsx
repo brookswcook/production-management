@@ -17,7 +17,11 @@ import {
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
 
-export function CreateFabricForm({ footerEl }: { footerEl?: ReactElement }) {
+export function CreateFabricForm({
+  footerEl,
+}: {
+  footerEl?: ReactElement;
+}): ReactElement {
   const [selectedColorType, setSelectedColorType] = useState<string>("");
   const [printFiles, setPrintFiles] = useState<File[] | null>(null);
   const [newFabricMutation] = useCreateFabricMutation({
@@ -135,7 +139,7 @@ export function CreateFabricPopperButton({
   disabled = false,
 }: {
   disabled?: boolean;
-}) {
+}): ReactElement {
   const [closeCount, setCloseCount] = useState<number>(0);
   function cancel() {
     setCloseCount(closeCount + 1);

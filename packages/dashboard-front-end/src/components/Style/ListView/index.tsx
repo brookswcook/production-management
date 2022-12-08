@@ -8,7 +8,7 @@ import {
   GridToolbarExport,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { Fragment } from "react";
+import { Fragment, ReactElement } from "react";
 import { Link } from "react-router-dom";
 import {
   StyleFieldsFragment,
@@ -17,7 +17,7 @@ import {
 import RequireRole from "../../Auth/RequireRole";
 import { CreateStylePopperButton } from "../Form";
 
-export function StyleList() {
+export function StyleList(): ReactElement {
   const { data, loading, error } = useStylesQuery({});
   const rows: StyleFieldsFragment[] = data?.styles ?? [];
 

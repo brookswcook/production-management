@@ -7,7 +7,14 @@ import {
   GridToolbarContainer,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { ChangeEvent, FormEvent, Fragment, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  Fragment,
+  ReactElement,
+  useEffect,
+  useState,
+} from "react";
 import { toast } from "react-toastify";
 import {
   CreateNoteInput,
@@ -36,7 +43,7 @@ export default function SampleGrid({
   parentCode: string;
   sampleType: "fit" | "fabric";
   samples: Omit<Sample, "typename">[];
-}) {
+}): ReactElement {
   const refetchPolicy = {
     refetchQueries: ["Fabric"],
   };
@@ -128,7 +135,7 @@ export default function SampleGrid({
     </Box>
   );
 
-  function CustomToolbar() {
+  function CustomToolbar(): ReactElement {
     const [rejectionText, setRejectionText] = useState<string>("");
     const [imageFiles, setImageFiles] = useState<FileList>();
     const [noteFileLink, setNoteFileLink] = useState<string>();

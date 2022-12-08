@@ -1,5 +1,5 @@
 import { decodeToken, UserPayload } from "dashboard-core";
-import { createContext, useEffect, useState } from "react";
+import { createContext, ReactElement, useEffect, useState } from "react";
 import useToken from "./useToken";
 
 interface AuthContextType {
@@ -16,7 +16,11 @@ export const AuthContext = createContext<AuthContextType>({
   signOut() {},
 });
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}): ReactElement {
   const { token, setToken } = useToken();
   const [decodedToken, setDecodedToken] = useState<UserPayload | null>(null);
 
@@ -27,7 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [token]);
 
-  function signIn({ token }: { token: string | null }) {
+  function signIn({ token }: { token: string | null }): void {
     setToken(token);
   }
 

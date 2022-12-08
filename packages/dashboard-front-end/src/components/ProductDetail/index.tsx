@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { NoteType } from "dashboard-core";
-import { Fragment } from "react";
+import { Fragment, ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import {
   ProductFieldsFragment,
@@ -22,7 +22,7 @@ import { DetailViewSection } from "../Common/DetailViewSection";
 import { TextProperty } from "../Properties";
 import { ObjectProperty } from "../Properties/ObjectProperty";
 
-export default function ProductDetail() {
+export default function ProductDetail(): ReactElement {
   const { code = "" } = useParams();
   const { data, error, loading } = useProductQuery({
     variables: { code },

@@ -1,4 +1,5 @@
 import { Typography } from "@mui/material";
+import { ReactElement } from "react";
 
 export function TextProperty({
   title,
@@ -8,7 +9,7 @@ export function TextProperty({
   title: string;
   value: string;
   vertical?: boolean;
-}) {
+}): ReactElement {
   return (
     <Typography component={vertical ? "div" : "span"} variant="subtitle2">
       {title}

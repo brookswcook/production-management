@@ -1,4 +1,5 @@
 import { Container, Box, Grid } from "@mui/material";
+import { ReactElement } from "react";
 
 export function DetailView({
   headerSections,
@@ -6,7 +7,7 @@ export function DetailView({
 }: {
   headerSections: JSX.Element[] | JSX.Element;
   children: JSX.Element[] | JSX.Element;
-}) {
+}): ReactElement {
   return (
     <Container maxWidth="xl">
       <Box sx={{ p: 1 }}>

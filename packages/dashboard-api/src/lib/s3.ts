@@ -19,7 +19,7 @@ export async function upload({
     await s3Client.send(
       new PutObjectCommand({
         Bucket: config.s3.bucketName,
-        Key: fileName,
+        Key: key,
         Body,
         ContentLength,
       })

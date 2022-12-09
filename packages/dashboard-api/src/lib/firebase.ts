@@ -39,3 +39,21 @@ export async function verifyToken(token: string): Promise<DecodedIdToken> {
     throw new Error("Firebase token verification was not successful");
   }
 }
+
+export async function createUser({ email, emailVerified = false }: CreateUser) {
+  try {
+    const result = await getAuthService().createUser({ email, emailVerified });
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error(`Firebase new user creation: ${error.message}`);
+      throw new Error(error.message);
+    }
+    throw new Error("Firebase new user creation was not successful");
+  }
+}
+
+export type CreateUser = {
+  email: string;
+  emailVerified?: boolean;
+};

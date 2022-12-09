@@ -1,5 +1,5 @@
 {
-  "name": "control-app",
+  "name": "production-management-app",
   "private": true,
   "version": "1.0.0",
   "description": "A set of tools to control production schedule",

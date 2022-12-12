@@ -32,7 +32,6 @@ export function SignInWithEmailLink(): ReactElement {
   }, []);
 
   async function handleSignInWithEmailLink() {
-    console.log(authEmail);
     try {
       const userCredential = await signInWithEmailLink(
         auth,

@@ -1,16 +1,80 @@
-import { ApolloError, AuthenticationError } from "apollo-server-core";
+import {
+  ApolloError,
+  AuthenticationError,
+  UserInputError,
+} from "apollo-server-core";
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
-import { LoginInput } from "./user.input";
+import {
+  CreateUserInput,
+  DeleteUserInput,
+  LoginInput,
+  UpdateUserInput,
+} from "./user.input";
 import { LoginResult, User, UserModel } from "./user.model";
 import { signUserToken } from "../../lib/jwt";
-import { verifyToken } from "../../lib/firebase";
+import {
+  createUser as createFirebaseUser,
+  updateUser as updateFirebaseUser,
+  deleteUser as deleteFirebaseUser,
+  verifyToken,
+} from "../../lib/firebase";
 
 @Resolver(User)
 export class UserResolver {
-  @Authorized()
+  @Authorized(["Admin"])
   @Query(() => [User])
   async users() {
     return UserModel.find().exec();
+  }
+
+  @Authorized(["Admin"])
+  @Mutation(() => User)
+  async createUser(
+    @Arg("data") { email, firstName, lastName, role }: CreateUserInput
+  ): Promise<User> {
+    try {
+      const { uid: firebaseUID } = await createFirebaseUser({ email });
+      return new UserModel({
+        email,
+        firebaseUID,
+        firstName,
+        lastName,
+        role,
+      }).save();
+    } catch (error) {
+      throw new UserInputError((error as Error).message);
+    }
+  }
+
+  @Authorized(["Admin"])
+  @Mutation(() => User)
+  async updateUser(
+    @Arg("data") { email, ...props }: UpdateUserInput
+  ): Promise<User> {
+    try {
+      const apiUser = await UserModel.getUserByEmailOrFail(email);
+      Object.assign(apiUser, props);
+      const savedApiUser = await apiUser.save();
+      props.disabled != null &&
+        (await updateFirebaseUser(savedApiUser.firebaseUID, {
+          disabled: props.disabled,
+        }));
+      return savedApiUser;
+    } catch (error) {
+      throw new UserInputError((error as Error).message);
+    }
+  }
+
+  @Authorized(["Admin"])
+  @Mutation(() => Boolean)
+  async deleteUser(@Arg("data") { email }: DeleteUserInput): Promise<boolean> {
+    try {
+      await UserModel.findOneAndUpdate({ email }, { deleted: true });
+      await deleteFirebaseUser(email);
+      return true;
+    } catch (error) {
+      throw new UserInputError((error as Error).message);
+    }
   }
 
   @Mutation(() => LoginResult)

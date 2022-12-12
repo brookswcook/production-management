@@ -16,6 +16,10 @@ export class User extends TimeStamps {
 
   @Field()
   @Property({ unique: true, required: true })
+  firebaseUID!: string;
+
+  @Field()
+  @Property({ unique: true, required: true })
   email!: string;
 
   @Field()
@@ -33,6 +37,14 @@ export class User extends TimeStamps {
     },
   })
   fullName!: string;
+
+  @Field()
+  @Property({ required: true, default: false })
+  disabled!: boolean;
+
+  @Field()
+  @Property({ required: true, default: false })
+  deleted!: boolean;
 
   @Field()
   @Property({ required: true })

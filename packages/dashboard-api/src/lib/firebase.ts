@@ -1,5 +1,6 @@
 import firebaseAdmin from "firebase-admin";
 import { Auth } from "firebase-admin/lib/auth/auth";
+import { UpdateRequest } from "firebase-admin/lib/auth/auth-config";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import { UserRecord } from "firebase-admin/lib/auth/user-record";
 import config from "../config";
@@ -46,14 +47,45 @@ export async function createUser({
   emailVerified = false,
 }: CreateUser): Promise<UserRecord> {
   try {
-    const result = await getAuthService().createUser({ email, emailVerified });
-    return result;
+    return await getAuthService().createUser({
+      email,
+      emailVerified,
+    });
   } catch (error) {
     if (error instanceof Error) {
       logger.error(`Firebase new user creation: ${error.message}`);
       throw new Error(error.message);
     }
     throw new Error("Firebase new user creation was not successful");
+  }
+}
+
+export async function updateUser(
+  uid: string,
+  props: UpdateRequest
+): Promise<UserRecord> {
+  try {
+    return await getAuthService().updateUser(uid, props);
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error(`Firebase user update: ${error.message}`);
+      throw new Error(error.message);
+    }
+    throw new Error("Firebase user update was not successful");
+  }
+}
+
+export async function deleteUser(email: string): Promise<void> {
+  try {
+    const { uid } = await getAuthService().getUserByEmail(email);
+    console.log(uid);
+    return await getAuthService().deleteUser(uid);
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error(`Firebase user delete: ${error.message}`);
+      throw new Error(error.message);
+    }
+    throw new Error("Firebase user detele was not successful");
   }
 }
 

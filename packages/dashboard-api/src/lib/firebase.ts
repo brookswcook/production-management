@@ -1,6 +1,7 @@
 import firebaseAdmin from "firebase-admin";
 import { Auth } from "firebase-admin/lib/auth/auth";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
+import { UserRecord } from "firebase-admin/lib/auth/user-record";
 import config from "../config";
 import logger from "./logger";
 
@@ -40,7 +41,10 @@ export async function verifyToken(token: string): Promise<DecodedIdToken> {
   }
 }
 
-export async function createUser({ email, emailVerified = false }: CreateUser) {
+export async function createUser({
+  email,
+  emailVerified = false,
+}: CreateUser): Promise<UserRecord> {
   try {
     const result = await getAuthService().createUser({ email, emailVerified });
     return result;

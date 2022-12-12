@@ -78,7 +78,6 @@ export async function updateUser(
 export async function deleteUser(email: string): Promise<void> {
   try {
     const { uid } = await getAuthService().getUserByEmail(email);
-    console.log(uid);
     return await getAuthService().deleteUser(uid);
   } catch (error) {
     if (error instanceof Error) {

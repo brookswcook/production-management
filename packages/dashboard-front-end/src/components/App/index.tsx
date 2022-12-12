@@ -37,6 +37,7 @@ import RequireRole from "../Auth/RequireRole";
 import FabricGrid from "../FabricGrid";
 import { FabricDetail } from "../FabricDetail";
 import { StyleDetail, StyleList } from "../Style";
+import { SignInWithEmailLink } from "../Auth/SignInWithEmail";
 
 function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const { signOut } = useContext(AuthContext);
@@ -228,6 +229,10 @@ function ApolloApp() {
         <Router>
           <Routes>
             <Route path="/signin" element={<SignIn />} />
+            <Route
+              path="/singinwithemaillink"
+              element={<SignInWithEmailLink />}
+            />
             <Route
               path="/"
               element={<Dashboard children={<ProductGrid />} />}

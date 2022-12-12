@@ -8,10 +8,23 @@ const {
   REACT_APP_FIREBASE_APP_ID,
   NODE_ENV,
   REACT_APP_USE_AUTH_EMULATOR,
+  REACT_APP_URI,
 } = process.env;
+
+if (
+  REACT_APP_URI == null ||
+  REACT_APP_FIREBASE_API_KEY == null ||
+  REACT_APP_FIREBASE_AUTH_DOMAIN == null ||
+  REACT_APP_FIREBASE_PROJECT_ID == null ||
+  REACT_APP_FIREBASE_STORAGE_BUCKET == null ||
+  REACT_APP_FIREBASE_MESSAGING_SENDER_ID == null ||
+  REACT_APP_FIREBASE_APP_ID == null
+)
+  throw new Error("Required env variables are not set");
 
 export const config = {
   apolloURI: REACT_APP_APOLLO_SERVER_URI,
+  appURI: REACT_APP_URI,
   firebase: {
     apiKey: REACT_APP_FIREBASE_API_KEY,
     authDomain: REACT_APP_FIREBASE_AUTH_DOMAIN,

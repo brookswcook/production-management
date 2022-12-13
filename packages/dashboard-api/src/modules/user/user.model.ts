@@ -14,6 +14,7 @@ export class User extends TimeStamps {
   @Field()
   id?: string;
 
+  // TODO: add firebaseUID field resolver instead;
   @Field()
   @Property({ unique: true, required: true })
   firebaseUID!: string;
@@ -42,6 +43,7 @@ export class User extends TimeStamps {
   @Property({ required: true, default: false })
   disabled!: boolean;
 
+  // TODO: to think about how soft delete can be extended on other entities
   @Field()
   @Property({ required: true, default: false })
   deleted!: boolean;
@@ -52,9 +54,11 @@ export class User extends TimeStamps {
 
   static async getUserByEmailOrFail(
     this: ReturnModelType<typeof User>,
-    email: string
+    email: string,
+    deleted = false,
+    disabled = false
   ) {
-    const user = await this.findOne({ email }).exec();
+    const user = await this.findOne({ email, deleted, disabled }).exec();
     if (user == null) throw new Error("User is not found");
     return user;
   }

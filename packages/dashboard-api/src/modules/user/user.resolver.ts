@@ -24,7 +24,7 @@ export class UserResolver {
   @Authorized(["Admin"])
   @Query(() => [User])
   async users() {
-    return UserModel.find().exec();
+    return UserModel.find({ deleted: false }).exec();
   }
 
   @Authorized(["Admin"])

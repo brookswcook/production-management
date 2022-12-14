@@ -38,6 +38,7 @@ import FabricGrid from "../FabricGrid";
 import { FabricDetail } from "../FabricDetail";
 import { StyleDetail, StyleList } from "../Style";
 import { SignInWithEmailLink } from "../Auth/SignInWithEmail";
+import { UserList } from "../User";
 
 function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const { signOut } = useContext(AuthContext);
@@ -128,6 +129,13 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
                         to="/oplog"
                       />
                     </RequireRole>
+                    <RequireRole authorizedRoles={["Admin"]}>
+                      <MenuItemLink
+                        onClick={handleCloseNavMenu}
+                        name="Users"
+                        to="/users"
+                      />
+                    </RequireRole>
                   </Menu>
                 </Grid>
                 <Grid item container alignItems={"center"} gap={3} xs={10}>
@@ -161,6 +169,16 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
                           style={{ textDecoration: "none", color: "white" }}
                         >
                           Operation logs
+                        </Link>
+                      </Button>
+                    </RequireRole>
+                    <RequireRole authorizedRoles={["Admin"]}>
+                      <Button variant="text" size="small">
+                        <Link
+                          to={`/users`}
+                          style={{ textDecoration: "none", color: "white" }}
+                        >
+                          Users
                         </Link>
                       </Button>
                     </RequireRole>
@@ -260,6 +278,10 @@ function ApolloApp() {
             <Route
               path="/styles/:code"
               element={<Dashboard children={<StyleDetail />} />}
+            />
+            <Route
+              path="/users"
+              element={<Dashboard children={<UserList />} />}
             />
             <Route
               path="/oplog"

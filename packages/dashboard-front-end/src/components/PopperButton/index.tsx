@@ -1,4 +1,4 @@
-import { Fragment, MouseEvent, useEffect, useState, ReactElement } from "react";
+import { Fragment, useEffect, useState, ReactElement, useRef } from "react";
 import {
   Button,
   ButtonPropsVariantOverrides,
@@ -14,7 +14,7 @@ export function PopperButton({
   children,
   variant = "text",
   disabled,
-  popperCloseCounter,
+  closeSwitch,
 }: {
   icon?: ReactElement;
   title: string;
@@ -24,23 +24,14 @@ export function PopperButton({
     ButtonPropsVariantOverrides
   >;
   disabled?: boolean;
-  popperCloseCounter?: number;
+  closeSwitch?: number;
 }): ReactElement {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
+  const buttonRef = useRef<null | HTMLButtonElement>(null);
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    setOpen(Boolean(anchorEl));
-  }, [anchorEl]);
-
-  useEffect(() => {
     setOpen(false);
-  }, [popperCloseCounter]);
-
-  function togglePopper(event: MouseEvent<HTMLElement>) {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  }
+  }, [closeSwitch]);
 
   return (
     <Fragment>
@@ -48,12 +39,17 @@ export function PopperButton({
         disabled={disabled}
         variant={variant}
         size="small"
-        onClick={togglePopper}
+        onClick={() => setOpen(!open)}
+        ref={buttonRef}
       >
         {icon ? icon : <Fragment />}
         {title}
       </Button>
-      <Popper open={open} anchorEl={anchorEl} placement="bottom-start">
+      <Popper
+        open={open}
+        anchorEl={buttonRef?.current}
+        placement="bottom-start"
+      >
         <ClickAwayListener onClickAway={() => setOpen(false)}>
           <Paper
             elevation={9}

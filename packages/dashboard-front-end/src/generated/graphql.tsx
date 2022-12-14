@@ -49,6 +49,17 @@ export type CreateStyleInput = {
   techPack?: InputMaybe<Array<FileUploadInput>>;
 };
 
+export type CreateUserInput = {
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  role: Scalars['String'];
+};
+
+export type DeleteUserInput = {
+  email: Scalars['String'];
+};
+
 export type Fabric = {
   __typename?: 'Fabric';
   code: Scalars['String'];
@@ -137,6 +148,8 @@ export type Mutation = {
   createNote: Note;
   createProduct: Product;
   createStyle: Style;
+  createUser: User;
+  deleteUser: Scalars['Boolean'];
   login: LoginResult;
   rejectFabricSample: FabricSample;
   rejectFitSample: FitSample;
@@ -144,6 +157,7 @@ export type Mutation = {
   sendFitSample: FitSample;
   startFabricProduction: Product;
   startProduction: Product;
+  updateUser: User;
   uploadPrint: Fabric;
   uploadTechPack: Style;
 };
@@ -179,6 +193,16 @@ export type MutationCreateStyleArgs = {
 };
 
 
+export type MutationCreateUserArgs = {
+  data: CreateUserInput;
+};
+
+
+export type MutationDeleteUserArgs = {
+  data: DeleteUserInput;
+};
+
+
 export type MutationLoginArgs = {
   data: LoginInput;
 };
@@ -211,6 +235,11 @@ export type MutationStartFabricProductionArgs = {
 
 export type MutationStartProductionArgs = {
   data: StartProductionInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  data: UpdateUserInput;
 };
 
 
@@ -308,7 +337,6 @@ export type Query = {
   products: Array<Product>;
   style: Style;
   styles: Array<Style>;
-  techPackLinks: Array<Scalars['String']>;
   users: Array<User>;
 };
 
@@ -340,11 +368,6 @@ export type QueryProductsArgs = {
 
 export type QueryStyleArgs = {
   code: Scalars['String'];
-};
-
-
-export type QueryTechPackLinksArgs = {
-  uploadingKeys: Array<Scalars['String']>;
 };
 
 export type Sample = {
@@ -387,6 +410,12 @@ export type UniqueSampleInput = {
   sku: Scalars['String'];
 };
 
+export type UpdateUserInput = {
+  disabled: Scalars['Boolean'];
+  email: Scalars['String'];
+  role: Scalars['String'];
+};
+
 export type UploadPrintInput = {
   code: Scalars['String'];
   print: FileUploadInput;
@@ -399,18 +428,16 @@ export type UploadTechPackInput = {
 
 export type User = {
   __typename?: 'User';
+  deleted: Scalars['Boolean'];
+  disabled: Scalars['Boolean'];
   email: Scalars['String'];
+  firebaseUID: Scalars['String'];
   firstName: Scalars['String'];
   fullName: Scalars['String'];
   id: Scalars['String'];
   lastName: Scalars['String'];
   role: Scalars['String'];
 };
-
-export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', email: string }> };
 
 export type LoginMutationVariables = Exact<{
   data: LoginInput;
@@ -569,12 +596,19 @@ export type UploadTechPackMutationVariables = Exact<{
 
 export type UploadTechPackMutation = { __typename?: 'Mutation', uploadTechPack: { __typename?: 'Style', code: string } };
 
-export type TechPackLinksQueryVariables = Exact<{
-  uploadingKeys: Array<Scalars['String']> | Scalars['String'];
+export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean }> };
+
+export type UserListFieldsFragment = { __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean };
+
+export type CreateUserMutationVariables = Exact<{
+  data: CreateUserInput;
 }>;
 
 
-export type TechPackLinksQuery = { __typename?: 'Query', techPackLinks: Array<string> };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', email: string, role: string } };
 
 export const NoteFieldsFragmentDoc = gql`
     fragment noteFields on Note {
@@ -749,40 +783,15 @@ export const StyleFieldsFragmentDoc = gql`
   productCodes
 }
     ${FileFieldsFragmentDoc}`;
-export const UsersDocument = gql`
-    query Users {
-  users {
-    email
-  }
+export const UserListFieldsFragmentDoc = gql`
+    fragment UserListFields on User {
+  id
+  email
+  fullName
+  role
+  disabled
 }
     `;
-
-/**
- * __useUsersQuery__
- *
- * To run a query within a React component, call `useUsersQuery` and pass it any options that fit your needs.
- * When your component renders, `useUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUsersQuery({
- *   variables: {
- *   },
- * });
- */
-export function useUsersQuery(baseOptions?: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
-      }
-export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
-        }
-export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
-export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
-export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($data: LoginInput!) {
   login(data: $data) {
@@ -1494,36 +1503,71 @@ export function useUploadTechPackMutation(baseOptions?: Apollo.MutationHookOptio
 export type UploadTechPackMutationHookResult = ReturnType<typeof useUploadTechPackMutation>;
 export type UploadTechPackMutationResult = Apollo.MutationResult<UploadTechPackMutation>;
 export type UploadTechPackMutationOptions = Apollo.BaseMutationOptions<UploadTechPackMutation, UploadTechPackMutationVariables>;
-export const TechPackLinksDocument = gql`
-    query TechPackLinks($uploadingKeys: [String!]!) {
-  techPackLinks(uploadingKeys: $uploadingKeys)
+export const UsersDocument = gql`
+    query Users {
+  users {
+    ...UserListFields
+  }
 }
-    `;
+    ${UserListFieldsFragmentDoc}`;
 
 /**
- * __useTechPackLinksQuery__
+ * __useUsersQuery__
  *
- * To run a query within a React component, call `useTechPackLinksQuery` and pass it any options that fit your needs.
- * When your component renders, `useTechPackLinksQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useTechPackLinksQuery({
+ * const { data, loading, error } = useUsersQuery({
  *   variables: {
- *      uploadingKeys: // value for 'uploadingKeys'
  *   },
  * });
  */
-export function useTechPackLinksQuery(baseOptions: Apollo.QueryHookOptions<TechPackLinksQuery, TechPackLinksQueryVariables>) {
+export function useUsersQuery(baseOptions?: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TechPackLinksQuery, TechPackLinksQueryVariables>(TechPackLinksDocument, options);
+        return Apollo.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
       }
-export function useTechPackLinksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TechPackLinksQuery, TechPackLinksQueryVariables>) {
+export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TechPackLinksQuery, TechPackLinksQueryVariables>(TechPackLinksDocument, options);
+          return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
         }
-export type TechPackLinksQueryHookResult = ReturnType<typeof useTechPackLinksQuery>;
-export type TechPackLinksLazyQueryHookResult = ReturnType<typeof useTechPackLinksLazyQuery>;
-export type TechPackLinksQueryResult = Apollo.QueryResult<TechPackLinksQuery, TechPackLinksQueryVariables>;
+export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
+export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
+export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
+export const CreateUserDocument = gql`
+    mutation CreateUser($data: CreateUserInput!) {
+  createUser(data: $data) {
+    email
+    role
+  }
+}
+    `;
+export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
+
+/**
+ * __useCreateUserMutation__
+ *
+ * To run a mutation, you first call `useCreateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserMutation, { data, loading, error }] = useCreateUserMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument, options);
+      }
+export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
+export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
+export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;

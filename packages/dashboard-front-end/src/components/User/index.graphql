@@ -1,0 +1,20 @@
+query Users {
+  users {
+    ...UserListFields
+  }
+}
+
+fragment UserListFields on User {
+  id
+  email
+  fullName
+  role
+  disabled
+}
+
+mutation CreateUser($data: CreateUserInput!) {
+  createUser(data: $data) {
+    email
+    role
+  }
+}

@@ -100,20 +100,21 @@ export function CreateStylePopperButton({
 }: {
   disabled?: boolean;
 }): ReactElement {
-  const [closeCount, setCloseCount] = useState<number>(0);
-  function cancel() {
-    setCloseCount(closeCount + 1);
+  const [closeSwitch, setCloseSwitch] = useState(0);
+  function closePopper() {
+    setCloseSwitch(closeSwitch + 1);
   }
+
   return (
     <PopperButton
       icon={<AddIcon />}
       title={"Add Style"}
       disabled={disabled}
-      popperCloseCounter={closeCount}
+      closeSwitch={closeSwitch}
     >
       <CreateStyleForm
         footerEl={
-          <Button variant="contained" onClick={cancel}>
+          <Button variant="contained" onClick={closePopper}>
             Cancel
           </Button>
         }

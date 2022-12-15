@@ -1,6 +1,5 @@
 import { Context } from "apollo-server-core";
 import { AuthChecker } from "type-graphql";
-import { compare } from "bcrypt";
 import { ResolverContext } from "./graphql";
 import { authorizeByRole } from "dashboard-core";
 
@@ -15,7 +14,3 @@ export const authChecker: AuthChecker<Context<ResolverContext>> = (
   } = context;
   return authorizeByRole(userRole, authRuleRoles);
 };
-
-export function isPasswordCorrect(data: string, encrypted: string) {
-  return compare(data, encrypted);
-}

@@ -2,19 +2,25 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { useNavigate } from "react-router-dom";
-import { ReactElement, useContext } from "react";
+import { ReactElement, useContext, useState } from "react";
 import { AuthContext } from "./AuthProvider";
-import { LoginResult, useLoginMutation } from "../../generated/graphql";
 import { toast } from "react-toastify";
+import {
+  signInWithEmailAndPassword,
+  sendSignInLinkToEmail,
+  sendEmailVerification,
+} from "firebase/auth";
+import { auth } from "./firebaseAuth";
+import { FirebaseError } from "firebase/app";
+import { Divider } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { LoginResult, useLoginMutation } from "../../generated/graphql";
+import { config } from "../../config";
 
 type JSONValue = string | number | { [x: string]: JSONValue };
 
@@ -39,28 +45,48 @@ function Copyright(props: { [x: string]: JSONValue }): ReactElement {
 export default function SignIn(): ReactElement {
   const navigate = useNavigate();
   const { signIn } = useContext(AuthContext);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [authType, setAuthType] = useState<string>("");
   const [loginMutation] = useLoginMutation();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     try {
       event.preventDefault();
-      const data = new FormData(event.currentTarget);
-
-      const email = data.get("email") as string;
-      const password = data.get("password") as string;
-
-      const { data: loginData } = await loginMutation({
-        variables: { data: { email, password } },
-      });
-
-      const { token } = (loginData?.login as LoginResult) ?? {
-        token: null,
-      };
-
-      signIn({ token });
-      navigate("/", { replace: true });
+      if (authType === "password") {
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        if (!userCredential.user.emailVerified) {
+          toast.error(
+            "User email is not verified. Verification email was sent"
+          );
+          return await sendEmailVerification(userCredential.user);
+        }
+        const firebaseToken = await userCredential.user.getIdToken(true);
+        const { data: loginData } = await loginMutation({
+          variables: { data: { token: firebaseToken } },
+        });
+        const { token } = (loginData?.login as LoginResult) ?? {
+          token: null,
+        };
+        signIn({ token });
+        navigate("/", { replace: true });
+      } else if (authType === "passwordless") {
+        const actionCodeSettings = {
+          url: `${config.appURI}/singinwithemaillink`,
+          handleCodeInApp: true,
+        };
+        await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+        window.localStorage.setItem("emailForSignIn", email);
+        toast.info(`Verification link was sent to ${email}`);
+      }
     } catch (error) {
-      toast.error("Login failed");
+      if (error instanceof FirebaseError) toast.error(error.code);
+      else if (error instanceof Error) toast.error(error.message);
+      else toast.error("Unknown error");
     }
   }
 
@@ -81,7 +107,7 @@ export default function SignIn(): ReactElement {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
@@ -90,30 +116,47 @@ export default function SignIn(): ReactElement {
             label="Email Address"
             name="email"
             autoComplete="email"
+            type={"email"}
+            onChange={({ target: { value } }) => {
+              setEmail(value);
+            }}
           />
           <TextField
             margin="normal"
-            required
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={"password"}
             id="password"
             autoComplete="current-password"
+            onChange={({ target: { value } }) => {
+              setPassword(value);
+            }}
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
-          />
+          /> */}
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            onClick={() => setAuthType("password")}
           >
             Sign In
           </Button>
-          <Grid container>
+          <Divider>or</Divider>
+          <Button
+            type="submit"
+            fullWidth
+            variant="outlined"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={() => setAuthType("passwordless")}
+          >
+            Sign in with verification link
+          </Button>
+          {/* <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
@@ -124,10 +167,10 @@ export default function SignIn(): ReactElement {
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Box>
       </Box>
-      {<Copyright sx={{ mt: 8, mb: 4 }} />}
+      {/* {<Copyright sx={{ mt: 8, mb: 4 }} />} */}
     </Container>
   );
 }

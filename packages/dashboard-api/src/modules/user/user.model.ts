@@ -18,9 +18,6 @@ export class User extends TimeStamps {
   @Property({ unique: true, required: true })
   email!: string;
 
-  @Property({ required: true })
-  password!: string;
-
   @Field()
   @Property({ required: true })
   firstName!: string;
@@ -38,15 +35,26 @@ export class User extends TimeStamps {
   fullName!: string;
 
   @Field()
+  @Property({ required: true, default: false })
+  disabled!: boolean;
+
+  // TODO: to think about how soft delete can be extended on other entities
+  @Field()
+  @Property({ required: true, default: false })
+  deleted!: boolean;
+
+  @Field()
   @Property({ required: true })
   role!: UserRole;
 
   static async getUserByEmailOrFail(
     this: ReturnModelType<typeof User>,
-    email: string
+    email: string,
+    deleted = false,
+    disabled = false
   ) {
-    const user = await this.findOne({ email }).exec();
-    if (user == null) throw new Error("User not found");
+    const user = await this.findOne({ email, deleted, disabled }).exec();
+    if (user == null) throw new Error("User is not found");
     return user;
   }
 
@@ -55,7 +63,7 @@ export class User extends TimeStamps {
     id: string
   ) {
     const user = await this.findOne({ _id: id }).exec();
-    if (user == null) throw new Error("User not found");
+    if (user == null) throw new Error("User is not found");
     return user;
   }
 

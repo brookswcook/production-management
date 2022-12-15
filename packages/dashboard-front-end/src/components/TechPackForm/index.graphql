@@ -3,7 +3,3 @@ mutation UploadTechPack($data: UploadTechPackInput!) {
     code
   }
 }
-
-query TechPackLinks($uploadingKeys: [String!]!) {
-  techPackLinks(uploadingKeys: $uploadingKeys)
-}

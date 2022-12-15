@@ -1,10 +1,5 @@
 import "reflect-metadata";
-import {
-  PORT as port,
-  NODE_ENV as nodeEnv,
-  MONGO_DEBUG_MODE_ENABLED,
-  MONGO_URI,
-} from "./config";
+import config from "./config";
 import { ApolloServer } from "apollo-server-express";
 import {
   ApolloServerPluginDrainHttpServer,
@@ -22,7 +17,8 @@ import { logPlugin } from "./lib/graphqlLogPlugin";
 
 class DashboardApolloServer extends Server {
   constructor() {
-    super(Number(port), nodeEnv);
+    const { port, environment } = config;
+    super(port, environment);
   }
 
   public async init() {
@@ -66,8 +62,9 @@ class DashboardApolloServer extends Server {
 
   protected async initializeDB() {
     try {
-      mongoose.set("debug", Boolean(MONGO_DEBUG_MODE_ENABLED));
-      await mongoose.connect(MONGO_URI);
+      const { debugModeEnabled, uri } = config.db;
+      mongoose.set("debug", debugModeEnabled);
+      await mongoose.connect(uri);
       this.logger.info("Connected to mongo successfully");
     } catch (error) {
       this.logger.error(error);

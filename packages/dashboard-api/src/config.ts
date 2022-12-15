@@ -27,6 +27,7 @@ const {
 if (
   jwtExpire == null ||
   jwtSecret == null ||
+  mongoURI == null ||
   environment == null ||
   s3AccessKeyID == null ||
   s3SecretAccessKey == null ||

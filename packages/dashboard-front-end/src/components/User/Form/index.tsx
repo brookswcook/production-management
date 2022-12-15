@@ -1,14 +1,39 @@
 import { Stack, Typography, TextField, Button } from "@mui/material";
-import { Fragment, ReactElement, useState } from "react";
+import { FormEvent, Fragment, ReactElement, useState } from "react";
 import { PopperButton } from "../../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
+import {
+  CreateUserInput,
+  useCreateUserMutation,
+} from "../../../generated/graphql";
+import { toast } from "react-toastify";
 
 export function CreateUserForm({
   onCancel,
 }: {
   onCancel?: VoidFunction;
 }): ReactElement {
-  function createNewUser() {}
+  const [newUserMutation] = useCreateUserMutation({
+    refetchQueries: ["Users"],
+  });
+
+  async function createNewUser(
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const newUserData = Object.fromEntries(
+      data.entries()
+    ) as unknown as CreateUserInput;
+
+    try {
+      await newUserMutation({
+        variables: { data: newUserData },
+      });
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  }
 
   return (
     <Stack

@@ -34,13 +34,11 @@ export class UserResolver {
   ): Promise<User> {
     try {
       const { uid: firebaseUID } = await createFirebaseUser({ email });
-      return new UserModel({
-        email,
-        firebaseUID,
-        firstName,
-        lastName,
-        role,
-      }).save();
+      return await UserModel.findOneAndUpdate(
+        { email },
+        { $set: { firebaseUID, firstName, lastName, role, deleted: false } },
+        { upsert: true, new: true }
+      ).exec();
     } catch (error) {
       throw new UserInputError((error as Error).message);
     }

@@ -1,4 +1,10 @@
-import { Stack, Typography, TextField, Button } from "@mui/material";
+import {
+  Stack,
+  Typography,
+  TextField,
+  Button,
+  Autocomplete,
+} from "@mui/material";
 import { FormEvent, Fragment, ReactElement, useState } from "react";
 import { PopperButton } from "../../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -48,7 +54,12 @@ export function CreateUserForm({
       <TextField label="Email" name="email" required />
       <TextField label="First name" name="firstName" required />
       <TextField label="Last name" name="lastName" required />
-      <TextField label="Role" name="role" required />
+      <Autocomplete
+        options={["Factory", "VChapman", "Admin"]}
+        renderInput={params => (
+          <TextField {...params} name="role" label="Role" required />
+        )}
+      />
       <Fragment>
         <Button variant="contained" type="submit">
           Add User

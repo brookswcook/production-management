@@ -5,7 +5,7 @@ import { S3ClientConfig } from "@aws-sdk/client-s3";
 const {
   NODE_ENV: environment = "development",
   PORT: port = 4000,
-  MONGO_URI: mongoURI = "localhost:27017",
+  MONGO_URI: mongoURI,
   MONGO_DEBUG_MODE_ENABLED: mongoDebugModeEnabled = false,
 
   S3_REGION: s3Region = "us-east-1",
@@ -19,8 +19,8 @@ const {
   FIREBASE_CLIENT_EMAIL: firebaseClientEmail,
   FIREBASE_PRIVATE_KEY: firebasePrivateKey,
 
-  JWT_SECRET: jwtSecret = "secret",
-  JWT_EXPIRE: jwtExpire = "7d",
+  JWT_SECRET: jwtSecret,
+  JWT_EXPIRE: jwtExpire,
   LOG_LEVEL: logLevel = LoggingLevel.info,
 } = process.env;
 

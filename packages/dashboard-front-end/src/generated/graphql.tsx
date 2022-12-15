@@ -116,6 +116,20 @@ export type FileUploadInput = {
   fileSize: Scalars['Float'];
 };
 
+export type FirebaseUser = {
+  __typename?: 'FirebaseUser';
+  disabled: Scalars['Boolean'];
+  emailVerified: Scalars['Boolean'];
+  metadata: FirebaseUserMetadata;
+  uid: Scalars['String'];
+};
+
+export type FirebaseUserMetadata = {
+  __typename?: 'FirebaseUserMetadata';
+  creationTime?: Maybe<Scalars['String']>;
+  lastSignInTime?: Maybe<Scalars['String']>;
+};
+
 export type FitSample = {
   __typename?: 'FitSample';
   approved?: Maybe<Scalars['Boolean']>;
@@ -431,7 +445,7 @@ export type User = {
   deleted: Scalars['Boolean'];
   disabled: Scalars['Boolean'];
   email: Scalars['String'];
-  firebaseUID: Scalars['String'];
+  firebaseUser?: Maybe<FirebaseUser>;
   firstName: Scalars['String'];
   fullName: Scalars['String'];
   id: Scalars['String'];
@@ -599,9 +613,9 @@ export type UploadTechPackMutation = { __typename?: 'Mutation', uploadTechPack: 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean, firebaseUser?: { __typename?: 'FirebaseUser', emailVerified: boolean, metadata: { __typename?: 'FirebaseUserMetadata', creationTime?: string | null, lastSignInTime?: string | null } } | null }> };
 
-export type UserListFieldsFragment = { __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean };
+export type UserListFieldsFragment = { __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean, firebaseUser?: { __typename?: 'FirebaseUser', emailVerified: boolean, metadata: { __typename?: 'FirebaseUserMetadata', creationTime?: string | null, lastSignInTime?: string | null } } | null };
 
 export type CreateUserMutationVariables = Exact<{
   data: CreateUserInput;
@@ -790,6 +804,13 @@ export const UserListFieldsFragmentDoc = gql`
   fullName
   role
   disabled
+  firebaseUser {
+    emailVerified
+    metadata {
+      creationTime
+      lastSignInTime
+    }
+  }
 }
     `;
 export const LoginDocument = gql`

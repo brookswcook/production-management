@@ -14,11 +14,6 @@ export class User extends TimeStamps {
   @Field()
   id?: string;
 
-  // TODO: add firebaseUID field resolver instead;
-  @Field()
-  @Property({ unique: true, required: true })
-  firebaseUID!: string;
-
   @Field()
   @Property({ unique: true, required: true })
   email!: string;

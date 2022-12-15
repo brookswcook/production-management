@@ -3,7 +3,17 @@ import {
   AuthenticationError,
   UserInputError,
 } from "apollo-server-core";
-import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Field,
+  FieldResolver,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
 import {
   CreateUserInput,
   DeleteUserInput,
@@ -16,11 +26,21 @@ import {
   createUser as createFirebaseUser,
   updateUser as updateFirebaseUser,
   deleteUser as deleteFirebaseUser,
+  getUser as getFirebaseUser,
   verifyToken,
+  FirebaseUserType,
+  FirebaseUserMetadataType,
 } from "../../lib/firebase";
 
 @Resolver(User)
 export class UserResolver {
+  @FieldResolver(() => FirebaseUser, { nullable: true })
+  async firebaseUser(
+    @Root("_doc") { email }: User
+  ): Promise<FirebaseUser | null> {
+    return getFirebaseUser(email);
+  }
+
   @Authorized(["Admin"])
   @Query(() => [User])
   async users() {
@@ -33,10 +53,10 @@ export class UserResolver {
     @Arg("data") { email, firstName, lastName, role }: CreateUserInput
   ): Promise<User> {
     try {
-      const { uid: firebaseUID } = await createFirebaseUser({ email });
+      await createFirebaseUser({ email });
       return await UserModel.findOneAndUpdate(
         { email },
-        { $set: { firebaseUID, firstName, lastName, role, deleted: false } },
+        { $set: { firstName, lastName, role, deleted: false } },
         { upsert: true, new: true }
       ).exec();
     } catch (error) {
@@ -54,7 +74,7 @@ export class UserResolver {
       Object.assign(apiUser, props);
       const savedApiUser = await apiUser.save();
       props.disabled != null &&
-        (await updateFirebaseUser(savedApiUser.firebaseUID, {
+        (await updateFirebaseUser(savedApiUser.email, {
           disabled: props.disabled,
         }));
       return savedApiUser;
@@ -97,4 +117,28 @@ export class UserResolver {
       throw new AuthenticationError((error as ApolloError).message);
     }
   }
+}
+
+@ObjectType()
+export class FirebaseUserMetadata implements Partial<FirebaseUserMetadataType> {
+  @Field({ nullable: true })
+  creationTime?: string;
+
+  @Field({ nullable: true })
+  lastSignInTime?: string;
+}
+
+@ObjectType()
+export class FirebaseUser implements Partial<FirebaseUserType> {
+  @Field()
+  uid!: string;
+
+  @Field()
+  emailVerified!: boolean;
+
+  @Field()
+  disabled!: boolean;
+
+  @Field(() => FirebaseUserMetadata)
+  metadata!: FirebaseUserMetadataType;
 }

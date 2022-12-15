@@ -2,7 +2,7 @@ import firebaseAdmin from "firebase-admin";
 import { Auth } from "firebase-admin/lib/auth/auth";
 import { UpdateRequest } from "firebase-admin/lib/auth/auth-config";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
-import { UserRecord } from "firebase-admin/lib/auth/user-record";
+import { UserMetadata, UserRecord } from "firebase-admin/lib/auth/user-record";
 import config from "../config";
 import logger from "./logger";
 
@@ -60,11 +60,26 @@ export async function createUser({
   }
 }
 
+export async function getUser(email: string): Promise<UserRecord | null> {
+  try {
+    return await getAuthService().getUserByEmail(email);
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error(
+        `Firebase getting user with email ${email} error: ${error.message}`
+      );
+      return null;
+    }
+    throw new Error("Firebase user getting was not successful");
+  }
+}
+
 export async function updateUser(
-  uid: string,
+  email: string,
   props: UpdateRequest
 ): Promise<UserRecord> {
   try {
+    const { uid } = await getAuthService().getUserByEmail(email);
     return await getAuthService().updateUser(uid, props);
   } catch (error) {
     if (error instanceof Error) {
@@ -92,3 +107,6 @@ export type CreateUser = {
   email: string;
   emailVerified?: boolean;
 };
+
+export type FirebaseUserType = UserRecord;
+export type FirebaseUserMetadataType = UserMetadata;

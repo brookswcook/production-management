@@ -56,6 +56,44 @@ export function UserList(): ReactElement {
       type: "boolean",
       valueGetter: params => !params.value,
     },
+    {
+      field: "emailVerified",
+      headerName: "Email Verified",
+      minWidth: 50,
+      flex: 1,
+      type: "boolean",
+      valueGetter: ({ row }: { row: UserListFieldsFragment }) => {
+        return row.firebaseUser?.emailVerified ?? false;
+      },
+    },
+    {
+      field: "creationTime",
+      headerName: "Creation Time",
+      minWidth: 70,
+      flex: 1,
+      type: "date",
+      valueGetter: ({ row }: { row: UserListFieldsFragment }) => {
+        return row.firebaseUser?.metadata?.creationTime ?? new Date(0);
+      },
+      valueFormatter: params => {
+        const date = new Date(params.value as string);
+        return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+      },
+    },
+    {
+      field: "lastSignInTime",
+      headerName: "Last Sign In Time",
+      minWidth: 70,
+      flex: 1,
+      type: "date",
+      valueGetter: ({ row }: { row: UserListFieldsFragment }) => {
+        return row.firebaseUser?.metadata.lastSignInTime ?? new Date(0);
+      },
+      valueFormatter: params => {
+        const date = new Date(params.value as string);
+        return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+      },
+    },
   ];
 
   function CustomToolbar() {

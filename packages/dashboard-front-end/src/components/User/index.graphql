@@ -10,6 +10,13 @@ fragment UserListFields on User {
   fullName
   role
   disabled
+  firebaseUser {
+    emailVerified
+    metadata {
+      creationTime
+      lastSignInTime
+    }
+  }
 }
 
 mutation CreateUser($data: CreateUserInput!) {

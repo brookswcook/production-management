@@ -50,14 +50,14 @@ class DashboardApolloServer extends Server {
   }
 
   protected setupMiddlewares() {
-    this.app.use(graphqlUploadExpress({ maxFileSize: 2e7 }));
-    this.app.use(jwt(jwtAuth));
     this.app.use(
       cors({
         origin: "*",
         methods: ["GET", "POST"],
       })
     );
+    this.app.use(graphqlUploadExpress({ maxFileSize: 2e7 }));
+    this.app.use(jwt(jwtAuth));
   }
 
   protected async initializeDB() {

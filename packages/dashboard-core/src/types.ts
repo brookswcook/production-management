@@ -6,4 +6,8 @@ export type UserPayload = {
   role: UserRole;
   firstName: string;
 };
+export type DecodedTokenPayload<T> = {
+  [K in keyof T]: T[K];
+} & { iat: number; exp: number };
+
 export type FileType = "tech-pack" | "print" | "note-image";

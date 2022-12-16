@@ -53,7 +53,7 @@ const config: ApiConfig = {
       apiKey: firebaseApiKey,
       serviceAccount: {
         clientEmail: firebaseClientEmail,
-        privateKey: firebasePrivateKey,
+        privateKey: Buffer.from(firebasePrivateKey, "base64").toString("ascii"),
         projectId: firebaseProjectId,
       },
     },

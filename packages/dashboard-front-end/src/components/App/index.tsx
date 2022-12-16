@@ -12,16 +12,26 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ProductGrid from "../ProductGrid";
-import { Fragment, MouseEventHandler, ReactElement, useContext } from "react";
+import {
+  Fragment,
+  MouseEventHandler,
+  ReactElement,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import { ApolloProvider } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloProvider,
+  NormalizedCacheObject,
+} from "@apollo/client";
 import createApolloClient from "../../apolloClient";
 import {
   Route,
   BrowserRouter as Router,
   Routes,
-  useNavigate,
   Link,
   To,
 } from "react-router-dom";
@@ -42,7 +52,6 @@ import { UserList } from "../User";
 
 function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const { signOut } = useContext(AuthContext);
-  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -56,11 +65,6 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
-  function onSignOut() {
-    signOut();
-    navigate("/");
-  }
 
   return (
     <RequireAuth>
@@ -203,7 +207,7 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Button color="inherit" onClick={onSignOut}>
+                  <Button color="inherit" onClick={signOut}>
                     Logout
                   </Button>
                 </Grid>
@@ -238,11 +242,17 @@ function MenuItemLink({
 }
 
 function ApolloApp() {
-  const { token } = useContext(AuthContext);
-  const client = createApolloClient(token);
+  const { token, signOut } = useContext(AuthContext);
+  const [apolloClient, setApolloClient] = useState<
+    ApolloClient<NormalizedCacheObject>
+  >(createApolloClient(token, signOut));
+
+  useEffect(() => {
+    setApolloClient(createApolloClient(token, signOut));
+  }, [token]);
 
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Router>
           <Routes>

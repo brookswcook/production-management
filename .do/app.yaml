@@ -5,13 +5,45 @@ envs:
 name: staging-production-management
 region: sfo
 services:
-- name: dashboard-api
-  dockerfile_path: packages/dashboard-api/Dockerfile
+- dockerfile_path: packages/dashboard-api/Dockerfile
   envs:
+  - key: S3_ACCESS_KEY_ID
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:0Zu3ic7TA7evwQ6ay4hRXwK4v4Uuu3Cy:1B4P4KHBBPm6eeyWM6cnSWsBLKOMxXmS+qwigpiIOoUc/4TN]
+  - key: S3_SECRET_ACCESS_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:gPr8jfYzxBrDerGWzkgEVsMAzVPgyqSJ:UCkplJzocgl3Phc/ca3bVyBs8tJNL1nGrmOKGN7301/kVw/AEXHR2/IIWqZQ9VrlPUhQzbe04gkaTjQ=]
   - key: MONGO_URI
     scope: RUN_AND_BUILD_TIME
     type: SECRET
-    value: EV[1:h6ZR6WF4Zkoa67Wakczxgg68JEha/zrI:+XpxsVmXlCScGizl+WNw7C5dZ1N2B+yEZu9BoX66617FtCRgPQBBmr1J009KrCKZCoPr52E5jMAu3+pQwX2MbbKPu50LanffpwYj/nZ28xnyEceb7gnuOkhODzQOHL+w+FFSRSJywQ==]
+    value: EV[1:AByLcc/71MLEQxhtfBKS9kJH1pdZkhUj:zO0OO5ya5CXSLkpxAAjZbE+FKqeDyICBNycB4D3bByfdHlTzJ5q55gncAhseHlX1yI8GXGwQU0IwIOADcezumpUSZFuRCu/IiNuK1wB9dxgIocsqeZkcUDH6b+fwxF4=]
+  - key: JWT_EXPIRE
+    scope: RUN_AND_BUILD_TIME
+    value: 5d
+  - key: JWT_SECRET
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:CUEiykJIFJRBzRgVYpmv4h1lecLxg2Z0:KFf6f3yolw4Bxuidq8N5iCw8cxNVorLwxXgH1aWZWEap05a3H1rIUpBJNK8OvZD0djMg+7ovyTuDyCWRuZgmIEyWbEzQ1AsuLojYmavjkdx0iJKRqfZrriMSdOu6SRZkAF+e0fM2rpIOoEeCLCbGfk0BhIwA4uamEEBgXnZwOc8+GRR6Ev10EDEQ9V0bmCVQIn1OgiMsMPg29CGGQCPn8/dDEsfgbKNdRIMziyLdg6H+8DMEv9cLuWUw4R3S+JQXhsqFdXRNcMnMXAGdwzVBcU061gdklE4W]
+  - key: LOG_LEVEL
+    scope: RUN_AND_BUILD_TIME
+    value: info
+  - key: FIREBASE_API_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:sll3S9A62BjJ5Rv+bhOyvdkdTkXU9p6j:HzjhrXt0R7pXSjJkoMVqaOR66Lt/8YuW0nohl9FdEKiReD/xi2ljjsrPFRqIVBWRFJaKfXoa3g==]
+  - key: FIREBASE_PROJECT_ID
+    scope: RUN_AND_BUILD_TIME
+    value: projectmanagement-ec889
+  - key: FIREBASE_CLIENT_EMAIL
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:ILo+Ulo2OfR+gq4fOU3mq/kva0OEj0AJ:BfLwhs4tHxxgI2ieq93z0/c7f0w6+CGR8GVgaMqAA3cKl9p+QKLvKllp1pYz3ROLd3GLKgSjB6KW2KaXTi0rjMztJ8CfoXnbRW+BmsqssxCwSgtNoLK/]
+  - key: FIREBASE_PRIVATE_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:zN+bQmvQpTPlcTrRaLLfyrMFXfirm2bj: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]
   github:
     branch: master
     deploy_on_push: true
@@ -19,12 +51,11 @@ services:
   http_port: 4000
   instance_count: 1
   instance_size_slug: basic-xxs
+  name: dashboard-api
   routes:
   - path: /api
   source_dir: /
-
-- name: dashboard-front-end
-  dockerfile_path: packages/dashboard-front-end/Dockerfile
+- dockerfile_path: packages/dashboard-front-end/Dockerfile
   github:
     branch: master
     deploy_on_push: true
@@ -32,6 +63,7 @@ services:
   http_port: 80
   instance_count: 1
   instance_size_slug: basic-xxs
+  name: dashboard-front-end
   routes:
   - path: /
   source_dir: /

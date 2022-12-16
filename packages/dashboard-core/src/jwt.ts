@@ -1,9 +1,8 @@
 import { sign, decode } from "jsonwebtoken";
+import { DecodedTokenPayload } from "./types";
 
-export function decodeToken<T>(token: string): T | null {
-  const result = decode(token, { json: true });
-  if (result == null) return null;
-  return result as T;
+export function decodeToken<T>(token: string): DecodedTokenPayload<T> | null {
+  return decode(token, { json: true }) as DecodedTokenPayload<T>;
 }
 
 export function signToken<T extends object>(

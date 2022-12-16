@@ -23,7 +23,9 @@ export function AuthProvider({
 }): ReactElement {
   const { token, setToken } = useToken();
   const [decodedToken, setDecodedToken] =
-    useState<DecodedTokenPayload<UserPayload> | null>(null);
+    useState<DecodedTokenPayload<UserPayload> | null>(
+      token ? decodeToken<UserPayload>(token) : null
+    );
 
   useEffect(() => {
     if (token != null) {

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { config } from "../../config";
 
 // TODO: Use refreshToken
 // TODO: Use refreshToken rotation and refresh token reuse detection
@@ -7,17 +8,20 @@ export default function useToken(): {
   token: string | null;
   setToken: (token: string | null) => void;
 } {
+  const { nodeEnv } = config;
+  const itemName =
+    nodeEnv === "production" ? "pmt-auth-token" : `pmt-auth-token-${nodeEnv}`;
   function getToken() {
-    return sessionStorage.getItem("token");
+    return localStorage.getItem(itemName);
   }
 
   const [token, setToken] = useState<string | null>(getToken());
 
   function saveToken(token: string | null) {
     if (token == null) {
-      sessionStorage.removeItem("token");
+      localStorage.removeItem(itemName);
     } else {
-      sessionStorage.setItem("token", token);
+      localStorage.setItem(itemName, token);
     }
     setToken(token);
   }

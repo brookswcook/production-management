@@ -1,12 +1,6 @@
 import { Container } from "@mui/material";
-import {
-  DataGrid,
-  GridColDef,
-  GridRenderCellParams,
-  GridToolbarContainer,
-} from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbarContainer } from "@mui/x-data-grid";
 import { Fragment, ReactElement } from "react";
-import { Link } from "react-router-dom";
 import {
   UserListFieldsFragment,
   useUsersQuery,
@@ -24,15 +18,16 @@ export function UserList(): ReactElement {
       headerName: "Name",
       minWidth: 50,
       flex: 1,
-      renderCell({ id, formattedValue }: GridRenderCellParams) {
-        const linkPath = `/users/${id}`;
-        const linkText = `${String(formattedValue)}`;
-        return (
-          <Link to={linkPath} style={{ textDecoration: "none" }}>
-            {linkText}
-          </Link>
-        );
-      },
+      type: "string",
+      // renderCell({ id, formattedValue }: GridRenderCellParams) {
+      //   const linkPath = `/users/${id}`;
+      //   const linkText = `${String(formattedValue)}`;
+      //   return (
+      //     <Link to={linkPath} style={{ textDecoration: "none" }}>
+      //       {linkText}
+      //     </Link>
+      //   );
+      // },
     },
     {
       field: "email",

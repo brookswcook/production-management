@@ -121,7 +121,7 @@ export function CreateFabricForm({
         <FilePreload
           label="Print file"
           setFiles={setPrintFiles}
-          helperText={"Please upload tiff file"}
+          helperText={"Please upload print file"}
           multiple={false}
         />
       )}

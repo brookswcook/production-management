@@ -1,0 +1,20 @@
+query Factories {
+  factories {
+    ...FactoryListFields
+  }
+}
+
+query FactoryCodes {
+  factories {
+    ...FactoryCodes
+  }
+}
+
+fragment FactoryListFields on Factory {
+  code
+  name
+}
+
+fragment FactoryCodes on Factory {
+  code
+}

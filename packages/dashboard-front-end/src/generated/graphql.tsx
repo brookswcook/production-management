@@ -29,6 +29,13 @@ export type CreateFabricInput = {
   type?: InputMaybe<Scalars['String']>;
 };
 
+export type CreateFactoryInput = {
+  address: Scalars['String'];
+  code: Scalars['String'];
+  email?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
 export type CreateNoteInput = {
   images?: InputMaybe<Array<FileUploadInput>>;
   parentId: Scalars['String'];
@@ -51,6 +58,7 @@ export type CreateStyleInput = {
 
 export type CreateUserInput = {
   email: Scalars['String'];
+  factoryCode: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   role: Scalars['String'];
@@ -95,6 +103,15 @@ export type FabricSample = {
   parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
+};
+
+export type Factory = {
+  __typename?: 'Factory';
+  address: Scalars['String'];
+  associatedUsers: Array<Scalars['String']>;
+  code: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
 };
 
 export type File = {
@@ -159,6 +176,7 @@ export type Mutation = {
   approveFabricSample: FabricSample;
   approveFitSample: FitSample;
   createFabric: Fabric;
+  createFactory: Factory;
   createNote: Note;
   createProduct: Product;
   createStyle: Style;
@@ -189,6 +207,11 @@ export type MutationApproveFitSampleArgs = {
 
 export type MutationCreateFabricArgs = {
   data: CreateFabricInput;
+};
+
+
+export type MutationCreateFactoryArgs = {
+  data: CreateFactoryInput;
 };
 
 
@@ -344,6 +367,7 @@ export type Query = {
   __typename?: 'Query';
   fabric: Fabric;
   fabrics: Array<Fabric>;
+  factories: Array<Factory>;
   imageLink: Scalars['String'];
   operationLogs: Array<OperationLog>;
   printLink: Scalars['String'];
@@ -480,6 +504,20 @@ export type FabricsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', id: string, code: string, title: string, factoryName: string, colorName: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }> };
+
+export type FactoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FactoriesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Factory', code: string, name: string }> };
+
+export type FactoryCodesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FactoryCodesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Factory', code: string }> };
+
+export type FactoryListFieldsFragment = { __typename?: 'Factory', code: string, name: string };
+
+export type FactoryCodesFragment = { __typename?: 'Factory', code: string };
 
 export type FileFieldsFragment = { __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null };
 
@@ -669,6 +707,17 @@ export const FabricFieldsFragmentDoc = gql`
 }
     ${NoteFieldsFragmentDoc}
 ${FabricSampleFieldsFragmentDoc}`;
+export const FactoryListFieldsFragmentDoc = gql`
+    fragment FactoryListFields on Factory {
+  code
+  name
+}
+    `;
+export const FactoryCodesFragmentDoc = gql`
+    fragment FactoryCodes on Factory {
+  code
+}
+    `;
 export const OperationLogFieldsFragmentDoc = gql`
     fragment operationLogFields on OperationLog {
   id
@@ -951,6 +1000,74 @@ export function useFabricsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Fa
 export type FabricsQueryHookResult = ReturnType<typeof useFabricsQuery>;
 export type FabricsLazyQueryHookResult = ReturnType<typeof useFabricsLazyQuery>;
 export type FabricsQueryResult = Apollo.QueryResult<FabricsQuery, FabricsQueryVariables>;
+export const FactoriesDocument = gql`
+    query Factories {
+  factories {
+    ...FactoryListFields
+  }
+}
+    ${FactoryListFieldsFragmentDoc}`;
+
+/**
+ * __useFactoriesQuery__
+ *
+ * To run a query within a React component, call `useFactoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFactoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFactoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFactoriesQuery(baseOptions?: Apollo.QueryHookOptions<FactoriesQuery, FactoriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FactoriesQuery, FactoriesQueryVariables>(FactoriesDocument, options);
+      }
+export function useFactoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FactoriesQuery, FactoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FactoriesQuery, FactoriesQueryVariables>(FactoriesDocument, options);
+        }
+export type FactoriesQueryHookResult = ReturnType<typeof useFactoriesQuery>;
+export type FactoriesLazyQueryHookResult = ReturnType<typeof useFactoriesLazyQuery>;
+export type FactoriesQueryResult = Apollo.QueryResult<FactoriesQuery, FactoriesQueryVariables>;
+export const FactoryCodesDocument = gql`
+    query FactoryCodes {
+  factories {
+    ...FactoryCodes
+  }
+}
+    ${FactoryCodesFragmentDoc}`;
+
+/**
+ * __useFactoryCodesQuery__
+ *
+ * To run a query within a React component, call `useFactoryCodesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFactoryCodesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFactoryCodesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFactoryCodesQuery(baseOptions?: Apollo.QueryHookOptions<FactoryCodesQuery, FactoryCodesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FactoryCodesQuery, FactoryCodesQueryVariables>(FactoryCodesDocument, options);
+      }
+export function useFactoryCodesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FactoryCodesQuery, FactoryCodesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FactoryCodesQuery, FactoryCodesQueryVariables>(FactoryCodesDocument, options);
+        }
+export type FactoryCodesQueryHookResult = ReturnType<typeof useFactoryCodesQuery>;
+export type FactoryCodesLazyQueryHookResult = ReturnType<typeof useFactoryCodesLazyQuery>;
+export type FactoryCodesQueryResult = Apollo.QueryResult<FactoryCodesQuery, FactoryCodesQueryVariables>;
 export const OperationLogsDocument = gql`
     query OperationLogs {
   operationLogs {

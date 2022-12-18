@@ -508,14 +508,21 @@ export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?:
 export type FactoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FactoriesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Factory', code: string, name: string }> };
+export type FactoriesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Factory', code: string, name: string, address: string, email?: string | null }> };
 
 export type FactoryCodesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FactoryCodesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Factory', code: string }> };
 
-export type FactoryListFieldsFragment = { __typename?: 'Factory', code: string, name: string };
+export type CreateFactoryMutationVariables = Exact<{
+  data: CreateFactoryInput;
+}>;
+
+
+export type CreateFactoryMutation = { __typename?: 'Mutation', createFactory: { __typename?: 'Factory', code: string } };
+
+export type FactoryListFieldsFragment = { __typename?: 'Factory', code: string, name: string, address: string, email?: string | null };
 
 export type FactoryCodesFragment = { __typename?: 'Factory', code: string };
 
@@ -711,6 +718,8 @@ export const FactoryListFieldsFragmentDoc = gql`
     fragment FactoryListFields on Factory {
   code
   name
+  address
+  email
 }
     `;
 export const FactoryCodesFragmentDoc = gql`
@@ -1068,6 +1077,39 @@ export function useFactoryCodesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type FactoryCodesQueryHookResult = ReturnType<typeof useFactoryCodesQuery>;
 export type FactoryCodesLazyQueryHookResult = ReturnType<typeof useFactoryCodesLazyQuery>;
 export type FactoryCodesQueryResult = Apollo.QueryResult<FactoryCodesQuery, FactoryCodesQueryVariables>;
+export const CreateFactoryDocument = gql`
+    mutation CreateFactory($data: CreateFactoryInput!) {
+  createFactory(data: $data) {
+    code
+  }
+}
+    `;
+export type CreateFactoryMutationFn = Apollo.MutationFunction<CreateFactoryMutation, CreateFactoryMutationVariables>;
+
+/**
+ * __useCreateFactoryMutation__
+ *
+ * To run a mutation, you first call `useCreateFactoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateFactoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createFactoryMutation, { data, loading, error }] = useCreateFactoryMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateFactoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateFactoryMutation, CreateFactoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateFactoryMutation, CreateFactoryMutationVariables>(CreateFactoryDocument, options);
+      }
+export type CreateFactoryMutationHookResult = ReturnType<typeof useCreateFactoryMutation>;
+export type CreateFactoryMutationResult = Apollo.MutationResult<CreateFactoryMutation>;
+export type CreateFactoryMutationOptions = Apollo.BaseMutationOptions<CreateFactoryMutation, CreateFactoryMutationVariables>;
 export const OperationLogsDocument = gql`
     query OperationLogs {
   operationLogs {

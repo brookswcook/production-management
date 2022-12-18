@@ -4,7 +4,7 @@ import { Field, ObjectType } from "type-graphql";
 @ObjectType()
 export class Factory {
   @Field()
-  @Property({ required: true })
+  @Property({ required: true, unique: true })
   code!: string;
 
   @Field()

@@ -6,13 +6,13 @@ import {
 } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
-import { UserRole } from "dashboard-core";
+import { UserPayload, UserRole } from "dashboard-core";
 
 @ModelOptions({ schemaOptions: { timestamps: true } })
 @ObjectType()
-export class User extends TimeStamps {
+export class User extends TimeStamps implements UserPayload {
   @Field()
-  id?: string;
+  id!: string;
 
   @Field()
   @Property({ unique: true, required: true })
@@ -67,11 +67,20 @@ export class User extends TimeStamps {
     return user;
   }
 
+  static async getUserEmails(query: Partial<User>): Promise<string[]> {
+    const emails = await UserModel.find(query, { _id: 0, email: 1 }).lean();
+    return emails.map(item => item.email);
+  }
+
   static parseFactoryNameRole(role: string) {
     const factoryRoleMatch = role.match(/(?<=^Factory:)\w+$/);
     if (factoryRoleMatch != null && factoryRoleMatch.length > 0) {
       return factoryRoleMatch.pop();
     } else return null;
+  }
+
+  static buildFactoryRole(factoryCode: string) {
+    return `Factory:${factoryCode}`;
   }
 }
 

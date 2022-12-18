@@ -5,12 +5,13 @@ import {
   Button,
   Autocomplete,
 } from "@mui/material";
-import { FormEvent, Fragment, ReactElement, useState } from "react";
+import { FormEvent, ReactElement, useEffect, useState } from "react";
 import { PopperButton } from "../../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
 import {
   CreateUserInput,
   useCreateUserMutation,
+  useFactoryCodesLazyQuery,
 } from "../../../generated/graphql";
 import { toast } from "react-toastify";
 
@@ -19,9 +20,23 @@ export function CreateUserForm({
 }: {
   onCancel?: VoidFunction;
 }): ReactElement {
+  const [role, setRole] = useState<string | null>(null);
+  const [factoryCodes, setFactoryCodes] = useState<string[]>([]);
   const [newUserMutation] = useCreateUserMutation({
     refetchQueries: ["Users"],
   });
+  const [getFactoryCodes] = useFactoryCodesLazyQuery();
+  async function updateFactoryCodes() {
+    const { data } = await getFactoryCodes();
+    if (data != null) {
+      const factoryCodes = data.factories.map(({ code }) => code);
+      setFactoryCodes(factoryCodes);
+    }
+  }
+
+  useEffect(() => {
+    if (role === "Factory") void updateFactoryCodes();
+  }, [role]);
 
   async function createNewUser(
     event: FormEvent<HTMLFormElement>
@@ -56,18 +71,32 @@ export function CreateUserForm({
       <TextField label="Last name" name="lastName" required />
       <Autocomplete
         options={["Factory", "VChapman", "Admin"]}
+        onChange={(_, value) => setRole(value)}
         renderInput={params => (
           <TextField {...params} name="role" label="Role" required />
         )}
       />
-      <Fragment>
+      {role === "Factory" && (
+        <Autocomplete
+          options={factoryCodes}
+          renderInput={params => (
+            <TextField
+              {...params}
+              name="factoryCode"
+              label="FactoryCode"
+              required
+            />
+          )}
+        />
+      )}
+      <>
         <Button variant="contained" type="submit">
           Add User
         </Button>
         <Button variant="contained" onClick={onCancel}>
           Cancel
         </Button>
-      </Fragment>
+      </>
     </Stack>
   );
 }

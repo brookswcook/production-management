@@ -1,6 +1,6 @@
 export type ColorType = "print" | "solid";
 export type NoteType = "sampleRejectionComment" | "productNote" | "fabricNote";
-export type UserRole = "Factory" | "VChapman" | "Admin";
+export type UserRole = "Factory" | "VChapman" | "Admin" | string;
 export type UserPayload = {
   id: string;
   role: UserRole;

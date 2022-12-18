@@ -1,0 +1,76 @@
+import { Container } from "@mui/material";
+import { GridColDef, GridToolbarContainer, DataGrid } from "@mui/x-data-grid";
+import { Fragment, ReactElement } from "react";
+import {
+  FactoryListFieldsFragment,
+  useFactoriesQuery,
+} from "../../../generated/graphql";
+import RequireRole from "../../Auth/RequireRole";
+import { CreateFactoryPopperButton } from "../Form";
+
+export function FactoryList(): ReactElement {
+  const { data, loading, error } = useFactoriesQuery({});
+  const rows: FactoryListFieldsFragment[] = data?.factories ?? [];
+
+  const columns: GridColDef<FactoryListFieldsFragment>[] = [
+    {
+      field: "code",
+      headerName: "Code",
+      minWidth: 50,
+      flex: 1,
+      type: "string",
+    },
+    {
+      field: "name",
+      headerName: "Name",
+      minWidth: 70,
+      flex: 1,
+      type: "string",
+    },
+    {
+      field: "address",
+      headerName: "Address",
+      minWidth: 70,
+      flex: 3,
+      type: "string",
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      minWidth: 70,
+      flex: 1,
+      type: "string",
+    },
+  ];
+
+  function CustomToolbar() {
+    return (
+      <Fragment>
+        <GridToolbarContainer>
+          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+            <CreateFactoryPopperButton />
+          </RequireRole>
+        </GridToolbarContainer>
+      </Fragment>
+    );
+  }
+
+  return (
+    <Container maxWidth="xl">
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        getRowId={item => String(item.code)}
+        pageSize={100}
+        loading={loading}
+        error={error}
+        autoHeight
+        components={{
+          Toolbar: CustomToolbar,
+        }}
+        disableSelectionOnClick
+        sx={{ mt: 1 }}
+      />
+    </Container>
+  );
+}

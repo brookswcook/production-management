@@ -21,6 +21,9 @@ export class CreateUserInput {
 
   @Field()
   role!: UserRole;
+
+  @Field()
+  factoryCode?: string;
 }
 
 @InputType()

@@ -49,6 +49,7 @@ import { FabricDetail } from "../FabricDetail";
 import { StyleDetail, StyleList } from "../Style";
 import { SignInWithEmailLink } from "../Auth/SignInWithEmail";
 import { UserList } from "../User";
+import { FactoryList } from "../Factory/ListView";
 
 function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const { signOut } = useContext(AuthContext);
@@ -140,6 +141,13 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
                         to="/users"
                       />
                     </RequireRole>
+                    <RequireRole authorizedRoles={["Admin"]}>
+                      <MenuItemLink
+                        onClick={handleCloseNavMenu}
+                        name="Factories"
+                        to="/factories"
+                      />
+                    </RequireRole>
                   </Menu>
                 </Grid>
                 <Grid item container alignItems={"center"} gap={3} xs={10}>
@@ -183,6 +191,16 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
                           style={{ textDecoration: "none", color: "white" }}
                         >
                           Users
+                        </Link>
+                      </Button>
+                    </RequireRole>
+                    <RequireRole authorizedRoles={["Admin"]}>
+                      <Button variant="text" size="small">
+                        <Link
+                          to={`/factories`}
+                          style={{ textDecoration: "none", color: "white" }}
+                        >
+                          Factories
                         </Link>
                       </Button>
                     </RequireRole>
@@ -292,6 +310,10 @@ function ApolloApp() {
             <Route
               path="/users"
               element={<Dashboard children={<UserList />} />}
+            />
+            <Route
+              path="/factories"
+              element={<Dashboard children={<FactoryList />} />}
             />
             <Route
               path="/oplog"

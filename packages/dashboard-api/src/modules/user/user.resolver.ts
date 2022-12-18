@@ -50,13 +50,23 @@ export class UserResolver {
   @Authorized(["Admin"])
   @Mutation(() => User)
   async createUser(
-    @Arg("data") { email, firstName, lastName, role }: CreateUserInput
+    @Arg("data")
+    { email, firstName, lastName, role, factoryCode }: CreateUserInput
   ): Promise<User> {
     try {
       await createFirebaseUser({ email });
+      const factoryRole =
+        factoryCode != null ? UserModel.buildFactoryRole(factoryCode) : null;
       return await UserModel.findOneAndUpdate(
         { email },
-        { $set: { firstName, lastName, role, deleted: false } },
+        {
+          $set: {
+            firstName,
+            lastName,
+            role: factoryRole ?? role,
+            deleted: false,
+          },
+        },
         { upsert: true, new: true }
       ).exec();
     } catch (error) {

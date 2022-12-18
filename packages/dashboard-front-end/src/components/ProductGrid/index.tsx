@@ -17,6 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { CreateProductForm } from "../ProductForm";
 import { Fragment, ReactElement } from "react";
 import { Link } from "react-router-dom";
+import RequireRole from "../Auth/RequireRole";
 
 export default function ProductGrid(): ReactElement {
   const { data, loading, error } = useProductsQuery({
@@ -151,9 +152,11 @@ export default function ProductGrid(): ReactElement {
     return (
       <Fragment>
         <GridToolbarContainer>
-          <PopperButton icon={<AddIcon />} title="Add product">
-            <CreateProductForm />
-          </PopperButton>
+          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+            <PopperButton icon={<AddIcon />} title="Add product">
+              <CreateProductForm />
+            </PopperButton>
+          </RequireRole>
           <GridToolbarColumnsButton />
           <GridToolbarFilterButton />
           <GridToolbarExport />

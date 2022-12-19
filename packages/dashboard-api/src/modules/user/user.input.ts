@@ -22,7 +22,7 @@ export class CreateUserInput {
   @Field()
   role!: UserRole;
 
-  @Field()
+  @Field({ nullable: true })
   factoryCode?: string;
 }
 

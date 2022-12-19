@@ -23,8 +23,10 @@ export default function createClient(
   const resetTokenLink = onError(({ networkError }) => {
     if (networkError && networkError.name === "ServerError") {
       const { statusCode } = networkError as ServerError;
-      if (statusCode === 401) resetTokenHandler();
-      location.reload();
+      if (statusCode === 401) {
+        resetTokenHandler();
+        location.reload();
+      }
     }
   });
 

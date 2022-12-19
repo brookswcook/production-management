@@ -17,9 +17,9 @@ export class ProductResolver {
     @Ctx() { user: { role } }: ResolverContext,
     @Arg("data", { nullable: true }) data?: GetProductsInput
   ) {
-    const factoryName = UserModel.parseFactoryNameRole(role);
+    const factoryCode = UserModel.parseFactoryCodeRole(role);
     const query: Partial<Product> = data ? ({ ...data } as Product) : {};
-    factoryName && Object.assign(query, { factoryName });
+    factoryCode && Object.assign(query, { factoryCode });
     return ProductModel.find(query)
       .sort({ _id: -1 })
       .populate({ path: "notes", populate: { path: "user" } })

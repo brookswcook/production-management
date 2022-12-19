@@ -1,7 +1,8 @@
 import { Field, InputType } from "type-graphql";
+import { IFactoryTenant } from "../factory/types";
 
 @InputType()
-export class CreateProductInput {
+export class CreateProductInput implements IFactoryTenant {
   @Field()
   styleCode!: string;
 
@@ -9,7 +10,7 @@ export class CreateProductInput {
   fabricCode!: string;
 
   @Field()
-  factoryName!: string;
+  factoryCode!: string;
 
   @Field()
   deliveryDate!: Date;
@@ -18,5 +19,5 @@ export class CreateProductInput {
 @InputType()
 export class GetProductsInput {
   @Field()
-  factoryName!: string;
+  factoryCode!: string;
 }

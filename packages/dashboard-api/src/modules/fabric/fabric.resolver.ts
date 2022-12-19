@@ -62,7 +62,7 @@ export class FabricResolver {
   ) {
     const fabricData: Omit<
       Fabric,
-      "samples" | "stage" | "products" | "factoryName" | "notes"
+      "samples" | "stage" | "products" | "factoryCode" | "notes"
     > = data;
     if (print != null) {
       const { file, fileSize } = print;

@@ -68,7 +68,7 @@ export class User extends ExpectResultModel implements UserPayload, TimeStamps {
     return emails.map(item => item.email);
   }
 
-  static parseFactoryNameRole(role: string) {
+  static parseFactoryCodeRole(role: string) {
     const factoryRoleMatch = role.match(/(?<=^Factory:)\w+$/);
     if (factoryRoleMatch != null && factoryRoleMatch.length > 0) {
       return factoryRoleMatch.pop();

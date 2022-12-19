@@ -6,12 +6,12 @@ import {
 import { ColorType, NoteType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
 import { ExpectResultModel } from "../common/expectResultModel";
-import { IFactorySupport } from "../factory/types";
+import { IFactoryTenant } from "../factory/types";
 import { Note } from "../note/note.model";
 import { FabricSample } from "../sample/sample.model";
 
 @ObjectType()
-export class Fabric extends ExpectResultModel implements IFactorySupport {
+export class Fabric extends ExpectResultModel implements IFactoryTenant {
   @Field()
   id?: string;
 
@@ -42,7 +42,7 @@ export class Fabric extends ExpectResultModel implements IFactorySupport {
 
   @Field()
   @Property({ required: true })
-  factoryName!: string;
+  factoryCode!: string;
 
   @Field({ nullable: true })
   @Property()

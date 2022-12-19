@@ -7,10 +7,11 @@ import {
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
 import { UserPayload, UserRole } from "dashboard-core";
+import { ExpectResultModel } from "../common/expectResultModel";
 
 @ModelOptions({ schemaOptions: { timestamps: true } })
 @ObjectType()
-export class User extends TimeStamps implements UserPayload {
+export class User extends ExpectResultModel implements UserPayload, TimeStamps {
   @Field()
   id!: string;
 
@@ -47,24 +48,19 @@ export class User extends TimeStamps implements UserPayload {
   @Property({ required: true })
   role!: UserRole;
 
+  @Field({ nullable: true })
+  createdAt?: Date;
+
+  @Field({ nullable: true })
+  updatedAt?: Date;
+
   static async getUserByEmailOrFail(
     this: ReturnModelType<typeof User>,
     email: string,
     deleted = false,
     disabled = false
   ) {
-    const user = await this.findOne({ email, deleted, disabled }).exec();
-    if (user == null) throw new Error("User is not found");
-    return user;
-  }
-
-  static async getUserByIdOrFail(
-    this: ReturnModelType<typeof User>,
-    id: string
-  ) {
-    const user = await this.findOne({ _id: id }).exec();
-    if (user == null) throw new Error("User is not found");
-    return user;
+    return this.findOneOrFail({ email, deleted, disabled });
   }
 
   static async getUserEmails(query: Partial<User>): Promise<string[]> {

@@ -1,13 +1,4 @@
-import {
-  Arg,
-  Authorized,
-  Ctx,
-  FieldResolver,
-  Mutation,
-  Query,
-  Resolver,
-  Root,
-} from "type-graphql";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { ResolverContext } from "../../lib/graphql";
 import { getDownloadFileLink, uploadFiles } from "../file/file.service";
 import { CreateNoteInput } from "./note.input";
@@ -15,11 +6,6 @@ import { Note, NoteModel } from "./note.model";
 
 @Resolver(Note)
 export class NoteResolver {
-  @FieldResolver(() => Date, { nullable: true })
-  createdAt(@Root("_doc") note: Note) {
-    return note.createdAt;
-  }
-
   @Authorized()
   @Mutation(() => Note)
   async createNote(

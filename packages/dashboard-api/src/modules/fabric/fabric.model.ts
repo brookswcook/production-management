@@ -87,11 +87,12 @@ export class Fabric extends ExpectResultModel implements IFactoryTenant {
   // TODO: reuse
   static async findByCodeOrFail(
     this: ReturnModelType<typeof Fabric>,
-    code: string
+    code: string,
+    factoryCode?: string
   ): Promise<Fabric> {
-    const fabric = await this.findOne({
-      code,
-    })
+    const query: Partial<Fabric> = { code };
+    factoryCode && Object.assign(query, { factoryCode });
+    const fabric = await this.findOne(query)
       .populate({ path: "notes", populate: { path: "user" } })
       .populate({
         path: "samples",

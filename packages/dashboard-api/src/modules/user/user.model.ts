@@ -72,7 +72,7 @@ export class User extends ExpectResultModel implements UserPayload, TimeStamps {
     const factoryRoleMatch = role.match(/(?<=^Factory:)\w+$/);
     if (factoryRoleMatch != null && factoryRoleMatch.length > 0) {
       return factoryRoleMatch.pop();
-    } else return null;
+    } else return undefined;
   }
 
   static buildFactoryRole(factoryCode: string) {

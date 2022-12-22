@@ -12,14 +12,19 @@ import {
 import { ResolverContext } from "../../lib/graphql";
 import { getDownloadFileLink, uploadFile } from "../file/file.service";
 import { ProductService } from "../product/product.service";
+import { UserService } from "../user/user.service";
 import { CreateFabricInput, UploadPrintInput } from "./fabric.input";
 import { Fabric, FabricModel } from "./fabric.model";
 
 @Resolver(() => Fabric)
 export class FabricResolver {
-  constructor(private readonly productService: ProductService) {
+  constructor(
+    private readonly productService: ProductService,
+    private readonly userService: UserService
+  ) {
     // TODO: use DI as typedi if it gets annoying
     this.productService = new ProductService();
+    this.userService = new UserService();
   }
 
   @FieldResolver(() => [String])
@@ -30,8 +35,9 @@ export class FabricResolver {
 
   @Authorized()
   @Query(() => [Fabric])
-  async fabrics() {
-    return FabricModel.find()
+  async fabrics(@Ctx() { user: { role } }: ResolverContext) {
+    const factoryCode = this.userService.parseFactoryCodeRole(role);
+    return FabricModel.find({ factoryCode })
       .populate({
         path: "samples",
         populate: {
@@ -44,8 +50,12 @@ export class FabricResolver {
 
   @Authorized()
   @Query(() => Fabric, { nullable: false })
-  async fabric(@Arg("code") code: string): Promise<Fabric | null> {
-    return FabricModel.findByCodeOrFail(code);
+  async fabric(
+    @Arg("code") code: string,
+    @Ctx() { user: { role } }: ResolverContext
+  ): Promise<Fabric | null> {
+    const factoryCode = this.userService.parseFactoryCodeRole(role);
+    return FabricModel.findByCodeOrFail(code, factoryCode);
   }
 
   @Authorized()

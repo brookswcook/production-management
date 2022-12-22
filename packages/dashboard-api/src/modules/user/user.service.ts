@@ -5,4 +5,8 @@ export class UserService {
     const factoryRole = UserModel.buildFactoryRole(factoryCode);
     return UserModel.getUserEmails({ role: factoryRole });
   }
+
+  parseFactoryCodeRole(role: string) {
+    return UserModel.parseFactoryCodeRole(role);
+  }
 }

@@ -12,6 +12,13 @@ mutation RejectFitSample($data: UniqueSampleInput!) {
   }
 }
 
+mutation MarkFitSampleAsDelivered($data: UniqueSampleInput!) {
+  markFitSampleAsDelivered(data: $data) {
+    id
+    sku
+  }
+}
+
 mutation ApproveFabricSample($data: UniqueSampleInput!) {
   approveFabricSample(data: $data) {
     id
@@ -21,6 +28,13 @@ mutation ApproveFabricSample($data: UniqueSampleInput!) {
 
 mutation RejectFabricSample($data: UniqueSampleInput!) {
   rejectFabricSample(data: $data) {
+    id
+    sku
+  }
+}
+
+mutation MarkFabricSampleAsDelivered($data: UniqueSampleInput!) {
+  markFabricSampleAsDelivered(data: $data) {
     id
     sku
   }

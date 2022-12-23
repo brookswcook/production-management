@@ -13,6 +13,14 @@ export class FitSampleResolver {
     return FitSampleModel.sendSample(data);
   }
 
+  @Authorized(["Admin", "Factory:.+"] as UserRole[])
+  @Mutation(() => FitSample)
+  async markFitSampleAsDelivered(
+    @Arg("data") { parentCode, sku }: UniqueSampleInput
+  ): Promise<FitSample> {
+    return FitSampleModel.markAsDelivered(parentCode, sku);
+  }
+
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FitSample)
   async rejectFitSample(

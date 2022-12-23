@@ -80,6 +80,18 @@ export class Sample {
     return new this(data).save();
   }
 
+  static async markAsDelivered(
+    this: ReturnModelType<typeof Sample>,
+    parentCode: string,
+    sku: string
+  ) {
+    const sample = await this.findOneSampleAndUpdateOrFail(
+      { parentCode, sku },
+      { delivered: true }
+    );
+    return sample;
+  }
+
   static async rejectSample(
     this: ReturnModelType<typeof Sample>,
     parentCode: string,
@@ -87,7 +99,7 @@ export class Sample {
   ) {
     const sample = await this.findOneSampleAndUpdateOrFail(
       { parentCode, sku },
-      { delivered: true, approved: false }
+      { approved: false }
     );
     return sample;
   }
@@ -99,7 +111,7 @@ export class Sample {
   ) {
     const sample = await this.findOneSampleAndUpdateOrFail(
       { parentCode, sku },
-      { delivered: true, approved: true }
+      { approved: true }
     );
     return sample;
   }

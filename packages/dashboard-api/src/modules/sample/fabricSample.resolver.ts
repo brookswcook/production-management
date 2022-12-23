@@ -13,6 +13,14 @@ export class FabricSampleResolver {
     return FabricSampleModel.sendSample(data);
   }
 
+  @Authorized(["Admin", "Factory:.+"] as UserRole[])
+  @Mutation(() => FabricSample)
+  async markFabricSampleAsDelivered(
+    @Arg("data") { parentCode, sku }: UniqueSampleInput
+  ): Promise<FabricSample> {
+    return FabricSampleModel.markAsDelivered(parentCode, sku);
+  }
+
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FabricSample)
   async rejectFabricSample(

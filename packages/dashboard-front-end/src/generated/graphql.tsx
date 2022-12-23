@@ -183,6 +183,8 @@ export type Mutation = {
   createUser: User;
   deleteUser: Scalars['Boolean'];
   login: LoginResult;
+  markFabricSampleAsDelivered: FabricSample;
+  markFitSampleAsDelivered: FitSample;
   rejectFabricSample: FabricSample;
   rejectFitSample: FitSample;
   sendFabricSample: FabricSample;
@@ -242,6 +244,16 @@ export type MutationDeleteUserArgs = {
 
 export type MutationLoginArgs = {
   data: LoginInput;
+};
+
+
+export type MutationMarkFabricSampleAsDeliveredArgs = {
+  data: UniqueSampleInput;
+};
+
+
+export type MutationMarkFitSampleAsDeliveredArgs = {
+  data: UniqueSampleInput;
 };
 
 
@@ -602,6 +614,13 @@ export type RejectFitSampleMutationVariables = Exact<{
 
 export type RejectFitSampleMutation = { __typename?: 'Mutation', rejectFitSample: { __typename?: 'FitSample', id: string, sku: string } };
 
+export type MarkFitSampleAsDeliveredMutationVariables = Exact<{
+  data: UniqueSampleInput;
+}>;
+
+
+export type MarkFitSampleAsDeliveredMutation = { __typename?: 'Mutation', markFitSampleAsDelivered: { __typename?: 'FitSample', id: string, sku: string } };
+
 export type ApproveFabricSampleMutationVariables = Exact<{
   data: UniqueSampleInput;
 }>;
@@ -615,6 +634,13 @@ export type RejectFabricSampleMutationVariables = Exact<{
 
 
 export type RejectFabricSampleMutation = { __typename?: 'Mutation', rejectFabricSample: { __typename?: 'FabricSample', id: string, sku: string } };
+
+export type MarkFabricSampleAsDeliveredMutationVariables = Exact<{
+  data: UniqueSampleInput;
+}>;
+
+
+export type MarkFabricSampleAsDeliveredMutation = { __typename?: 'Mutation', markFabricSampleAsDelivered: { __typename?: 'FabricSample', id: string, sku: string } };
 
 export type CreateNoteMutationVariables = Exact<{
   data: CreateNoteInput;
@@ -1416,6 +1442,40 @@ export function useRejectFitSampleMutation(baseOptions?: Apollo.MutationHookOpti
 export type RejectFitSampleMutationHookResult = ReturnType<typeof useRejectFitSampleMutation>;
 export type RejectFitSampleMutationResult = Apollo.MutationResult<RejectFitSampleMutation>;
 export type RejectFitSampleMutationOptions = Apollo.BaseMutationOptions<RejectFitSampleMutation, RejectFitSampleMutationVariables>;
+export const MarkFitSampleAsDeliveredDocument = gql`
+    mutation MarkFitSampleAsDelivered($data: UniqueSampleInput!) {
+  markFitSampleAsDelivered(data: $data) {
+    id
+    sku
+  }
+}
+    `;
+export type MarkFitSampleAsDeliveredMutationFn = Apollo.MutationFunction<MarkFitSampleAsDeliveredMutation, MarkFitSampleAsDeliveredMutationVariables>;
+
+/**
+ * __useMarkFitSampleAsDeliveredMutation__
+ *
+ * To run a mutation, you first call `useMarkFitSampleAsDeliveredMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkFitSampleAsDeliveredMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markFitSampleAsDeliveredMutation, { data, loading, error }] = useMarkFitSampleAsDeliveredMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useMarkFitSampleAsDeliveredMutation(baseOptions?: Apollo.MutationHookOptions<MarkFitSampleAsDeliveredMutation, MarkFitSampleAsDeliveredMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MarkFitSampleAsDeliveredMutation, MarkFitSampleAsDeliveredMutationVariables>(MarkFitSampleAsDeliveredDocument, options);
+      }
+export type MarkFitSampleAsDeliveredMutationHookResult = ReturnType<typeof useMarkFitSampleAsDeliveredMutation>;
+export type MarkFitSampleAsDeliveredMutationResult = Apollo.MutationResult<MarkFitSampleAsDeliveredMutation>;
+export type MarkFitSampleAsDeliveredMutationOptions = Apollo.BaseMutationOptions<MarkFitSampleAsDeliveredMutation, MarkFitSampleAsDeliveredMutationVariables>;
 export const ApproveFabricSampleDocument = gql`
     mutation ApproveFabricSample($data: UniqueSampleInput!) {
   approveFabricSample(data: $data) {
@@ -1484,6 +1544,40 @@ export function useRejectFabricSampleMutation(baseOptions?: Apollo.MutationHookO
 export type RejectFabricSampleMutationHookResult = ReturnType<typeof useRejectFabricSampleMutation>;
 export type RejectFabricSampleMutationResult = Apollo.MutationResult<RejectFabricSampleMutation>;
 export type RejectFabricSampleMutationOptions = Apollo.BaseMutationOptions<RejectFabricSampleMutation, RejectFabricSampleMutationVariables>;
+export const MarkFabricSampleAsDeliveredDocument = gql`
+    mutation MarkFabricSampleAsDelivered($data: UniqueSampleInput!) {
+  markFabricSampleAsDelivered(data: $data) {
+    id
+    sku
+  }
+}
+    `;
+export type MarkFabricSampleAsDeliveredMutationFn = Apollo.MutationFunction<MarkFabricSampleAsDeliveredMutation, MarkFabricSampleAsDeliveredMutationVariables>;
+
+/**
+ * __useMarkFabricSampleAsDeliveredMutation__
+ *
+ * To run a mutation, you first call `useMarkFabricSampleAsDeliveredMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkFabricSampleAsDeliveredMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markFabricSampleAsDeliveredMutation, { data, loading, error }] = useMarkFabricSampleAsDeliveredMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useMarkFabricSampleAsDeliveredMutation(baseOptions?: Apollo.MutationHookOptions<MarkFabricSampleAsDeliveredMutation, MarkFabricSampleAsDeliveredMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MarkFabricSampleAsDeliveredMutation, MarkFabricSampleAsDeliveredMutationVariables>(MarkFabricSampleAsDeliveredDocument, options);
+      }
+export type MarkFabricSampleAsDeliveredMutationHookResult = ReturnType<typeof useMarkFabricSampleAsDeliveredMutation>;
+export type MarkFabricSampleAsDeliveredMutationResult = Apollo.MutationResult<MarkFabricSampleAsDeliveredMutation>;
+export type MarkFabricSampleAsDeliveredMutationOptions = Apollo.BaseMutationOptions<MarkFabricSampleAsDeliveredMutation, MarkFabricSampleAsDeliveredMutationVariables>;
 export const CreateNoteDocument = gql`
     mutation CreateNote($data: CreateNoteInput!) {
   createNote(data: $data) {

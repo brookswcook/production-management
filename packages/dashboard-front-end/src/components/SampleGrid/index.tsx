@@ -28,6 +28,8 @@ import {
   useImageLinkLazyQuery,
   useRejectFabricSampleMutation,
   useRejectFitSampleMutation,
+  useMarkFitSampleAsDeliveredMutation,
+  useMarkFabricSampleAsDeliveredMutation,
 } from "../../generated/graphql";
 import { PopperButton } from "../PopperButton";
 import { NoteType } from "dashboard-core";
@@ -51,10 +53,15 @@ export default function SampleGrid({
     useState<GridSelectionModel>([]);
   const [approveFitSampleMutation] = useApproveFitSampleMutation(refetchPolicy);
   const [rejectFitSampleMutation] = useRejectFitSampleMutation(refetchPolicy);
+
+  const [markFitSampleAsDelivered] =
+    useMarkFitSampleAsDeliveredMutation(refetchPolicy);
   const [approveFabricSampleMutation] =
     useApproveFabricSampleMutation(refetchPolicy);
   const [rejectFabricSampleMutation] =
     useRejectFabricSampleMutation(refetchPolicy);
+  const [markFabricSampleAsDelivered] =
+    useMarkFabricSampleAsDeliveredMutation(refetchPolicy);
   const [createNoteMutation] = useCreateNoteMutation(refetchPolicy);
 
   // TODO: reuse it since there's a similar thing in ProductGrid
@@ -166,6 +173,16 @@ export default function SampleGrid({
             <Button
               variant="text"
               size="small"
+              onClick={markAsDelivered}
+              disabled={selectedSamples.length !== 1}
+            >
+              Mark As Delivered
+            </Button>
+          </RequireRole>
+          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+            <Button
+              variant="text"
+              size="small"
               onClick={approveSample}
               disabled={selectedSamples.length !== 1}
             >
@@ -224,6 +241,20 @@ export default function SampleGrid({
         </GridToolbarContainer>
       </Fragment>
     );
+    async function markAsDelivered() {
+      try {
+        await (sampleType == "fit"
+          ? markFitSampleAsDelivered
+          : markFabricSampleAsDelivered)({
+          variables: {
+            data: { parentCode, sku: selectedSamples[0].sku ?? "" },
+          },
+        });
+      } catch (error) {
+        toast.error((error as ApolloError).message);
+      }
+    }
+
     async function approveSample() {
       try {
         await (sampleType == "fit"

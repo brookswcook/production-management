@@ -175,10 +175,10 @@ export class Product implements IFactoryTenant {
   @Property({ _id: false })
   shipping?: ProductShipping;
 
-  static async findByCodeOrFail(code: string) {
-    const product = await ProductModel.findOne({
-      code,
-    } as Product)
+  static async findByCodeOrFail(code: string, factoryCode?: string) {
+    const query: Partial<Product> = { code };
+    factoryCode && Object.assign(query, { factoryCode });
+    const product = await ProductModel.findOne(query)
       .populate({ path: "notes", populate: { path: "user" } })
       .populate({ path: "fitSamples", populate: { path: "note" } })
       .populate({ path: "style", populate: { path: "techPacks" } })

@@ -28,16 +28,22 @@ export class FabricResolver {
   }
 
   @FieldResolver(() => [String])
-  async productCodes(@Root("_doc") { code }: Fabric): Promise<string[]> {
+  async productCodes(
+    @Root("_doc") { code }: Fabric,
+    @Ctx() { user: { role } }: ResolverContext
+  ): Promise<string[]> {
+    const factoryCode = this.userService.parseFactoryCodeRole(role);
     // TODO: add loader to run query once
-    return this.productService.getProductCodesByFabricCode(code);
+    return this.productService.getProductCodesByFabricCode(code, factoryCode);
   }
 
   @Authorized()
   @Query(() => [Fabric])
   async fabrics(@Ctx() { user: { role } }: ResolverContext) {
     const factoryCode = this.userService.parseFactoryCodeRole(role);
-    return FabricModel.find({ factoryCode })
+    const query: Partial<Fabric> = {};
+    factoryCode && Object.assign(query, { factoryCode });
+    return FabricModel.find(query)
       .populate({
         path: "samples",
         populate: {

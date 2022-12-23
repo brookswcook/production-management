@@ -6,9 +6,15 @@ import { StartProductionInput } from "../productProduction/productProduction.inp
 import { UserRole } from "dashboard-core";
 import { ResolverContext } from "../../lib/graphql";
 import { UserModel } from "../user/user.model";
+import { UserService } from "../user/user.service";
 
 @Resolver(Product)
 export class ProductResolver {
+  constructor(private readonly userService: UserService) {
+    // TODO: use DI as typedi if it gets annoying
+    this.userService = new UserService();
+  }
+
   // TODO: consider to use lean() with getter plugin
   // TODO: populate fitSamples only when needed; analyze AST
   @Authorized()
@@ -34,8 +40,12 @@ export class ProductResolver {
 
   @Authorized()
   @Query(() => Product)
-  async product(@Arg("code", { nullable: false }) code: string) {
-    return ProductModel.findByCodeOrFail(code);
+  async product(
+    @Ctx() { user: { role } }: ResolverContext,
+    @Arg("code", { nullable: false }) code: string
+  ) {
+    const factoryCode = this.userService.parseFactoryCodeRole(role);
+    return ProductModel.findByCodeOrFail(code, factoryCode);
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])

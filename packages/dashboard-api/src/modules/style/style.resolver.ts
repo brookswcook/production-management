@@ -15,18 +15,27 @@ import { UserRole } from "dashboard-core";
 import { ProductService } from "../product/product.service";
 import { Fabric } from "../fabric/fabric.model";
 import { ResolverContext } from "../../lib/graphql";
+import { UserService } from "../user/user.service";
 
 @Resolver(Style)
 export class StyleResolver {
-  constructor(private readonly productService: ProductService) {
+  constructor(
+    private readonly productService: ProductService,
+    private readonly userService: UserService
+  ) {
     // TODO: use DI as typedi if it gets annoying
     this.productService = new ProductService();
+    this.userService = new UserService();
   }
 
   @FieldResolver(() => [String])
-  async productCodes(@Root("_doc") { code }: Fabric): Promise<string[]> {
+  async productCodes(
+    @Root("_doc") { code }: Fabric,
+    @Ctx() { user: { role } }: ResolverContext
+  ): Promise<string[]> {
     // TODO: add loader to run query once
-    return this.productService.getProductCodesByStyleCode(code);
+    const factoryCode = this.userService.parseFactoryCodeRole(role);
+    return this.productService.getProductCodesByStyleCode(code, factoryCode);
   }
 
   @Authorized()

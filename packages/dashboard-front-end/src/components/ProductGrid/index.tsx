@@ -82,7 +82,7 @@ export default function ProductGrid(): ReactElement {
       },
     },
     {
-      field: "factoryName",
+      field: "factoryCode",
       headerName: "Factory",
       minWidth: 50,
       flex: 1,

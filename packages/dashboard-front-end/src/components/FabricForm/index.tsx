@@ -33,7 +33,7 @@ export function CreateFabricForm({
   async function createNewFabric(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const { code, title, factoryName, colorName, colorCode } =
+    const { code, title, factoryCode, colorName, colorCode } =
       Object.fromEntries(data.entries()) as unknown as CreateFabricInput;
 
     try {
@@ -49,7 +49,7 @@ export function CreateFabricForm({
         const newFabricData: CreateFabricInput = {
           code,
           title,
-          factoryName,
+          factoryCode,
           colorName,
           colorCode,
         };
@@ -87,7 +87,7 @@ export function CreateFabricForm({
       <Autocomplete
         options={["Amy", "Kevin"]}
         renderInput={params => (
-          <TextField {...params} name="factoryName" label="Factory" required />
+          <TextField {...params} name="factoryCode" label="Factory" required />
         )}
       />
       <TextField

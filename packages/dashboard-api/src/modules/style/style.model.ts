@@ -5,10 +5,11 @@ import {
 } from "@typegoose/typegoose";
 import { FileType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
+import { ExpectResultModel } from "../common/expectResultModel";
 import { File } from "../file/file.model";
 
 @ObjectType()
-export class Style {
+export class Style extends ExpectResultModel {
   @Field()
   id!: string;
 
@@ -50,20 +51,6 @@ export class Style {
       .exec();
     if (style == null) throw Error(`Style with given code not found`);
     return style;
-  }
-
-  static async findOneAndUpdateOrFail(
-    this: ReturnModelType<typeof Style>,
-    query: Partial<Style>,
-    update: Partial<Style>
-  ): Promise<Style> {
-    const updatedStyle = await this.findOneAndUpdate(
-      query,
-      { $set: update },
-      { returnOriginal: false }
-    ).exec();
-    if (updatedStyle == null) throw Error(`Style is not found`);
-    return updatedStyle;
   }
 }
 

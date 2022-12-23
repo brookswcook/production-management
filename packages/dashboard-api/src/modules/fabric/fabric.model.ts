@@ -5,11 +5,13 @@ import {
 } from "@typegoose/typegoose";
 import { ColorType, NoteType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
+import { ExpectResultModel } from "../common/expectResultModel";
+import { IFactoryTenant } from "../factory/types";
 import { Note } from "../note/note.model";
 import { FabricSample } from "../sample/sample.model";
 
 @ObjectType()
-export class Fabric {
+export class Fabric extends ExpectResultModel implements IFactoryTenant {
   @Field()
   id?: string;
 
@@ -40,7 +42,7 @@ export class Fabric {
 
   @Field()
   @Property({ required: true })
-  factoryName!: string;
+  factoryCode!: string;
 
   @Field({ nullable: true })
   @Property()
@@ -83,28 +85,14 @@ export class Fabric {
   notes!: Note[];
 
   // TODO: reuse
-  static async findOneAndUpdateOrFail(
-    this: ReturnModelType<typeof Fabric>,
-    query: Partial<Fabric>,
-    update: Partial<Fabric>
-  ): Promise<Fabric> {
-    const updatedFabric = await this.findOneAndUpdate(
-      query,
-      { $set: update },
-      { returnOriginal: false }
-    ).exec();
-    if (updatedFabric == null) throw Error(`Fabric is not found`);
-    return updatedFabric;
-  }
-
-  // TODO: reuse
   static async findByCodeOrFail(
     this: ReturnModelType<typeof Fabric>,
-    code: string
+    code: string,
+    factoryCode?: string
   ): Promise<Fabric> {
-    const fabric = await this.findOne({
-      code,
-    })
+    const query: Partial<Fabric> = { code };
+    factoryCode && Object.assign(query, { factoryCode });
+    const fabric = await this.findOne(query)
       .populate({ path: "notes", populate: { path: "user" } })
       .populate({
         path: "samples",

@@ -31,13 +31,13 @@ export function CreateProductForm(): ReactElement {
   async function createNewProduct(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const { styleCode, fabricCode, factoryName } = Object.fromEntries(
+    const { styleCode, fabricCode, factoryCode } = Object.fromEntries(
       data.entries()
     ) as unknown as CreateProductInput;
     try {
       await newProductMutation({
         variables: {
-          data: { styleCode, fabricCode, factoryName, deliveryDate },
+          data: { styleCode, fabricCode, factoryCode, deliveryDate },
         },
       });
     } catch (error) {
@@ -82,7 +82,7 @@ export function CreateProductForm(): ReactElement {
       <Autocomplete
         options={["Amy", "Kevin"]}
         renderInput={params => (
-          <TextField {...params} name="factoryName" label="Factory" required />
+          <TextField {...params} name="factoryCode" label="Factory" required />
         )}
       />
       <DatePicker

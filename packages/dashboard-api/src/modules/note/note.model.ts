@@ -3,17 +3,17 @@ import {
   index,
   ModelOptions,
   prop as Property,
-  ReturnModelType,
 } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
 import { NoteType } from "dashboard-core";
 import { User } from "../user/user.model";
+import { ExpectResultModel } from "../common/expectResultModel";
 
 @ModelOptions({ schemaOptions: { timestamps: true } })
 @index({ type: 1, parentId: 1 })
 @ObjectType()
-export class Note extends TimeStamps {
+export class Note extends ExpectResultModel implements TimeStamps {
   @Field()
   id?: string;
 
@@ -47,19 +47,11 @@ export class Note extends TimeStamps {
   })
   user!: User;
 
-  static async findOneAndUpdateOrFail(
-    this: ReturnModelType<typeof Note>,
-    query: Partial<Note>,
-    update: Partial<Note>
-  ): Promise<Note> {
-    const updatedNote = await this.findOneAndUpdate(
-      query,
-      { $set: update },
-      { returnOriginal: false }
-    ).exec();
-    if (updatedNote == null) throw Error(`Note is not found`);
-    return updatedNote;
-  }
+  @Field({ nullable: true })
+  createdAt?: Date;
+
+  @Field({ nullable: true })
+  updatedAt?: Date;
 }
 
 export const NoteModel = getModelForClass(Note);

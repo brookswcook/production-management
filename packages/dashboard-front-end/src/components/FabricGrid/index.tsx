@@ -56,6 +56,13 @@ export default function FabricGrid(): ReactElement {
       type: "string",
     },
     {
+      field: "factoryCode",
+      headerName: "Factory",
+      minWidth: 50,
+      flex: 1,
+      type: "string",
+    },
+    {
       field: "productCodes",
       headerName: "Associated Products",
       minWidth: 100,

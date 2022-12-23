@@ -34,6 +34,7 @@
     "graphql-upload": "^13.0.0",
     "mongoose": "^6.2.0",
     "reflect-metadata": "^0.1.13",
+    "ts-mixer": "^6.0.2",
     "type-graphql": "^1.1.1",
     "winston": "^3.5.0"
   },

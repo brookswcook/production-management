@@ -13,10 +13,11 @@ import { Style } from "../style/style.model";
 import { Fabric } from "../fabric/fabric.model";
 import { Note } from "../note/note.model";
 import { NoteType } from "dashboard-core";
+import { IFactoryTenant } from "../factory/types";
 
 @index<Product>({ styleCode: 1, fabricCode: 1 }, { unique: true })
 @ObjectType()
-export class Product {
+export class Product implements IFactoryTenant {
   @Field()
   id?: string;
 
@@ -65,7 +66,7 @@ export class Product {
 
   @Field()
   @Property({ required: true })
-  factoryName!: string;
+  factoryCode!: string;
 
   @Field()
   @Property({ required: true })
@@ -174,10 +175,10 @@ export class Product {
   @Property({ _id: false })
   shipping?: ProductShipping;
 
-  static async findByCodeOrFail(code: string) {
-    const product = await ProductModel.findOne({
-      code,
-    } as Product)
+  static async findByCodeOrFail(code: string, factoryCode?: string) {
+    const query: Partial<Product> = { code };
+    factoryCode && Object.assign(query, { factoryCode });
+    const product = await ProductModel.findOne(query)
       .populate({ path: "notes", populate: { path: "user" } })
       .populate({ path: "fitSamples", populate: { path: "note" } })
       .populate({ path: "style", populate: { path: "techPacks" } })

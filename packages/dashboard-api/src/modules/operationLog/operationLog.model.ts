@@ -1,5 +1,6 @@
 import {
   getModelForClass,
+  index,
   ModelOptions,
   prop as Property,
 } from "@typegoose/typegoose";
@@ -7,6 +8,7 @@ import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
 import { User } from "../user/user.model";
 
+@index<OperationLog>({ variables: "text" })
 @ModelOptions({ schemaOptions: { timestamps: true } })
 @ObjectType()
 export class OperationLog extends TimeStamps {

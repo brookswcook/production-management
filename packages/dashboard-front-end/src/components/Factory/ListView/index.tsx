@@ -6,6 +6,7 @@ import {
   useFactoriesQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
+import { renderCellExpand } from "../../Common/GridCellExpand";
 import { CreateFactoryPopperButton } from "../Form";
 
 export function FactoryList(): ReactElement {
@@ -25,6 +26,7 @@ export function FactoryList(): ReactElement {
       headerName: "Name",
       minWidth: 70,
       flex: 1,
+      renderCell: renderCellExpand,
       type: "string",
     },
     {
@@ -32,6 +34,7 @@ export function FactoryList(): ReactElement {
       headerName: "Address",
       minWidth: 70,
       flex: 3,
+      renderCell: renderCellExpand,
       type: "string",
     },
     {

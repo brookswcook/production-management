@@ -18,6 +18,10 @@ export class Factory {
   @Field({ nullable: true })
   @Property()
   email?: string;
+
+  @Field({ nullable: true })
+  @Property()
+  phone?: string;
 }
 
 export const FactoryModel = getModelForClass(Factory);

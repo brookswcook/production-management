@@ -19,6 +19,10 @@ export class User extends ExpectResultModel implements UserPayload, TimeStamps {
   @Property({ unique: true, required: true })
   email!: string;
 
+  @Field({ nullable: true })
+  @Property()
+  phone?: string;
+
   @Field()
   @Property({ required: true })
   firstName!: string;

@@ -9,6 +9,7 @@ import { Field, ObjectType } from "type-graphql";
 import { UserPayload, UserRole } from "dashboard-core";
 import { ExpectResultModel } from "../common/expectResultModel";
 
+// TODO: add unique compound index {companyCode, email} once we support multitenancy in auth; until then email should be unique
 @ModelOptions({ schemaOptions: { timestamps: true } })
 @ObjectType()
 export class User extends ExpectResultModel implements UserPayload, TimeStamps {
@@ -42,6 +43,10 @@ export class User extends ExpectResultModel implements UserPayload, TimeStamps {
     },
   })
   fullName!: string;
+
+  @Field()
+  @Property({ required: true })
+  companyCode!: string;
 
   @Field()
   @Property({ required: true, default: false })

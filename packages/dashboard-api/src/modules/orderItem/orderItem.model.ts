@@ -19,6 +19,10 @@ export class OrderItem {
   productCode!: string;
 
   @Field()
+  @Property({ required: true })
+  companyCode!: string;
+
+  @Field()
   @Property({ required: true, default: 1 })
   quantity!: number;
 

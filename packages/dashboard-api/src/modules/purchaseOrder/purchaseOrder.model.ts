@@ -6,7 +6,6 @@ import {
 } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 
-// Note: can it be called productionOrder?
 @ModelOptions({
   schemaOptions: { timestamps: true, collection: "purchase_orders" },
 })

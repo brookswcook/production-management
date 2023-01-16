@@ -6,7 +6,10 @@ import {
 } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 
-@ModelOptions({ schemaOptions: { timestamps: true } })
+// Note: can it be called productionOrder?
+@ModelOptions({
+  schemaOptions: { timestamps: true, collection: "purchase_orders" },
+})
 @ObjectType()
 export class PurchaseOrder implements TimeStamps {
   @Field()
@@ -25,13 +28,17 @@ export class PurchaseOrder implements TimeStamps {
   @Property({ required: true })
   expectedDeliveryDate!: Date;
 
-  // company
-  @Property({ required: true })
-  recipientId!: string;
+  // @Field()
+  // @Property({ required: true })
+  // items!: OrderItem[];
 
-  // factory
+  @Field()
   @Property({ required: true })
-  supplierId!: string;
+  companyCode!: string;
+
+  @Field()
+  @Property({ required: true })
+  factoryCode!: string;
 }
 
 export const PurchaseOrderModel = getModelForClass(PurchaseOrder);

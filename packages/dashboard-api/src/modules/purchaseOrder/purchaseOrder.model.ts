@@ -11,16 +11,16 @@ import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 })
 @ObjectType()
 export class PurchaseOrder implements TimeStamps {
-  @Field()
-  @Property({ required: true, unique: true })
-  code!: string;
+  @Property({
+    required: true,
+    unique: true,
+  })
+  uid!: number;
 
   @Field()
-  @Property({ required: true })
   createdAt!: Date;
 
   @Field()
-  @Property({ required: true })
   updatedAt!: Date;
 
   @Field()
@@ -38,6 +38,18 @@ export class PurchaseOrder implements TimeStamps {
   @Field()
   @Property({ required: true })
   factoryCode!: string;
+
+  static async getNextUID() {
+    const [{ uid } = { uid: 0 }] = await PurchaseOrderModel.aggregate<
+      Pick<PurchaseOrder, "uid">
+    >([
+      { $project: { _id: 0, uid: 1 } },
+      { $sort: { uid: -1 } },
+      { $limit: 1 },
+    ]).exec();
+
+    return uid + 1;
+  }
 }
 
 export const PurchaseOrderModel = getModelForClass(PurchaseOrder);

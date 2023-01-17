@@ -50,6 +50,12 @@ export type CreateProductInput = {
   styleCode: Scalars['String'];
 };
 
+export type CreatePurchaseOrderInput = {
+  companyCode: Scalars['String'];
+  expectedDeliveryDate: Scalars['DateTime'];
+  factoryCode: Scalars['String'];
+};
+
 export type CreateStyleInput = {
   code: Scalars['String'];
   name: Scalars['String'];
@@ -112,6 +118,7 @@ export type Factory = {
   code: Scalars['String'];
   email?: Maybe<Scalars['String']>;
   name: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
 };
 
 export type File = {
@@ -179,6 +186,7 @@ export type Mutation = {
   createFactory: Factory;
   createNote: Note;
   createProduct: Product;
+  createPurchaseOrder: PurchaseOrder;
   createStyle: Style;
   createUser: User;
   deleteUser: Scalars['Boolean'];
@@ -224,6 +232,11 @@ export type MutationCreateNoteArgs = {
 
 export type MutationCreateProductArgs = {
   data: CreateProductInput;
+};
+
+
+export type MutationCreatePurchaseOrderArgs = {
+  data: CreatePurchaseOrderInput;
 };
 
 
@@ -324,6 +337,21 @@ export type OperationLog = {
   variables: Scalars['String'];
 };
 
+export type OrderItem = {
+  __typename?: 'OrderItem';
+  companyCode: Scalars['String'];
+  orderCode: Scalars['String'];
+  price: Scalars['Float'];
+  productCode: Scalars['String'];
+  quantity: Scalars['Float'];
+  variant: Array<OrderItemAttribute>;
+};
+
+export type OrderItemAttribute = {
+  __typename?: 'OrderItemAttribute';
+  size?: Maybe<Scalars['String']>;
+};
+
 export type Product = {
   __typename?: 'Product';
   code: Scalars['String'];
@@ -374,6 +402,15 @@ export type ProductShipping = {
   lastShippingDate: Scalars['DateTime'];
   shipped: Scalars['Boolean'];
   trackNumber?: Maybe<Scalars['String']>;
+};
+
+export type PurchaseOrder = {
+  __typename?: 'PurchaseOrder';
+  companyCode: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  expectedDeliveryDate: Scalars['DateTime'];
+  factoryCode: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Query = {
@@ -479,6 +516,8 @@ export type UploadTechPackInput = {
 
 export type User = {
   __typename?: 'User';
+  address: Scalars['String'];
+  companyCode: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
   deleted: Scalars['Boolean'];
   disabled: Scalars['Boolean'];
@@ -488,6 +527,7 @@ export type User = {
   fullName: Scalars['String'];
   id: Scalars['String'];
   lastName: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
   role: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -585,6 +625,13 @@ export type ProductQueryVariables = Exact<{
 
 
 export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type?: string | null, colorType: string, colorCode?: string | null, printFileName?: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null } };
+
+export type CreatePurchaseOrderMutationVariables = Exact<{
+  data: CreatePurchaseOrderInput;
+}>;
+
+
+export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', expectedDeliveryDate: string } };
 
 export type SendFabricSampleMutationVariables = Exact<{
   data: SendSampleInput;
@@ -1308,6 +1355,39 @@ export function useProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pr
 export type ProductQueryHookResult = ReturnType<typeof useProductQuery>;
 export type ProductLazyQueryHookResult = ReturnType<typeof useProductLazyQuery>;
 export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVariables>;
+export const CreatePurchaseOrderDocument = gql`
+    mutation CreatePurchaseOrder($data: CreatePurchaseOrderInput!) {
+  createPurchaseOrder(data: $data) {
+    expectedDeliveryDate
+  }
+}
+    `;
+export type CreatePurchaseOrderMutationFn = Apollo.MutationFunction<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>;
+
+/**
+ * __useCreatePurchaseOrderMutation__
+ *
+ * To run a mutation, you first call `useCreatePurchaseOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePurchaseOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPurchaseOrderMutation, { data, loading, error }] = useCreatePurchaseOrderMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreatePurchaseOrderMutation(baseOptions?: Apollo.MutationHookOptions<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>(CreatePurchaseOrderDocument, options);
+      }
+export type CreatePurchaseOrderMutationHookResult = ReturnType<typeof useCreatePurchaseOrderMutation>;
+export type CreatePurchaseOrderMutationResult = Apollo.MutationResult<CreatePurchaseOrderMutation>;
+export type CreatePurchaseOrderMutationOptions = Apollo.BaseMutationOptions<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>;
 export const SendFabricSampleDocument = gql`
     mutation SendFabricSample($data: SendSampleInput!) {
   sendFabricSample(data: $data) {

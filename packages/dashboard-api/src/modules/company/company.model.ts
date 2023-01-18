@@ -28,6 +28,10 @@ export class Company implements TimeStamps {
 
   @Field()
   @Property({ required: true })
+  address!: string;
+
+  @Field()
+  @Property({ required: true })
   createdAt!: Date;
 
   @Field()

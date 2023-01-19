@@ -11,6 +11,7 @@ import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 })
 @ObjectType()
 export class PurchaseOrder implements TimeStamps {
+  @Field()
   @Property({
     required: true,
     unique: true,

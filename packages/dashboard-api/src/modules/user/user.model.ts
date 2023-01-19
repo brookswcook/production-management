@@ -46,6 +46,10 @@ export class User extends ExpectResultModel implements UserPayload, TimeStamps {
 
   @Field()
   @Property({ required: true, default: false })
+  pointOfContact!: boolean;
+
+  @Field()
+  @Property({ required: true, default: false })
   disabled!: boolean;
 
   // TODO: to think about how soft delete can be extended on other entities
@@ -72,6 +76,22 @@ export class User extends ExpectResultModel implements UserPayload, TimeStamps {
     return this.findOneOrFail({ email, deleted, disabled });
   }
 
+  static async getUserContactDetails(
+    query: Partial<User>
+  ): Promise<UserContactDetails[]> {
+    return await UserModel.find(
+      { ...query, ...{ pointOfContact: true } },
+      {
+        _id: 0,
+        fullName: 1,
+        email: 1,
+        phone: 1,
+      }
+    )
+      .lean()
+      .exec();
+  }
+
   static async getUserEmails(query: Partial<User>): Promise<string[]> {
     const emails = await UserModel.find(query, { _id: 0, email: 1 }).lean();
     return emails.map(item => item.email);
@@ -96,3 +116,14 @@ export class LoginResult {
 }
 
 export const UserModel = getModelForClass(User);
+
+export class UserContactDetails {
+  @Field()
+  fullName!: string;
+
+  @Field()
+  email!: string;
+
+  @Field()
+  phone?: string;
+}

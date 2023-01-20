@@ -11,3 +11,15 @@ export type DecodedTokenPayload<T> = {
 } & { iat: number; exp: number };
 
 export type FileType = "tech-pack" | "print" | "note-image";
+
+export type ProductSizes =
+  | "00"
+  | "0"
+  | "2"
+  | "4"
+  | "6"
+  | "8"
+  | "10"
+  | "12"
+  | "14"
+  | "16";

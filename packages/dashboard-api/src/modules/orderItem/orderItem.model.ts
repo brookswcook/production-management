@@ -3,14 +3,15 @@ import {
   ModelOptions,
   prop as Property,
 } from "@typegoose/typegoose";
+import { ProductSizes } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
 class OrderItemAttribute {
   // TODO: move size type to core types
   @Field({ nullable: true })
-  @Property()
-  size?: "0-0" | "0" | "2" | "4" | "6" | "8" | "10" | "12" | "14";
+  @Property({ enum: ["00", "0", "2", "4", "6", "8", "10", "12", "14", "16"] })
+  size?: ProductSizes;
   // Note: extend by adding other attributes if needed; by having array of objects with optional attribute fields it's possible to create any combination of them
 }
 
@@ -21,7 +22,7 @@ class OrderItemAttribute {
 export class OrderItem {
   @Field()
   @Property({ required: true })
-  orderCode!: string;
+  orderUid!: number;
 
   @Field()
   @Property({ required: true })
@@ -36,13 +37,14 @@ export class OrderItem {
   quantity!: number;
 
   @Field(() => [OrderItemAttribute])
-  @Property({ type: () => [OrderItemAttribute], required: true, default: [] })
-  variant!: OrderItemAttribute[];
+  @Property({
+    type: () => [OrderItemAttribute],
+    required: true,
+    default: [],
+    _id: false,
+  })
+  variantAttributes!: OrderItemAttribute[];
 
-  // TODO: decide where to keep the price, maybe it should be a part of a product; or a separate entity with reference to a product
-  // Note: it looks like it's production price i.e should be set/calculated by factory
-  // TODO: rename to productionPrice
-  // TODO: add shipping price
   @Field()
   @Property({ required: true })
   price!: number;

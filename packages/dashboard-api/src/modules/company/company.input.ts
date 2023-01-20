@@ -1,4 +1,16 @@
-import { InputType } from "type-graphql";
+import { Field, InputType } from "type-graphql";
 
 @InputType()
-export class CreateCompanyInput {}
+export class CreateCompanyInput {
+  @Field()
+  name!: string;
+
+  @Field()
+  address!: string;
+
+  @Field({ nullable: true })
+  parentId?: string;
+
+  @Field()
+  role!: "Owner" | "Factory";
+}

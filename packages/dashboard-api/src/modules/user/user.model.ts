@@ -83,13 +83,13 @@ export class User extends ExpectResultModel implements UserPayload, TimeStamps {
       { ...query, ...{ pointOfContact: true } },
       {
         _id: 0,
+        firstName: 1,
+        lastName: 1,
         fullName: 1,
         email: 1,
         phone: 1,
       }
-    )
-      .lean()
-      .exec();
+    ).exec();
   }
 
   static async getUserEmails(query: Partial<User>): Promise<string[]> {
@@ -117,6 +117,7 @@ export class LoginResult {
 
 export const UserModel = getModelForClass(User);
 
+@ObjectType()
 export class UserContactDetails {
   @Field()
   fullName!: string;
@@ -124,6 +125,6 @@ export class UserContactDetails {
   @Field()
   email!: string;
 
-  @Field()
+  @Field({ nullable: true })
   phone?: string;
 }

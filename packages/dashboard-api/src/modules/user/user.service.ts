@@ -13,7 +13,9 @@ export class UserService {
   getUserContactDetailsByCompany(
     companyCode: string
   ): Promise<UserContactDetails[]> {
-    return UserModel.getUserContactDetails({ companyCode });
+    return UserModel.getUserContactDetails({
+      companyCode,
+    });
   }
 
   parseFactoryCodeRole(role: string) {

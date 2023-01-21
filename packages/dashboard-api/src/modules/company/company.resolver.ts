@@ -1,12 +1,14 @@
 import {
   Arg,
   Authorized,
+  Ctx,
   FieldResolver,
   Mutation,
   Query,
   Resolver,
   Root,
 } from "type-graphql";
+import { ResolverContext } from "../../lib/graphql";
 import { UserContactDetails } from "../user/user.model";
 import { UserService } from "../user/user.service";
 import { CreateCompanyInput } from "./company.input";
@@ -26,16 +28,22 @@ export class CompanyResolver {
   }
 
   @FieldResolver(() => [UserContactDetails])
-  async contacts(
-    @Root("_doc") { code }: Company
-  ): Promise<UserContactDetails[]> {
-    return this.userService.getUserContactDetailsByCompany(code);
+  async contacts(@Root("_doc") { id }: Company): Promise<UserContactDetails[]> {
+    return this.userService.getUserContactDetailsByCompany(id);
   }
 
   @Authorized(["Admin"])
   @Query(() => [Company], { nullable: false })
   async companies(): Promise<Company[]> {
     return CompanyModel.find().exec();
+  }
+
+  @Authorized(["Admin"])
+  @Query(() => [Company], { nullable: false })
+  async factories(
+    @Ctx() { user: { companyId: parentId } }: ResolverContext
+  ): Promise<Company[]> {
+    return CompanyModel.find({ parentId, role: "Factory" }).exec();
   }
 
   @Authorized(["Admin"])

@@ -14,7 +14,7 @@ import { Field, ObjectType } from "type-graphql";
 @ObjectType()
 export class Company implements TimeStamps {
   @Field()
-  id?: string;
+  id!: string;
 
   @Field()
   @Property({

@@ -42,7 +42,7 @@ export class User extends ExpectResultModel implements UserPayload, TimeStamps {
 
   @Field()
   @Property({ required: true })
-  companyCode!: string;
+  companyId!: string;
 
   @Field()
   @Property({ required: true, default: false })

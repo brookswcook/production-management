@@ -6,15 +6,15 @@ export class UserService {
     return UserModel.getUserEmails({ role: factoryRole });
   }
 
-  getUserEmailsByCompany(companyCode: string): Promise<string[]> {
-    return UserModel.getUserEmails({ companyCode });
+  getUserEmailsByCompany(companyId: string): Promise<string[]> {
+    return UserModel.getUserEmails({ companyId });
   }
 
   getUserContactDetailsByCompany(
-    companyCode: string
+    companyId: string
   ): Promise<UserContactDetails[]> {
     return UserModel.getUserContactDetails({
-      companyCode,
+      companyId,
     });
   }
 

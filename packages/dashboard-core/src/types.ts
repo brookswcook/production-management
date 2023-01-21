@@ -5,6 +5,7 @@ export type UserPayload = {
   id: string;
   role: UserRole;
   firstName: string;
+  companyId: string;
 };
 export type DecodedTokenPayload<T> = {
   [K in keyof T]: T[K];

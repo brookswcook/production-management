@@ -1,5 +1,6 @@
 import {
   getModelForClass,
+  index,
   ModelOptions,
   prop as Property,
   ReturnModelType,
@@ -10,6 +11,10 @@ import { UserPayload, UserRole } from "dashboard-core";
 import { ExpectResultModel } from "../common/expectResultModel";
 
 // TODO: add unique compound index {companyCode, email} once we support multitenancy in auth; until then email should be unique
+@index<User>(
+  { companyId: 1, pointOfContact: 1 },
+  { unique: true, partialFilterExpression: { pointOfContact: true } }
+)
 @ModelOptions({ schemaOptions: { timestamps: true } })
 @ObjectType()
 export class User extends ExpectResultModel implements UserPayload, TimeStamps {

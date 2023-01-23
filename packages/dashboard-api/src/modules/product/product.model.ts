@@ -13,11 +13,10 @@ import { Style } from "../style/style.model";
 import { Fabric } from "../fabric/fabric.model";
 import { Note } from "../note/note.model";
 import { NoteType } from "dashboard-core";
-import { IFactoryTenant } from "../factory/types";
 
 @index<Product>({ styleCode: 1, fabricCode: 1 }, { unique: true })
 @ObjectType()
-export class Product implements IFactoryTenant {
+export class Product {
   @Field()
   id?: string;
 

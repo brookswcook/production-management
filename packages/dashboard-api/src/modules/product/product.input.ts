@@ -1,8 +1,7 @@
 import { Field, InputType } from "type-graphql";
-import { IFactoryTenant } from "../factory/types";
 
 @InputType()
-export class CreateProductInput implements IFactoryTenant {
+export class CreateProductInput {
   @Field()
   styleCode!: string;
 

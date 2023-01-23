@@ -3,7 +3,7 @@ import { FormEvent, ReactElement, useState } from "react";
 import { PopperButton } from "../../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
 import {
-  CreateFactoryInput,
+  CreateCompanyInput,
   useCreateFactoryMutation,
 } from "../../../generated/graphql";
 import { toast } from "react-toastify";
@@ -24,7 +24,7 @@ export function CreateFactoryForm({
     const data = new FormData(event.currentTarget);
     const newFactoryData = Object.fromEntries(
       data.entries()
-    ) as unknown as CreateFactoryInput;
+    ) as unknown as CreateCompanyInput;
 
     try {
       await newFactoryMutation({
@@ -45,10 +45,9 @@ export function CreateFactoryForm({
       <Typography component="h4" variant="inherit">
         {`Create new Factory`}
       </Typography>
-      <TextField label="Code" name="code" required />
       <TextField label="Name" name="name" required />
       <TextField label="Address" name="address" required />
-      <TextField label="Email" name="email" required />
+      {/* <TextField label="Email" name="email" required /> */}
       <>
         <Button variant="contained" type="submit">
           Add Factory

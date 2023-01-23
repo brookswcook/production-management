@@ -43,6 +43,9 @@ export function FactoryList(): ReactElement {
       minWidth: 70,
       flex: 1,
       type: "string",
+      valueGetter: ({ row }: { row: FactoryListFieldsFragment }) => {
+        return row.contacts[0]?.email ?? "";
+      },
     },
   ];
 

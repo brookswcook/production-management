@@ -18,6 +18,10 @@ export class PurchaseOrder implements TimeStamps {
   })
   uid!: number;
 
+  // @Field()
+  // @Property({ required: true, unique: true })
+  // code!: string;
+
   @Field()
   createdAt!: Date;
 

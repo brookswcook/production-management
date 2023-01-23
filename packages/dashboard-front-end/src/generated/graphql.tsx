@@ -19,6 +19,26 @@ export type Scalars = {
   Upload: any;
 };
 
+export type Company = {
+  __typename?: 'Company';
+  address: Scalars['String'];
+  associatedUsers: Array<Scalars['String']>;
+  code: Scalars['String'];
+  contacts?: Maybe<Array<UserContactDetails>>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  isRoot: Scalars['Boolean'];
+  name: Scalars['String'];
+  parentId?: Maybe<Scalars['String']>;
+  role: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type CreateCompanyInput = {
+  address: Scalars['String'];
+  name: Scalars['String'];
+};
+
 export type CreateFabricInput = {
   code: Scalars['String'];
   colorCode?: InputMaybe<Scalars['String']>;
@@ -29,18 +49,20 @@ export type CreateFabricInput = {
   type?: InputMaybe<Scalars['String']>;
 };
 
-export type CreateFactoryInput = {
-  address: Scalars['String'];
-  code: Scalars['String'];
-  email?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
-};
-
 export type CreateNoteInput = {
   images?: InputMaybe<Array<FileUploadInput>>;
   parentId: Scalars['String'];
   text: Scalars['String'];
   type: Scalars['String'];
+};
+
+export type CreateOrderInput = {
+  companyCode: Scalars['String'];
+  orderUid: Scalars['Float'];
+  price: Scalars['Float'];
+  productCode: Scalars['String'];
+  quantity: Scalars['Float'];
+  variantAttributes: Array<OrderItemAttributeInput>;
 };
 
 export type CreateProductInput = {
@@ -111,16 +133,6 @@ export type FabricSample = {
   trackNumber: Scalars['String'];
 };
 
-export type Factory = {
-  __typename?: 'Factory';
-  address: Scalars['String'];
-  associatedUsers: Array<Scalars['String']>;
-  code: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-  phone?: Maybe<Scalars['String']>;
-};
-
 export type File = {
   __typename?: 'File';
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -182,9 +194,11 @@ export type Mutation = {
   __typename?: 'Mutation';
   approveFabricSample: FabricSample;
   approveFitSample: FitSample;
+  createCompany: Company;
   createFabric: Fabric;
-  createFactory: Factory;
+  createFactory: Company;
   createNote: Note;
+  createOrderItem: OrderItem;
   createProduct: Product;
   createPurchaseOrder: PurchaseOrder;
   createStyle: Style;
@@ -215,18 +229,28 @@ export type MutationApproveFitSampleArgs = {
 };
 
 
+export type MutationCreateCompanyArgs = {
+  data: CreateCompanyInput;
+};
+
+
 export type MutationCreateFabricArgs = {
   data: CreateFabricInput;
 };
 
 
 export type MutationCreateFactoryArgs = {
-  data: CreateFactoryInput;
+  data: CreateCompanyInput;
 };
 
 
 export type MutationCreateNoteArgs = {
   data: CreateNoteInput;
+};
+
+
+export type MutationCreateOrderItemArgs = {
+  data: CreateOrderInput;
 };
 
 
@@ -340,16 +364,20 @@ export type OperationLog = {
 export type OrderItem = {
   __typename?: 'OrderItem';
   companyCode: Scalars['String'];
-  orderCode: Scalars['String'];
+  orderUid: Scalars['Float'];
   price: Scalars['Float'];
   productCode: Scalars['String'];
   quantity: Scalars['Float'];
-  variant: Array<OrderItemAttribute>;
+  variantAttributes: Array<OrderItemAttribute>;
 };
 
 export type OrderItemAttribute = {
   __typename?: 'OrderItemAttribute';
   size?: Maybe<Scalars['String']>;
+};
+
+export type OrderItemAttributeInput = {
+  size?: InputMaybe<Scalars['String']>;
 };
 
 export type Product = {
@@ -410,14 +438,16 @@ export type PurchaseOrder = {
   createdAt: Scalars['DateTime'];
   expectedDeliveryDate: Scalars['DateTime'];
   factoryCode: Scalars['String'];
+  uid: Scalars['Float'];
   updatedAt: Scalars['DateTime'];
 };
 
 export type Query = {
   __typename?: 'Query';
+  companies: Array<Company>;
   fabric: Fabric;
   fabrics: Array<Fabric>;
-  factories: Array<Factory>;
+  factories: Array<Company>;
   imageLink: Scalars['String'];
   operationLogs: Array<OperationLog>;
   printLink: Scalars['String'];
@@ -516,8 +546,7 @@ export type UploadTechPackInput = {
 
 export type User = {
   __typename?: 'User';
-  address: Scalars['String'];
-  companyCode: Scalars['String'];
+  companyId: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
   deleted: Scalars['Boolean'];
   disabled: Scalars['Boolean'];
@@ -528,8 +557,16 @@ export type User = {
   id: Scalars['String'];
   lastName: Scalars['String'];
   phone?: Maybe<Scalars['String']>;
+  pointOfContact: Scalars['Boolean'];
   role: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type UserContactDetails = {
+  __typename?: 'UserContactDetails';
+  email: Scalars['String'];
+  fullName: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
 };
 
 export type LoginMutationVariables = Exact<{
@@ -563,23 +600,23 @@ export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?:
 export type FactoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FactoriesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Factory', code: string, name: string, address: string, email?: string | null }> };
+export type FactoriesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Company', id: string, code: string, name: string, address: string, contacts?: Array<{ __typename?: 'UserContactDetails', email: string }> | null }> };
 
 export type FactoryCodesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FactoryCodesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Factory', code: string }> };
+export type FactoryCodesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Company', code: string }> };
 
 export type CreateFactoryMutationVariables = Exact<{
-  data: CreateFactoryInput;
+  data: CreateCompanyInput;
 }>;
 
 
-export type CreateFactoryMutation = { __typename?: 'Mutation', createFactory: { __typename?: 'Factory', code: string } };
+export type CreateFactoryMutation = { __typename?: 'Mutation', createFactory: { __typename?: 'Company', code: string } };
 
-export type FactoryListFieldsFragment = { __typename?: 'Factory', code: string, name: string, address: string, email?: string | null };
+export type FactoryListFieldsFragment = { __typename?: 'Company', id: string, code: string, name: string, address: string, contacts?: Array<{ __typename?: 'UserContactDetails', email: string }> | null };
 
-export type FactoryCodesFragment = { __typename?: 'Factory', code: string };
+export type FactoryCodesFragment = { __typename?: 'Company', code: string };
 
 export type FileFieldsFragment = { __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null };
 
@@ -791,15 +828,18 @@ export const FabricFieldsFragmentDoc = gql`
     ${NoteFieldsFragmentDoc}
 ${FabricSampleFieldsFragmentDoc}`;
 export const FactoryListFieldsFragmentDoc = gql`
-    fragment FactoryListFields on Factory {
+    fragment FactoryListFields on Company {
+  id
   code
   name
   address
-  email
+  contacts {
+    email
+  }
 }
     `;
 export const FactoryCodesFragmentDoc = gql`
-    fragment FactoryCodes on Factory {
+    fragment FactoryCodes on Company {
   code
 }
     `;
@@ -1154,7 +1194,7 @@ export type FactoryCodesQueryHookResult = ReturnType<typeof useFactoryCodesQuery
 export type FactoryCodesLazyQueryHookResult = ReturnType<typeof useFactoryCodesLazyQuery>;
 export type FactoryCodesQueryResult = Apollo.QueryResult<FactoryCodesQuery, FactoryCodesQueryVariables>;
 export const CreateFactoryDocument = gql`
-    mutation CreateFactory($data: CreateFactoryInput!) {
+    mutation CreateFactory($data: CreateCompanyInput!) {
   createFactory(data: $data) {
     code
   }

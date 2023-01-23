@@ -7,10 +7,4 @@ export class CreateCompanyInput {
 
   @Field()
   address!: string;
-
-  @Field({ nullable: true })
-  parentId?: string;
-
-  @Field()
-  role!: "Owner" | "Factory";
 }

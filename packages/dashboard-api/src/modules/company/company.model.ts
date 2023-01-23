@@ -36,7 +36,7 @@ export class Company implements TimeStamps {
   address!: string;
 
   @Field({ nullable: true })
-  @Property()
+  @Property({ default: null })
   parentId?: string;
 
   @Field()

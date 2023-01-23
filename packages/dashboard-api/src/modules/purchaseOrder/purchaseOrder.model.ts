@@ -38,7 +38,7 @@ export class PurchaseOrder implements TimeStamps {
 
   @Field()
   @Property({ required: true })
-  companyCode!: string;
+  companyId!: string;
 
   @Field()
   @Property({ required: true })

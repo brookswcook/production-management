@@ -30,7 +30,7 @@ export class OrderItem {
 
   @Field()
   @Property({ required: true })
-  companyCode!: string;
+  companyId!: string;
 
   @Field()
   @Property({ required: true, default: 1 })

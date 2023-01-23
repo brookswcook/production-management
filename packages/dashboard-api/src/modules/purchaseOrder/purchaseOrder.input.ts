@@ -6,8 +6,11 @@ export class CreatePurchaseOrderInput {
   expectedDeliveryDate!: Date;
 
   @Field()
-  companyCode!: string;
-
-  @Field()
   factoryCode!: string;
+}
+
+@InputType()
+export class GetPurchaseOrderInput {
+  @Field()
+  uid!: number;
 }

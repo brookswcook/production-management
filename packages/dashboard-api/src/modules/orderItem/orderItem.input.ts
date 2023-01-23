@@ -16,7 +16,7 @@ export class CreateOrderInput {
   productCode!: string;
 
   @Field()
-  companyCode!: string;
+  companyId!: string;
 
   @Field()
   quantity!: number;

@@ -57,7 +57,7 @@ export type CreateNoteInput = {
 };
 
 export type CreateOrderInput = {
-  companyCode: Scalars['String'];
+  companyId: Scalars['String'];
   orderUid: Scalars['Float'];
   price: Scalars['Float'];
   productCode: Scalars['String'];
@@ -73,7 +73,7 @@ export type CreateProductInput = {
 };
 
 export type CreatePurchaseOrderInput = {
-  companyCode: Scalars['String'];
+  companyId: Scalars['String'];
   expectedDeliveryDate: Scalars['DateTime'];
   factoryCode: Scalars['String'];
 };
@@ -363,7 +363,7 @@ export type OperationLog = {
 
 export type OrderItem = {
   __typename?: 'OrderItem';
-  companyCode: Scalars['String'];
+  companyId: Scalars['String'];
   orderUid: Scalars['Float'];
   price: Scalars['Float'];
   productCode: Scalars['String'];
@@ -434,7 +434,7 @@ export type ProductShipping = {
 
 export type PurchaseOrder = {
   __typename?: 'PurchaseOrder';
-  companyCode: Scalars['String'];
+  companyId: Scalars['String'];
   createdAt: Scalars['DateTime'];
   expectedDeliveryDate: Scalars['DateTime'];
   factoryCode: Scalars['String'];

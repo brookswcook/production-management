@@ -22,14 +22,14 @@ export class CompanyResolver {
   }
 
   @FieldResolver(() => [String])
-  async associatedUsers(@Root("_doc") { code }: Company): Promise<string[]> {
+  async associatedUsers(@Root() { code }: Company): Promise<string[]> {
     // TODO: add loader to run query once
     return this.userService.getUserEmailsByCompany(code);
   }
 
-  @FieldResolver(() => [UserContactDetails])
-  async contacts(@Root("_doc") { id }: Company): Promise<UserContactDetails[]> {
-    return this.userService.getUserContactDetailsByCompany(id);
+  @FieldResolver(() => [UserContactDetails], { defaultValue: [] })
+  async contacts(@Root() company: Company): Promise<UserContactDetails[]> {
+    return this.userService.getUserContactDetailsByCompany(company.id);
   }
 
   @Authorized(["Admin"])

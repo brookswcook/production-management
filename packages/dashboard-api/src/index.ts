@@ -14,6 +14,7 @@ import mongoose from "mongoose";
 import { authChecker } from "./lib/auth";
 import { graphqlUploadExpress } from "graphql-upload";
 import { logPlugin } from "./lib/graphqlLogPlugin";
+import { TypegooseMiddleware } from "./lib/typegoose-middleware";
 
 class DashboardApolloServer extends Server {
   constructor() {
@@ -33,6 +34,7 @@ class DashboardApolloServer extends Server {
   protected async setupApolloServer(): Promise<ApolloServer> {
     const schema = await buildSchema({
       resolvers: [__dirname + "/modules/**/*.resolver.{js,ts}"],
+      globalMiddlewares: [TypegooseMiddleware],
       authChecker,
     });
     return new ApolloServer({

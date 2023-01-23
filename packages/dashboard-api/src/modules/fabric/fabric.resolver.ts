@@ -29,7 +29,7 @@ export class FabricResolver {
 
   @FieldResolver(() => [String])
   async productCodes(
-    @Root("_doc") { code }: Fabric,
+    @Root() { code }: Fabric,
     @Ctx() { user: { role } }: ResolverContext
   ): Promise<string[]> {
     const factoryCode = this.userService.parseFactoryCodeRole(role);

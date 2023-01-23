@@ -35,9 +35,7 @@ import {
 @Resolver(User)
 export class UserResolver {
   @FieldResolver(() => FirebaseUser, { nullable: true })
-  async firebaseUser(
-    @Root("_doc") { email }: User
-  ): Promise<FirebaseUser | null> {
+  async firebaseUser(@Root() { email }: User): Promise<FirebaseUser | null> {
     return getFirebaseUser(email);
   }
 

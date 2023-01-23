@@ -27,7 +27,7 @@ export class CompanyResolver {
     return this.userService.getUserEmailsByCompany(code);
   }
 
-  @FieldResolver(() => [UserContactDetails], { defaultValue: [] })
+  @FieldResolver(() => [UserContactDetails], { nullable: false })
   async contacts(@Root() company: Company): Promise<UserContactDetails[]> {
     return this.userService.getUserContactDetailsByCompany(company.id);
   }

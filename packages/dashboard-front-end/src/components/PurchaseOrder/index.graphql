@@ -1,5 +1,23 @@
+query PurchaseOrders {
+  purchaseOrders {
+    ...PurchaseOrderListFields
+  }
+}
+
+query PurchaseOrder($uid: Int!) {
+  purchaseOrder(uid: $uid) {
+    ...PurchaseOrderListFields
+  }
+}
+
 mutation CreatePurchaseOrder($data: CreatePurchaseOrderInput!) {
   createPurchaseOrder(data: $data) {
-    expectedDeliveryDate
+    ...PurchaseOrderListFields
   }
+}
+
+fragment PurchaseOrderListFields on PurchaseOrder {
+  uid
+  createdAt
+  expectedDeliveryDate
 }

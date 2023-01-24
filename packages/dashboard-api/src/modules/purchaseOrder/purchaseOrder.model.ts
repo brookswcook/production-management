@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 import {
   getModelForClass,
   ModelOptions,
@@ -11,7 +11,7 @@ import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 })
 @ObjectType()
 export class PurchaseOrder implements TimeStamps {
-  @Field()
+  @Field(() => Int)
   @Property({
     required: true,
     unique: true,

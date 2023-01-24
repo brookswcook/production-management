@@ -73,7 +73,6 @@ export type CreateProductInput = {
 };
 
 export type CreatePurchaseOrderInput = {
-  companyId: Scalars['String'];
   expectedDeliveryDate: Scalars['DateTime'];
   factoryCode: Scalars['String'];
 };
@@ -179,6 +178,10 @@ export type FitSample = {
 
 export type GetProductsInput = {
   factoryCode: Scalars['String'];
+};
+
+export type GetPurchaseOrderInput = {
+  uid: Scalars['Float'];
 };
 
 export type LoginInput = {
@@ -438,7 +441,7 @@ export type PurchaseOrder = {
   createdAt: Scalars['DateTime'];
   expectedDeliveryDate: Scalars['DateTime'];
   factoryCode: Scalars['String'];
-  uid: Scalars['Float'];
+  uid: Scalars['Int'];
   updatedAt: Scalars['DateTime'];
 };
 
@@ -453,6 +456,8 @@ export type Query = {
   printLink: Scalars['String'];
   product: Product;
   products: Array<Product>;
+  purchaseOrder?: Maybe<PurchaseOrder>;
+  purchaseOrders: Array<PurchaseOrder>;
   style: Style;
   styles: Array<Style>;
   users: Array<User>;
@@ -481,6 +486,11 @@ export type QueryProductArgs = {
 
 export type QueryProductsArgs = {
   data?: InputMaybe<GetProductsInput>;
+};
+
+
+export type QueryPurchaseOrderArgs = {
+  uid: Scalars['Int'];
 };
 
 
@@ -663,12 +673,26 @@ export type ProductQueryVariables = Exact<{
 
 export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type?: string | null, colorType: string, colorCode?: string | null, printFileName?: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null } };
 
+export type PurchaseOrdersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PurchaseOrdersQuery = { __typename?: 'Query', purchaseOrders: Array<{ __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string }> };
+
+export type PurchaseOrderQueryVariables = Exact<{
+  uid: Scalars['Int'];
+}>;
+
+
+export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder?: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string } | null };
+
 export type CreatePurchaseOrderMutationVariables = Exact<{
   data: CreatePurchaseOrderInput;
 }>;
 
 
-export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', expectedDeliveryDate: string } };
+export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string } };
+
+export type PurchaseOrderListFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string };
 
 export type SendFabricSampleMutationVariables = Exact<{
   data: SendSampleInput;
@@ -946,6 +970,13 @@ export const ProductFieldsFragmentDoc = gql`
     ${FabricSampleFieldsFragmentDoc}
 ${FitSampleFieldsFragmentDoc}
 ${NoteFieldsFragmentDoc}`;
+export const PurchaseOrderListFieldsFragmentDoc = gql`
+    fragment PurchaseOrderListFields on PurchaseOrder {
+  uid
+  createdAt
+  expectedDeliveryDate
+}
+    `;
 export const FileFieldsFragmentDoc = gql`
     fragment fileFields on File {
   id
@@ -1395,13 +1426,82 @@ export function useProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pr
 export type ProductQueryHookResult = ReturnType<typeof useProductQuery>;
 export type ProductLazyQueryHookResult = ReturnType<typeof useProductLazyQuery>;
 export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVariables>;
+export const PurchaseOrdersDocument = gql`
+    query PurchaseOrders {
+  purchaseOrders {
+    ...PurchaseOrderListFields
+  }
+}
+    ${PurchaseOrderListFieldsFragmentDoc}`;
+
+/**
+ * __usePurchaseOrdersQuery__
+ *
+ * To run a query within a React component, call `usePurchaseOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePurchaseOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePurchaseOrdersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePurchaseOrdersQuery(baseOptions?: Apollo.QueryHookOptions<PurchaseOrdersQuery, PurchaseOrdersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PurchaseOrdersQuery, PurchaseOrdersQueryVariables>(PurchaseOrdersDocument, options);
+      }
+export function usePurchaseOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PurchaseOrdersQuery, PurchaseOrdersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PurchaseOrdersQuery, PurchaseOrdersQueryVariables>(PurchaseOrdersDocument, options);
+        }
+export type PurchaseOrdersQueryHookResult = ReturnType<typeof usePurchaseOrdersQuery>;
+export type PurchaseOrdersLazyQueryHookResult = ReturnType<typeof usePurchaseOrdersLazyQuery>;
+export type PurchaseOrdersQueryResult = Apollo.QueryResult<PurchaseOrdersQuery, PurchaseOrdersQueryVariables>;
+export const PurchaseOrderDocument = gql`
+    query PurchaseOrder($uid: Int!) {
+  purchaseOrder(uid: $uid) {
+    ...PurchaseOrderListFields
+  }
+}
+    ${PurchaseOrderListFieldsFragmentDoc}`;
+
+/**
+ * __usePurchaseOrderQuery__
+ *
+ * To run a query within a React component, call `usePurchaseOrderQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePurchaseOrderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePurchaseOrderQuery({
+ *   variables: {
+ *      uid: // value for 'uid'
+ *   },
+ * });
+ */
+export function usePurchaseOrderQuery(baseOptions: Apollo.QueryHookOptions<PurchaseOrderQuery, PurchaseOrderQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PurchaseOrderQuery, PurchaseOrderQueryVariables>(PurchaseOrderDocument, options);
+      }
+export function usePurchaseOrderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PurchaseOrderQuery, PurchaseOrderQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PurchaseOrderQuery, PurchaseOrderQueryVariables>(PurchaseOrderDocument, options);
+        }
+export type PurchaseOrderQueryHookResult = ReturnType<typeof usePurchaseOrderQuery>;
+export type PurchaseOrderLazyQueryHookResult = ReturnType<typeof usePurchaseOrderLazyQuery>;
+export type PurchaseOrderQueryResult = Apollo.QueryResult<PurchaseOrderQuery, PurchaseOrderQueryVariables>;
 export const CreatePurchaseOrderDocument = gql`
     mutation CreatePurchaseOrder($data: CreatePurchaseOrderInput!) {
   createPurchaseOrder(data: $data) {
-    expectedDeliveryDate
+    ...PurchaseOrderListFields
   }
 }
-    `;
+    ${PurchaseOrderListFieldsFragmentDoc}`;
 export type CreatePurchaseOrderMutationFn = Apollo.MutationFunction<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>;
 
 /**

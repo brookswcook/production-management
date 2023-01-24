@@ -1,5 +1,13 @@
 import { UserRole } from "dashboard-core";
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+} from "type-graphql";
 import { ResolverContext } from "../../lib/graphql";
 import { CreatePurchaseOrderInput } from "./purchaseOrder.input";
 import { PurchaseOrder, PurchaseOrderModel } from "./purchaseOrder.model";
@@ -17,7 +25,7 @@ export class PurchaseOrderResolver {
   @Authorized<UserRole>(["Admin", "VChapman"])
   @Query(() => PurchaseOrder, { nullable: true })
   async purchaseOrder(
-    @Arg("uid") uid: number,
+    @Arg("uid", () => Int) uid: number,
     @Ctx() { user: { companyId } }: ResolverContext
   ): Promise<PurchaseOrder | null> {
     return PurchaseOrderModel.findOne({ companyId, uid }).exec();

@@ -5,6 +5,7 @@ import {
   prop as Property,
 } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
+import { Company } from "../company/company.model";
 
 @ModelOptions({
   schemaOptions: { timestamps: true, collection: "purchase_orders" },
@@ -36,13 +37,29 @@ export class PurchaseOrder implements TimeStamps {
   // @Property({ required: true })
   // items!: OrderItem[];
 
-  @Field()
   @Property({ required: true })
   companyId!: string;
 
   @Field()
+  @Property({
+    ref: () => Company,
+    foreignField: "_id",
+    localField: "companyId",
+    justOne: true,
+  })
+  company!: Company;
+
   @Property({ required: true })
-  factoryCode!: string;
+  factoryId!: string;
+
+  @Field()
+  @Property({
+    ref: () => Company,
+    foreignField: "_id",
+    localField: "factoryId",
+    justOne: true,
+  })
+  factory!: Company;
 
   static async getNextUID() {
     const [{ uid } = { uid: 0 }] = await PurchaseOrderModel.aggregate<

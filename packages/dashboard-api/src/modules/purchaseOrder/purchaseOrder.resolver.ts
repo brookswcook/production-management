@@ -19,7 +19,9 @@ export class PurchaseOrderResolver {
   async purchaseOrders(
     @Ctx() { user: { companyId } }: ResolverContext
   ): Promise<PurchaseOrder[]> {
-    return PurchaseOrderModel.find({ companyId }).exec();
+    return PurchaseOrderModel.find({ companyId })
+      .populate(["company", "factory"])
+      .exec();
   }
 
   @Authorized<UserRole>(["Admin", "VChapman"])
@@ -28,7 +30,9 @@ export class PurchaseOrderResolver {
     @Arg("uid", () => Int) uid: number,
     @Ctx() { user: { companyId } }: ResolverContext
   ): Promise<PurchaseOrder | null> {
-    return PurchaseOrderModel.findOne({ companyId, uid }).exec();
+    return PurchaseOrderModel.findOne({ companyId, uid })
+      .populate("company", "factory")
+      .exec();
   }
 
   @Authorized<UserRole>(["Admin", "VChapman"])

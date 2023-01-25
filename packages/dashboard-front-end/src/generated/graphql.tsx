@@ -676,23 +676,23 @@ export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Prod
 export type PurchaseOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PurchaseOrdersQuery = { __typename?: 'Query', purchaseOrders: Array<{ __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string }> };
+export type PurchaseOrdersQuery = { __typename?: 'Query', purchaseOrders: Array<{ __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } }> };
 
 export type PurchaseOrderQueryVariables = Exact<{
   uid: Scalars['Int'];
 }>;
 
 
-export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder?: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string } | null };
+export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder?: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } } | null };
 
 export type CreatePurchaseOrderMutationVariables = Exact<{
   data: CreatePurchaseOrderInput;
 }>;
 
 
-export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string } };
+export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } } };
 
-export type PurchaseOrderListFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string };
+export type PurchaseOrderListFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } };
 
 export type SendFabricSampleMutationVariables = Exact<{
   data: SendSampleInput;
@@ -975,6 +975,12 @@ export const PurchaseOrderListFieldsFragmentDoc = gql`
   uid
   createdAt
   expectedDeliveryDate
+  company {
+    name
+  }
+  factory {
+    name
+  }
 }
     `;
 export const FileFieldsFragmentDoc = gql`

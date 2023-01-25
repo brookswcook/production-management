@@ -20,4 +20,10 @@ fragment PurchaseOrderListFields on PurchaseOrder {
   uid
   createdAt
   expectedDeliveryDate
+  company {
+    name
+  }
+  factory {
+    name
+  }
 }

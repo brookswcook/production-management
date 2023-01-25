@@ -2,12 +2,14 @@ import { Container, Grid } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
+  GridRenderCellParams,
   GridToolbarColumnsButton,
   GridToolbarContainer,
   GridToolbarExport,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
 import { Fragment, ReactElement } from "react";
+import { Link } from "react-router-dom";
 import {
   PurchaseOrderListFieldsFragment,
   usePurchaseOrdersQuery,
@@ -20,10 +22,21 @@ export function PurchaseOrderList(): ReactElement {
   const columns: GridColDef<PurchaseOrderListFieldsFragment>[] = [
     {
       field: "uid",
-      headerName: "Uid",
+      headerName: "#",
       minWidth: 50,
       flex: 1,
       type: "number",
+      headerAlign: "left",
+      align: "left",
+      renderCell({ id, formattedValue }: GridRenderCellParams) {
+        const linkPath = `/purchase-orders/${id}`;
+        const linkText = `${formattedValue as string}`;
+        return (
+          <Link to={linkPath} style={{ textDecoration: "none" }}>
+            {linkText}
+          </Link>
+        );
+      },
     },
     {
       field: "createdAt",
@@ -33,6 +46,26 @@ export function PurchaseOrderList(): ReactElement {
       type: "date",
       valueFormatter: params => {
         return new Date(params.value as string).toLocaleDateString();
+      },
+    },
+    {
+      field: "factoryName",
+      headerName: "Factory",
+      minWidth: 70,
+      flex: 2,
+      type: "string",
+      valueGetter: ({ row }: { row: PurchaseOrderListFieldsFragment }) => {
+        return row.factory.name;
+      },
+    },
+    {
+      field: "companyName",
+      headerName: "Company",
+      minWidth: 70,
+      flex: 2,
+      type: "string",
+      valueGetter: ({ row }: { row: PurchaseOrderListFieldsFragment }) => {
+        return row.company.name;
       },
     },
     {

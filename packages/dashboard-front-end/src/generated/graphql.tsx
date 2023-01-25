@@ -22,9 +22,8 @@ export type Scalars = {
 export type Company = {
   __typename?: 'Company';
   address: Scalars['String'];
-  associatedUsers: Array<Scalars['String']>;
   code: Scalars['String'];
-  contacts: Array<UserContactDetails>;
+  contacts: Array<User>;
   createdAt: Scalars['DateTime'];
   id: Scalars['String'];
   isRoot: Scalars['Boolean'];
@@ -32,6 +31,7 @@ export type Company = {
   parentId?: Maybe<Scalars['String']>;
   role: Scalars['String'];
   updatedAt: Scalars['DateTime'];
+  users: Array<User>;
 };
 
 export type CreateCompanyInput = {
@@ -437,10 +437,10 @@ export type ProductShipping = {
 
 export type PurchaseOrder = {
   __typename?: 'PurchaseOrder';
-  companyId: Scalars['String'];
+  company: Company;
   createdAt: Scalars['DateTime'];
   expectedDeliveryDate: Scalars['DateTime'];
-  factoryCode: Scalars['String'];
+  factory: Company;
   uid: Scalars['Int'];
   updatedAt: Scalars['DateTime'];
 };
@@ -610,7 +610,7 @@ export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?:
 export type FactoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FactoriesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Company', id: string, code: string, name: string, address: string, contacts: Array<{ __typename?: 'UserContactDetails', email: string }> }> };
+export type FactoriesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Company', id: string, code: string, name: string, address: string, contacts: Array<{ __typename?: 'User', email: string }> }> };
 
 export type FactoryCodesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -624,7 +624,7 @@ export type CreateFactoryMutationVariables = Exact<{
 
 export type CreateFactoryMutation = { __typename?: 'Mutation', createFactory: { __typename?: 'Company', code: string } };
 
-export type FactoryListFieldsFragment = { __typename?: 'Company', id: string, code: string, name: string, address: string, contacts: Array<{ __typename?: 'UserContactDetails', email: string }> };
+export type FactoryListFieldsFragment = { __typename?: 'Company', id: string, code: string, name: string, address: string, contacts: Array<{ __typename?: 'User', email: string }> };
 
 export type FactoryCodesFragment = { __typename?: 'Company', code: string };
 

@@ -6,6 +6,7 @@ import {
 } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
+import { User } from "../user/user.model";
 
 // Note: it should be used as tenant entity
 // TODO: Review all entities to support multitenancy by company
@@ -50,6 +51,23 @@ export class Company implements TimeStamps {
   @Field()
   @Property({ required: true, enum: ["Owner", "Factory"] })
   role!: "Owner" | "Factory";
+
+  @Field(() => [User])
+  @Property({
+    ref: () => User,
+    foreignField: "companyId",
+    localField: "_id",
+  })
+  users!: User[];
+
+  @Field(() => [User])
+  @Property({
+    ref: () => User,
+    foreignField: "companyId",
+    localField: "_id",
+    match: { pointOfContact: true },
+  })
+  contacts!: User[];
 
   @Field()
   createdAt!: Date;

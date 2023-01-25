@@ -6,12 +6,13 @@ import {
 } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Company } from "../company/company.model";
+import { ExpectResultModel } from "../common/expectResultModel";
 
 @ModelOptions({
   schemaOptions: { timestamps: true, collection: "purchase_orders" },
 })
 @ObjectType()
-export class PurchaseOrder implements TimeStamps {
+export class PurchaseOrder extends ExpectResultModel implements TimeStamps {
   @Field(() => Int)
   @Property({
     required: true,

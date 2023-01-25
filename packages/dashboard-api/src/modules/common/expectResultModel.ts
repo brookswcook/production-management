@@ -1,5 +1,5 @@
 import { ModelType } from "@typegoose/typegoose/lib/types";
-import { FilterQuery, UpdateQuery } from "mongoose";
+import { FilterQuery, PopulateOptions, UpdateQuery } from "mongoose";
 
 export class ExpectResultModel {
   static async findOneAndUpdateOrFail<T>(
@@ -16,8 +16,15 @@ export class ExpectResultModel {
     return updatedDocument;
   }
 
-  static async findOneOrFail<T>(this: ModelType<T>, query: FilterQuery<T>) {
-    const document = await this.findOne(query).exec();
+  static async findOneOrFail<T>(
+    this: ModelType<T>,
+    query: FilterQuery<T>,
+    populateOptions?: PopulateOptions | (PopulateOptions | string)[]
+  ) {
+    const findQuery = this.findOne(query);
+    const document = await (populateOptions
+      ? findQuery.populate(populateOptions).exec()
+      : findQuery.exec());
     if (document == null) throw new Error(`${this.modelName} is not found`);
     return document;
   }

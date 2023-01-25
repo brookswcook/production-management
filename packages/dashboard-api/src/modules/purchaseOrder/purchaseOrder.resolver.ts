@@ -36,25 +36,25 @@ export class PurchaseOrderResolver {
   }
 
   @Authorized<UserRole>(["Admin", "VChapman"])
-  @Query(() => PurchaseOrder, { nullable: true })
+  @Query(() => PurchaseOrder)
   async purchaseOrder(
     @Arg("uid", () => Int) uid: number,
     @Ctx() { user: { companyId } }: ResolverContext
-  ): Promise<PurchaseOrder | null> {
-    return PurchaseOrderModel.findOne({ companyId, uid })
-      .populate({
+  ): Promise<PurchaseOrder> {
+    return PurchaseOrderModel.findOneOrFail({ companyId, uid }, [
+      {
         path: "company",
         populate: {
           path: "contacts",
         },
-      })
-      .populate({
+      },
+      {
         path: "factory",
         populate: {
           path: "contacts",
         },
-      })
-      .exec();
+      },
+    ]);
   }
 
   @Authorized<UserRole>(["Admin", "VChapman"])

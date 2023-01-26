@@ -28,7 +28,6 @@ export class OrderItem {
   @Property({ required: true })
   productCode!: string;
 
-  @Field()
   @Property({ required: true })
   companyId!: string;
 

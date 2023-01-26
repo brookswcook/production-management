@@ -52,6 +52,8 @@ export function CreateFabricForm({
           factoryCode,
           colorName,
           colorCode,
+          print: null,
+          type: null,
         };
         if (printFiles) {
           newFabricData.print = printFiles.map(file => ({

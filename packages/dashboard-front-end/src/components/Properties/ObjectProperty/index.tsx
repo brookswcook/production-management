@@ -46,7 +46,11 @@ export function ObjectProperty({
       alignItems="center"
     >
       <Grid item>
-        <Typography component="span" variant="subtitle2">
+        <Typography
+          component="span"
+          variant="subtitle2"
+          style={{ whiteSpace: "pre" }}
+        >
           {title}
         </Typography>
       </Grid>

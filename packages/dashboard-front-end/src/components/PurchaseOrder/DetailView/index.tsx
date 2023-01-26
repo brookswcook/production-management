@@ -16,6 +16,7 @@ function PurchaseOrderHeaderSection({
     expectedDeliveryDate,
     createdAt,
     factory: {
+      name: factoryName,
       address: factoryAddress,
       contacts: [
         {
@@ -26,6 +27,7 @@ function PurchaseOrderHeaderSection({
       ],
     },
     company: {
+      name: companyName,
       address: companyAddress,
       contacts: [
         {
@@ -53,8 +55,9 @@ function PurchaseOrderHeaderSection({
             value={new Date(expectedDeliveryDate).toLocaleDateString()}
           />
           <ObjectProperty
-            title="To"
+            title="To       "
             value={{
+              name: String(factoryName),
               address: String(factoryAddress),
               contact: String(factoryContactName),
               email: String(factoryEmail),
@@ -62,8 +65,9 @@ function PurchaseOrderHeaderSection({
             }}
           />
           <ObjectProperty
-            title="Sip to"
+            title="Ship to"
             value={{
+              name: String(companyName),
               address: String(companyAddress),
               contact: String(companyContactName),
               email: String(companyEmail),

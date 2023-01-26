@@ -51,6 +51,7 @@ import { SignInWithEmailLink } from "../Auth/SignInWithEmail";
 import { UserList } from "../User";
 import { FactoryList } from "../Factory/ListView";
 import { PurchaseOrderList } from "../PurchaseOrder/ListView";
+import { PurchaseOrderDetail } from "../PurchaseOrder/DetailView";
 
 function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const { signOut } = useContext(AuthContext);
@@ -326,6 +327,10 @@ function ApolloApp() {
             <Route
               path="/purchase-orders"
               element={<Dashboard children={<PurchaseOrderList />} />}
+            />
+            <Route
+              path="/purchase-orders/:uid"
+              element={<Dashboard children={<PurchaseOrderDetail />} />}
             />
             <Route
               path="/oplog"

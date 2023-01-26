@@ -8,7 +8,13 @@ class OrderItemAttributeInput {
 }
 
 @InputType()
-export class CreateOrderInput {
+export class GetOrderItemsInput {
+  @Field()
+  orderUid!: number;
+}
+
+@InputType()
+export class CreateOrderItemInput {
   @Field()
   orderUid!: number;
 

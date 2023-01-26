@@ -22,9 +22,21 @@ fragment PurchaseOrderDetailFields on PurchaseOrder {
   expectedDeliveryDate
   company {
     name
+    address
+    contacts {
+      fullName
+      email
+      phone
+    }
   }
   factory {
     name
+    address
+    contacts {
+      fullName
+      email
+      phone
+    }
   }
 }
 

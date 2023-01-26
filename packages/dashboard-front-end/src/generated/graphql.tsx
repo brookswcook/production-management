@@ -28,7 +28,7 @@ export type Company = {
   id: Scalars['String'];
   isRoot: Scalars['Boolean'];
   name: Scalars['String'];
-  parentId?: Maybe<Scalars['String']>;
+  parentId: Maybe<Scalars['String']>;
   role: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   users: Array<User>;
@@ -41,16 +41,16 @@ export type CreateCompanyInput = {
 
 export type CreateFabricInput = {
   code: Scalars['String'];
-  colorCode?: InputMaybe<Scalars['String']>;
+  colorCode: InputMaybe<Scalars['String']>;
   colorName: Scalars['String'];
   factoryCode: Scalars['String'];
-  print?: InputMaybe<FileUploadInput>;
+  print: InputMaybe<FileUploadInput>;
   title: Scalars['String'];
-  type?: InputMaybe<Scalars['String']>;
+  type: InputMaybe<Scalars['String']>;
 };
 
 export type CreateNoteInput = {
-  images?: InputMaybe<Array<FileUploadInput>>;
+  images: InputMaybe<Array<FileUploadInput>>;
   parentId: Scalars['String'];
   text: Scalars['String'];
   type: Scalars['String'];
@@ -80,12 +80,12 @@ export type CreatePurchaseOrderInput = {
 export type CreateStyleInput = {
   code: Scalars['String'];
   name: Scalars['String'];
-  techPack?: InputMaybe<Array<FileUploadInput>>;
+  techPack: InputMaybe<Array<FileUploadInput>>;
 };
 
 export type CreateUserInput = {
   email: Scalars['String'];
-  factoryCode?: InputMaybe<Scalars['String']>;
+  factoryCode: InputMaybe<Scalars['String']>;
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   role: Scalars['String'];
@@ -98,35 +98,35 @@ export type DeleteUserInput = {
 export type Fabric = {
   __typename?: 'Fabric';
   code: Scalars['String'];
-  colorCode?: Maybe<Scalars['String']>;
+  colorCode: Maybe<Scalars['String']>;
   colorName: Scalars['String'];
   colorType: Scalars['String'];
   factoryCode: Scalars['String'];
   id: Scalars['String'];
   notes: Array<Note>;
-  printFileName?: Maybe<Scalars['String']>;
+  printFileName: Maybe<Scalars['String']>;
   productCodes: Array<Scalars['String']>;
   samples: Array<FabricSample>;
   stage: Scalars['String'];
   title: Scalars['String'];
-  type?: Maybe<Scalars['String']>;
+  type: Maybe<Scalars['String']>;
 };
 
 export type FabricProduction = {
   __typename?: 'FabricProduction';
-  actualStartDate?: Maybe<Scalars['DateTime']>;
+  actualStartDate: Maybe<Scalars['DateTime']>;
   lastStartDate: Scalars['DateTime'];
-  onTime?: Maybe<Scalars['Boolean']>;
-  started?: Maybe<Scalars['Boolean']>;
-  sufficientFabric?: Maybe<Scalars['Boolean']>;
+  onTime: Maybe<Scalars['Boolean']>;
+  started: Maybe<Scalars['Boolean']>;
+  sufficientFabric: Maybe<Scalars['Boolean']>;
 };
 
 export type FabricSample = {
   __typename?: 'FabricSample';
-  approved?: Maybe<Scalars['Boolean']>;
-  delivered?: Maybe<Scalars['Boolean']>;
+  approved: Maybe<Scalars['Boolean']>;
+  delivered: Maybe<Scalars['Boolean']>;
   id: Scalars['String'];
-  note?: Maybe<Note>;
+  note: Maybe<Note>;
   parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
@@ -134,7 +134,7 @@ export type FabricSample = {
 
 export type File = {
   __typename?: 'File';
-  createdAt?: Maybe<Scalars['DateTime']>;
+  createdAt: Maybe<Scalars['DateTime']>;
   extName: Scalars['String'];
   id: Scalars['String'];
   link: Scalars['String'];
@@ -142,7 +142,7 @@ export type File = {
   parentId: Scalars['String'];
   type: Scalars['String'];
   uploadingKey: Scalars['String'];
-  user?: Maybe<User>;
+  user: Maybe<User>;
   userId: Scalars['String'];
 };
 
@@ -161,16 +161,16 @@ export type FirebaseUser = {
 
 export type FirebaseUserMetadata = {
   __typename?: 'FirebaseUserMetadata';
-  creationTime?: Maybe<Scalars['String']>;
-  lastSignInTime?: Maybe<Scalars['String']>;
+  creationTime: Maybe<Scalars['String']>;
+  lastSignInTime: Maybe<Scalars['String']>;
 };
 
 export type FitSample = {
   __typename?: 'FitSample';
-  approved?: Maybe<Scalars['Boolean']>;
-  delivered?: Maybe<Scalars['Boolean']>;
+  approved: Maybe<Scalars['Boolean']>;
+  delivered: Maybe<Scalars['Boolean']>;
   id: Scalars['String'];
-  note?: Maybe<Note>;
+  note: Maybe<Note>;
   parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
@@ -343,23 +343,23 @@ export type MutationUploadTechPackArgs = {
 
 export type Note = {
   __typename?: 'Note';
-  createdAt?: Maybe<Scalars['DateTime']>;
+  createdAt: Maybe<Scalars['DateTime']>;
   id: Scalars['String'];
   imageFileNames: Array<Scalars['String']>;
   parentId: Scalars['String'];
   text: Scalars['String'];
   type: Scalars['String'];
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  user?: Maybe<User>;
+  updatedAt: Maybe<Scalars['DateTime']>;
+  user: Maybe<User>;
   userId: Scalars['String'];
 };
 
 export type OperationLog = {
   __typename?: 'OperationLog';
-  createdAt?: Maybe<Scalars['DateTime']>;
+  createdAt: Maybe<Scalars['DateTime']>;
   id: Scalars['String'];
   name: Scalars['String'];
-  user?: Maybe<User>;
+  user: Maybe<User>;
   userId: Scalars['String'];
   variables: Scalars['String'];
 };
@@ -376,11 +376,11 @@ export type OrderItem = {
 
 export type OrderItemAttribute = {
   __typename?: 'OrderItemAttribute';
-  size?: Maybe<Scalars['String']>;
+  size: Maybe<Scalars['String']>;
 };
 
 export type OrderItemAttributeInput = {
-  size?: InputMaybe<Scalars['String']>;
+  size: InputMaybe<Scalars['String']>;
 };
 
 export type Product = {
@@ -390,7 +390,7 @@ export type Product = {
   dueIn: Scalars['Int'];
   fabric: Fabric;
   fabricCode: Scalars['String'];
-  fabricProduction?: Maybe<FabricProduction>;
+  fabricProduction: Maybe<FabricProduction>;
   fabricSampleDelivered: Scalars['Boolean'];
   factoryCode: Scalars['String'];
   fitSampleDelivered: Scalars['Boolean'];
@@ -399,10 +399,10 @@ export type Product = {
   name: Scalars['String'];
   notes: Array<Note>;
   onTime: Scalars['Boolean'];
-  preProductionSample?: Maybe<FitSample>;
-  production?: Maybe<ProductProduction>;
-  qualityControl?: Maybe<ProductQualityControl>;
-  shipping?: Maybe<ProductShipping>;
+  preProductionSample: Maybe<FitSample>;
+  production: Maybe<ProductProduction>;
+  qualityControl: Maybe<ProductQualityControl>;
+  shipping: Maybe<ProductShipping>;
   stage: Scalars['String'];
   style: Style;
   styleCode: Scalars['String'];
@@ -411,28 +411,28 @@ export type Product = {
 
 export type ProductProduction = {
   __typename?: 'ProductProduction';
-  actualStartDate?: Maybe<Scalars['DateTime']>;
+  actualStartDate: Maybe<Scalars['DateTime']>;
   lastStartDate: Scalars['DateTime'];
-  onTime?: Maybe<Scalars['Boolean']>;
-  started?: Maybe<Scalars['Boolean']>;
+  onTime: Maybe<Scalars['Boolean']>;
+  started: Maybe<Scalars['Boolean']>;
 };
 
 export type ProductQualityControl = {
   __typename?: 'ProductQualityControl';
   lastVisitDate: Scalars['DateTime'];
-  notes?: Maybe<Array<Scalars['String']>>;
-  passed?: Maybe<Scalars['Boolean']>;
-  scheduledVisitDate?: Maybe<Scalars['DateTime']>;
+  notes: Maybe<Array<Scalars['String']>>;
+  passed: Maybe<Scalars['Boolean']>;
+  scheduledVisitDate: Maybe<Scalars['DateTime']>;
   visited: Scalars['Boolean'];
 };
 
 export type ProductShipping = {
   __typename?: 'ProductShipping';
-  actualShippingDate?: Maybe<Scalars['DateTime']>;
-  delivered?: Maybe<Scalars['Boolean']>;
+  actualShippingDate: Maybe<Scalars['DateTime']>;
+  delivered: Maybe<Scalars['Boolean']>;
   lastShippingDate: Scalars['DateTime'];
   shipped: Scalars['Boolean'];
-  trackNumber?: Maybe<Scalars['String']>;
+  trackNumber: Maybe<Scalars['String']>;
 };
 
 export type PurchaseOrder = {
@@ -456,7 +456,7 @@ export type Query = {
   printLink: Scalars['String'];
   product: Product;
   products: Array<Product>;
-  purchaseOrder?: Maybe<PurchaseOrder>;
+  purchaseOrder: PurchaseOrder;
   purchaseOrders: Array<PurchaseOrder>;
   style: Style;
   styles: Array<Style>;
@@ -485,7 +485,7 @@ export type QueryProductArgs = {
 
 
 export type QueryProductsArgs = {
-  data?: InputMaybe<GetProductsInput>;
+  data: InputMaybe<GetProductsInput>;
 };
 
 
@@ -500,10 +500,10 @@ export type QueryStyleArgs = {
 
 export type Sample = {
   __typename?: 'Sample';
-  approved?: Maybe<Scalars['Boolean']>;
-  delivered?: Maybe<Scalars['Boolean']>;
+  approved: Maybe<Scalars['Boolean']>;
+  delivered: Maybe<Scalars['Boolean']>;
   id: Scalars['String'];
-  note?: Maybe<Note>;
+  note: Maybe<Note>;
   parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
@@ -557,26 +557,26 @@ export type UploadTechPackInput = {
 export type User = {
   __typename?: 'User';
   companyId: Scalars['String'];
-  createdAt?: Maybe<Scalars['DateTime']>;
+  createdAt: Maybe<Scalars['DateTime']>;
   deleted: Scalars['Boolean'];
   disabled: Scalars['Boolean'];
   email: Scalars['String'];
-  firebaseUser?: Maybe<FirebaseUser>;
+  firebaseUser: Maybe<FirebaseUser>;
   firstName: Scalars['String'];
   fullName: Scalars['String'];
   id: Scalars['String'];
   lastName: Scalars['String'];
-  phone?: Maybe<Scalars['String']>;
+  phone: Maybe<Scalars['String']>;
   pointOfContact: Scalars['Boolean'];
   role: Scalars['String'];
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt: Maybe<Scalars['DateTime']>;
 };
 
 export type UserContactDetails = {
   __typename?: 'UserContactDetails';
   email: Scalars['String'];
   fullName: Scalars['String'];
-  phone?: Maybe<Scalars['String']>;
+  phone: Maybe<Scalars['String']>;
 };
 
 export type LoginMutationVariables = Exact<{
@@ -591,7 +591,7 @@ export type FabricQueryVariables = Exact<{
 }>;
 
 
-export type FabricQuery = { __typename?: 'Query', fabric: { __typename?: 'Fabric', code: string, colorName: string, id: string, title: string, factoryCode: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> } };
+export type FabricQuery = { __typename?: 'Query', fabric: { __typename?: 'Fabric', code: string, colorName: string, id: string, title: string, factoryCode: string, colorType: string, colorCode: string | null, printFileName: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> } };
 
 export type CreateFabricMutationVariables = Exact<{
   data: CreateFabricInput;
@@ -600,12 +600,12 @@ export type CreateFabricMutationVariables = Exact<{
 
 export type CreateFabricMutation = { __typename?: 'Mutation', createFabric: { __typename?: 'Fabric', code: string, colorName: string } };
 
-export type FabricFieldsFragment = { __typename?: 'Fabric', id: string, code: string, title: string, factoryCode: string, colorName: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> };
+export type FabricFieldsFragment = { __typename?: 'Fabric', id: string, code: string, title: string, factoryCode: string, colorName: string, colorType: string, colorCode: string | null, printFileName: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> };
 
 export type FabricsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', id: string, code: string, title: string, factoryCode: string, colorName: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }> };
+export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', id: string, code: string, title: string, factoryCode: string, colorName: string, colorType: string, colorCode: string | null, printFileName: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }> };
 
 export type FactoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -628,14 +628,14 @@ export type FactoryListFieldsFragment = { __typename?: 'Company', id: string, co
 
 export type FactoryCodesFragment = { __typename?: 'Company', code: string };
 
-export type FileFieldsFragment = { __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null };
+export type FileFieldsFragment = { __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt: string | null, user: { __typename?: 'User', fullName: string } | null };
 
-export type OperationLogFieldsFragment = { __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null };
+export type OperationLogFieldsFragment = { __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt: string | null, user: { __typename?: 'User', firstName: string } | null };
 
 export type OperationLogsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OperationLogsQuery = { __typename?: 'Query', operationLogs: Array<{ __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null }> };
+export type OperationLogsQuery = { __typename?: 'Query', operationLogs: Array<{ __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt: string | null, user: { __typename?: 'User', firstName: string } | null }> };
 
 export type PrintLinkQueryVariables = Exact<{
   fileName: Scalars['String'];
@@ -651,27 +651,27 @@ export type CreateProductMutationVariables = Exact<{
 
 export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'Product', code: string } };
 
-export type NoteFieldsFragment = { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null };
+export type NoteFieldsFragment = { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null };
 
-export type SampleFieldsFragment = { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null };
+export type SampleFieldsFragment = { __typename?: 'Sample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null };
 
-export type FitSampleFieldsFragment = { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null };
+export type FitSampleFieldsFragment = { __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null };
 
-export type FabricSampleFieldsFragment = { __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null };
+export type FabricSampleFieldsFragment = { __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null };
 
-export type ProductFieldsFragment = { __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type?: string | null, colorType: string, colorCode?: string | null, printFileName?: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null };
+export type ProductFieldsFragment = { __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type: string | null, colorType: string, colorCode: string | null, printFileName: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample: { __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric: boolean | null, started: boolean | null, actualStartDate: string | null, onTime: boolean | null } | null, production: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate: string | null, onTime: boolean | null, started: boolean | null } | null, qualityControl: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate: string | null, visited: boolean, passed: boolean | null, notes: Array<string> | null } | null, shipping: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate: string | null, shipped: boolean, trackNumber: string | null, delivered: boolean | null } | null };
 
 export type ProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type?: string | null, colorType: string, colorCode?: string | null, printFileName?: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null }> };
+export type ProductsQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type: string | null, colorType: string, colorCode: string | null, printFileName: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample: { __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric: boolean | null, started: boolean | null, actualStartDate: string | null, onTime: boolean | null } | null, production: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate: string | null, onTime: boolean | null, started: boolean | null } | null, qualityControl: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate: string | null, visited: boolean, passed: boolean | null, notes: Array<string> | null } | null, shipping: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate: string | null, shipped: boolean, trackNumber: string | null, delivered: boolean | null } | null }> };
 
 export type ProductQueryVariables = Exact<{
   code: Scalars['String'];
 }>;
 
 
-export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type?: string | null, colorType: string, colorCode?: string | null, printFileName?: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null } };
+export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type: string | null, colorType: string, colorCode: string | null, printFileName: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample: { __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric: boolean | null, started: boolean | null, actualStartDate: string | null, onTime: boolean | null } | null, production: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate: string | null, onTime: boolean | null, started: boolean | null } | null, qualityControl: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate: string | null, visited: boolean, passed: boolean | null, notes: Array<string> | null } | null, shipping: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate: string | null, shipped: boolean, trackNumber: string | null, delivered: boolean | null } | null } };
 
 export type PurchaseOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -683,7 +683,7 @@ export type PurchaseOrderQueryVariables = Exact<{
 }>;
 
 
-export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder?: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } } | null };
+export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } } };
 
 export type CreatePurchaseOrderMutationVariables = Exact<{
   data: CreatePurchaseOrderInput;
@@ -691,6 +691,8 @@ export type CreatePurchaseOrderMutationVariables = Exact<{
 
 
 export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } } };
+
+export type PurchaseOrderDetailFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } };
 
 export type PurchaseOrderListFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } };
 
@@ -769,14 +771,14 @@ export type StyleQueryVariables = Exact<{
 }>;
 
 
-export type StyleQuery = { __typename?: 'Query', style: { __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null }> } };
+export type StyleQuery = { __typename?: 'Query', style: { __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt: string | null, user: { __typename?: 'User', fullName: string } | null }> } };
 
 export type StylesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StylesQuery = { __typename?: 'Query', styles: Array<{ __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null }> }> };
+export type StylesQuery = { __typename?: 'Query', styles: Array<{ __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt: string | null, user: { __typename?: 'User', fullName: string } | null }> }> };
 
-export type StyleFieldsFragment = { __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null }> };
+export type StyleFieldsFragment = { __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt: string | null, user: { __typename?: 'User', fullName: string } | null }> };
 
 export type CreateStyleMutationVariables = Exact<{
   data: CreateStyleInput;
@@ -795,9 +797,9 @@ export type UploadTechPackMutation = { __typename?: 'Mutation', uploadTechPack: 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean, firebaseUser?: { __typename?: 'FirebaseUser', emailVerified: boolean, metadata: { __typename?: 'FirebaseUserMetadata', creationTime?: string | null, lastSignInTime?: string | null } } | null }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean, firebaseUser: { __typename?: 'FirebaseUser', emailVerified: boolean, metadata: { __typename?: 'FirebaseUserMetadata', creationTime: string | null, lastSignInTime: string | null } } | null }> };
 
-export type UserListFieldsFragment = { __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean, firebaseUser?: { __typename?: 'FirebaseUser', emailVerified: boolean, metadata: { __typename?: 'FirebaseUserMetadata', creationTime?: string | null, lastSignInTime?: string | null } } | null };
+export type UserListFieldsFragment = { __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean, firebaseUser: { __typename?: 'FirebaseUser', emailVerified: boolean, metadata: { __typename?: 'FirebaseUserMetadata', creationTime: string | null, lastSignInTime: string | null } } | null };
 
 export type CreateUserMutationVariables = Exact<{
   data: CreateUserInput;
@@ -970,6 +972,31 @@ export const ProductFieldsFragmentDoc = gql`
     ${FabricSampleFieldsFragmentDoc}
 ${FitSampleFieldsFragmentDoc}
 ${NoteFieldsFragmentDoc}`;
+export const PurchaseOrderDetailFieldsFragmentDoc = gql`
+    fragment PurchaseOrderDetailFields on PurchaseOrder {
+  uid
+  createdAt
+  expectedDeliveryDate
+  company {
+    name
+    address
+    contacts {
+      fullName
+      email
+      phone
+    }
+  }
+  factory {
+    name
+    address
+    contacts {
+      fullName
+      email
+      phone
+    }
+  }
+}
+    `;
 export const PurchaseOrderListFieldsFragmentDoc = gql`
     fragment PurchaseOrderListFields on PurchaseOrder {
   uid
@@ -1469,10 +1496,10 @@ export type PurchaseOrdersQueryResult = Apollo.QueryResult<PurchaseOrdersQuery, 
 export const PurchaseOrderDocument = gql`
     query PurchaseOrder($uid: Int!) {
   purchaseOrder(uid: $uid) {
-    ...PurchaseOrderListFields
+    ...PurchaseOrderDetailFields
   }
 }
-    ${PurchaseOrderListFieldsFragmentDoc}`;
+    ${PurchaseOrderDetailFieldsFragmentDoc}`;
 
 /**
  * __usePurchaseOrderQuery__

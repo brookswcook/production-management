@@ -59,21 +59,21 @@ function PurchaseOrderHeaderSection({
           <ObjectProperty
             title="To       "
             value={{
-              name: String(factoryName),
-              address: String(factoryAddress),
-              contact: String(factoryContactName),
-              email: String(factoryEmail),
-              phone: String(factoryContactPhone),
+              name: factoryName,
+              address: factoryAddress,
+              contact: factoryContactName,
+              email: factoryEmail,
+              phone: factoryContactPhone,
             }}
           />
           <ObjectProperty
             title="Ship to"
             value={{
-              name: String(companyName),
-              address: String(companyAddress),
-              contact: String(companyContactName),
-              email: String(companyEmail),
-              phone: String(companyContactPhone),
+              name: companyName,
+              address: companyAddress,
+              contact: companyContactName,
+              email: companyEmail,
+              phone: companyContactPhone,
             }}
           />
         </Stack>

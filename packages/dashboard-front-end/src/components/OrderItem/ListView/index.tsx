@@ -33,7 +33,7 @@ export function OrderItemList(): ReactElement {
       <DataGrid
         rows={rows}
         columns={columns}
-        getRowId={item => String(item.id)}
+        getRowId={item => item.id}
         pageSize={100}
         loading={loading}
         error={error}

@@ -66,7 +66,7 @@ export function FactoryList(): ReactElement {
       <DataGrid
         rows={rows}
         columns={columns}
-        getRowId={item => String(item.code)}
+        getRowId={item => item.code}
         pageSize={100}
         loading={loading}
         error={error}

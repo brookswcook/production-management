@@ -21,6 +21,9 @@ class OrderItemAttribute {
 @ObjectType()
 export class OrderItem {
   @Field()
+  id!: string;
+
+  @Field()
   @Property({ required: true })
   orderUid!: number;
 

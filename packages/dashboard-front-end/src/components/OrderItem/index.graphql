@@ -1,0 +1,16 @@
+query OrderItems {
+  orderItems {
+    ...OrderItemListFields
+  }
+}
+
+fragment OrderItemListFields on OrderItem {
+  id
+  orderUid
+  productCode
+  quantity
+  price
+  variantAttributes {
+    size
+  }
+}

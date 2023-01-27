@@ -56,8 +56,7 @@ export type CreateNoteInput = {
   type: Scalars['String'];
 };
 
-export type CreateOrderInput = {
-  companyId: Scalars['String'];
+export type CreateOrderItemInput = {
   orderUid: Scalars['Float'];
   price: Scalars['Float'];
   productCode: Scalars['String'];
@@ -176,6 +175,10 @@ export type FitSample = {
   trackNumber: Scalars['String'];
 };
 
+export type GetOrderItemsInput = {
+  orderUid: Scalars['Float'];
+};
+
 export type GetProductsInput = {
   factoryCode: Scalars['String'];
 };
@@ -253,7 +256,7 @@ export type MutationCreateNoteArgs = {
 
 
 export type MutationCreateOrderItemArgs = {
-  data: CreateOrderInput;
+  data: CreateOrderItemInput;
 };
 
 
@@ -366,7 +369,7 @@ export type OperationLog = {
 
 export type OrderItem = {
   __typename?: 'OrderItem';
-  companyId: Scalars['String'];
+  id: Scalars['String'];
   orderUid: Scalars['Float'];
   price: Scalars['Float'];
   productCode: Scalars['String'];
@@ -453,6 +456,7 @@ export type Query = {
   factories: Array<Company>;
   imageLink: Scalars['String'];
   operationLogs: Array<OperationLog>;
+  orderItems: Array<OrderItem>;
   printLink: Scalars['String'];
   product: Product;
   products: Array<Product>;
@@ -471,6 +475,11 @@ export type QueryFabricArgs = {
 
 export type QueryImageLinkArgs = {
   fileName: Scalars['String'];
+};
+
+
+export type QueryOrderItemsArgs = {
+  data: InputMaybe<GetOrderItemsInput>;
 };
 
 
@@ -636,6 +645,13 @@ export type OperationLogsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type OperationLogsQuery = { __typename?: 'Query', operationLogs: Array<{ __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt: string | null, user: { __typename?: 'User', firstName: string } | null }> };
+
+export type OrderItemsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OrderItemsQuery = { __typename?: 'Query', orderItems: Array<{ __typename?: 'OrderItem', id: string, orderUid: number, productCode: string, quantity: number, price: number, variantAttributes: Array<{ __typename?: 'OrderItemAttribute', size: string | null }> }> };
+
+export type OrderItemListFieldsFragment = { __typename?: 'OrderItem', id: string, orderUid: number, productCode: string, quantity: number, price: number, variantAttributes: Array<{ __typename?: 'OrderItemAttribute', size: string | null }> };
 
 export type PrintLinkQueryVariables = Exact<{
   fileName: Scalars['String'];
@@ -878,6 +894,18 @@ export const OperationLogFieldsFragmentDoc = gql`
     firstName
   }
   createdAt
+}
+    `;
+export const OrderItemListFieldsFragmentDoc = gql`
+    fragment OrderItemListFields on OrderItem {
+  id
+  orderUid
+  productCode
+  quantity
+  price
+  variantAttributes {
+    size
+  }
 }
     `;
 export const SampleFieldsFragmentDoc = gql`
@@ -1324,6 +1352,40 @@ export function useOperationLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type OperationLogsQueryHookResult = ReturnType<typeof useOperationLogsQuery>;
 export type OperationLogsLazyQueryHookResult = ReturnType<typeof useOperationLogsLazyQuery>;
 export type OperationLogsQueryResult = Apollo.QueryResult<OperationLogsQuery, OperationLogsQueryVariables>;
+export const OrderItemsDocument = gql`
+    query OrderItems {
+  orderItems {
+    ...OrderItemListFields
+  }
+}
+    ${OrderItemListFieldsFragmentDoc}`;
+
+/**
+ * __useOrderItemsQuery__
+ *
+ * To run a query within a React component, call `useOrderItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrderItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrderItemsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOrderItemsQuery(baseOptions?: Apollo.QueryHookOptions<OrderItemsQuery, OrderItemsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrderItemsQuery, OrderItemsQueryVariables>(OrderItemsDocument, options);
+      }
+export function useOrderItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderItemsQuery, OrderItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrderItemsQuery, OrderItemsQueryVariables>(OrderItemsDocument, options);
+        }
+export type OrderItemsQueryHookResult = ReturnType<typeof useOrderItemsQuery>;
+export type OrderItemsLazyQueryHookResult = ReturnType<typeof useOrderItemsLazyQuery>;
+export type OrderItemsQueryResult = Apollo.QueryResult<OrderItemsQuery, OrderItemsQueryVariables>;
 export const PrintLinkDocument = gql`
     query PrintLink($fileName: String!) {
   printLink(fileName: $fileName)

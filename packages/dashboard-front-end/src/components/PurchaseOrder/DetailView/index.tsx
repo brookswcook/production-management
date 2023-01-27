@@ -7,6 +7,8 @@ import {
 } from "../../../generated/graphql";
 import { DetailView } from "../../Common/DetailView";
 import { DetailViewHeaderTitle } from "../../Common/DetailViewHeaderTitle";
+import { DetailViewSection } from "../../Common/DetailViewSection";
+import { OrderItemList } from "../../OrderItem/ListView";
 import { ObjectProperty } from "../../Properties/ObjectProperty";
 import { TextProperty } from "../../Properties/TextProperty";
 
@@ -105,7 +107,9 @@ export function PurchaseOrderDetail(): ReactElement {
         <PurchaseOrderHeaderSection purchaseOrder={data.purchaseOrder} />
       }
     >
-      <></>
+      <DetailViewSection headerTitle="Order items:">
+        <OrderItemList />
+      </DetailViewSection>
     </DetailView>
   );
 }

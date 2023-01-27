@@ -1,6 +1,7 @@
-import { decodeToken, UserPayload, DecodedTokenPayload } from "dashboard-core";
+import { UserPayload, DecodedTokenPayload } from "dashboard-core";
 import { createContext, ReactElement, useEffect, useState } from "react";
 import useToken from "./useToken";
+import jwt_decode from "jwt-decode";
 
 interface AuthContextType {
   token: string | null;
@@ -24,12 +25,14 @@ export function AuthProvider({
   const { token, setToken } = useToken();
   const [decodedToken, setDecodedToken] =
     useState<DecodedTokenPayload<UserPayload> | null>(
-      token ? decodeToken<UserPayload>(token) : null
+      token ? jwt_decode(token) : null
     );
 
   useEffect(() => {
     if (token != null) {
-      const decodedToken = decodeToken<UserPayload>(token);
+      const decodedToken = jwt_decode<DecodedTokenPayload<UserPayload> | null>(
+        token
+      );
       setDecodedToken(decodedToken);
     }
   }, [token]);

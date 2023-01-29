@@ -19,7 +19,7 @@ export class AttributeDefinition {
   name!: string;
 
   @Field(() => [String])
-  @Property({ required: true })
+  @Property({ type: [String], required: true })
   values!: [string];
 
   @Field({ nullable: true })

@@ -6,11 +6,16 @@ query OrderItems {
 
 fragment OrderItemListFields on OrderItem {
   id
-  orderUid
-  productCode
+  purchaseOrder {
+    uid
+  }
+  product {
+    code
+  }
   quantity
   price
   variantAttributes {
-    size
+    key
+    value
   }
 }

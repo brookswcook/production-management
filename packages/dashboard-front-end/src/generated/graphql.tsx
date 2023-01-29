@@ -19,6 +19,20 @@ export type Scalars = {
   Upload: any;
 };
 
+export type Attribute = {
+  __typename?: 'Attribute';
+  key: Scalars['String'];
+  unit: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type AttributeDefinition = {
+  __typename?: 'AttributeDefinition';
+  name: Scalars['String'];
+  unit: Maybe<Scalars['String']>;
+  values: Array<Scalars['String']>;
+};
+
 export type Company = {
   __typename?: 'Company';
   address: Scalars['String'];
@@ -370,16 +384,11 @@ export type OperationLog = {
 export type OrderItem = {
   __typename?: 'OrderItem';
   id: Scalars['String'];
-  orderUid: Scalars['Float'];
   price: Scalars['Float'];
-  productCode: Scalars['String'];
+  product: Product;
+  purchaseOrder: PurchaseOrder;
   quantity: Scalars['Float'];
-  variantAttributes: Array<OrderItemAttribute>;
-};
-
-export type OrderItemAttribute = {
-  __typename?: 'OrderItemAttribute';
-  size: Maybe<Scalars['String']>;
+  variantAttributes: Array<Attribute>;
 };
 
 export type OrderItemAttributeInput = {
@@ -450,6 +459,7 @@ export type PurchaseOrder = {
 
 export type Query = {
   __typename?: 'Query';
+  attributeDefinitions: Array<AttributeDefinition>;
   companies: Array<Company>;
   fabric: Fabric;
   fabrics: Array<Fabric>;
@@ -649,9 +659,9 @@ export type OperationLogsQuery = { __typename?: 'Query', operationLogs: Array<{ 
 export type OrderItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OrderItemsQuery = { __typename?: 'Query', orderItems: Array<{ __typename?: 'OrderItem', id: string, orderUid: number, productCode: string, quantity: number, price: number, variantAttributes: Array<{ __typename?: 'OrderItemAttribute', size: string | null }> }> };
+export type OrderItemsQuery = { __typename?: 'Query', orderItems: Array<{ __typename?: 'OrderItem', id: string, quantity: number, price: number, purchaseOrder: { __typename?: 'PurchaseOrder', uid: number }, product: { __typename?: 'Product', code: string }, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> }> };
 
-export type OrderItemListFieldsFragment = { __typename?: 'OrderItem', id: string, orderUid: number, productCode: string, quantity: number, price: number, variantAttributes: Array<{ __typename?: 'OrderItemAttribute', size: string | null }> };
+export type OrderItemListFieldsFragment = { __typename?: 'OrderItem', id: string, quantity: number, price: number, purchaseOrder: { __typename?: 'PurchaseOrder', uid: number }, product: { __typename?: 'Product', code: string }, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> };
 
 export type PrintLinkQueryVariables = Exact<{
   fileName: Scalars['String'];
@@ -899,12 +909,17 @@ export const OperationLogFieldsFragmentDoc = gql`
 export const OrderItemListFieldsFragmentDoc = gql`
     fragment OrderItemListFields on OrderItem {
   id
-  orderUid
-  productCode
+  purchaseOrder {
+    uid
+  }
+  product {
+    code
+  }
   quantity
   price
   variantAttributes {
-    size
+    key
+    value
   }
 }
     `;

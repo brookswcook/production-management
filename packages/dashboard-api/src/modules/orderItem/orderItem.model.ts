@@ -3,17 +3,10 @@ import {
   ModelOptions,
   prop as Property,
 } from "@typegoose/typegoose";
-import { ProductSizes } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
-
-@ObjectType()
-class OrderItemAttribute {
-  // TODO: move size type to core types
-  @Field({ nullable: true })
-  @Property({ enum: ["00", "0", "2", "4", "6", "8", "10", "12", "14", "16"] })
-  size?: ProductSizes;
-  // Note: extend by adding other attributes if needed; by having array of objects with optional attribute fields it's possible to create any combination of them
-}
+import { Attribute } from "../attribute/attribute.model";
+import { Product } from "../product/product.model";
+import { PurchaseOrder } from "../purchaseOrder/purchaseOrder.model";
 
 @ModelOptions({
   schemaOptions: { collection: "order_items" },
@@ -23,13 +16,29 @@ export class OrderItem {
   @Field()
   id!: string;
 
-  @Field()
   @Property({ required: true })
   orderUid!: number;
 
   @Field()
+  @Property({
+    ref: () => PurchaseOrder,
+    foreignField: "uid",
+    localField: "orderUid",
+    justOne: true,
+  })
+  purchaseOrder!: PurchaseOrder;
+
   @Property({ required: true })
   productCode!: string;
+
+  @Field()
+  @Property({
+    ref: () => Product,
+    foreignField: "code",
+    localField: "productCode",
+    justOne: true,
+  })
+  product!: Product;
 
   @Property({ required: true })
   companyId!: string;
@@ -38,14 +47,14 @@ export class OrderItem {
   @Property({ required: true, default: 1 })
   quantity!: number;
 
-  @Field(() => [OrderItemAttribute])
+  @Field(() => [Attribute])
   @Property({
-    type: () => [OrderItemAttribute],
+    type: () => [Attribute],
     required: true,
     default: [],
     _id: false,
   })
-  variantAttributes!: OrderItemAttribute[];
+  variantAttributes!: Attribute[];
 
   @Field()
   @Property({ required: true })

@@ -5,11 +5,12 @@ import {
 } from "@typegoose/typegoose";
 import { Field, ObjectType } from "type-graphql";
 
+// TODO: Add attribute definition groups
 @ModelOptions({
-  schemaOptions: { collection: "product_attributes" },
+  schemaOptions: { collection: "attribute_definitions" },
 })
 @ObjectType()
-export class ProductAttribute {
+export class AttributeDefinition {
   @Property({ required: true })
   companyId!: string;
 
@@ -26,4 +27,4 @@ export class ProductAttribute {
   unit?: string;
 }
 
-export const ProductAttributeModel = getModelForClass(ProductAttribute);
+export const AttributeDefinitionModel = getModelForClass(AttributeDefinition);

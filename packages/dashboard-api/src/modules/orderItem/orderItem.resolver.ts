@@ -11,7 +11,13 @@ export class OrderItemResolver {
     @Ctx() { user: { companyId } }: ResolverContext,
     @Arg("data", { nullable: true }) data: GetOrderItemsInput
   ): Promise<OrderItem[]> {
-    return OrderItemModel.find({ ...data, companyId }).exec();
+    return OrderItemModel.find({ ...data, companyId })
+      .populate([
+        {
+          path: "product",
+        },
+      ])
+      .exec();
   }
 
   @Authorized<UserRole>(["Admin", "VChapman"])

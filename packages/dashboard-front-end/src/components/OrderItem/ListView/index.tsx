@@ -93,21 +93,19 @@ export function OrderItemList({
   }
 
   return (
-    <Container maxWidth="xl">
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        getRowId={item => item.id}
-        pageSize={100}
-        loading={loading}
-        error={error}
-        autoHeight
-        components={{
-          Toolbar: CustomToolbar,
-        }}
-        disableSelectionOnClick
-        sx={{ mt: 1 }}
-      />
-    </Container>
+    <DataGrid
+      rows={rows}
+      columns={columns}
+      getRowId={item => item.id}
+      pageSize={100}
+      loading={loading}
+      error={error}
+      autoHeight
+      components={{
+        Toolbar: CustomToolbar,
+      }}
+      disableSelectionOnClick
+      sx={{ mt: 1 }}
+    />
   );
 }

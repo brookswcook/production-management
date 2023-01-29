@@ -40,7 +40,6 @@ export class PurchaseOrder extends ExpectResultModel implements TimeStamps {
     ref: () => OrderItem,
     foreignField: "orderUid",
     localField: "uid",
-    default: [],
   })
   items!: OrderItem[];
 

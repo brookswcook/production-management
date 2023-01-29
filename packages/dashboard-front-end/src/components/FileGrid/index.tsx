@@ -50,21 +50,21 @@ export function FileGrid({
   ];
 
   return (
-    <Box sx={{ height: "300px", width: "100%", pt: 1 }}>
-      <DataGrid
-        rows={files ?? []}
-        columns={columns}
-        pageSize={5}
-        getRowId={item => item.id}
-        rowsPerPageOptions={[5]}
-        disableSelectionOnClick={true}
-        // onSelectionModelChange={selectionModel =>
-        //   setSelectedGridItems(selectionModel)
-        // }
-        // components={{
-        //   Toolbar: CustomToolbar,
-        // }}
-      />
-    </Box>
+    <DataGrid
+      rows={files ?? []}
+      columns={columns}
+      pageSize={5}
+      getRowId={item => item.id}
+      rowsPerPageOptions={[5]}
+      disableSelectionOnClick={true}
+      autoHeight
+      // onSelectionModelChange={selectionModel =>
+      //   setSelectedGridItems(selectionModel)
+      // }
+      // components={{
+      //   Toolbar: CustomToolbar,
+      // }}
+      sx={{ mt: 1 }}
+    />
   );
 }

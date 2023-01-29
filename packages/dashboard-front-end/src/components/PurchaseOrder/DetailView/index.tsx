@@ -108,7 +108,7 @@ export function PurchaseOrderDetail(): ReactElement {
       }
     >
       <DetailViewSection headerTitle="Order items:">
-        <OrderItemList />
+        <OrderItemList orderUid={Number(uid)} />
       </DetailViewSection>
     </DetailView>
   );

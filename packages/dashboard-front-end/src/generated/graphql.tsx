@@ -48,6 +48,12 @@ export type Company = {
   users: Array<User>;
 };
 
+export type CreateAttributeInput = {
+  key: Scalars['String'];
+  unit: InputMaybe<Scalars['String']>;
+  value: Scalars['String'];
+};
+
 export type CreateCompanyInput = {
   address: Scalars['String'];
   name: Scalars['String'];
@@ -74,8 +80,8 @@ export type CreateOrderItemInput = {
   orderUid: Scalars['Float'];
   price: Scalars['Float'];
   productCode: Scalars['String'];
-  quantity: Scalars['Float'];
-  variantAttributes: Array<OrderItemAttributeInput>;
+  quantity: InputMaybe<Scalars['Float']>;
+  variantAttributes: InputMaybe<Array<CreateAttributeInput>>;
 };
 
 export type CreateProductInput = {
@@ -386,13 +392,8 @@ export type OrderItem = {
   id: Scalars['String'];
   price: Scalars['Float'];
   product: Product;
-  purchaseOrder: PurchaseOrder;
   quantity: Scalars['Float'];
   variantAttributes: Array<Attribute>;
-};
-
-export type OrderItemAttributeInput = {
-  size: InputMaybe<Scalars['String']>;
 };
 
 export type Product = {
@@ -453,6 +454,7 @@ export type PurchaseOrder = {
   createdAt: Scalars['DateTime'];
   expectedDeliveryDate: Scalars['DateTime'];
   factory: Company;
+  items: Array<OrderItem>;
   uid: Scalars['Int'];
   updatedAt: Scalars['DateTime'];
 };
@@ -656,12 +658,14 @@ export type OperationLogsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type OperationLogsQuery = { __typename?: 'Query', operationLogs: Array<{ __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt: string | null, user: { __typename?: 'User', firstName: string } | null }> };
 
-export type OrderItemsQueryVariables = Exact<{ [key: string]: never; }>;
+export type OrderItemsQueryVariables = Exact<{
+  data: InputMaybe<GetOrderItemsInput>;
+}>;
 
 
-export type OrderItemsQuery = { __typename?: 'Query', orderItems: Array<{ __typename?: 'OrderItem', id: string, quantity: number, price: number, purchaseOrder: { __typename?: 'PurchaseOrder', uid: number }, product: { __typename?: 'Product', code: string }, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> }> };
+export type OrderItemsQuery = { __typename?: 'Query', orderItems: Array<{ __typename?: 'OrderItem', id: string, quantity: number, price: number, product: { __typename?: 'Product', code: string }, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> }> };
 
-export type OrderItemListFieldsFragment = { __typename?: 'OrderItem', id: string, quantity: number, price: number, purchaseOrder: { __typename?: 'PurchaseOrder', uid: number }, product: { __typename?: 'Product', code: string }, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> };
+export type OrderItemListFieldsFragment = { __typename?: 'OrderItem', id: string, quantity: number, price: number, product: { __typename?: 'Product', code: string }, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> };
 
 export type PrintLinkQueryVariables = Exact<{
   fileName: Scalars['String'];
@@ -909,9 +913,6 @@ export const OperationLogFieldsFragmentDoc = gql`
 export const OrderItemListFieldsFragmentDoc = gql`
     fragment OrderItemListFields on OrderItem {
   id
-  purchaseOrder {
-    uid
-  }
   product {
     code
   }
@@ -1368,8 +1369,8 @@ export type OperationLogsQueryHookResult = ReturnType<typeof useOperationLogsQue
 export type OperationLogsLazyQueryHookResult = ReturnType<typeof useOperationLogsLazyQuery>;
 export type OperationLogsQueryResult = Apollo.QueryResult<OperationLogsQuery, OperationLogsQueryVariables>;
 export const OrderItemsDocument = gql`
-    query OrderItems {
-  orderItems {
+    query OrderItems($data: GetOrderItemsInput) {
+  orderItems(data: $data) {
     ...OrderItemListFields
   }
 }
@@ -1387,6 +1388,7 @@ export const OrderItemsDocument = gql`
  * @example
  * const { data, loading, error } = useOrderItemsQuery({
  *   variables: {
+ *      data: // value for 'data'
  *   },
  * });
  */

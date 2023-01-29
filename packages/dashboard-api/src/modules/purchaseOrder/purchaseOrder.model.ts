@@ -7,6 +7,7 @@ import {
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Company } from "../company/company.model";
 import { ExpectResultModel } from "../common/expectResultModel";
+import { OrderItem } from "../orderItem/orderItem.model";
 
 @ModelOptions({
   schemaOptions: { timestamps: true, collection: "purchase_orders" },
@@ -34,9 +35,14 @@ export class PurchaseOrder extends ExpectResultModel implements TimeStamps {
   @Property({ required: true })
   expectedDeliveryDate!: Date;
 
-  // @Field()
-  // @Property({ required: true })
-  // items!: OrderItem[];
+  @Field(() => [OrderItem])
+  @Property({
+    ref: () => OrderItem,
+    foreignField: "orderUid",
+    localField: "uid",
+    default: [],
+  })
+  items!: OrderItem[];
 
   @Property({ required: true })
   companyId!: string;

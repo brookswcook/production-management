@@ -1,14 +1,11 @@
-query OrderItems {
-  orderItems {
+query OrderItems($data: GetOrderItemsInput) {
+  orderItems(data: $data) {
     ...OrderItemListFields
   }
 }
 
 fragment OrderItemListFields on OrderItem {
   id
-  purchaseOrder {
-    uid
-  }
   product {
     code
   }

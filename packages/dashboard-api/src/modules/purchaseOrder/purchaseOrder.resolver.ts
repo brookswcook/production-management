@@ -20,18 +20,23 @@ export class PurchaseOrderResolver {
     @Ctx() { user: { companyId } }: ResolverContext
   ): Promise<PurchaseOrder[]> {
     return PurchaseOrderModel.find({ companyId })
-      .populate({
-        path: "company",
-        populate: {
-          path: "contacts",
+      .populate([
+        {
+          path: "company",
+          populate: {
+            path: "contacts",
+          },
         },
-      })
-      .populate({
-        path: "factory",
-        populate: {
-          path: "contacts",
+        {
+          path: "factory",
+          populate: {
+            path: "contacts",
+          },
         },
-      })
+        {
+          path: "items",
+        },
+      ])
       .exec();
   }
 
@@ -53,6 +58,9 @@ export class PurchaseOrderResolver {
         populate: {
           path: "contacts",
         },
+      },
+      {
+        path: "items",
       },
     ]);
   }

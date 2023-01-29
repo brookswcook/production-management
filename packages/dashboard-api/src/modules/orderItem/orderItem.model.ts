@@ -6,7 +6,6 @@ import {
 import { Field, ObjectType } from "type-graphql";
 import { Attribute } from "../attribute/attribute.model";
 import { Product } from "../product/product.model";
-import { PurchaseOrder } from "../purchaseOrder/purchaseOrder.model";
 
 @ModelOptions({
   schemaOptions: { collection: "order_items" },
@@ -18,15 +17,6 @@ export class OrderItem {
 
   @Property({ required: true })
   orderUid!: number;
-
-  @Field()
-  @Property({
-    ref: () => PurchaseOrder,
-    foreignField: "uid",
-    localField: "orderUid",
-    justOne: true,
-  })
-  purchaseOrder!: PurchaseOrder;
 
   @Property({ required: true })
   productCode!: string;
@@ -50,7 +40,6 @@ export class OrderItem {
   @Field(() => [Attribute])
   @Property({
     type: () => [Attribute],
-    required: true,
     default: [],
     _id: false,
   })

@@ -1,11 +1,5 @@
-import { ProductSizes } from "dashboard-core";
 import { Field, InputType } from "type-graphql";
-
-@InputType()
-class OrderItemAttributeInput {
-  @Field({ nullable: true })
-  size?: ProductSizes;
-}
+import { CreateAttributeInput } from "../attribute/attribute.input";
 
 @InputType()
 export class GetOrderItemsInput {
@@ -21,11 +15,11 @@ export class CreateOrderItemInput {
   @Field()
   productCode!: string;
 
-  @Field()
-  quantity!: number;
+  @Field({ nullable: true })
+  quantity?: number;
 
-  @Field(() => [OrderItemAttributeInput])
-  variantAttributes!: OrderItemAttributeInput[];
+  @Field(() => [CreateAttributeInput], { nullable: true })
+  variantAttributes?: CreateAttributeInput[];
 
   @Field()
   price!: number;

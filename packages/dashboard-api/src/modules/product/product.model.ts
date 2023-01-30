@@ -32,7 +32,7 @@ export class Product {
   @Field()
   @Property({
     get(this: Product) {
-      return `${this.style.name} in ${this.fabric.colorName}`;
+      return `${this.style?.name ?? ""} in ${this.fabric?.colorName ?? ""}`;
     },
   })
   name!: string;
@@ -52,7 +52,7 @@ export class Product {
     localField: "styleCode",
     justOne: true,
   } as StylePropParams)
-  style!: Style;
+  style?: Style;
 
   @Field()
   @Property({
@@ -61,7 +61,7 @@ export class Product {
     localField: "fabricCode",
     justOne: true,
   } as FabricPropParams)
-  fabric!: Fabric;
+  fabric?: Fabric;
 
   @Field()
   @Property({ required: true })
@@ -96,7 +96,7 @@ export class Product {
   @Field()
   @Property({
     get(this: Product) {
-      return this.style.techPackUploaded;
+      return this.style?.techPackUploaded;
     },
   })
   techPackUploaded?: boolean;
@@ -106,8 +106,8 @@ export class Product {
     get(this: Product): ProductStage {
       if (this.production?.started) return "Production";
       else if (this.fabricProduction?.started) return "Pre-Cut & Sew";
-      else if (this.fitSamples.length > 0) return "Fit Sampling";
-      else if (this.fabric.samples.length > 0) return "Fabric Sampling";
+      else if (this.fitSamples?.length ?? 0 > 0) return "Fit Sampling";
+      else if (this.fabric?.samples?.length ?? 0 > 0) return "Fabric Sampling";
       else if (this.techPackUploaded) return "Pre-Sampling";
       else return "Planning";
     },
@@ -117,7 +117,7 @@ export class Product {
   @Field()
   @Property({
     get(this: Product) {
-      return this.fabric.samples.some(sample => sample.delivered);
+      return this.fabric?.samples?.some(sample => sample.delivered);
     },
   })
   fabricSampleDelivered?: boolean;
@@ -125,24 +125,23 @@ export class Product {
   @Field()
   @Property({
     get(this: Product) {
-      return this.fitSamples.some(fitSample => fitSample.delivered);
+      return this.fitSamples?.some(fitSample => fitSample.delivered);
     },
   })
   fitSampleDelivered?: boolean;
 
-  // Note: might be useful to get it as part of product by populate, see also getFitSamplesByProductName
   @Field(() => [FitSample])
   @Property({
     ref: () => FitSample,
     foreignField: "parentCode",
     localField: "code",
   } as FitSamplePropParams)
-  fitSamples!: FitSample[];
+  fitSamples?: FitSample[];
 
   @Field(() => FitSample, { nullable: true })
   @Property({
     get(this: Product) {
-      return this.fitSamples.find(sample => sample.approved);
+      return this.fitSamples?.find(sample => sample.approved);
     },
     excludeIndexes: true,
   })

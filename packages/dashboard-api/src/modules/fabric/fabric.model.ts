@@ -51,13 +51,13 @@ export class Fabric extends ExpectResultModel {
   @Property()
   printFileName?: string;
 
-  @Field(() => [FabricSample], { nullable: false })
+  @Field(() => [FabricSample])
   @Property({
     ref: () => FabricSample,
     foreignField: "parentCode",
     localField: "code",
   } as FabricSamplesPropParams)
-  samples!: FabricSample[];
+  samples?: FabricSample[];
 
   // TODO: it depends on populate in fabrics query;
   //       it's better to run specific query and move it to resolver as fieldresolver
@@ -66,8 +66,8 @@ export class Fabric extends ExpectResultModel {
   @Field()
   @Property({
     get(this: Fabric): FabricStage {
-      if (this.samples.some(sample => sample.approved)) return "Approved";
-      else if (this.samples.length > 0) return "Fabric Sampling";
+      if (this.samples?.some(sample => sample.approved)) return "Approved";
+      else if (this.samples?.length ?? 0 > 0) return "Fabric Sampling";
       else return "In development";
     },
   })

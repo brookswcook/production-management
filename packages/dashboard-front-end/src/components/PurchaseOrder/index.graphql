@@ -12,14 +12,12 @@ query PurchaseOrder($uid: Int!) {
 
 mutation CreatePurchaseOrder($data: CreatePurchaseOrderInput!) {
   createPurchaseOrder(data: $data) {
-    ...PurchaseOrderListFields
+    ...PurchaseOrderScalarFields
   }
 }
 
 fragment PurchaseOrderDetailFields on PurchaseOrder {
-  uid
-  createdAt
-  expectedDeliveryDate
+  ...PurchaseOrderScalarFields
   company {
     name
     address
@@ -41,13 +39,17 @@ fragment PurchaseOrderDetailFields on PurchaseOrder {
 }
 
 fragment PurchaseOrderListFields on PurchaseOrder {
-  uid
-  createdAt
-  expectedDeliveryDate
+  ...PurchaseOrderScalarFields
   company {
     name
   }
   factory {
     name
   }
+}
+
+fragment PurchaseOrderScalarFields on PurchaseOrder {
+  uid
+  createdAt
+  expectedDeliveryDate
 }

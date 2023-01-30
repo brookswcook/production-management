@@ -14,6 +14,8 @@ import {
   PurchaseOrderListFieldsFragment,
   usePurchaseOrdersQuery,
 } from "../../../generated/graphql";
+import RequireRole from "../../Auth/RequireRole";
+import { CreatePurchaseOrderPopperButton } from "../Form";
 
 export function PurchaseOrderList(): ReactElement {
   const { data, loading, error } = usePurchaseOrdersQuery({});
@@ -80,10 +82,13 @@ export function PurchaseOrderList(): ReactElement {
     },
   ];
 
-  function CustomToolbar(): ReactElement {
+  function CustomToolbar() {
     return (
       <Fragment>
         <GridToolbarContainer>
+          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+            <CreatePurchaseOrderPopperButton />
+          </RequireRole>
           <GridToolbarColumnsButton />
           <GridToolbarFilterButton />
           <GridToolbarExport />

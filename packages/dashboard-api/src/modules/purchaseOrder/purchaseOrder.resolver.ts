@@ -14,7 +14,7 @@ import { PurchaseOrder, PurchaseOrderModel } from "./purchaseOrder.model";
 
 @Resolver(PurchaseOrder)
 export class PurchaseOrderResolver {
-  @Authorized<UserRole>(["Admin", "VChapman"])
+  @Authorized()
   @Query(() => [PurchaseOrder])
   async purchaseOrders(
     @Ctx() { user: { companyId } }: ResolverContext
@@ -40,7 +40,7 @@ export class PurchaseOrderResolver {
       .exec();
   }
 
-  @Authorized<UserRole>(["Admin", "VChapman"])
+  @Authorized()
   @Query(() => PurchaseOrder)
   async purchaseOrder(
     @Arg("uid", () => Int) uid: number,

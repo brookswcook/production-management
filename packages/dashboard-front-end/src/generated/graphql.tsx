@@ -93,7 +93,7 @@ export type CreateProductInput = {
 
 export type CreatePurchaseOrderInput = {
   expectedDeliveryDate: Scalars['DateTime'];
-  factoryCode: Scalars['String'];
+  factoryId: Scalars['String'];
 };
 
 export type CreateStyleInput = {
@@ -720,11 +720,13 @@ export type CreatePurchaseOrderMutationVariables = Exact<{
 }>;
 
 
-export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } } };
+export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string } };
 
 export type PurchaseOrderDetailFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } };
 
 export type PurchaseOrderListFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } };
+
+export type PurchaseOrderScalarFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string };
 
 export type SendFabricSampleMutationVariables = Exact<{
   data: SendSampleInput;
@@ -1016,11 +1018,16 @@ export const ProductFieldsFragmentDoc = gql`
     ${FabricSampleFieldsFragmentDoc}
 ${FitSampleFieldsFragmentDoc}
 ${NoteFieldsFragmentDoc}`;
+export const PurchaseOrderScalarFieldsFragmentDoc = gql`
+    fragment PurchaseOrderScalarFields on PurchaseOrder {
+  uid
+  createdAt
+  expectedDeliveryDate
+}
+    `;
 export const PurchaseOrderDetailFieldsFragmentDoc = gql`
     fragment PurchaseOrderDetailFields on PurchaseOrder {
-  uid
-  createdAt
-  expectedDeliveryDate
+  ...PurchaseOrderScalarFields
   company {
     name
     address
@@ -1040,12 +1047,10 @@ export const PurchaseOrderDetailFieldsFragmentDoc = gql`
     }
   }
 }
-    `;
+    ${PurchaseOrderScalarFieldsFragmentDoc}`;
 export const PurchaseOrderListFieldsFragmentDoc = gql`
     fragment PurchaseOrderListFields on PurchaseOrder {
-  uid
-  createdAt
-  expectedDeliveryDate
+  ...PurchaseOrderScalarFields
   company {
     name
   }
@@ -1053,7 +1058,7 @@ export const PurchaseOrderListFieldsFragmentDoc = gql`
     name
   }
 }
-    `;
+    ${PurchaseOrderScalarFieldsFragmentDoc}`;
 export const FileFieldsFragmentDoc = gql`
     fragment fileFields on File {
   id
@@ -1610,10 +1615,10 @@ export type PurchaseOrderQueryResult = Apollo.QueryResult<PurchaseOrderQuery, Pu
 export const CreatePurchaseOrderDocument = gql`
     mutation CreatePurchaseOrder($data: CreatePurchaseOrderInput!) {
   createPurchaseOrder(data: $data) {
-    ...PurchaseOrderListFields
+    ...PurchaseOrderScalarFields
   }
 }
-    ${PurchaseOrderListFieldsFragmentDoc}`;
+    ${PurchaseOrderScalarFieldsFragmentDoc}`;
 export type CreatePurchaseOrderMutationFn = Apollo.MutationFunction<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>;
 
 /**

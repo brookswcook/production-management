@@ -15,6 +15,7 @@ export function PopperButton({
   variant = "text",
   disabled,
   closeSwitch,
+  closeOnClickAway = true,
 }: {
   icon?: ReactElement;
   title: string;
@@ -25,6 +26,7 @@ export function PopperButton({
   >;
   disabled?: boolean;
   closeSwitch?: number;
+  closeOnClickAway?: boolean;
 }): ReactElement {
   const buttonRef = useRef<null | HTMLButtonElement>(null);
   const [open, setOpen] = useState<boolean>(false);
@@ -50,7 +52,11 @@ export function PopperButton({
         anchorEl={buttonRef?.current}
         placement="bottom-start"
       >
-        <ClickAwayListener onClickAway={() => setOpen(false)}>
+        <ClickAwayListener
+          onClickAway={() => {
+            closeOnClickAway && setOpen(false);
+          }}
+        >
           <Paper
             elevation={9}
             sx={{

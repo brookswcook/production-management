@@ -109,6 +109,7 @@ export function CreatePurchaseOrderPopperButton({
       title={"Add Purchase Order"}
       disabled={disabled}
       closeSwitch={closeSwitch}
+      closeOnClickAway={false}
     >
       <CreatePurchaseOrderForm
         footerEl={

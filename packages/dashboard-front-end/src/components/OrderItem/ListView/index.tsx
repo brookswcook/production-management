@@ -1,6 +1,11 @@
-import { Container } from "@mui/material";
-import { GridColDef, DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
+import {
+  GridColDef,
+  DataGrid,
+  GridToolbarContainer,
+  GridRenderCellParams,
+} from "@mui/x-data-grid";
 import { Fragment, ReactElement, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   OrderItemListFieldsFragment,
   useOrderItemsQuery,
@@ -38,7 +43,7 @@ export function OrderItemList({
       },
     }));
     setAttributeColumns(attributeColumns);
-  });
+  }, [data]);
 
   const columns: GridColDef<OrderItemListFieldsFragment>[] = [
     {
@@ -49,6 +54,16 @@ export function OrderItemList({
       type: "string",
       valueGetter: ({ row }: { row: OrderItemListFieldsFragment }) => {
         return row.product.code;
+      },
+      renderCell({ value }: GridRenderCellParams<OrderItemListFieldsFragment>) {
+        const productCode = String(value);
+        const linkPath = `/products/${productCode}`;
+        const linkText = `${productCode}`;
+        return (
+          <Link to={linkPath} style={{ textDecoration: "none" }}>
+            {linkText}
+          </Link>
+        );
       },
     },
     ...attributeColumns,

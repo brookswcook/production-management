@@ -26,6 +26,14 @@ export class PurchaseOrder extends ExpectResultModel implements TimeStamps {
   // code!: string;
 
   @Field()
+  @Property({
+    required: true,
+    default: "draft",
+    enum: ["draft", "created", "sent", "delivered", "completed"],
+  })
+  status!: "draft" | "created" | "sent" | "delivered" | "completed";
+
+  @Field()
   createdAt!: Date;
 
   @Field()

@@ -51,6 +51,16 @@ export function PurchaseOrderList(): ReactElement {
       },
     },
     {
+      field: "status",
+      headerName: "status",
+      minWidth: 70,
+      flex: 2,
+      type: "string",
+      valueGetter: ({ row }: { row: PurchaseOrderListFieldsFragment }) => {
+        return row.status;
+      },
+    },
+    {
       field: "factoryName",
       headerName: "Factory",
       minWidth: 70,

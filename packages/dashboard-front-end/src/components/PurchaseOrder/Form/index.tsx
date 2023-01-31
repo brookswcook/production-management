@@ -12,7 +12,6 @@ import {
 import { FormEvent, ReactElement, useState } from "react";
 import { toast } from "react-toastify";
 import {
-  CreatePurchaseOrderInput,
   useCreatePurchaseOrderMutation,
   useFactoriesQuery,
 } from "../../../generated/graphql";
@@ -29,20 +28,18 @@ export function CreatePurchaseOrderForm({
   });
 
   const { data: { factories } = { factories: [] } } = useFactoriesQuery();
+  const [factoryId, setFactoryId] = useState<string | null>(null);
   const [expectedDeliveryDate, setDeliveryDate] = useState<string>(
     new Date().toISOString()
   );
 
   async function createNewPurchaseOrder(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const { factoryId } = Object.fromEntries(
-      data.entries()
-    ) as unknown as CreatePurchaseOrderInput;
     try {
+      if (factoryId == null) return toast.error("Factory should be selected");
       await newPurchaseOrderMutation({
         variables: {
-          data: { factoryId: String(factoryId), expectedDeliveryDate },
+          data: { factoryId, expectedDeliveryDate },
         },
       });
     } catch (error) {
@@ -57,13 +54,13 @@ export function CreatePurchaseOrderForm({
       spacing={2}
       autoComplete="off"
     >
-      {" "}
       <Typography component="h4" variant="inherit">
         {`Create new Purchase Order`}
       </Typography>
       <Autocomplete
+        onChange={(_, value) => setFactoryId(value?.id ?? null)}
         options={factories}
-        getOptionLabel={option => option.id}
+        getOptionLabel={option => option.name}
         renderOption={(props, option) => (
           <Box component="li" {...props}>
             {`${option.name}`}
@@ -109,7 +106,6 @@ export function CreatePurchaseOrderPopperButton({
       title={"Add Purchase Order"}
       disabled={disabled}
       closeSwitch={closeSwitch}
-      closeOnClickAway={false}
     >
       <CreatePurchaseOrderForm
         footerEl={

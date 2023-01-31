@@ -15,12 +15,12 @@ export class AttributeDefinition {
   companyId!: string;
 
   @Field()
-  @Property({ required: true })
+  @Property({ required: true, unique: true })
   name!: string;
 
-  @Field(() => [String])
-  @Property({ type: [String], required: true })
-  values!: [string];
+  @Field(() => [String], { nullable: true })
+  @Property({ type: [String] })
+  values?: [string];
 
   @Field({ nullable: true })
   @Property()

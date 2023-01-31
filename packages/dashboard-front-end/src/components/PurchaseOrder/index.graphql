@@ -52,4 +52,23 @@ fragment PurchaseOrderScalarFields on PurchaseOrder {
   uid
   createdAt
   expectedDeliveryDate
+  status
+}
+
+query AttributeDefinitions {
+  attributeDefinitions {
+    ...AttributeDefinitionsListFields
+  }
+}
+
+query AttributeDefinition {
+  attributeDefinitions {
+    ...AttributeDefinitionsListFields
+  }
+}
+
+fragment AttributeDefinitionsListFields on AttributeDefinition {
+  name
+  values
+  unit
 }

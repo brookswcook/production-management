@@ -30,7 +30,7 @@ export type AttributeDefinition = {
   __typename?: 'AttributeDefinition';
   name: Scalars['String'];
   unit: Maybe<Scalars['String']>;
-  values: Array<Scalars['String']>;
+  values: Maybe<Array<Scalars['String']>>;
 };
 
 export type Company = {
@@ -455,12 +455,14 @@ export type PurchaseOrder = {
   expectedDeliveryDate: Scalars['DateTime'];
   factory: Company;
   items: Array<OrderItem>;
+  status: Scalars['String'];
   uid: Scalars['Int'];
   updatedAt: Scalars['DateTime'];
 };
 
 export type Query = {
   __typename?: 'Query';
+  attributeDefinition: Array<AttributeDefinition>;
   attributeDefinitions: Array<AttributeDefinition>;
   companies: Array<Company>;
   fabric: Fabric;
@@ -477,6 +479,11 @@ export type Query = {
   style: Style;
   styles: Array<Style>;
   users: Array<User>;
+};
+
+
+export type QueryAttributeDefinitionArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -706,27 +713,39 @@ export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Prod
 export type PurchaseOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PurchaseOrdersQuery = { __typename?: 'Query', purchaseOrders: Array<{ __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } }> };
+export type PurchaseOrdersQuery = { __typename?: 'Query', purchaseOrders: Array<{ __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } }> };
 
 export type PurchaseOrderQueryVariables = Exact<{
   uid: Scalars['Int'];
 }>;
 
 
-export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } } };
+export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } } };
 
 export type CreatePurchaseOrderMutationVariables = Exact<{
   data: CreatePurchaseOrderInput;
 }>;
 
 
-export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string } };
+export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string } };
 
-export type PurchaseOrderDetailFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } };
+export type PurchaseOrderDetailFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } };
 
-export type PurchaseOrderListFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } };
+export type PurchaseOrderListFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } };
 
-export type PurchaseOrderScalarFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string };
+export type PurchaseOrderScalarFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string };
+
+export type AttributeDefinitionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AttributeDefinitionsQuery = { __typename?: 'Query', attributeDefinitions: Array<{ __typename?: 'AttributeDefinition', name: string, values: Array<string> | null, unit: string | null }> };
+
+export type AttributeDefinitionQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AttributeDefinitionQuery = { __typename?: 'Query', attributeDefinitions: Array<{ __typename?: 'AttributeDefinition', name: string, values: Array<string> | null, unit: string | null }> };
+
+export type AttributeDefinitionsListFieldsFragment = { __typename?: 'AttributeDefinition', name: string, values: Array<string> | null, unit: string | null };
 
 export type SendFabricSampleMutationVariables = Exact<{
   data: SendSampleInput;
@@ -1023,6 +1042,7 @@ export const PurchaseOrderScalarFieldsFragmentDoc = gql`
   uid
   createdAt
   expectedDeliveryDate
+  status
 }
     `;
 export const PurchaseOrderDetailFieldsFragmentDoc = gql`
@@ -1059,6 +1079,13 @@ export const PurchaseOrderListFieldsFragmentDoc = gql`
   }
 }
     ${PurchaseOrderScalarFieldsFragmentDoc}`;
+export const AttributeDefinitionsListFieldsFragmentDoc = gql`
+    fragment AttributeDefinitionsListFields on AttributeDefinition {
+  name
+  values
+  unit
+}
+    `;
 export const FileFieldsFragmentDoc = gql`
     fragment fileFields on File {
   id
@@ -1645,6 +1672,74 @@ export function useCreatePurchaseOrderMutation(baseOptions?: Apollo.MutationHook
 export type CreatePurchaseOrderMutationHookResult = ReturnType<typeof useCreatePurchaseOrderMutation>;
 export type CreatePurchaseOrderMutationResult = Apollo.MutationResult<CreatePurchaseOrderMutation>;
 export type CreatePurchaseOrderMutationOptions = Apollo.BaseMutationOptions<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>;
+export const AttributeDefinitionsDocument = gql`
+    query AttributeDefinitions {
+  attributeDefinitions {
+    ...AttributeDefinitionsListFields
+  }
+}
+    ${AttributeDefinitionsListFieldsFragmentDoc}`;
+
+/**
+ * __useAttributeDefinitionsQuery__
+ *
+ * To run a query within a React component, call `useAttributeDefinitionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAttributeDefinitionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAttributeDefinitionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAttributeDefinitionsQuery(baseOptions?: Apollo.QueryHookOptions<AttributeDefinitionsQuery, AttributeDefinitionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AttributeDefinitionsQuery, AttributeDefinitionsQueryVariables>(AttributeDefinitionsDocument, options);
+      }
+export function useAttributeDefinitionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AttributeDefinitionsQuery, AttributeDefinitionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AttributeDefinitionsQuery, AttributeDefinitionsQueryVariables>(AttributeDefinitionsDocument, options);
+        }
+export type AttributeDefinitionsQueryHookResult = ReturnType<typeof useAttributeDefinitionsQuery>;
+export type AttributeDefinitionsLazyQueryHookResult = ReturnType<typeof useAttributeDefinitionsLazyQuery>;
+export type AttributeDefinitionsQueryResult = Apollo.QueryResult<AttributeDefinitionsQuery, AttributeDefinitionsQueryVariables>;
+export const AttributeDefinitionDocument = gql`
+    query AttributeDefinition {
+  attributeDefinitions {
+    ...AttributeDefinitionsListFields
+  }
+}
+    ${AttributeDefinitionsListFieldsFragmentDoc}`;
+
+/**
+ * __useAttributeDefinitionQuery__
+ *
+ * To run a query within a React component, call `useAttributeDefinitionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAttributeDefinitionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAttributeDefinitionQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAttributeDefinitionQuery(baseOptions?: Apollo.QueryHookOptions<AttributeDefinitionQuery, AttributeDefinitionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AttributeDefinitionQuery, AttributeDefinitionQueryVariables>(AttributeDefinitionDocument, options);
+      }
+export function useAttributeDefinitionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AttributeDefinitionQuery, AttributeDefinitionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AttributeDefinitionQuery, AttributeDefinitionQueryVariables>(AttributeDefinitionDocument, options);
+        }
+export type AttributeDefinitionQueryHookResult = ReturnType<typeof useAttributeDefinitionQuery>;
+export type AttributeDefinitionLazyQueryHookResult = ReturnType<typeof useAttributeDefinitionLazyQuery>;
+export type AttributeDefinitionQueryResult = Apollo.QueryResult<AttributeDefinitionQuery, AttributeDefinitionQueryVariables>;
 export const SendFabricSampleDocument = gql`
     mutation SendFabricSample($data: SendSampleInput!) {
   sendFabricSample(data: $data) {

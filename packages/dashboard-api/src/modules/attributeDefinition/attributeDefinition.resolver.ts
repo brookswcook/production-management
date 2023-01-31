@@ -1,4 +1,4 @@
-import { Ctx, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, Query, Resolver } from "type-graphql";
 import { ResolverContext } from "../../lib/graphql";
 import {
   AttributeDefinition,
@@ -12,5 +12,13 @@ export class AttributeDefinitionResolver {
     @Ctx() { user: { companyId } }: ResolverContext
   ): Promise<AttributeDefinition[]> {
     return AttributeDefinitionModel.find({ companyId }).exec();
+  }
+
+  @Query(() => [AttributeDefinition])
+  async attributeDefinition(
+    @Ctx() { user: { companyId } }: ResolverContext,
+    @Arg("name") name: string
+  ): Promise<AttributeDefinition[]> {
+    return AttributeDefinitionModel.find({ companyId, name }).exec();
   }
 }

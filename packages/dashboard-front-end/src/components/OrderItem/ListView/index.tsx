@@ -10,11 +10,14 @@ import {
   OrderItemListFieldsFragment,
   useOrderItemsQuery,
 } from "../../../generated/graphql";
+import RequireRole from "../../Auth/RequireRole";
 
 export function OrderItemList({
   orderUid,
+  addActionDisabled = false,
 }: {
   orderUid?: number;
+  addActionDisabled?: boolean;
 }): ReactElement {
   const [attributeColumns, setAttributeColumns] = useState<
     GridColDef<OrderItemListFieldsFragment>[]

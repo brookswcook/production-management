@@ -110,7 +110,10 @@ export function PurchaseOrderDetail(): ReactElement {
       }
     >
       <DetailViewSection headerTitle="Order items:">
-        <OrderItemList orderUid={Number(uid)} />
+        <OrderItemList
+          orderUid={Number(uid)}
+          addActionDisabled={data.purchaseOrder.status !== "draft"}
+        />
       </DetailViewSection>
     </DetailView>
   );

@@ -17,6 +17,7 @@ function PurchaseOrderHeaderSection({
     uid,
     expectedDeliveryDate,
     createdAt,
+    status,
     factory: {
       name: factoryName,
       address: factoryAddress,
@@ -56,6 +57,7 @@ function PurchaseOrderHeaderSection({
             title="Delivery"
             value={new Date(expectedDeliveryDate).toLocaleDateString()}
           />
+          <TextProperty title="Status" value={status} />
           <ObjectProperty
             title="To       "
             value={{

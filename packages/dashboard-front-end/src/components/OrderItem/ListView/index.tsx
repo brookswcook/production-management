@@ -1,8 +1,10 @@
+import { Grid, Stack, Toolbar, Typography } from "@mui/material";
 import {
   GridColDef,
   DataGrid,
   GridToolbarContainer,
   GridRenderCellParams,
+  GridFooterContainer,
 } from "@mui/x-data-grid";
 import { Fragment, ReactElement, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -11,12 +13,13 @@ import {
   useOrderItemsQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
+import { CreateOrderItemPopperButton } from "../Form";
 
 export function OrderItemList({
   orderUid,
   addActionDisabled = false,
 }: {
-  orderUid?: number;
+  orderUid: number;
   addActionDisabled?: boolean;
 }): ReactElement {
   const [attributeColumns, setAttributeColumns] = useState<
@@ -24,16 +27,20 @@ export function OrderItemList({
   >([]);
 
   const { data, loading, error } = useOrderItemsQuery({
-    variables: { data: orderUid != null ? { orderUid } : null },
+    variables: { data: { orderUid } },
   });
   const rows: OrderItemListFieldsFragment[] = data?.orderItems ?? [];
 
-  useEffect(() => {
-    if (data == null || data.orderItems == null) return;
-    const attributeKeys = data.orderItems
-      .flatMap(item => item.variantAttributes)
-      .map(({ key }) => key);
-    const attributeColumns = attributeKeys.map(key => ({
+  function generateAttributeColumnsSet(): GridColDef<OrderItemListFieldsFragment>[] {
+    if (data == null || data.orderItems == null) return [];
+    const attributeKeys = Array.from(
+      new Set(
+        data.orderItems
+          .flatMap(item => item.variantAttributes)
+          .map(({ key }) => key)
+      )
+    );
+    return attributeKeys.map(key => ({
       field: `${key}Attribute`,
       headerName: `${key[0].toUpperCase()}${key.slice(1)}`,
       minWidth: 50,
@@ -45,6 +52,10 @@ export function OrderItemList({
         );
       },
     }));
+  }
+
+  useEffect(() => {
+    const attributeColumns = generateAttributeColumnsSet();
     setAttributeColumns(attributeColumns);
   }, [data]);
 
@@ -105,7 +116,14 @@ export function OrderItemList({
   function CustomToolbar() {
     return (
       <Fragment>
-        <GridToolbarContainer></GridToolbarContainer>
+        <GridToolbarContainer>
+          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+            <CreateOrderItemPopperButton
+              disabled={addActionDisabled}
+              orderUid={orderUid}
+            />
+          </RequireRole>
+        </GridToolbarContainer>
       </Fragment>
     );
   }
@@ -121,6 +139,23 @@ export function OrderItemList({
       autoHeight
       components={{
         Toolbar: CustomToolbar,
+        Footer: () => {
+          return (
+            <GridFooterContainer sx={{ pl: 1, pr: 1 }}>
+              <Stack direction={"row"} justifyContent={"flex-end"} spacing={2}>
+                <Typography>Total:</Typography>
+                <Typography>{`Quantity: ${rows.reduce(
+                  (acc, { quantity }) => acc + quantity,
+                  0
+                )}`}</Typography>
+                <Typography>{`Price: ${rows.reduce(
+                  (acc, { price, quantity }) => acc + price * quantity,
+                  0
+                )}`}</Typography>
+              </Stack>
+            </GridFooterContainer>
+          );
+        },
       }}
       disableSelectionOnClick
       sx={{ mt: 1 }}

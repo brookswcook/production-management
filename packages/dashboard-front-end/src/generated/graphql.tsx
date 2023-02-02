@@ -674,6 +674,15 @@ export type OrderItemsQuery = { __typename?: 'Query', orderItems: Array<{ __type
 
 export type OrderItemListFieldsFragment = { __typename?: 'OrderItem', id: string, quantity: number, price: number, product: { __typename?: 'Product', code: string }, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> };
 
+export type OrderItemOwnFieldsFragment = { __typename?: 'OrderItem', id: string, quantity: number, price: number, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> };
+
+export type CreateOrderItemMutationVariables = Exact<{
+  data: CreateOrderItemInput;
+}>;
+
+
+export type CreateOrderItemMutation = { __typename?: 'Mutation', createOrderItem: { __typename?: 'OrderItem', id: string, quantity: number, price: number, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> } };
+
 export type PrintLinkQueryVariables = Exact<{
   fileName: Scalars['String'];
 }>;
@@ -931,12 +940,9 @@ export const OperationLogFieldsFragmentDoc = gql`
   createdAt
 }
     `;
-export const OrderItemListFieldsFragmentDoc = gql`
-    fragment OrderItemListFields on OrderItem {
+export const OrderItemOwnFieldsFragmentDoc = gql`
+    fragment OrderItemOwnFields on OrderItem {
   id
-  product {
-    code
-  }
   quantity
   price
   variantAttributes {
@@ -945,6 +951,14 @@ export const OrderItemListFieldsFragmentDoc = gql`
   }
 }
     `;
+export const OrderItemListFieldsFragmentDoc = gql`
+    fragment OrderItemListFields on OrderItem {
+  ...OrderItemOwnFields
+  product {
+    code
+  }
+}
+    ${OrderItemOwnFieldsFragmentDoc}`;
 export const SampleFieldsFragmentDoc = gql`
     fragment sampleFields on Sample {
   sku
@@ -1435,6 +1449,39 @@ export function useOrderItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type OrderItemsQueryHookResult = ReturnType<typeof useOrderItemsQuery>;
 export type OrderItemsLazyQueryHookResult = ReturnType<typeof useOrderItemsLazyQuery>;
 export type OrderItemsQueryResult = Apollo.QueryResult<OrderItemsQuery, OrderItemsQueryVariables>;
+export const CreateOrderItemDocument = gql`
+    mutation CreateOrderItem($data: CreateOrderItemInput!) {
+  createOrderItem(data: $data) {
+    ...OrderItemOwnFields
+  }
+}
+    ${OrderItemOwnFieldsFragmentDoc}`;
+export type CreateOrderItemMutationFn = Apollo.MutationFunction<CreateOrderItemMutation, CreateOrderItemMutationVariables>;
+
+/**
+ * __useCreateOrderItemMutation__
+ *
+ * To run a mutation, you first call `useCreateOrderItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrderItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOrderItemMutation, { data, loading, error }] = useCreateOrderItemMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateOrderItemMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrderItemMutation, CreateOrderItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOrderItemMutation, CreateOrderItemMutationVariables>(CreateOrderItemDocument, options);
+      }
+export type CreateOrderItemMutationHookResult = ReturnType<typeof useCreateOrderItemMutation>;
+export type CreateOrderItemMutationResult = Apollo.MutationResult<CreateOrderItemMutation>;
+export type CreateOrderItemMutationOptions = Apollo.BaseMutationOptions<CreateOrderItemMutation, CreateOrderItemMutationVariables>;
 export const PrintLinkDocument = gql`
     query PrintLink($fileName: String!) {
   printLink(fileName: $fileName)

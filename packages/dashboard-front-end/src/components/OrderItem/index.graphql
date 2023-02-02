@@ -5,14 +5,24 @@ query OrderItems($data: GetOrderItemsInput) {
 }
 
 fragment OrderItemListFields on OrderItem {
-  id
+  ...OrderItemOwnFields
   product {
     code
   }
+}
+
+fragment OrderItemOwnFields on OrderItem {
+  id
   quantity
   price
   variantAttributes {
     key
     value
+  }
+}
+
+mutation CreateOrderItem($data: CreateOrderItemInput!) {
+  createOrderItem(data: $data) {
+    ...OrderItemOwnFields
   }
 }

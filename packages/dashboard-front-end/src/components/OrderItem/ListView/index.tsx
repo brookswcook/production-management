@@ -15,6 +15,10 @@ import {
 import RequireRole from "../../Auth/RequireRole";
 import { CreateOrderItemPopperButton } from "../Form";
 
+function toCurrency(number: number, currency = "$"): string {
+  return `${currency}${number.toFixed(2)}`;
+}
+
 export function OrderItemList({
   orderUid,
   addActionDisabled = false,
@@ -98,7 +102,7 @@ export function OrderItemList({
       flex: 1,
       type: "number",
       valueGetter: ({ row }: { row: OrderItemListFieldsFragment }) => {
-        return row.price;
+        return toCurrency(row.price);
       },
     },
     {
@@ -108,7 +112,7 @@ export function OrderItemList({
       flex: 1,
       type: "number",
       valueGetter: ({ row }: { row: OrderItemListFieldsFragment }) => {
-        return row.price * row.quantity;
+        return toCurrency(row.price * row.quantity);
       },
     },
   ];
@@ -148,12 +152,12 @@ export function OrderItemList({
                   (acc, { quantity }) => acc + quantity,
                   0
                 )}`}</Typography>
-                <Typography>{`Price: ${rows
-                  .reduce(
+                <Typography>{`Price: ${toCurrency(
+                  rows.reduce(
                     (acc, { price, quantity }) => acc + price * quantity,
                     0
                   )
-                  .toFixed(2)}`}</Typography>
+                )}`}</Typography>
               </Stack>
             </GridFooterContainer>
           );

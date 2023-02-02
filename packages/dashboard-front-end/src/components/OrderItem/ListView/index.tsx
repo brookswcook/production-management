@@ -1,4 +1,4 @@
-import { Grid, Stack, Toolbar, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import {
   GridColDef,
   DataGrid,
@@ -148,10 +148,12 @@ export function OrderItemList({
                   (acc, { quantity }) => acc + quantity,
                   0
                 )}`}</Typography>
-                <Typography>{`Price: ${rows.reduce(
-                  (acc, { price, quantity }) => acc + price * quantity,
-                  0
-                )}`}</Typography>
+                <Typography>{`Price: ${rows
+                  .reduce(
+                    (acc, { price, quantity }) => acc + price * quantity,
+                    0
+                  )
+                  .toFixed(2)}`}</Typography>
               </Stack>
             </GridFooterContainer>
           );

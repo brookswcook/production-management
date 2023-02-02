@@ -1,7 +1,7 @@
 import { TextField, TextFieldProps } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 
-const floatRegex = /^[+]?(\d+(?:[.])?\d*)$/;
+const floatRegex = /^[+]?(\d+(?:[.])?\d{0,2})$/;
 
 export function FloatTextField({ value, onChange, ...props }: TextFieldProps) {
   const [inputValue, setInputValue] = useState(String(value ?? ""));

@@ -233,6 +233,7 @@ export type Mutation = {
   login: LoginResult;
   markFabricSampleAsDelivered: FabricSample;
   markFitSampleAsDelivered: FitSample;
+  pushPurchaseOrderToNextStage: PurchaseOrder;
   rejectFabricSample: FabricSample;
   rejectFitSample: FitSample;
   sendFabricSample: FabricSample;
@@ -317,6 +318,11 @@ export type MutationMarkFabricSampleAsDeliveredArgs = {
 
 export type MutationMarkFitSampleAsDeliveredArgs = {
   data: UniqueSampleInput;
+};
+
+
+export type MutationPushPurchaseOrderToNextStageArgs = {
+  uid: Scalars['Int'];
 };
 
 
@@ -455,6 +461,7 @@ export type PurchaseOrder = {
   expectedDeliveryDate: Scalars['DateTime'];
   factory: Company;
   items: Array<OrderItem>;
+  nextStatus: Maybe<Scalars['String']>;
   status: Scalars['String'];
   uid: Scalars['Int'];
   updatedAt: Scalars['DateTime'];

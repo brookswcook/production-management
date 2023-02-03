@@ -24,3 +24,18 @@ export type ProductSizes =
   | "12"
   | "14"
   | "16";
+
+export type PurchaseOrderStatus =
+  | "draft"
+  | "processing"
+  | "shipped"
+  | "received"
+  | "cancelled";
+
+export const purchaseOrderStatusSet = [
+  "draft",
+  "processing",
+  "shipped",
+  "received",
+  "cancelled",
+];

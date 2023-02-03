@@ -19,7 +19,7 @@ export class PurchaseOrderResolver {
   async purchaseOrders(
     @Ctx() { user: { companyId } }: ResolverContext
   ): Promise<PurchaseOrder[]> {
-    return PurchaseOrderModel.find({ companyId })
+    return await PurchaseOrderModel.find({ companyId })
       .populate([
         {
           path: "company",
@@ -46,7 +46,7 @@ export class PurchaseOrderResolver {
     @Arg("uid", () => Int) uid: number,
     @Ctx() { user: { companyId } }: ResolverContext
   ): Promise<PurchaseOrder> {
-    return PurchaseOrderModel.findOneOrFail({ companyId, uid }, [
+    return await PurchaseOrderModel.findOneOrFail({ companyId, uid }, [
       {
         path: "company",
         populate: {
@@ -72,10 +72,25 @@ export class PurchaseOrderResolver {
     @Ctx() { user: { companyId } }: ResolverContext
   ): Promise<PurchaseOrder> {
     const uid = await PurchaseOrderModel.getNextUID();
-    return new PurchaseOrderModel({
+    return await new PurchaseOrderModel({
       uid,
       companyId,
       ...data,
     }).save();
+  }
+
+  @Authorized()
+  @Mutation(() => PurchaseOrder)
+  async pushPurchaseOrderToNextStage(
+    @Arg("uid", () => Int) uid: number,
+    @Ctx() { user: { companyId } }: ResolverContext
+  ): Promise<PurchaseOrder> {
+    const purchaseOrder = await PurchaseOrderModel.findOneOrFail({
+      companyId,
+      uid,
+    });
+    if (purchaseOrder.nextStatus == null) return purchaseOrder;
+    purchaseOrder.status = purchaseOrder.nextStatus;
+    return await purchaseOrder.save();
   }
 }

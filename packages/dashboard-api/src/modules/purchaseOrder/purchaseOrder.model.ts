@@ -8,6 +8,7 @@ import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Company } from "../company/company.model";
 import { ExpectResultModel } from "../common/expectResultModel";
 import { OrderItem } from "../orderItem/orderItem.model";
+import { PurchaseOrderStatus, purchaseOrderStatusSet } from "dashboard-core";
 
 @ModelOptions({
   schemaOptions: { timestamps: true, collection: "purchase_orders" },
@@ -28,10 +29,23 @@ export class PurchaseOrder extends ExpectResultModel implements TimeStamps {
   @Field()
   @Property({
     required: true,
-    default: "draft",
-    enum: ["draft", "created", "sent", "delivered", "completed"],
+    default: purchaseOrderStatusSet[0],
+    enum: purchaseOrderStatusSet,
   })
-  status!: "draft" | "created" | "sent" | "delivered" | "completed";
+  status!: PurchaseOrderStatus;
+
+  @Field(() => String, { nullable: true })
+  @Property({
+    type: () => String,
+    get(this: PurchaseOrder) {
+      const current = purchaseOrderStatusSet.indexOf(this.status);
+      // keeping in mind that last one is cancelled
+      if (current < purchaseOrderStatusSet.length - 2)
+        return purchaseOrderStatusSet[current + 1];
+      else return null;
+    },
+  })
+  nextStatus!: PurchaseOrderStatus | null;
 
   @Field()
   createdAt!: Date;

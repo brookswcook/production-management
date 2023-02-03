@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "dashboard-core",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Common things across the project",
   "license": "ISC",
   "directories": {
@@ -14,13 +14,5 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc"
-  },
-  "dependencies": {
-    "@types/jsonwebtoken": "^8.5.9",
-    "jsonwebtoken": "^8.5.1",
-    "winston": "^3.5.0"
-  },
-  "devDependencies": {
-    "@types/winston": "^2.4.4"
   }
 }

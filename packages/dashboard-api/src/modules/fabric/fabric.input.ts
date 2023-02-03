@@ -1,9 +1,8 @@
 import { Field, InputType } from "type-graphql";
-import { IFactoryTenant } from "../factory/types";
 import { FileUploadInput } from "../file/file.input";
 
 @InputType()
-export class CreateFabricInput implements IFactoryTenant {
+export class CreateFabricInput {
   @Field()
   code!: string;
 

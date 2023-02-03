@@ -35,9 +35,7 @@ import {
 @Resolver(User)
 export class UserResolver {
   @FieldResolver(() => FirebaseUser, { nullable: true })
-  async firebaseUser(
-    @Root("_doc") { email }: User
-  ): Promise<FirebaseUser | null> {
+  async firebaseUser(@Root() { email }: User): Promise<FirebaseUser | null> {
     return getFirebaseUser(email);
   }
 
@@ -116,13 +114,12 @@ export class UserResolver {
       if (!email_verified)
         throw new AuthenticationError("User email is not verified");
 
-      const { id, role, firstName } = (await UserModel.getUserByEmailOrFail(
-        email
-      )) as {
-        id: string;
-      } & User;
+      const { id, role, firstName, companyId } =
+        (await UserModel.getUserByEmailOrFail(email)) as {
+          id: string;
+        } & User;
 
-      return { token: signUserToken({ id, role, firstName }) };
+      return { token: signUserToken({ id, role, firstName, companyId }) };
     } catch (error) {
       throw new AuthenticationError((error as ApolloError).message);
     }

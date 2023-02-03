@@ -4,7 +4,7 @@ import { OperationLog, OperationLogModel } from "./operationLog.model";
 @Resolver(OperationLog)
 export class OperationLogResolver {
   @FieldResolver(() => Date, { nullable: true })
-  createdAt(@Root("_doc") opLog: OperationLog) {
+  createdAt(@Root() opLog: OperationLog) {
     return opLog.createdAt;
   }
 

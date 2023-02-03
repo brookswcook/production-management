@@ -5,13 +5,13 @@ import { getDownloadFileLink } from "./file.service";
 @Resolver(File)
 export class FileResolver {
   @FieldResolver(() => Date, { nullable: true })
-  createdAt(@Root("_doc") { createdAt }: File) {
+  createdAt(@Root() { createdAt }: File) {
     return createdAt;
   }
 
   @Authorized()
   @FieldResolver(() => String)
-  link(@Root("_doc") { uploadingKey }: File): Promise<string> {
+  link(@Root() { uploadingKey }: File): Promise<string> {
     return getDownloadFileLink(uploadingKey);
   }
 }

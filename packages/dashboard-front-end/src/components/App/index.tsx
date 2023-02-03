@@ -50,6 +50,8 @@ import { StyleDetail, StyleList } from "../Style";
 import { SignInWithEmailLink } from "../Auth/SignInWithEmail";
 import { UserList } from "../User";
 import { FactoryList } from "../Factory/ListView";
+import { PurchaseOrderList } from "../PurchaseOrder/ListView";
+import { PurchaseOrderDetail } from "../PurchaseOrder/DetailView";
 
 function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const { signOut } = useContext(AuthContext);
@@ -148,6 +150,11 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
                         to="/factories"
                       />
                     </RequireRole>
+                    <MenuItemLink
+                      onClick={handleCloseNavMenu}
+                      name="Purchase Orders"
+                      to="/purchase-orders"
+                    />
                   </Menu>
                 </Grid>
                 <Grid item container alignItems={"center"} gap={3} xs={10}>
@@ -164,16 +171,18 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
                     </Button>
                   </Grid>
                   <Grid item sx={{ display: { xs: "none", md: "inline" } }}>
-                    {["products", "fabrics", "styles"].map(item => (
-                      <Button variant="text" size="small" key={item}>
-                        <Link
-                          to={`/${item}`}
-                          style={{ textDecoration: "none", color: "white" }}
-                        >
-                          {item}
-                        </Link>
-                      </Button>
-                    ))}
+                    {["products", "fabrics", "styles", "purchase-orders"].map(
+                      item => (
+                        <Button variant="text" size="small" key={item}>
+                          <Link
+                            to={`/${item}`}
+                            style={{ textDecoration: "none", color: "white" }}
+                          >
+                            {item}
+                          </Link>
+                        </Button>
+                      )
+                    )}
                     <RequireRole authorizedRoles={["Admin"]}>
                       <Button variant="text" size="small">
                         <Link
@@ -314,6 +323,14 @@ function ApolloApp() {
             <Route
               path="/factories"
               element={<Dashboard children={<FactoryList />} />}
+            />
+            <Route
+              path="/purchase-orders"
+              element={<Dashboard children={<PurchaseOrderList />} />}
+            />
+            <Route
+              path="/purchase-orders/:uid"
+              element={<Dashboard children={<PurchaseOrderDetail />} />}
             />
             <Route
               path="/oplog"

@@ -79,7 +79,7 @@ export function FabricDetail(): ReactElement {
     if (printFileName != null) {
       try {
         const { data } = await getPrintLink({
-          variables: { fileName: String(printFileName) },
+          variables: { fileName: printFileName },
         });
         setPrintLink(data?.printLink ?? "#");
       } catch (error) {
@@ -164,7 +164,7 @@ export function FabricDetail(): ReactElement {
         <NoteGrid
           notes={notes as Note[]}
           type={"fabricNote" as NoteType}
-          parentId={String(id)}
+          parentId={id}
         />
       </DetailViewSection>
     </Container>

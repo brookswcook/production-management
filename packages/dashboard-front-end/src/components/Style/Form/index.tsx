@@ -41,6 +41,7 @@ export function CreateStyleForm({
         const newStyleData: CreateStyleInput = {
           code,
           name,
+          techPack: null,
         };
         if (techPackFiles) {
           newStyleData.techPack = techPackFiles.map(file => ({

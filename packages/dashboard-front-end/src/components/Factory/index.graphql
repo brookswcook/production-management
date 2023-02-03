@@ -10,19 +10,22 @@ query FactoryCodes {
   }
 }
 
-mutation CreateFactory($data: CreateFactoryInput!) {
+mutation CreateFactory($data: CreateCompanyInput!) {
   createFactory(data: $data) {
     code
   }
 }
 
-fragment FactoryListFields on Factory {
+fragment FactoryListFields on Company {
+  id
   code
   name
   address
-  email
+  contacts {
+    email
+  }
 }
 
-fragment FactoryCodes on Factory {
+fragment FactoryCodes on Company {
   code
 }

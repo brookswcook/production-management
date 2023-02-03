@@ -6,12 +6,11 @@ import {
 import { ColorType, NoteType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
 import { ExpectResultModel } from "../common/expectResultModel";
-import { IFactoryTenant } from "../factory/types";
 import { Note } from "../note/note.model";
 import { FabricSample } from "../sample/sample.model";
 
 @ObjectType()
-export class Fabric extends ExpectResultModel implements IFactoryTenant {
+export class Fabric extends ExpectResultModel {
   @Field()
   id?: string;
 
@@ -52,13 +51,13 @@ export class Fabric extends ExpectResultModel implements IFactoryTenant {
   @Property()
   printFileName?: string;
 
-  @Field(() => [FabricSample], { nullable: false })
+  @Field(() => [FabricSample])
   @Property({
     ref: () => FabricSample,
     foreignField: "parentCode",
     localField: "code",
   } as FabricSamplesPropParams)
-  samples!: FabricSample[];
+  samples?: FabricSample[];
 
   // TODO: it depends on populate in fabrics query;
   //       it's better to run specific query and move it to resolver as fieldresolver
@@ -67,8 +66,8 @@ export class Fabric extends ExpectResultModel implements IFactoryTenant {
   @Field()
   @Property({
     get(this: Fabric): FabricStage {
-      if (this.samples.some(sample => sample.approved)) return "Approved";
-      else if (this.samples.length > 0) return "Fabric Sampling";
+      if (this.samples?.some(sample => sample.approved)) return "Approved";
+      else if (this.samples?.length ?? 0 > 0) return "Fabric Sampling";
       else return "In development";
     },
   })

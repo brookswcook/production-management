@@ -1,0 +1,82 @@
+query PurchaseOrders {
+  purchaseOrders {
+    ...PurchaseOrderListFields
+  }
+}
+
+query PurchaseOrder($uid: Int!) {
+  purchaseOrder(uid: $uid) {
+    ...PurchaseOrderDetailFields
+  }
+}
+
+mutation CreatePurchaseOrder($data: CreatePurchaseOrderInput!) {
+  createPurchaseOrder(data: $data) {
+    ...PurchaseOrderScalarFields
+  }
+}
+
+fragment PurchaseOrderDetailFields on PurchaseOrder {
+  ...PurchaseOrderScalarFields
+  company {
+    name
+    address
+    contacts {
+      fullName
+      email
+      phone
+    }
+  }
+  factory {
+    name
+    address
+    contacts {
+      fullName
+      email
+      phone
+    }
+  }
+}
+
+fragment PurchaseOrderListFields on PurchaseOrder {
+  ...PurchaseOrderScalarFields
+  company {
+    name
+  }
+  factory {
+    name
+  }
+}
+
+fragment PurchaseOrderScalarFields on PurchaseOrder {
+  uid
+  createdAt
+  expectedDeliveryDate
+  status
+  nextStatus
+}
+
+query AttributeDefinitions {
+  attributeDefinitions {
+    ...AttributeDefinitionsListFields
+  }
+}
+
+query AttributeDefinition {
+  attributeDefinitions {
+    ...AttributeDefinitionsListFields
+  }
+}
+
+fragment AttributeDefinitionsListFields on AttributeDefinition {
+  name
+  values
+  unit
+}
+
+mutation PushPurchaseOrderToNextStage($uid: Int!) {
+  pushPurchaseOrderToNextStage(uid: $uid) {
+    status
+    nextStatus
+  }
+}

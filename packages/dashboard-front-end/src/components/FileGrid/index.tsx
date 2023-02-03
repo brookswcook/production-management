@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { FileType } from "dashboard-core";
 import { FileFieldsFragment } from "../../generated/graphql";
@@ -50,21 +50,15 @@ export function FileGrid({
   ];
 
   return (
-    <Box sx={{ height: "300px", width: "100%", pt: 1 }}>
-      <DataGrid
-        rows={files ?? []}
-        columns={columns}
-        pageSize={5}
-        getRowId={item => item.id}
-        rowsPerPageOptions={[5]}
-        disableSelectionOnClick={true}
-        // onSelectionModelChange={selectionModel =>
-        //   setSelectedGridItems(selectionModel)
-        // }
-        // components={{
-        //   Toolbar: CustomToolbar,
-        // }}
-      />
-    </Box>
+    <DataGrid
+      rows={files ?? []}
+      columns={columns}
+      pageSize={5}
+      getRowId={item => item.id}
+      rowsPerPageOptions={[5]}
+      disableSelectionOnClick={true}
+      autoHeight
+      sx={{ mt: 1 }}
+    />
   );
 }

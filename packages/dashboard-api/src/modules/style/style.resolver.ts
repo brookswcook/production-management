@@ -30,7 +30,7 @@ export class StyleResolver {
 
   @FieldResolver(() => [String])
   async productCodes(
-    @Root("_doc") { code }: Fabric,
+    @Root() { code }: Fabric,
     @Ctx() { user: { role } }: ResolverContext
   ): Promise<string[]> {
     // TODO: add loader to run query once
@@ -40,7 +40,7 @@ export class StyleResolver {
 
   @Authorized()
   @Query(() => [Style])
-  async styles() {
+  async styles(): Promise<Style[]> {
     return StyleModel.find()
       .populate({ path: "techPacks", populate: "user" })
       .exec();

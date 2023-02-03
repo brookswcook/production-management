@@ -19,28 +19,69 @@ export type Scalars = {
   Upload: any;
 };
 
-export type CreateFabricInput = {
-  code: Scalars['String'];
-  colorCode?: InputMaybe<Scalars['String']>;
-  colorName: Scalars['String'];
-  factoryCode: Scalars['String'];
-  print?: InputMaybe<FileUploadInput>;
-  title: Scalars['String'];
-  type?: InputMaybe<Scalars['String']>;
+export type Attribute = {
+  __typename?: 'Attribute';
+  key: Scalars['String'];
+  unit: Scalars['String'];
+  value: Scalars['String'];
 };
 
-export type CreateFactoryInput = {
+export type AttributeDefinition = {
+  __typename?: 'AttributeDefinition';
+  name: Scalars['String'];
+  unit: Maybe<Scalars['String']>;
+  values: Maybe<Array<Scalars['String']>>;
+};
+
+export type Company = {
+  __typename?: 'Company';
   address: Scalars['String'];
   code: Scalars['String'];
-  email?: InputMaybe<Scalars['String']>;
+  contacts: Array<User>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  isRoot: Scalars['Boolean'];
+  name: Scalars['String'];
+  parentId: Maybe<Scalars['String']>;
+  role: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  users: Array<User>;
+};
+
+export type CreateAttributeInput = {
+  key: Scalars['String'];
+  unit: InputMaybe<Scalars['String']>;
+  value: Scalars['String'];
+};
+
+export type CreateCompanyInput = {
+  address: Scalars['String'];
   name: Scalars['String'];
 };
 
+export type CreateFabricInput = {
+  code: Scalars['String'];
+  colorCode: InputMaybe<Scalars['String']>;
+  colorName: Scalars['String'];
+  factoryCode: Scalars['String'];
+  print: InputMaybe<FileUploadInput>;
+  title: Scalars['String'];
+  type: InputMaybe<Scalars['String']>;
+};
+
 export type CreateNoteInput = {
-  images?: InputMaybe<Array<FileUploadInput>>;
+  images: InputMaybe<Array<FileUploadInput>>;
   parentId: Scalars['String'];
   text: Scalars['String'];
   type: Scalars['String'];
+};
+
+export type CreateOrderItemInput = {
+  orderUid: Scalars['Float'];
+  price: Scalars['Float'];
+  productCode: Scalars['String'];
+  quantity: InputMaybe<Scalars['Float']>;
+  variantAttributes: InputMaybe<Array<CreateAttributeInput>>;
 };
 
 export type CreateProductInput = {
@@ -50,15 +91,20 @@ export type CreateProductInput = {
   styleCode: Scalars['String'];
 };
 
+export type CreatePurchaseOrderInput = {
+  expectedDeliveryDate: Scalars['DateTime'];
+  factoryId: Scalars['String'];
+};
+
 export type CreateStyleInput = {
   code: Scalars['String'];
   name: Scalars['String'];
-  techPack?: InputMaybe<Array<FileUploadInput>>;
+  techPack: InputMaybe<Array<FileUploadInput>>;
 };
 
 export type CreateUserInput = {
   email: Scalars['String'];
-  factoryCode?: InputMaybe<Scalars['String']>;
+  factoryCode: InputMaybe<Scalars['String']>;
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   role: Scalars['String'];
@@ -71,52 +117,43 @@ export type DeleteUserInput = {
 export type Fabric = {
   __typename?: 'Fabric';
   code: Scalars['String'];
-  colorCode?: Maybe<Scalars['String']>;
+  colorCode: Maybe<Scalars['String']>;
   colorName: Scalars['String'];
   colorType: Scalars['String'];
   factoryCode: Scalars['String'];
   id: Scalars['String'];
   notes: Array<Note>;
-  printFileName?: Maybe<Scalars['String']>;
+  printFileName: Maybe<Scalars['String']>;
   productCodes: Array<Scalars['String']>;
   samples: Array<FabricSample>;
   stage: Scalars['String'];
   title: Scalars['String'];
-  type?: Maybe<Scalars['String']>;
+  type: Maybe<Scalars['String']>;
 };
 
 export type FabricProduction = {
   __typename?: 'FabricProduction';
-  actualStartDate?: Maybe<Scalars['DateTime']>;
+  actualStartDate: Maybe<Scalars['DateTime']>;
   lastStartDate: Scalars['DateTime'];
-  onTime?: Maybe<Scalars['Boolean']>;
-  started?: Maybe<Scalars['Boolean']>;
-  sufficientFabric?: Maybe<Scalars['Boolean']>;
+  onTime: Maybe<Scalars['Boolean']>;
+  started: Maybe<Scalars['Boolean']>;
+  sufficientFabric: Maybe<Scalars['Boolean']>;
 };
 
 export type FabricSample = {
   __typename?: 'FabricSample';
-  approved?: Maybe<Scalars['Boolean']>;
-  delivered?: Maybe<Scalars['Boolean']>;
+  approved: Maybe<Scalars['Boolean']>;
+  delivered: Maybe<Scalars['Boolean']>;
   id: Scalars['String'];
-  note?: Maybe<Note>;
+  note: Maybe<Note>;
   parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
 };
 
-export type Factory = {
-  __typename?: 'Factory';
-  address: Scalars['String'];
-  associatedUsers: Array<Scalars['String']>;
-  code: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-};
-
 export type File = {
   __typename?: 'File';
-  createdAt?: Maybe<Scalars['DateTime']>;
+  createdAt: Maybe<Scalars['DateTime']>;
   extName: Scalars['String'];
   id: Scalars['String'];
   link: Scalars['String'];
@@ -124,7 +161,7 @@ export type File = {
   parentId: Scalars['String'];
   type: Scalars['String'];
   uploadingKey: Scalars['String'];
-  user?: Maybe<User>;
+  user: Maybe<User>;
   userId: Scalars['String'];
 };
 
@@ -143,23 +180,31 @@ export type FirebaseUser = {
 
 export type FirebaseUserMetadata = {
   __typename?: 'FirebaseUserMetadata';
-  creationTime?: Maybe<Scalars['String']>;
-  lastSignInTime?: Maybe<Scalars['String']>;
+  creationTime: Maybe<Scalars['String']>;
+  lastSignInTime: Maybe<Scalars['String']>;
 };
 
 export type FitSample = {
   __typename?: 'FitSample';
-  approved?: Maybe<Scalars['Boolean']>;
-  delivered?: Maybe<Scalars['Boolean']>;
+  approved: Maybe<Scalars['Boolean']>;
+  delivered: Maybe<Scalars['Boolean']>;
   id: Scalars['String'];
-  note?: Maybe<Note>;
+  note: Maybe<Note>;
   parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
 };
 
+export type GetOrderItemsInput = {
+  orderUid: Scalars['Float'];
+};
+
 export type GetProductsInput = {
   factoryCode: Scalars['String'];
+};
+
+export type GetPurchaseOrderInput = {
+  uid: Scalars['Float'];
 };
 
 export type LoginInput = {
@@ -175,16 +220,20 @@ export type Mutation = {
   __typename?: 'Mutation';
   approveFabricSample: FabricSample;
   approveFitSample: FitSample;
+  createCompany: Company;
   createFabric: Fabric;
-  createFactory: Factory;
+  createFactory: Company;
   createNote: Note;
+  createOrderItem: OrderItem;
   createProduct: Product;
+  createPurchaseOrder: PurchaseOrder;
   createStyle: Style;
   createUser: User;
   deleteUser: Scalars['Boolean'];
   login: LoginResult;
   markFabricSampleAsDelivered: FabricSample;
   markFitSampleAsDelivered: FitSample;
+  pushPurchaseOrderToNextStage: PurchaseOrder;
   rejectFabricSample: FabricSample;
   rejectFitSample: FitSample;
   sendFabricSample: FabricSample;
@@ -207,13 +256,18 @@ export type MutationApproveFitSampleArgs = {
 };
 
 
+export type MutationCreateCompanyArgs = {
+  data: CreateCompanyInput;
+};
+
+
 export type MutationCreateFabricArgs = {
   data: CreateFabricInput;
 };
 
 
 export type MutationCreateFactoryArgs = {
-  data: CreateFactoryInput;
+  data: CreateCompanyInput;
 };
 
 
@@ -222,8 +276,18 @@ export type MutationCreateNoteArgs = {
 };
 
 
+export type MutationCreateOrderItemArgs = {
+  data: CreateOrderItemInput;
+};
+
+
 export type MutationCreateProductArgs = {
   data: CreateProductInput;
+};
+
+
+export type MutationCreatePurchaseOrderArgs = {
+  data: CreatePurchaseOrderInput;
 };
 
 
@@ -254,6 +318,11 @@ export type MutationMarkFabricSampleAsDeliveredArgs = {
 
 export type MutationMarkFitSampleAsDeliveredArgs = {
   data: UniqueSampleInput;
+};
+
+
+export type MutationPushPurchaseOrderToNextStageArgs = {
+  uid: Scalars['Int'];
 };
 
 
@@ -303,25 +372,34 @@ export type MutationUploadTechPackArgs = {
 
 export type Note = {
   __typename?: 'Note';
-  createdAt?: Maybe<Scalars['DateTime']>;
+  createdAt: Maybe<Scalars['DateTime']>;
   id: Scalars['String'];
   imageFileNames: Array<Scalars['String']>;
   parentId: Scalars['String'];
   text: Scalars['String'];
   type: Scalars['String'];
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  user?: Maybe<User>;
+  updatedAt: Maybe<Scalars['DateTime']>;
+  user: Maybe<User>;
   userId: Scalars['String'];
 };
 
 export type OperationLog = {
   __typename?: 'OperationLog';
-  createdAt?: Maybe<Scalars['DateTime']>;
+  createdAt: Maybe<Scalars['DateTime']>;
   id: Scalars['String'];
   name: Scalars['String'];
-  user?: Maybe<User>;
+  user: Maybe<User>;
   userId: Scalars['String'];
   variables: Scalars['String'];
+};
+
+export type OrderItem = {
+  __typename?: 'OrderItem';
+  id: Scalars['String'];
+  price: Scalars['Float'];
+  product: Product;
+  quantity: Scalars['Float'];
+  variantAttributes: Array<Attribute>;
 };
 
 export type Product = {
@@ -331,7 +409,7 @@ export type Product = {
   dueIn: Scalars['Int'];
   fabric: Fabric;
   fabricCode: Scalars['String'];
-  fabricProduction?: Maybe<FabricProduction>;
+  fabricProduction: Maybe<FabricProduction>;
   fabricSampleDelivered: Scalars['Boolean'];
   factoryCode: Scalars['String'];
   fitSampleDelivered: Scalars['Boolean'];
@@ -340,10 +418,10 @@ export type Product = {
   name: Scalars['String'];
   notes: Array<Note>;
   onTime: Scalars['Boolean'];
-  preProductionSample?: Maybe<FitSample>;
-  production?: Maybe<ProductProduction>;
-  qualityControl?: Maybe<ProductQualityControl>;
-  shipping?: Maybe<ProductShipping>;
+  preProductionSample: Maybe<FitSample>;
+  production: Maybe<ProductProduction>;
+  qualityControl: Maybe<ProductQualityControl>;
+  shipping: Maybe<ProductShipping>;
   stage: Scalars['String'];
   style: Style;
   styleCode: Scalars['String'];
@@ -352,43 +430,67 @@ export type Product = {
 
 export type ProductProduction = {
   __typename?: 'ProductProduction';
-  actualStartDate?: Maybe<Scalars['DateTime']>;
+  actualStartDate: Maybe<Scalars['DateTime']>;
   lastStartDate: Scalars['DateTime'];
-  onTime?: Maybe<Scalars['Boolean']>;
-  started?: Maybe<Scalars['Boolean']>;
+  onTime: Maybe<Scalars['Boolean']>;
+  started: Maybe<Scalars['Boolean']>;
 };
 
 export type ProductQualityControl = {
   __typename?: 'ProductQualityControl';
   lastVisitDate: Scalars['DateTime'];
-  notes?: Maybe<Array<Scalars['String']>>;
-  passed?: Maybe<Scalars['Boolean']>;
-  scheduledVisitDate?: Maybe<Scalars['DateTime']>;
+  notes: Maybe<Array<Scalars['String']>>;
+  passed: Maybe<Scalars['Boolean']>;
+  scheduledVisitDate: Maybe<Scalars['DateTime']>;
   visited: Scalars['Boolean'];
 };
 
 export type ProductShipping = {
   __typename?: 'ProductShipping';
-  actualShippingDate?: Maybe<Scalars['DateTime']>;
-  delivered?: Maybe<Scalars['Boolean']>;
+  actualShippingDate: Maybe<Scalars['DateTime']>;
+  delivered: Maybe<Scalars['Boolean']>;
   lastShippingDate: Scalars['DateTime'];
   shipped: Scalars['Boolean'];
-  trackNumber?: Maybe<Scalars['String']>;
+  trackNumber: Maybe<Scalars['String']>;
+};
+
+export type PurchaseOrder = {
+  __typename?: 'PurchaseOrder';
+  company: Company;
+  createdAt: Scalars['DateTime'];
+  expectedDeliveryDate: Scalars['DateTime'];
+  factory: Company;
+  items: Array<OrderItem>;
+  nextStatus: Maybe<Scalars['String']>;
+  status: Scalars['String'];
+  uid: Scalars['Int'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Query = {
   __typename?: 'Query';
+  attributeDefinition: Array<AttributeDefinition>;
+  attributeDefinitions: Array<AttributeDefinition>;
+  companies: Array<Company>;
   fabric: Fabric;
   fabrics: Array<Fabric>;
-  factories: Array<Factory>;
+  factories: Array<Company>;
   imageLink: Scalars['String'];
   operationLogs: Array<OperationLog>;
+  orderItems: Array<OrderItem>;
   printLink: Scalars['String'];
   product: Product;
   products: Array<Product>;
+  purchaseOrder: PurchaseOrder;
+  purchaseOrders: Array<PurchaseOrder>;
   style: Style;
   styles: Array<Style>;
   users: Array<User>;
+};
+
+
+export type QueryAttributeDefinitionArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -399,6 +501,11 @@ export type QueryFabricArgs = {
 
 export type QueryImageLinkArgs = {
   fileName: Scalars['String'];
+};
+
+
+export type QueryOrderItemsArgs = {
+  data: InputMaybe<GetOrderItemsInput>;
 };
 
 
@@ -413,7 +520,12 @@ export type QueryProductArgs = {
 
 
 export type QueryProductsArgs = {
-  data?: InputMaybe<GetProductsInput>;
+  data: InputMaybe<GetProductsInput>;
+};
+
+
+export type QueryPurchaseOrderArgs = {
+  uid: Scalars['Int'];
 };
 
 
@@ -423,10 +535,10 @@ export type QueryStyleArgs = {
 
 export type Sample = {
   __typename?: 'Sample';
-  approved?: Maybe<Scalars['Boolean']>;
-  delivered?: Maybe<Scalars['Boolean']>;
+  approved: Maybe<Scalars['Boolean']>;
+  delivered: Maybe<Scalars['Boolean']>;
   id: Scalars['String'];
-  note?: Maybe<Note>;
+  note: Maybe<Note>;
   parentCode: Scalars['String'];
   sku: Scalars['String'];
   trackNumber: Scalars['String'];
@@ -479,17 +591,27 @@ export type UploadTechPackInput = {
 
 export type User = {
   __typename?: 'User';
-  createdAt?: Maybe<Scalars['DateTime']>;
+  companyId: Scalars['String'];
+  createdAt: Maybe<Scalars['DateTime']>;
   deleted: Scalars['Boolean'];
   disabled: Scalars['Boolean'];
   email: Scalars['String'];
-  firebaseUser?: Maybe<FirebaseUser>;
+  firebaseUser: Maybe<FirebaseUser>;
   firstName: Scalars['String'];
   fullName: Scalars['String'];
   id: Scalars['String'];
   lastName: Scalars['String'];
+  phone: Maybe<Scalars['String']>;
+  pointOfContact: Scalars['Boolean'];
   role: Scalars['String'];
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt: Maybe<Scalars['DateTime']>;
+};
+
+export type UserContactDetails = {
+  __typename?: 'UserContactDetails';
+  email: Scalars['String'];
+  fullName: Scalars['String'];
+  phone: Maybe<Scalars['String']>;
 };
 
 export type LoginMutationVariables = Exact<{
@@ -504,7 +626,7 @@ export type FabricQueryVariables = Exact<{
 }>;
 
 
-export type FabricQuery = { __typename?: 'Query', fabric: { __typename?: 'Fabric', code: string, colorName: string, id: string, title: string, factoryCode: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> } };
+export type FabricQuery = { __typename?: 'Query', fabric: { __typename?: 'Fabric', code: string, colorName: string, id: string, title: string, factoryCode: string, colorType: string, colorCode: string | null, printFileName: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> } };
 
 export type CreateFabricMutationVariables = Exact<{
   data: CreateFabricInput;
@@ -513,42 +635,60 @@ export type CreateFabricMutationVariables = Exact<{
 
 export type CreateFabricMutation = { __typename?: 'Mutation', createFabric: { __typename?: 'Fabric', code: string, colorName: string } };
 
-export type FabricFieldsFragment = { __typename?: 'Fabric', id: string, code: string, title: string, factoryCode: string, colorName: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> };
+export type FabricFieldsFragment = { __typename?: 'Fabric', id: string, code: string, title: string, factoryCode: string, colorName: string, colorType: string, colorCode: string | null, printFileName: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> };
 
 export type FabricsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', id: string, code: string, title: string, factoryCode: string, colorName: string, colorType: string, colorCode?: string | null, printFileName?: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }> };
+export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', id: string, code: string, title: string, factoryCode: string, colorName: string, colorType: string, colorCode: string | null, printFileName: string | null, productCodes: Array<string>, stage: string, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }> };
 
 export type FactoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FactoriesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Factory', code: string, name: string, address: string, email?: string | null }> };
+export type FactoriesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Company', id: string, code: string, name: string, address: string, contacts: Array<{ __typename?: 'User', email: string }> }> };
 
 export type FactoryCodesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FactoryCodesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Factory', code: string }> };
+export type FactoryCodesQuery = { __typename?: 'Query', factories: Array<{ __typename?: 'Company', code: string }> };
 
 export type CreateFactoryMutationVariables = Exact<{
-  data: CreateFactoryInput;
+  data: CreateCompanyInput;
 }>;
 
 
-export type CreateFactoryMutation = { __typename?: 'Mutation', createFactory: { __typename?: 'Factory', code: string } };
+export type CreateFactoryMutation = { __typename?: 'Mutation', createFactory: { __typename?: 'Company', code: string } };
 
-export type FactoryListFieldsFragment = { __typename?: 'Factory', code: string, name: string, address: string, email?: string | null };
+export type FactoryListFieldsFragment = { __typename?: 'Company', id: string, code: string, name: string, address: string, contacts: Array<{ __typename?: 'User', email: string }> };
 
-export type FactoryCodesFragment = { __typename?: 'Factory', code: string };
+export type FactoryCodesFragment = { __typename?: 'Company', code: string };
 
-export type FileFieldsFragment = { __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null };
+export type FileFieldsFragment = { __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt: string | null, user: { __typename?: 'User', fullName: string } | null };
 
-export type OperationLogFieldsFragment = { __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null };
+export type OperationLogFieldsFragment = { __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt: string | null, user: { __typename?: 'User', firstName: string } | null };
 
 export type OperationLogsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OperationLogsQuery = { __typename?: 'Query', operationLogs: Array<{ __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt?: string | null, user?: { __typename?: 'User', firstName: string } | null }> };
+export type OperationLogsQuery = { __typename?: 'Query', operationLogs: Array<{ __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt: string | null, user: { __typename?: 'User', firstName: string } | null }> };
+
+export type OrderItemsQueryVariables = Exact<{
+  data: InputMaybe<GetOrderItemsInput>;
+}>;
+
+
+export type OrderItemsQuery = { __typename?: 'Query', orderItems: Array<{ __typename?: 'OrderItem', id: string, quantity: number, price: number, product: { __typename?: 'Product', code: string }, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> }> };
+
+export type OrderItemListFieldsFragment = { __typename?: 'OrderItem', id: string, quantity: number, price: number, product: { __typename?: 'Product', code: string }, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> };
+
+export type OrderItemOwnFieldsFragment = { __typename?: 'OrderItem', id: string, quantity: number, price: number, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> };
+
+export type CreateOrderItemMutationVariables = Exact<{
+  data: CreateOrderItemInput;
+}>;
+
+
+export type CreateOrderItemMutation = { __typename?: 'Mutation', createOrderItem: { __typename?: 'OrderItem', id: string, quantity: number, price: number, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> } };
 
 export type PrintLinkQueryVariables = Exact<{
   fileName: Scalars['String'];
@@ -564,27 +704,71 @@ export type CreateProductMutationVariables = Exact<{
 
 export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'Product', code: string } };
 
-export type NoteFieldsFragment = { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null };
+export type NoteFieldsFragment = { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null };
 
-export type SampleFieldsFragment = { __typename?: 'Sample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null };
+export type SampleFieldsFragment = { __typename?: 'Sample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null };
 
-export type FitSampleFieldsFragment = { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null };
+export type FitSampleFieldsFragment = { __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null };
 
-export type FabricSampleFieldsFragment = { __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null };
+export type FabricSampleFieldsFragment = { __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null };
 
-export type ProductFieldsFragment = { __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type?: string | null, colorType: string, colorCode?: string | null, printFileName?: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null };
+export type ProductFieldsFragment = { __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type: string | null, colorType: string, colorCode: string | null, printFileName: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample: { __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric: boolean | null, started: boolean | null, actualStartDate: string | null, onTime: boolean | null } | null, production: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate: string | null, onTime: boolean | null, started: boolean | null } | null, qualityControl: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate: string | null, visited: boolean, passed: boolean | null, notes: Array<string> | null } | null, shipping: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate: string | null, shipped: boolean, trackNumber: string | null, delivered: boolean | null } | null };
 
 export type ProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type?: string | null, colorType: string, colorCode?: string | null, printFileName?: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null }> };
+export type ProductsQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type: string | null, colorType: string, colorCode: string | null, printFileName: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample: { __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric: boolean | null, started: boolean | null, actualStartDate: string | null, onTime: boolean | null } | null, production: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate: string | null, onTime: boolean | null, started: boolean | null } | null, qualityControl: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate: string | null, visited: boolean, passed: boolean | null, notes: Array<string> | null } | null, shipping: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate: string | null, shipped: boolean, trackNumber: string | null, delivered: boolean | null } | null }> };
 
 export type ProductQueryVariables = Exact<{
   code: Scalars['String'];
 }>;
 
 
-export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type?: string | null, colorType: string, colorCode?: string | null, printFileName?: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample?: { __typename?: 'FitSample', sku: string, approved?: boolean | null, trackNumber: string, delivered?: boolean | null, note?: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt?: string | null, user?: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction?: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric?: boolean | null, started?: boolean | null, actualStartDate?: string | null, onTime?: boolean | null } | null, production?: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate?: string | null, onTime?: boolean | null, started?: boolean | null } | null, qualityControl?: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate?: string | null, visited: boolean, passed?: boolean | null, notes?: Array<string> | null } | null, shipping?: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate?: string | null, shipped: boolean, trackNumber?: string | null, delivered?: boolean | null } | null } };
+export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, code: string, name: string, deliveryDate: string, dueIn: number, onTime: boolean, stage: string, factoryCode: string, techPackUploaded: boolean, fabricSampleDelivered: boolean, fitSampleDelivered: boolean, style: { __typename?: 'Style', code: string, name: string }, fabric: { __typename?: 'Fabric', code: string, title: string, colorName: string, type: string | null, colorType: string, colorCode: string | null, printFileName: string | null, stage: string, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }, fitSamples: Array<{ __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }>, preProductionSample: { __typename?: 'FitSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null } | null, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, fabricProduction: { __typename?: 'FabricProduction', lastStartDate: string, sufficientFabric: boolean | null, started: boolean | null, actualStartDate: string | null, onTime: boolean | null } | null, production: { __typename?: 'ProductProduction', lastStartDate: string, actualStartDate: string | null, onTime: boolean | null, started: boolean | null } | null, qualityControl: { __typename?: 'ProductQualityControl', lastVisitDate: string, scheduledVisitDate: string | null, visited: boolean, passed: boolean | null, notes: Array<string> | null } | null, shipping: { __typename?: 'ProductShipping', lastShippingDate: string, actualShippingDate: string | null, shipped: boolean, trackNumber: string | null, delivered: boolean | null } | null } };
+
+export type PurchaseOrdersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PurchaseOrdersQuery = { __typename?: 'Query', purchaseOrders: Array<{ __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } }> };
+
+export type PurchaseOrderQueryVariables = Exact<{
+  uid: Scalars['Int'];
+}>;
+
+
+export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } } };
+
+export type CreatePurchaseOrderMutationVariables = Exact<{
+  data: CreatePurchaseOrderInput;
+}>;
+
+
+export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null } };
+
+export type PurchaseOrderDetailFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } };
+
+export type PurchaseOrderListFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } };
+
+export type PurchaseOrderScalarFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null };
+
+export type AttributeDefinitionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AttributeDefinitionsQuery = { __typename?: 'Query', attributeDefinitions: Array<{ __typename?: 'AttributeDefinition', name: string, values: Array<string> | null, unit: string | null }> };
+
+export type AttributeDefinitionQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AttributeDefinitionQuery = { __typename?: 'Query', attributeDefinitions: Array<{ __typename?: 'AttributeDefinition', name: string, values: Array<string> | null, unit: string | null }> };
+
+export type AttributeDefinitionsListFieldsFragment = { __typename?: 'AttributeDefinition', name: string, values: Array<string> | null, unit: string | null };
+
+export type PushPurchaseOrderToNextStageMutationVariables = Exact<{
+  uid: Scalars['Int'];
+}>;
+
+
+export type PushPurchaseOrderToNextStageMutation = { __typename?: 'Mutation', pushPurchaseOrderToNextStage: { __typename?: 'PurchaseOrder', status: string, nextStatus: string | null } };
 
 export type SendFabricSampleMutationVariables = Exact<{
   data: SendSampleInput;
@@ -661,14 +845,14 @@ export type StyleQueryVariables = Exact<{
 }>;
 
 
-export type StyleQuery = { __typename?: 'Query', style: { __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null }> } };
+export type StyleQuery = { __typename?: 'Query', style: { __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt: string | null, user: { __typename?: 'User', fullName: string } | null }> } };
 
 export type StylesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StylesQuery = { __typename?: 'Query', styles: Array<{ __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null }> }> };
+export type StylesQuery = { __typename?: 'Query', styles: Array<{ __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt: string | null, user: { __typename?: 'User', fullName: string } | null }> }> };
 
-export type StyleFieldsFragment = { __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt?: string | null, user?: { __typename?: 'User', fullName: string } | null }> };
+export type StyleFieldsFragment = { __typename?: 'Style', id: string, code: string, name: string, techPackUploaded: boolean, productCodes: Array<string>, techPacks: Array<{ __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt: string | null, user: { __typename?: 'User', fullName: string } | null }> };
 
 export type CreateStyleMutationVariables = Exact<{
   data: CreateStyleInput;
@@ -687,9 +871,9 @@ export type UploadTechPackMutation = { __typename?: 'Mutation', uploadTechPack: 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean, firebaseUser?: { __typename?: 'FirebaseUser', emailVerified: boolean, metadata: { __typename?: 'FirebaseUserMetadata', creationTime?: string | null, lastSignInTime?: string | null } } | null }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean, firebaseUser: { __typename?: 'FirebaseUser', emailVerified: boolean, metadata: { __typename?: 'FirebaseUserMetadata', creationTime: string | null, lastSignInTime: string | null } } | null }> };
 
-export type UserListFieldsFragment = { __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean, firebaseUser?: { __typename?: 'FirebaseUser', emailVerified: boolean, metadata: { __typename?: 'FirebaseUserMetadata', creationTime?: string | null, lastSignInTime?: string | null } } | null };
+export type UserListFieldsFragment = { __typename?: 'User', id: string, email: string, fullName: string, role: string, disabled: boolean, firebaseUser: { __typename?: 'FirebaseUser', emailVerified: boolean, metadata: { __typename?: 'FirebaseUserMetadata', creationTime: string | null, lastSignInTime: string | null } } | null };
 
 export type CreateUserMutationVariables = Exact<{
   data: CreateUserInput;
@@ -744,15 +928,18 @@ export const FabricFieldsFragmentDoc = gql`
     ${NoteFieldsFragmentDoc}
 ${FabricSampleFieldsFragmentDoc}`;
 export const FactoryListFieldsFragmentDoc = gql`
-    fragment FactoryListFields on Factory {
+    fragment FactoryListFields on Company {
+  id
   code
   name
   address
-  email
+  contacts {
+    email
+  }
 }
     `;
 export const FactoryCodesFragmentDoc = gql`
-    fragment FactoryCodes on Factory {
+    fragment FactoryCodes on Company {
   code
 }
     `;
@@ -767,6 +954,25 @@ export const OperationLogFieldsFragmentDoc = gql`
   createdAt
 }
     `;
+export const OrderItemOwnFieldsFragmentDoc = gql`
+    fragment OrderItemOwnFields on OrderItem {
+  id
+  quantity
+  price
+  variantAttributes {
+    key
+    value
+  }
+}
+    `;
+export const OrderItemListFieldsFragmentDoc = gql`
+    fragment OrderItemListFields on OrderItem {
+  ...OrderItemOwnFields
+  product {
+    code
+  }
+}
+    ${OrderItemOwnFieldsFragmentDoc}`;
 export const SampleFieldsFragmentDoc = gql`
     fragment sampleFields on Sample {
   sku
@@ -859,6 +1065,56 @@ export const ProductFieldsFragmentDoc = gql`
     ${FabricSampleFieldsFragmentDoc}
 ${FitSampleFieldsFragmentDoc}
 ${NoteFieldsFragmentDoc}`;
+export const PurchaseOrderScalarFieldsFragmentDoc = gql`
+    fragment PurchaseOrderScalarFields on PurchaseOrder {
+  uid
+  createdAt
+  expectedDeliveryDate
+  status
+  nextStatus
+}
+    `;
+export const PurchaseOrderDetailFieldsFragmentDoc = gql`
+    fragment PurchaseOrderDetailFields on PurchaseOrder {
+  ...PurchaseOrderScalarFields
+  company {
+    name
+    address
+    contacts {
+      fullName
+      email
+      phone
+    }
+  }
+  factory {
+    name
+    address
+    contacts {
+      fullName
+      email
+      phone
+    }
+  }
+}
+    ${PurchaseOrderScalarFieldsFragmentDoc}`;
+export const PurchaseOrderListFieldsFragmentDoc = gql`
+    fragment PurchaseOrderListFields on PurchaseOrder {
+  ...PurchaseOrderScalarFields
+  company {
+    name
+  }
+  factory {
+    name
+  }
+}
+    ${PurchaseOrderScalarFieldsFragmentDoc}`;
+export const AttributeDefinitionsListFieldsFragmentDoc = gql`
+    fragment AttributeDefinitionsListFields on AttributeDefinition {
+  name
+  values
+  unit
+}
+    `;
 export const FileFieldsFragmentDoc = gql`
     fragment fileFields on File {
   id
@@ -1107,7 +1363,7 @@ export type FactoryCodesQueryHookResult = ReturnType<typeof useFactoryCodesQuery
 export type FactoryCodesLazyQueryHookResult = ReturnType<typeof useFactoryCodesLazyQuery>;
 export type FactoryCodesQueryResult = Apollo.QueryResult<FactoryCodesQuery, FactoryCodesQueryVariables>;
 export const CreateFactoryDocument = gql`
-    mutation CreateFactory($data: CreateFactoryInput!) {
+    mutation CreateFactory($data: CreateCompanyInput!) {
   createFactory(data: $data) {
     code
   }
@@ -1173,6 +1429,74 @@ export function useOperationLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type OperationLogsQueryHookResult = ReturnType<typeof useOperationLogsQuery>;
 export type OperationLogsLazyQueryHookResult = ReturnType<typeof useOperationLogsLazyQuery>;
 export type OperationLogsQueryResult = Apollo.QueryResult<OperationLogsQuery, OperationLogsQueryVariables>;
+export const OrderItemsDocument = gql`
+    query OrderItems($data: GetOrderItemsInput) {
+  orderItems(data: $data) {
+    ...OrderItemListFields
+  }
+}
+    ${OrderItemListFieldsFragmentDoc}`;
+
+/**
+ * __useOrderItemsQuery__
+ *
+ * To run a query within a React component, call `useOrderItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrderItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrderItemsQuery({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useOrderItemsQuery(baseOptions?: Apollo.QueryHookOptions<OrderItemsQuery, OrderItemsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrderItemsQuery, OrderItemsQueryVariables>(OrderItemsDocument, options);
+      }
+export function useOrderItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderItemsQuery, OrderItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrderItemsQuery, OrderItemsQueryVariables>(OrderItemsDocument, options);
+        }
+export type OrderItemsQueryHookResult = ReturnType<typeof useOrderItemsQuery>;
+export type OrderItemsLazyQueryHookResult = ReturnType<typeof useOrderItemsLazyQuery>;
+export type OrderItemsQueryResult = Apollo.QueryResult<OrderItemsQuery, OrderItemsQueryVariables>;
+export const CreateOrderItemDocument = gql`
+    mutation CreateOrderItem($data: CreateOrderItemInput!) {
+  createOrderItem(data: $data) {
+    ...OrderItemOwnFields
+  }
+}
+    ${OrderItemOwnFieldsFragmentDoc}`;
+export type CreateOrderItemMutationFn = Apollo.MutationFunction<CreateOrderItemMutation, CreateOrderItemMutationVariables>;
+
+/**
+ * __useCreateOrderItemMutation__
+ *
+ * To run a mutation, you first call `useCreateOrderItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrderItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOrderItemMutation, { data, loading, error }] = useCreateOrderItemMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateOrderItemMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrderItemMutation, CreateOrderItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOrderItemMutation, CreateOrderItemMutationVariables>(CreateOrderItemDocument, options);
+      }
+export type CreateOrderItemMutationHookResult = ReturnType<typeof useCreateOrderItemMutation>;
+export type CreateOrderItemMutationResult = Apollo.MutationResult<CreateOrderItemMutation>;
+export type CreateOrderItemMutationOptions = Apollo.BaseMutationOptions<CreateOrderItemMutation, CreateOrderItemMutationVariables>;
 export const PrintLinkDocument = gql`
     query PrintLink($fileName: String!) {
   printLink(fileName: $fileName)
@@ -1308,6 +1632,210 @@ export function useProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pr
 export type ProductQueryHookResult = ReturnType<typeof useProductQuery>;
 export type ProductLazyQueryHookResult = ReturnType<typeof useProductLazyQuery>;
 export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVariables>;
+export const PurchaseOrdersDocument = gql`
+    query PurchaseOrders {
+  purchaseOrders {
+    ...PurchaseOrderListFields
+  }
+}
+    ${PurchaseOrderListFieldsFragmentDoc}`;
+
+/**
+ * __usePurchaseOrdersQuery__
+ *
+ * To run a query within a React component, call `usePurchaseOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePurchaseOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePurchaseOrdersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePurchaseOrdersQuery(baseOptions?: Apollo.QueryHookOptions<PurchaseOrdersQuery, PurchaseOrdersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PurchaseOrdersQuery, PurchaseOrdersQueryVariables>(PurchaseOrdersDocument, options);
+      }
+export function usePurchaseOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PurchaseOrdersQuery, PurchaseOrdersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PurchaseOrdersQuery, PurchaseOrdersQueryVariables>(PurchaseOrdersDocument, options);
+        }
+export type PurchaseOrdersQueryHookResult = ReturnType<typeof usePurchaseOrdersQuery>;
+export type PurchaseOrdersLazyQueryHookResult = ReturnType<typeof usePurchaseOrdersLazyQuery>;
+export type PurchaseOrdersQueryResult = Apollo.QueryResult<PurchaseOrdersQuery, PurchaseOrdersQueryVariables>;
+export const PurchaseOrderDocument = gql`
+    query PurchaseOrder($uid: Int!) {
+  purchaseOrder(uid: $uid) {
+    ...PurchaseOrderDetailFields
+  }
+}
+    ${PurchaseOrderDetailFieldsFragmentDoc}`;
+
+/**
+ * __usePurchaseOrderQuery__
+ *
+ * To run a query within a React component, call `usePurchaseOrderQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePurchaseOrderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePurchaseOrderQuery({
+ *   variables: {
+ *      uid: // value for 'uid'
+ *   },
+ * });
+ */
+export function usePurchaseOrderQuery(baseOptions: Apollo.QueryHookOptions<PurchaseOrderQuery, PurchaseOrderQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PurchaseOrderQuery, PurchaseOrderQueryVariables>(PurchaseOrderDocument, options);
+      }
+export function usePurchaseOrderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PurchaseOrderQuery, PurchaseOrderQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PurchaseOrderQuery, PurchaseOrderQueryVariables>(PurchaseOrderDocument, options);
+        }
+export type PurchaseOrderQueryHookResult = ReturnType<typeof usePurchaseOrderQuery>;
+export type PurchaseOrderLazyQueryHookResult = ReturnType<typeof usePurchaseOrderLazyQuery>;
+export type PurchaseOrderQueryResult = Apollo.QueryResult<PurchaseOrderQuery, PurchaseOrderQueryVariables>;
+export const CreatePurchaseOrderDocument = gql`
+    mutation CreatePurchaseOrder($data: CreatePurchaseOrderInput!) {
+  createPurchaseOrder(data: $data) {
+    ...PurchaseOrderScalarFields
+  }
+}
+    ${PurchaseOrderScalarFieldsFragmentDoc}`;
+export type CreatePurchaseOrderMutationFn = Apollo.MutationFunction<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>;
+
+/**
+ * __useCreatePurchaseOrderMutation__
+ *
+ * To run a mutation, you first call `useCreatePurchaseOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePurchaseOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPurchaseOrderMutation, { data, loading, error }] = useCreatePurchaseOrderMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreatePurchaseOrderMutation(baseOptions?: Apollo.MutationHookOptions<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>(CreatePurchaseOrderDocument, options);
+      }
+export type CreatePurchaseOrderMutationHookResult = ReturnType<typeof useCreatePurchaseOrderMutation>;
+export type CreatePurchaseOrderMutationResult = Apollo.MutationResult<CreatePurchaseOrderMutation>;
+export type CreatePurchaseOrderMutationOptions = Apollo.BaseMutationOptions<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>;
+export const AttributeDefinitionsDocument = gql`
+    query AttributeDefinitions {
+  attributeDefinitions {
+    ...AttributeDefinitionsListFields
+  }
+}
+    ${AttributeDefinitionsListFieldsFragmentDoc}`;
+
+/**
+ * __useAttributeDefinitionsQuery__
+ *
+ * To run a query within a React component, call `useAttributeDefinitionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAttributeDefinitionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAttributeDefinitionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAttributeDefinitionsQuery(baseOptions?: Apollo.QueryHookOptions<AttributeDefinitionsQuery, AttributeDefinitionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AttributeDefinitionsQuery, AttributeDefinitionsQueryVariables>(AttributeDefinitionsDocument, options);
+      }
+export function useAttributeDefinitionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AttributeDefinitionsQuery, AttributeDefinitionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AttributeDefinitionsQuery, AttributeDefinitionsQueryVariables>(AttributeDefinitionsDocument, options);
+        }
+export type AttributeDefinitionsQueryHookResult = ReturnType<typeof useAttributeDefinitionsQuery>;
+export type AttributeDefinitionsLazyQueryHookResult = ReturnType<typeof useAttributeDefinitionsLazyQuery>;
+export type AttributeDefinitionsQueryResult = Apollo.QueryResult<AttributeDefinitionsQuery, AttributeDefinitionsQueryVariables>;
+export const AttributeDefinitionDocument = gql`
+    query AttributeDefinition {
+  attributeDefinitions {
+    ...AttributeDefinitionsListFields
+  }
+}
+    ${AttributeDefinitionsListFieldsFragmentDoc}`;
+
+/**
+ * __useAttributeDefinitionQuery__
+ *
+ * To run a query within a React component, call `useAttributeDefinitionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAttributeDefinitionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAttributeDefinitionQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAttributeDefinitionQuery(baseOptions?: Apollo.QueryHookOptions<AttributeDefinitionQuery, AttributeDefinitionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AttributeDefinitionQuery, AttributeDefinitionQueryVariables>(AttributeDefinitionDocument, options);
+      }
+export function useAttributeDefinitionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AttributeDefinitionQuery, AttributeDefinitionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AttributeDefinitionQuery, AttributeDefinitionQueryVariables>(AttributeDefinitionDocument, options);
+        }
+export type AttributeDefinitionQueryHookResult = ReturnType<typeof useAttributeDefinitionQuery>;
+export type AttributeDefinitionLazyQueryHookResult = ReturnType<typeof useAttributeDefinitionLazyQuery>;
+export type AttributeDefinitionQueryResult = Apollo.QueryResult<AttributeDefinitionQuery, AttributeDefinitionQueryVariables>;
+export const PushPurchaseOrderToNextStageDocument = gql`
+    mutation PushPurchaseOrderToNextStage($uid: Int!) {
+  pushPurchaseOrderToNextStage(uid: $uid) {
+    status
+    nextStatus
+  }
+}
+    `;
+export type PushPurchaseOrderToNextStageMutationFn = Apollo.MutationFunction<PushPurchaseOrderToNextStageMutation, PushPurchaseOrderToNextStageMutationVariables>;
+
+/**
+ * __usePushPurchaseOrderToNextStageMutation__
+ *
+ * To run a mutation, you first call `usePushPurchaseOrderToNextStageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePushPurchaseOrderToNextStageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [pushPurchaseOrderToNextStageMutation, { data, loading, error }] = usePushPurchaseOrderToNextStageMutation({
+ *   variables: {
+ *      uid: // value for 'uid'
+ *   },
+ * });
+ */
+export function usePushPurchaseOrderToNextStageMutation(baseOptions?: Apollo.MutationHookOptions<PushPurchaseOrderToNextStageMutation, PushPurchaseOrderToNextStageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PushPurchaseOrderToNextStageMutation, PushPurchaseOrderToNextStageMutationVariables>(PushPurchaseOrderToNextStageDocument, options);
+      }
+export type PushPurchaseOrderToNextStageMutationHookResult = ReturnType<typeof usePushPurchaseOrderToNextStageMutation>;
+export type PushPurchaseOrderToNextStageMutationResult = Apollo.MutationResult<PushPurchaseOrderToNextStageMutation>;
+export type PushPurchaseOrderToNextStageMutationOptions = Apollo.BaseMutationOptions<PushPurchaseOrderToNextStageMutation, PushPurchaseOrderToNextStageMutationVariables>;
 export const SendFabricSampleDocument = gql`
     mutation SendFabricSample($data: SendSampleInput!) {
   sendFabricSample(data: $data) {

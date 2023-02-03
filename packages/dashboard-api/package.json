@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "dashboard-api",
-  "version": "0.0.1",
+  "version": "1.1.0",
   "description": "Dashboard api",
   "license": "ISC",
   "directories": {
@@ -25,7 +25,7 @@
     "apollo-server-express": "^3.6.2",
     "class-validator": "^0.13.2",
     "cors": "^2.8.5",
-    "dashboard-core": "^1.0.0",
+    "dashboard-core": "^1.1.0",
     "dotenv": "^15.0.0",
     "express": "^4.17.2",
     "express-jwt": "^6.1.0",

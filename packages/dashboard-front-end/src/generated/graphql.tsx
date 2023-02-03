@@ -729,27 +729,27 @@ export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Prod
 export type PurchaseOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PurchaseOrdersQuery = { __typename?: 'Query', purchaseOrders: Array<{ __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } }> };
+export type PurchaseOrdersQuery = { __typename?: 'Query', purchaseOrders: Array<{ __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } }> };
 
 export type PurchaseOrderQueryVariables = Exact<{
   uid: Scalars['Int'];
 }>;
 
 
-export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } } };
+export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } } };
 
 export type CreatePurchaseOrderMutationVariables = Exact<{
   data: CreatePurchaseOrderInput;
 }>;
 
 
-export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string } };
+export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null } };
 
-export type PurchaseOrderDetailFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } };
+export type PurchaseOrderDetailFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } };
 
-export type PurchaseOrderListFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } };
+export type PurchaseOrderListFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } };
 
-export type PurchaseOrderScalarFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string };
+export type PurchaseOrderScalarFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null };
 
 export type AttributeDefinitionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -762,6 +762,13 @@ export type AttributeDefinitionQueryVariables = Exact<{ [key: string]: never; }>
 export type AttributeDefinitionQuery = { __typename?: 'Query', attributeDefinitions: Array<{ __typename?: 'AttributeDefinition', name: string, values: Array<string> | null, unit: string | null }> };
 
 export type AttributeDefinitionsListFieldsFragment = { __typename?: 'AttributeDefinition', name: string, values: Array<string> | null, unit: string | null };
+
+export type PushPurchaseOrderToNextStageMutationVariables = Exact<{
+  uid: Scalars['Int'];
+}>;
+
+
+export type PushPurchaseOrderToNextStageMutation = { __typename?: 'Mutation', pushPurchaseOrderToNextStage: { __typename?: 'PurchaseOrder', status: string, nextStatus: string | null } };
 
 export type SendFabricSampleMutationVariables = Exact<{
   data: SendSampleInput;
@@ -1064,6 +1071,7 @@ export const PurchaseOrderScalarFieldsFragmentDoc = gql`
   createdAt
   expectedDeliveryDate
   status
+  nextStatus
 }
     `;
 export const PurchaseOrderDetailFieldsFragmentDoc = gql`
@@ -1794,6 +1802,40 @@ export function useAttributeDefinitionLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type AttributeDefinitionQueryHookResult = ReturnType<typeof useAttributeDefinitionQuery>;
 export type AttributeDefinitionLazyQueryHookResult = ReturnType<typeof useAttributeDefinitionLazyQuery>;
 export type AttributeDefinitionQueryResult = Apollo.QueryResult<AttributeDefinitionQuery, AttributeDefinitionQueryVariables>;
+export const PushPurchaseOrderToNextStageDocument = gql`
+    mutation PushPurchaseOrderToNextStage($uid: Int!) {
+  pushPurchaseOrderToNextStage(uid: $uid) {
+    status
+    nextStatus
+  }
+}
+    `;
+export type PushPurchaseOrderToNextStageMutationFn = Apollo.MutationFunction<PushPurchaseOrderToNextStageMutation, PushPurchaseOrderToNextStageMutationVariables>;
+
+/**
+ * __usePushPurchaseOrderToNextStageMutation__
+ *
+ * To run a mutation, you first call `usePushPurchaseOrderToNextStageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePushPurchaseOrderToNextStageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [pushPurchaseOrderToNextStageMutation, { data, loading, error }] = usePushPurchaseOrderToNextStageMutation({
+ *   variables: {
+ *      uid: // value for 'uid'
+ *   },
+ * });
+ */
+export function usePushPurchaseOrderToNextStageMutation(baseOptions?: Apollo.MutationHookOptions<PushPurchaseOrderToNextStageMutation, PushPurchaseOrderToNextStageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PushPurchaseOrderToNextStageMutation, PushPurchaseOrderToNextStageMutationVariables>(PushPurchaseOrderToNextStageDocument, options);
+      }
+export type PushPurchaseOrderToNextStageMutationHookResult = ReturnType<typeof usePushPurchaseOrderToNextStageMutation>;
+export type PushPurchaseOrderToNextStageMutationResult = Apollo.MutationResult<PushPurchaseOrderToNextStageMutation>;
+export type PushPurchaseOrderToNextStageMutationOptions = Apollo.BaseMutationOptions<PushPurchaseOrderToNextStageMutation, PushPurchaseOrderToNextStageMutationVariables>;
 export const SendFabricSampleDocument = gql`
     mutation SendFabricSample($data: SendSampleInput!) {
   sendFabricSample(data: $data) {

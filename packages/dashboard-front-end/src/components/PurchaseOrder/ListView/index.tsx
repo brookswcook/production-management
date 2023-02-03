@@ -52,12 +52,12 @@ export function PurchaseOrderList(): ReactElement {
     },
     {
       field: "status",
-      headerName: "status",
+      headerName: "Status",
       minWidth: 70,
       flex: 2,
       type: "string",
       valueGetter: ({ row }: { row: PurchaseOrderListFieldsFragment }) => {
-        return row.status;
+        return `${row.status[0].toUpperCase()}${row.status.slice(1)}`;
       },
     },
     {

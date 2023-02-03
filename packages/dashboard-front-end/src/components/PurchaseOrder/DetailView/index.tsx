@@ -1,9 +1,10 @@
-import { Box, Grid, LinearProgress, Stack } from "@mui/material";
+import { Box, Button, Grid, LinearProgress, Stack } from "@mui/material";
 import { Fragment, ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import {
   PurchaseOrderDetailFieldsFragment,
   usePurchaseOrderQuery,
+  usePushPurchaseOrderToNextStageMutation,
 } from "../../../generated/graphql";
 import { DetailView } from "../../Common/DetailView";
 import { DetailViewHeaderTitle } from "../../Common/DetailViewHeaderTitle";
@@ -18,6 +19,7 @@ function PurchaseOrderHeaderSection({
     expectedDeliveryDate,
     createdAt,
     status,
+    nextStatus,
     factory: {
       name: factoryName,
       address: factoryAddress,
@@ -44,6 +46,15 @@ function PurchaseOrderHeaderSection({
 }: {
   purchaseOrder: PurchaseOrderDetailFieldsFragment;
 }): ReactElement {
+  const [pushPurchaseOrderToNextStage] =
+    usePushPurchaseOrderToNextStageMutation({
+      refetchQueries: ["PurchaseOrders", "PurchaseOrder"],
+    });
+
+  function updateStatus() {
+    void pushPurchaseOrderToNextStage({ variables: { uid } });
+  }
+
   return (
     <>
       <DetailViewHeaderTitle
@@ -57,7 +68,14 @@ function PurchaseOrderHeaderSection({
             title="Delivery"
             value={new Date(expectedDeliveryDate).toLocaleDateString()}
           />
-          <TextProperty title="Status" value={status} />
+          <Stack spacing={2} direction={"row"}>
+            <TextProperty title="Status" value={status} />
+            {nextStatus != null && (
+              <Button size="small" variant="contained" onClick={updateStatus}>
+                {`Set to ${nextStatus}`}
+              </Button>
+            )}
+          </Stack>
           <ObjectProperty
             title="To       "
             value={{

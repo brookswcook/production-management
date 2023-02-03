@@ -53,6 +53,7 @@ fragment PurchaseOrderScalarFields on PurchaseOrder {
   createdAt
   expectedDeliveryDate
   status
+  nextStatus
 }
 
 query AttributeDefinitions {
@@ -71,4 +72,11 @@ fragment AttributeDefinitionsListFields on AttributeDefinition {
   name
   values
   unit
+}
+
+mutation PushPurchaseOrderToNextStage($uid: Int!) {
+  pushPurchaseOrderToNextStage(uid: $uid) {
+    status
+    nextStatus
+  }
 }

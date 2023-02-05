@@ -86,11 +86,9 @@ export class Fabric extends ExpectResultModel {
   // TODO: reuse
   static async findByCodeOrFail(
     this: ReturnModelType<typeof Fabric>,
-    code: string,
-    factoryCode?: string
+    code: string
   ): Promise<Fabric> {
     const query: Partial<Fabric> = { code };
-    factoryCode && Object.assign(query, { factoryCode });
     const fabric = await this.findOne(query)
       .populate({ path: "notes", populate: { path: "user" } })
       .populate({

@@ -32,17 +32,14 @@ export class FabricResolver {
     @Root() { code }: Fabric,
     @Ctx() { user: { role } }: ResolverContext
   ): Promise<string[]> {
-    const factoryCode = this.userService.parseFactoryCodeRole(role);
     // TODO: add loader to run query once
-    return this.productService.getProductCodesByFabricCode(code, factoryCode);
+    return this.productService.getProductCodesByFabricCode(code);
   }
 
   @Authorized()
   @Query(() => [Fabric])
   async fabrics(@Ctx() { user: { role } }: ResolverContext) {
-    const factoryCode = this.userService.parseFactoryCodeRole(role);
     const query: Partial<Fabric> = {};
-    factoryCode && Object.assign(query, { factoryCode });
     return FabricModel.find(query)
       .populate({
         path: "samples",
@@ -56,12 +53,8 @@ export class FabricResolver {
 
   @Authorized()
   @Query(() => Fabric, { nullable: false })
-  async fabric(
-    @Arg("code") code: string,
-    @Ctx() { user: { role } }: ResolverContext
-  ): Promise<Fabric | null> {
-    const factoryCode = this.userService.parseFactoryCodeRole(role);
-    return FabricModel.findByCodeOrFail(code, factoryCode);
+  async fabric(@Arg("code") code: string): Promise<Fabric> {
+    return FabricModel.findByCodeOrFail(code);
   }
 
   @Authorized()

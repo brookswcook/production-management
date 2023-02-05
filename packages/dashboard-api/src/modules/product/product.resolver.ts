@@ -19,13 +19,8 @@ export class ProductResolver {
   // TODO: populate fitSamples only when needed; analyze AST
   @Authorized()
   @Query(() => [Product])
-  async products(
-    @Ctx() { user: { role } }: ResolverContext,
-    @Arg("data", { nullable: true }) data?: GetProductsInput
-  ) {
-    const factoryCode = UserModel.parseFactoryCodeRole(role);
+  async products(@Arg("data", { nullable: true }) data?: GetProductsInput) {
     const query: Partial<Product> = data ? ({ ...data } as Product) : {};
-    factoryCode && Object.assign(query, { factoryCode });
     return ProductModel.find(query)
       .sort({ _id: -1 })
       .populate({ path: "notes", populate: { path: "user" } })
@@ -40,12 +35,8 @@ export class ProductResolver {
 
   @Authorized()
   @Query(() => Product)
-  async product(
-    @Ctx() { user: { role } }: ResolverContext,
-    @Arg("code", { nullable: false }) code: string
-  ) {
-    const factoryCode = this.userService.parseFactoryCodeRole(role);
-    return ProductModel.findByCodeOrFail(code, factoryCode);
+  async product(@Arg("code", { nullable: false }) code: string) {
+    return ProductModel.findByCodeOrFail(code);
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])

@@ -13,6 +13,7 @@ import { Style } from "../style/style.model";
 import { Fabric } from "../fabric/fabric.model";
 import { Note } from "../note/note.model";
 import { NoteType } from "dashboard-core";
+import { Company } from "../company/company.model";
 
 @index<Product>({ styleCode: 1, fabricCode: 1 }, { unique: true })
 @ObjectType()
@@ -54,6 +55,18 @@ export class Product {
   } as StylePropParams)
   style?: Style;
 
+  @Property({ required: true })
+  companyId!: string;
+
+  @Field()
+  @Property({
+    ref: () => Company,
+    foreignField: "_id",
+    localField: "companyId",
+    justOne: true,
+  })
+  company!: Company;
+
   @Field()
   @Property({
     ref: () => Fabric,
@@ -63,9 +76,17 @@ export class Product {
   } as FabricPropParams)
   fabric?: Fabric;
 
-  @Field()
   @Property({ required: true })
-  factoryCode!: string;
+  factoryId!: string;
+
+  @Field()
+  @Property({
+    ref: () => Company,
+    foreignField: "_id",
+    localField: "factoryId",
+    justOne: true,
+  })
+  factory!: Company;
 
   @Field()
   @Property({ required: true })

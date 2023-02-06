@@ -6,6 +6,7 @@ import {
 import { ColorType, NoteType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
 import { ExpectResultModel } from "../common/expectResultModel";
+import { Company } from "../company/company.model";
 import { Note } from "../note/note.model";
 import { FabricSample } from "../sample/sample.model";
 
@@ -39,9 +40,17 @@ export class Fabric extends ExpectResultModel {
   })
   colorType?: ColorType;
 
-  @Field()
   @Property({ required: true })
-  factoryCode!: string;
+  factoryId!: string;
+
+  @Field()
+  @Property({
+    ref: () => Company,
+    foreignField: "_id",
+    localField: "factoryId",
+    justOne: true,
+  })
+  factory!: Company;
 
   @Field({ nullable: true })
   @Property()

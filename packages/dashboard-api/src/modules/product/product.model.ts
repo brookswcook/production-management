@@ -194,9 +194,8 @@ export class Product {
   @Property({ _id: false })
   shipping?: ProductShipping;
 
-  static async findByCodeOrFail(code: string, factoryCode?: string) {
+  static async findByCodeOrFail(code: string) {
     const query: Partial<Product> = { code };
-    factoryCode && Object.assign(query, { factoryCode });
     const product = await ProductModel.findOne(query)
       .populate({ path: "notes", populate: { path: "user" } })
       .populate({ path: "fitSamples", populate: { path: "note" } })
@@ -210,6 +209,7 @@ export class Product {
           },
         },
       })
+      .populate("factory")
       .exec();
     if (product == null) throw Error(`Product with given code not found`);
     return product;

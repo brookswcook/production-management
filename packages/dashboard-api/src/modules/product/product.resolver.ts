@@ -1,12 +1,11 @@
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { CreateProductInput, GetProductsInput } from "./product.input";
+import { CreateProductInput } from "./product.input";
 import { Product, ProductModel } from "./product.model";
 import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
 import { StartProductionInput } from "../productProduction/productProduction.input";
 import { UserRole } from "dashboard-core";
-import { ResolverContext } from "../../lib/graphql";
-import { UserModel } from "../user/user.model";
 import { UserService } from "../user/user.service";
+import { ResolverContext } from "../../lib/graphql";
 
 @Resolver(Product)
 export class ProductResolver {
@@ -19,9 +18,8 @@ export class ProductResolver {
   // TODO: populate fitSamples only when needed; analyze AST
   @Authorized()
   @Query(() => [Product])
-  async products(@Arg("data", { nullable: true }) data?: GetProductsInput) {
-    const query: Partial<Product> = data ? ({ ...data } as Product) : {};
-    return ProductModel.find(query)
+  async products() {
+    return ProductModel.find()
       .sort({ _id: -1 })
       .populate({ path: "notes", populate: { path: "user" } })
       .populate("fitSamples")
@@ -30,6 +28,7 @@ export class ProductResolver {
         path: "fabric",
         populate: { path: "samples" },
       })
+      .populate("factory")
       .exec();
   }
 
@@ -41,7 +40,10 @@ export class ProductResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Product)
-  async createProduct(@Arg("data") data: CreateProductInput) {
+  async createProduct(
+    @Arg("data") data: CreateProductInput,
+    @Ctx() { user: { companyId } }: ResolverContext
+  ) {
     // TODO: use workflow saved in db. Calculate it based on delivery date
     const productWorkflowData: Partial<Product> = {
       fabricProduction: {
@@ -58,6 +60,7 @@ export class ProductResolver {
       },
     };
     return new ProductModel({
+      companyId,
       ...productWorkflowData,
       ...data,
     }).save();

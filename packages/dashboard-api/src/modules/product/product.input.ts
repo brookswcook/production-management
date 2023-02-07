@@ -9,14 +9,8 @@ export class CreateProductInput {
   fabricCode!: string;
 
   @Field()
-  factoryCode!: string;
+  factoryId!: string;
 
   @Field()
   deliveryDate!: Date;
-}
-
-@InputType()
-export class GetProductsInput {
-  @Field()
-  factoryCode!: string;
 }

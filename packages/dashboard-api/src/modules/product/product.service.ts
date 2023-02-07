@@ -1,15 +1,13 @@
 import { ProductModel } from "./product.model";
 
 export class ProductService {
-  getProductCodesByFabricCode(fabricCode: string, factoryCode?: string) {
+  getProductCodesByFabricCode(fabricCode: string) {
     const query = { fabricCode };
-    factoryCode && Object.assign(query, { factoryCode });
     return ProductModel.getProductCodes(query);
   }
 
-  getProductCodesByStyleCode(styleCode: string, factoryCode?: string) {
+  getProductCodesByStyleCode(styleCode: string) {
     const query = { styleCode };
-    factoryCode && Object.assign(query, { factoryCode });
     return ProductModel.getProductCodes(query);
   }
 }

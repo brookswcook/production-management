@@ -13,6 +13,7 @@ import {
   CreateProductInput,
   useCreateProductMutation,
   useFabricsQuery,
+  useFactoriesQuery,
   useStylesQuery,
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
@@ -24,6 +25,8 @@ export function CreateProductForm(): ReactElement {
   });
   const { data: { styles } = { styles: [] } } = useStylesQuery();
   const { data: { fabrics } = { fabrics: [] } } = useFabricsQuery();
+  const { data: { factories } = { factories: [] } } = useFactoriesQuery();
+  const [factoryId, setFactoryId] = useState<string | null>(null);
   const [deliveryDate, setDeliveryDate] = useState<string>(
     new Date().toISOString()
   );
@@ -31,13 +34,14 @@ export function CreateProductForm(): ReactElement {
   async function createNewProduct(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const { styleCode, fabricCode, factoryCode } = Object.fromEntries(
+    const { styleCode, fabricCode } = Object.fromEntries(
       data.entries()
     ) as unknown as CreateProductInput;
     try {
+      if (factoryId == null) return toast.error("Factory should be selected");
       await newProductMutation({
         variables: {
-          data: { styleCode, fabricCode, factoryCode, deliveryDate },
+          data: { styleCode, fabricCode, factoryId, deliveryDate },
         },
       });
     } catch (error) {
@@ -80,9 +84,16 @@ export function CreateProductForm(): ReactElement {
         )}
       />
       <Autocomplete
-        options={["Amy", "Kevin"]}
+        onChange={(_, value) => setFactoryId(value?.id ?? null)}
+        options={factories}
+        getOptionLabel={option => option.name}
+        renderOption={(props, option) => (
+          <Box component="li" {...props}>
+            {`${option.name}`}
+          </Box>
+        )}
         renderInput={params => (
-          <TextField {...params} name="factoryCode" label="Factory" required />
+          <TextField {...params} name="factoryId" label="Factory" required />
         )}
       />
       <DatePicker

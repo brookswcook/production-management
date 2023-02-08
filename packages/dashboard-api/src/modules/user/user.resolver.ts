@@ -6,6 +6,7 @@ import {
 import {
   Arg,
   Authorized,
+  Ctx,
   Field,
   FieldResolver,
   Mutation,
@@ -31,6 +32,7 @@ import {
   FirebaseUserType,
   FirebaseUserMetadataType,
 } from "../../lib/firebase";
+import { ResolverContext } from "../../lib/graphql";
 
 @Resolver(User)
 export class UserResolver {
@@ -49,19 +51,26 @@ export class UserResolver {
   @Mutation(() => User)
   async createUser(
     @Arg("data")
-    { email, firstName, lastName, role, factoryCode }: CreateUserInput
+    {
+      email,
+      firstName,
+      lastName,
+      role,
+      companyId: inputCompanyId,
+    }: CreateUserInput,
+    @Ctx() { user: { companyId: adminCompanyId } }: ResolverContext
   ): Promise<User> {
     try {
       await createFirebaseUser({ email });
-      const factoryRole =
-        factoryCode != null ? UserModel.buildFactoryRole(factoryCode) : null;
+      const companyId = inputCompanyId ?? adminCompanyId;
       return await UserModel.findOneAndUpdate(
         { email },
         {
           $set: {
             firstName,
             lastName,
-            role: factoryRole ?? role,
+            role,
+            companyId,
             deleted: false,
           },
         },

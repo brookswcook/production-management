@@ -103,8 +103,8 @@ export type CreateStyleInput = {
 };
 
 export type CreateUserInput = {
+  companyId: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
-  factoryCode: InputMaybe<Scalars['String']>;
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   role: Scalars['String'];
@@ -618,7 +618,7 @@ export type FabricQueryVariables = Exact<{
 }>;
 
 
-export type FabricQuery = { __typename?: 'Query', fabric: { __typename?: 'Fabric', code: string, colorName: string, id: string, title: string, colorType: string, colorCode: string | null, printFileName: string | null, productCodes: Array<string>, stage: string, factory: { __typename?: 'Company', code: string }, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> } };
+export type FabricQuery = { __typename?: 'Query', fabric: { __typename?: 'Fabric', code: string, colorName: string, id: string, title: string, colorType: string, colorCode: string | null, printFileName: string | null, productCodes: Array<string>, stage: string, factory: { __typename?: 'Company', code: string, name: string }, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> } };
 
 export type CreateFabricMutationVariables = Exact<{
   data: CreateFabricInput;
@@ -627,12 +627,12 @@ export type CreateFabricMutationVariables = Exact<{
 
 export type CreateFabricMutation = { __typename?: 'Mutation', createFabric: { __typename?: 'Fabric', code: string, colorName: string } };
 
-export type FabricFieldsFragment = { __typename?: 'Fabric', id: string, code: string, title: string, colorName: string, colorType: string, colorCode: string | null, printFileName: string | null, productCodes: Array<string>, stage: string, factory: { __typename?: 'Company', code: string }, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> };
+export type FabricFieldsFragment = { __typename?: 'Fabric', id: string, code: string, title: string, colorName: string, colorType: string, colorCode: string | null, printFileName: string | null, productCodes: Array<string>, stage: string, factory: { __typename?: 'Company', code: string, name: string }, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> };
 
 export type FabricsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', id: string, code: string, title: string, colorName: string, colorType: string, colorCode: string | null, printFileName: string | null, productCodes: Array<string>, stage: string, factory: { __typename?: 'Company', code: string }, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }> };
+export type FabricsQuery = { __typename?: 'Query', fabrics: Array<{ __typename?: 'Fabric', id: string, code: string, title: string, colorName: string, colorType: string, colorCode: string | null, printFileName: string | null, productCodes: Array<string>, stage: string, factory: { __typename?: 'Company', code: string, name: string }, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }>, samples: Array<{ __typename?: 'FabricSample', sku: string, approved: boolean | null, trackNumber: string, delivered: boolean | null, note: { __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null } | null }> }> };
 
 export type FactoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -905,6 +905,7 @@ export const FabricFieldsFragmentDoc = gql`
   title
   factory {
     code
+    name
   }
   colorName
   colorType

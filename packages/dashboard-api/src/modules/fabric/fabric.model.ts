@@ -109,6 +109,7 @@ export class Fabric extends ExpectResultModel {
           },
         },
       })
+      .populate("factory")
       .exec();
     if (fabric == null) throw Error(`Fabric with given code not found`);
     return fabric;

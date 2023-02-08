@@ -50,7 +50,7 @@ export function FabricDetail(): ReactElement {
     id,
     title,
     stage,
-    factoryCode,
+    factory,
     colorName,
     colorType,
     colorCode,
@@ -114,7 +114,7 @@ export function FabricDetail(): ReactElement {
                 value={stage === "Approved"}
               />
               <TextProperty title="Stage" value={stage} />
-              <TextProperty title="Factory" value={factoryCode} />
+              <TextProperty title="Factory" value={factory.code} />
               <Grid container direction={"row"} alignItems={"center"}>
                 <Grid item xs={12} sm={8} xl={6}>
                   <ObjectProperty title="Color" value={colorFieldSet} />

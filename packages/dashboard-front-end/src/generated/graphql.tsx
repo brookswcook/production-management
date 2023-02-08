@@ -63,7 +63,7 @@ export type CreateFabricInput = {
   code: Scalars['String'];
   colorCode: InputMaybe<Scalars['String']>;
   colorName: Scalars['String'];
-  factoryCode: Scalars['String'];
+  factoryId: Scalars['String'];
   print: InputMaybe<FileUploadInput>;
   title: Scalars['String'];
   type: InputMaybe<Scalars['String']>;

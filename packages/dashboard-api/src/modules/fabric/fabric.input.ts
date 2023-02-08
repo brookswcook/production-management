@@ -10,7 +10,7 @@ export class CreateFabricInput {
   title!: string;
 
   @Field({ nullable: false })
-  factoryCode!: string;
+  factoryId!: string;
 
   @Field()
   colorName!: string;

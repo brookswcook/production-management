@@ -12,35 +12,26 @@ import {
 import { ResolverContext } from "../../lib/graphql";
 import { getDownloadFileLink, uploadFile } from "../file/file.service";
 import { ProductService } from "../product/product.service";
-import { UserService } from "../user/user.service";
 import { CreateFabricInput, UploadPrintInput } from "./fabric.input";
 import { Fabric, FabricModel } from "./fabric.model";
 
 @Resolver(() => Fabric)
 export class FabricResolver {
-  constructor(
-    private readonly productService: ProductService,
-    private readonly userService: UserService
-  ) {
+  constructor(private readonly productService: ProductService) {
     // TODO: use DI as typedi if it gets annoying
     this.productService = new ProductService();
-    this.userService = new UserService();
   }
 
   @FieldResolver(() => [String])
-  async productCodes(
-    @Root() { code }: Fabric,
-    @Ctx() { user: { role } }: ResolverContext
-  ): Promise<string[]> {
+  async productCodes(@Root() { code }: Fabric): Promise<string[]> {
     // TODO: add loader to run query once
     return this.productService.getProductCodesByFabricCode(code);
   }
 
   @Authorized()
   @Query(() => [Fabric])
-  async fabrics(@Ctx() { user: { role } }: ResolverContext) {
-    const query: Partial<Fabric> = {};
-    return FabricModel.find(query)
+  async fabrics() {
+    return FabricModel.find()
       .populate({
         path: "samples",
         populate: {
@@ -48,6 +39,7 @@ export class FabricResolver {
         },
       })
       .populate({ path: "notes", populate: { path: "user" } })
+      .populate("factory")
       .exec();
   }
 
@@ -71,7 +63,7 @@ export class FabricResolver {
   ) {
     const fabricData: Omit<
       Fabric,
-      "samples" | "stage" | "products" | "factoryCode" | "notes"
+      "samples" | "stage" | "products" | "factoryId" | "factory" | "notes"
     > = data;
     if (print != null) {
       const { file, fileSize } = print;

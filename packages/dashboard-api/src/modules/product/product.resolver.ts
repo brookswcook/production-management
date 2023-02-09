@@ -1,11 +1,11 @@
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import { CreateProductInput } from "./product.input";
 import { Product, ProductModel } from "./product.model";
 import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
 import { StartProductionInput } from "../productProduction/productProduction.input";
 import { UserRole } from "dashboard-core";
 import { UserService } from "../user/user.service";
-import { ResolverContext } from "../../lib/graphql";
+import { TenantId } from "../user/user.decorator";
 
 @Resolver(Product)
 export class ProductResolver {
@@ -42,7 +42,7 @@ export class ProductResolver {
   @Mutation(() => Product)
   async createProduct(
     @Arg("data") data: CreateProductInput,
-    @Ctx() { user: { companyId } }: ResolverContext
+    @TenantId() companyId: string
   ) {
     // TODO: use workflow saved in db. Calculate it based on delivery date
     const productWorkflowData: Partial<Product> = {

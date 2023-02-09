@@ -101,17 +101,6 @@ export class User extends ExpectResultModel implements UserPayload, TimeStamps {
     const emails = await UserModel.find(query, { _id: 0, email: 1 }).lean();
     return emails.map(item => item.email);
   }
-
-  static parseFactoryCodeRole(role: string) {
-    const factoryRoleMatch = role.match(/(?<=^Factory:)\w+$/);
-    if (factoryRoleMatch != null && factoryRoleMatch.length > 0) {
-      return factoryRoleMatch.pop();
-    } else return undefined;
-  }
-
-  static buildFactoryRole(factoryCode: string) {
-    return `Factory:${factoryCode}`;
-  }
 }
 
 @ObjectType()

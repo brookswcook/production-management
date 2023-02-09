@@ -26,6 +26,7 @@ export const logPlugin = {
         if (isMutation) {
           try {
             const variables = JSON.stringify(variablesObject, null, 2);
+            // TODO: replace with service call
             await OperationLogModel.createLogRecord({
               name,
               variables,

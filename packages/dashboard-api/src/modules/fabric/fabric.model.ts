@@ -91,29 +91,6 @@ export class Fabric extends ExpectResultModel {
     options: { sort: { _id: -1 } },
   })
   notes!: Note[];
-
-  // TODO: reuse
-  static async findByCodeOrFail(
-    this: ReturnModelType<typeof Fabric>,
-    code: string
-  ): Promise<Fabric> {
-    const query: Partial<Fabric> = { code };
-    const fabric = await this.findOne(query)
-      .populate({ path: "notes", populate: { path: "user" } })
-      .populate({
-        path: "samples",
-        populate: {
-          path: "note",
-          populate: {
-            path: "user",
-          },
-        },
-      })
-      .populate("factory")
-      .exec();
-    if (fabric == null) throw Error(`Fabric with given code not found`);
-    return fabric;
-  }
 }
 
 export const FabricModel = getModelForClass(Fabric);

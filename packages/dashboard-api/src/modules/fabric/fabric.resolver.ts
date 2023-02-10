@@ -45,8 +45,17 @@ export class FabricResolver {
 
   @Authorized()
   @Query(() => Fabric, { nullable: false })
-  async fabric(@Arg("code") code: string): Promise<Fabric> {
-    return FabricModel.findByCodeOrFail(code);
+  async fabric(
+    @Arg("code") code: string
+  ): Promise<Fabric> {
+    return FabricModel.findOneOrFail({ companyId, code }, [
+      { path: "notes", populate: { path: "user" } },
+      {
+        path: "samples",
+        populate: { path: "note", populate: { path: "user" } },
+      },
+      { path: "factory" },
+    ]);
   }
 
   @Authorized()

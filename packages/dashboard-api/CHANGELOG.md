@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.2.0...dashboard-api@1.3.0) (2023-02-11)
+
+
+### Bug Fixes
+
+* a note about firebase auth user data metadata ([6d9a452](https://github.com/brookswcook/production-management/commit/6d9a452a10668b5200d1178772d8b0431fa2b216))
+* add a note about uploadFile method ([af40c7a](https://github.com/brookswcook/production-management/commit/af40c7a351447b59aaac375b912f27e6473f6b81))
+* add a todo note ([bef5d3f](https://github.com/brookswcook/production-management/commit/bef5d3fb51681721d2615ba5f5779a2030b08c17))
+* remove roles with user domains ([d137fd3](https://github.com/brookswcook/production-management/commit/d137fd3bf2cec5e339e1c81876d7c840eb70a91b))
+* replace direct context usage with tenant decorator ([76b001d](https://github.com/brookswcook/production-management/commit/76b001db5fb25cbe950fa3fea910707a3233a417))
+
+
+### Features
+
+* be able to get child companies by root company id ([09b969a](https://github.com/brookswcook/production-management/commit/09b969a1f0216abcd9fe52ec873d328758fc03d1))
+* **fabric:** support multitenancy on graphql layer ([ee2607a](https://github.com/brookswcook/production-management/commit/ee2607a56734f5c47cc64d8ce32b0141ef249a8a))
+* first two company loaders ([1199e0b](https://github.com/brookswcook/production-management/commit/1199e0bebe1f15b94f947afa677b9155c66d6906))
+* **graphql-log-plugin:** support multitenancy ([0dfa079](https://github.com/brookswcook/production-management/commit/0dfa0790e4b7e28d5d45e5edd7085b495243262f))
+* graphqlLoaderPlugin ([87307f9](https://github.com/brookswcook/production-management/commit/87307f927c71b5e95412f0a7dd51d9d34aae4bc5))
+* loader decorator and get loader function ([4409da4](https://github.com/brookswcook/production-management/commit/4409da417a85be2898ad60ce178dfc16cba0b675))
+* **note:** support multitenancy on graphql layer ([4585381](https://github.com/brookswcook/production-management/commit/4585381bca0e8b1bb4d36532b755391861e8f0fc))
+* **oplog:** support multitenancy on graphql layer ([38ac2f0](https://github.com/brookswcook/production-management/commit/38ac2f0427dbaae7efe0f1c2c9e803b4488fab4b))
+* **product:** support multitenancy on graphql layer ([07b7bef](https://github.com/brookswcook/production-management/commit/07b7bef624697f05bdb3d28a00f7d55f02ee218b))
+* remove entities filter by role name ([665f0b3](https://github.com/brookswcook/production-management/commit/665f0b31ffae0d734b801de1efc113ebe4176b88))
+* replace factory code with factory id in relations ([b2b86ec](https://github.com/brookswcook/production-management/commit/b2b86ec3d2afa62ef09f3f691f5b80b238710fdd))
+* replace factoryCode with factoryId in user ([073a01f](https://github.com/brookswcook/production-management/commit/073a01f2ec6bb720e9bd71502f93d43a868709e4))
+* replace hardcoded factory code with factory id in fabric ([297d7b3](https://github.com/brookswcook/production-management/commit/297d7b349a9a3f6adabdde3511c7ce96a6f8b9e4))
+* replace hardcoded factory codes with real ones ([1623db7](https://github.com/brookswcook/production-management/commit/1623db7d6ce05c339dc834718b08e5d71b874793))
+* **style:** support multitenancy in graphql layer ([43c6b24](https://github.com/brookswcook/production-management/commit/43c6b242d47d152c95e9d2b30cc9be314a98839c))
+* support loaders through context ([72d9708](https://github.com/brookswcook/production-management/commit/72d97084b6e9bf6c4d31931ca5b3f69e29cdf36f))
+* tenantId param decorator ([7de227b](https://github.com/brookswcook/production-management/commit/7de227b50527690a2954fc18db65a0a28b49169a))
+* use generic findOneOrFail method ([7770b74](https://github.com/brookswcook/production-management/commit/7770b74d60ad92a53b8f31624459943a02b81a8f))
+* **user:** support multitenancy in queries ([a030e63](https://github.com/brookswcook/production-management/commit/a030e63395aa8c2e599ea97cfb380eea1ac93c44))
+
+
+
+
+
 # 1.2.0 (2023-02-03)
 
 

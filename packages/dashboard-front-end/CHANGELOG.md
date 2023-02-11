@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.2.0...dashboard-front-end@1.3.0) (2023-02-11)
+
+
+### Features
+
+* replace factoryCode with factoryId in user ([073a01f](https://github.com/brookswcook/production-management/commit/073a01f2ec6bb720e9bd71502f93d43a868709e4))
+* replace hardcoded factory code with factory id in fabric ([297d7b3](https://github.com/brookswcook/production-management/commit/297d7b349a9a3f6adabdde3511c7ce96a6f8b9e4))
+* replace hardcoded factory codes with real ones ([1623db7](https://github.com/brookswcook/production-management/commit/1623db7d6ce05c339dc834718b08e5d71b874793))
+
+
+
+
+
 # 1.2.0 (2023-02-03)
 
 

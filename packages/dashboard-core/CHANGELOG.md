@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/brookswcook/production-management/compare/dashboard-core@1.2.0...dashboard-core@1.3.0) (2023-02-11)
+
+
+### Bug Fixes
+
+* remove roles with user domains ([d137fd3](https://github.com/brookswcook/production-management/commit/d137fd3bf2cec5e339e1c81876d7c840eb70a91b))
+
+
+### Features
+
+* replace factoryCode with factoryId in user ([073a01f](https://github.com/brookswcook/production-management/commit/073a01f2ec6bb720e9bd71502f93d43a868709e4))
+
+
+
+
+
 # 1.2.0 (2023-02-03)
 
 

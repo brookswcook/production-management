@@ -74,6 +74,10 @@ export class Company implements TimeStamps {
 
   @Field()
   updatedAt!: Date;
+
+  static async getChildCompanies(companyId: string): Promise<Company[]> {
+    return CompanyModel.find({ parentId: companyId }).exec();
+  }
 }
 
 export const CompanyModel = getModelForClass(Company);

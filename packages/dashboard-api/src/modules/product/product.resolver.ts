@@ -4,22 +4,16 @@ import { Product, ProductModel } from "./product.model";
 import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
 import { StartProductionInput } from "../productProduction/productProduction.input";
 import { UserRole } from "dashboard-core";
-import { UserService } from "../user/user.service";
 import { TenantId } from "../user/user.decorator";
 
 @Resolver(Product)
 export class ProductResolver {
-  constructor(private readonly userService: UserService) {
-    // TODO: use DI as typedi if it gets annoying
-    this.userService = new UserService();
-  }
-
   // TODO: consider to use lean() with getter plugin
   // TODO: populate fitSamples only when needed; analyze AST
   @Authorized()
   @Query(() => [Product])
-  async products() {
-    return ProductModel.find()
+  async products(@TenantId() companyId: string) {
+    return ProductModel.find({ companyId })
       .sort({ _id: -1 })
       .populate({ path: "notes", populate: { path: "user" } })
       .populate("fitSamples")
@@ -34,8 +28,25 @@ export class ProductResolver {
 
   @Authorized()
   @Query(() => Product)
-  async product(@Arg("code", { nullable: false }) code: string) {
-    return ProductModel.findByCodeOrFail(code);
+  async product(
+    @TenantId() companyId: string,
+    @Arg("code", { nullable: false }) code: string
+  ) {
+    return ProductModel.findOneOrFail({ code, companyId }, [
+      { path: "notes", populate: { path: "user" } },
+      { path: "fitSamples", populate: { path: "note" } },
+      { path: "style", populate: { path: "techPacks" } },
+      {
+        path: "fabric",
+        populate: {
+          path: "samples",
+          populate: {
+            path: "note",
+          },
+        },
+      },
+      { path: "factory" },
+    ]);
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])

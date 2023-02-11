@@ -14,10 +14,11 @@ import { Fabric } from "../fabric/fabric.model";
 import { Note } from "../note/note.model";
 import { NoteType } from "dashboard-core";
 import { Company } from "../company/company.model";
+import { ExpectResultModel } from "../common/expectResultModel";
 
 @index<Product>({ styleCode: 1, fabricCode: 1 }, { unique: true })
 @ObjectType()
-export class Product {
+export class Product extends ExpectResultModel {
   @Field()
   id?: string;
 
@@ -193,27 +194,6 @@ export class Product {
   @Field(() => ProductShipping, { nullable: true })
   @Property({ _id: false })
   shipping?: ProductShipping;
-
-  static async findByCodeOrFail(code: string) {
-    const query: Partial<Product> = { code };
-    const product = await ProductModel.findOne(query)
-      .populate({ path: "notes", populate: { path: "user" } })
-      .populate({ path: "fitSamples", populate: { path: "note" } })
-      .populate({ path: "style", populate: { path: "techPacks" } })
-      .populate({
-        path: "fabric",
-        populate: {
-          path: "samples",
-          populate: {
-            path: "note",
-          },
-        },
-      })
-      .populate("factory")
-      .exec();
-    if (product == null) throw Error(`Product with given code not found`);
-    return product;
-  }
 
   static async updatePerProductNameOrFail(
     productName: string,

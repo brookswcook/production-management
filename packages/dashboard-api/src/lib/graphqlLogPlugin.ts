@@ -21,7 +21,7 @@ export const logPlugin = {
           user == null
         )
           return;
-        const userId = user.id;
+        const { id: userId, companyId } = user;
         const isMutation = query.match(/^\w+/)?.pop() === "mutation";
         if (isMutation) {
           try {
@@ -31,6 +31,7 @@ export const logPlugin = {
               name,
               variables,
               userId,
+              companyId,
             });
           } catch (err) {
             logger.error(err);

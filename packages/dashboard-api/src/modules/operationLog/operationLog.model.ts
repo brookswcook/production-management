@@ -13,6 +13,9 @@ export class OperationLog extends TimeStamps {
   @Field()
   id?: string;
 
+  @Property({ required: true })
+  companyId!: string;
+
   @Field()
   @Property({ required: true })
   name!: string;

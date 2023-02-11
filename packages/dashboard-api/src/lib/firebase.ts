@@ -42,6 +42,7 @@ export async function verifyToken(token: string): Promise<DecodedIdToken> {
   }
 }
 
+// add companyId to metadata of user record
 export async function createUser({
   email,
   emailVerified = false,

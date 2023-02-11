@@ -12,6 +12,7 @@ import {
 import { ResolverContext } from "../../lib/graphql";
 import { getDownloadFileLink, uploadFile } from "../file/file.service";
 import { ProductService } from "../product/product.service";
+import { TenantId } from "../user/user.decorator";
 import { CreateFabricInput, UploadPrintInput } from "./fabric.input";
 import { Fabric, FabricModel } from "./fabric.model";
 
@@ -30,8 +31,8 @@ export class FabricResolver {
 
   @Authorized()
   @Query(() => [Fabric])
-  async fabrics() {
-    return FabricModel.find()
+  async fabrics(@TenantId() companyId: string) {
+    return FabricModel.find({ companyId })
       .populate({
         path: "samples",
         populate: {
@@ -46,6 +47,7 @@ export class FabricResolver {
   @Authorized()
   @Query(() => Fabric, { nullable: false })
   async fabric(
+    @TenantId() companyId: string,
     @Arg("code") code: string
   ): Promise<Fabric> {
     return FabricModel.findOneOrFail({ companyId, code }, [
@@ -67,12 +69,19 @@ export class FabricResolver {
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
   async createFabric(
+    @TenantId() companyId: string,
     @Arg("data") { print, ...data }: CreateFabricInput,
     @Ctx() { user: { id: userId } }: ResolverContext
   ) {
     const fabricData: Omit<
       Fabric,
-      "samples" | "stage" | "products" | "factoryId" | "factory" | "notes"
+      | "samples"
+      | "stage"
+      | "products"
+      | "factory"
+      | "notes"
+      | "companyId"
+      | "company"
     > = data;
     if (print != null) {
       const { file, fileSize } = print;
@@ -84,12 +93,15 @@ export class FabricResolver {
         fileSize
       );
     }
-    return (await new FabricModel(fabricData).save()).populate("samples");
+    return (
+      await new FabricModel({ companyId, ...fabricData }).save()
+    ).populate("samples");
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
   async uploadPrint(
+    @TenantId() companyId: string,
     @Arg("data") { code, print: { file, fileSize } }: UploadPrintInput,
     @Ctx() { user: { id: userId } }: ResolverContext
   ): Promise<Fabric> {
@@ -100,6 +112,9 @@ export class FabricResolver {
       file,
       fileSize
     );
-    return FabricModel.findOneAndUpdateOrFail({ code }, { printFileName });
+    return FabricModel.findOneAndUpdateOrFail(
+      { companyId, code },
+      { printFileName }
+    );
   }
 }

@@ -1,8 +1,4 @@
-import {
-  getModelForClass,
-  prop as Property,
-  ReturnModelType,
-} from "@typegoose/typegoose";
+import { getModelForClass, prop as Property } from "@typegoose/typegoose";
 import { ColorType, NoteType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
 import { ExpectResultModel } from "../common/expectResultModel";
@@ -39,6 +35,18 @@ export class Fabric extends ExpectResultModel {
     },
   })
   colorType?: ColorType;
+
+  @Property({ required: true })
+  companyId!: string;
+
+  @Field()
+  @Property({
+    ref: () => Company,
+    foreignField: "_id",
+    localField: "companyId",
+    justOne: true,
+  })
+  company!: Company;
 
   @Property({ required: true })
   factoryId!: string;

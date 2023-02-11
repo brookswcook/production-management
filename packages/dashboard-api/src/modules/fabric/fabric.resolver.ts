@@ -12,38 +12,27 @@ import {
 import { ResolverContext } from "../../lib/graphql";
 import { getDownloadFileLink, uploadFile } from "../file/file.service";
 import { ProductService } from "../product/product.service";
-import { UserService } from "../user/user.service";
+import { TenantId } from "../user/user.decorator";
 import { CreateFabricInput, UploadPrintInput } from "./fabric.input";
 import { Fabric, FabricModel } from "./fabric.model";
 
 @Resolver(() => Fabric)
 export class FabricResolver {
-  constructor(
-    private readonly productService: ProductService,
-    private readonly userService: UserService
-  ) {
+  constructor(private readonly productService: ProductService) {
     // TODO: use DI as typedi if it gets annoying
     this.productService = new ProductService();
-    this.userService = new UserService();
   }
 
   @FieldResolver(() => [String])
-  async productCodes(
-    @Root() { code }: Fabric,
-    @Ctx() { user: { role } }: ResolverContext
-  ): Promise<string[]> {
-    const factoryCode = this.userService.parseFactoryCodeRole(role);
+  async productCodes(@Root() { code }: Fabric): Promise<string[]> {
     // TODO: add loader to run query once
-    return this.productService.getProductCodesByFabricCode(code, factoryCode);
+    return this.productService.getProductCodesByFabricCode(code);
   }
 
   @Authorized()
   @Query(() => [Fabric])
-  async fabrics(@Ctx() { user: { role } }: ResolverContext) {
-    const factoryCode = this.userService.parseFactoryCodeRole(role);
-    const query: Partial<Fabric> = {};
-    factoryCode && Object.assign(query, { factoryCode });
-    return FabricModel.find(query)
+  async fabrics(@TenantId() companyId: string) {
+    return FabricModel.find({ companyId })
       .populate({
         path: "samples",
         populate: {
@@ -51,17 +40,24 @@ export class FabricResolver {
         },
       })
       .populate({ path: "notes", populate: { path: "user" } })
+      .populate("factory")
       .exec();
   }
 
   @Authorized()
   @Query(() => Fabric, { nullable: false })
   async fabric(
-    @Arg("code") code: string,
-    @Ctx() { user: { role } }: ResolverContext
-  ): Promise<Fabric | null> {
-    const factoryCode = this.userService.parseFactoryCodeRole(role);
-    return FabricModel.findByCodeOrFail(code, factoryCode);
+    @TenantId() companyId: string,
+    @Arg("code") code: string
+  ): Promise<Fabric> {
+    return FabricModel.findOneOrFail({ companyId, code }, [
+      { path: "notes", populate: { path: "user" } },
+      {
+        path: "samples",
+        populate: { path: "note", populate: { path: "user" } },
+      },
+      { path: "factory" },
+    ]);
   }
 
   @Authorized()
@@ -73,12 +69,19 @@ export class FabricResolver {
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
   async createFabric(
+    @TenantId() companyId: string,
     @Arg("data") { print, ...data }: CreateFabricInput,
     @Ctx() { user: { id: userId } }: ResolverContext
   ) {
     const fabricData: Omit<
       Fabric,
-      "samples" | "stage" | "products" | "factoryCode" | "notes"
+      | "samples"
+      | "stage"
+      | "products"
+      | "factory"
+      | "notes"
+      | "companyId"
+      | "company"
     > = data;
     if (print != null) {
       const { file, fileSize } = print;
@@ -90,12 +93,15 @@ export class FabricResolver {
         fileSize
       );
     }
-    return (await new FabricModel(fabricData).save()).populate("samples");
+    return (
+      await new FabricModel({ companyId, ...fabricData }).save()
+    ).populate("samples");
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
   async uploadPrint(
+    @TenantId() companyId: string,
     @Arg("data") { code, print: { file, fileSize } }: UploadPrintInput,
     @Ctx() { user: { id: userId } }: ResolverContext
   ): Promise<Fabric> {
@@ -106,6 +112,9 @@ export class FabricResolver {
       file,
       fileSize
     );
-    return FabricModel.findOneAndUpdateOrFail({ code }, { printFileName });
+    return FabricModel.findOneAndUpdateOrFail(
+      { companyId, code },
+      { printFileName }
+    );
   }
 }

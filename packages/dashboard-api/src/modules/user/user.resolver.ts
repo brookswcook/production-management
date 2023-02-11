@@ -6,6 +6,7 @@ import {
 import {
   Arg,
   Authorized,
+  Ctx,
   Field,
   FieldResolver,
   Mutation,
@@ -31,9 +32,16 @@ import {
   FirebaseUserType,
   FirebaseUserMetadataType,
 } from "../../lib/firebase";
+import { TenantId } from "./user.decorator";
+import { CompanyService } from "../company/company.service";
 
 @Resolver(User)
 export class UserResolver {
+  constructor(private readonly companyService: CompanyService) {
+    // TODO: use DI as typedi if it gets annoying
+    this.companyService = new CompanyService();
+  }
+
   @FieldResolver(() => FirebaseUser, { nullable: true })
   async firebaseUser(@Root() { email }: User): Promise<FirebaseUser | null> {
     return getFirebaseUser(email);
@@ -41,27 +49,41 @@ export class UserResolver {
 
   @Authorized(["Admin"])
   @Query(() => [User])
-  async users() {
-    return UserModel.find({ deleted: false }).exec();
+  async users(@TenantId() companyId: string) {
+    const childCompanyIds = await this.companyService.getChildCompaniesIds(
+      companyId
+    );
+    return UserModel.find({
+      companyId: { $in: [companyId, ...childCompanyIds] },
+      deleted: false,
+    }).exec();
   }
 
   @Authorized(["Admin"])
   @Mutation(() => User)
   async createUser(
+    @TenantId() adminCompanyId: string,
     @Arg("data")
-    { email, firstName, lastName, role, factoryCode }: CreateUserInput
+    {
+      email,
+      firstName,
+      lastName,
+      role,
+      companyId: inputCompanyId,
+    }: CreateUserInput
   ): Promise<User> {
     try {
       await createFirebaseUser({ email });
-      const factoryRole =
-        factoryCode != null ? UserModel.buildFactoryRole(factoryCode) : null;
+      // TODO: inputCompanyId should be a child of adminCompanyId!
+      const companyId = inputCompanyId ?? adminCompanyId;
       return await UserModel.findOneAndUpdate(
         { email },
         {
           $set: {
             firstName,
             lastName,
-            role: factoryRole ?? role,
+            role,
+            companyId,
             deleted: false,
           },
         },
@@ -75,10 +97,16 @@ export class UserResolver {
   @Authorized(["Admin"])
   @Mutation(() => User)
   async updateUser(
+    @TenantId() companyId: string,
     @Arg("data") { email, ...props }: UpdateUserInput
   ): Promise<User> {
     try {
-      const apiUser = await UserModel.getUserByEmailOrFail(email);
+      const apiUser = await UserModel.findOneOrFail({
+        email,
+        companyId,
+        deleted: false,
+        disabled: false,
+      });
       Object.assign(apiUser, props);
       const savedApiUser = await apiUser.save();
       props.disabled != null &&
@@ -93,9 +121,15 @@ export class UserResolver {
 
   @Authorized(["Admin"])
   @Mutation(() => Boolean)
-  async deleteUser(@Arg("data") { email }: DeleteUserInput): Promise<boolean> {
+  async deleteUser(
+    @TenantId() companyId: string,
+    @Arg("data") { email }: DeleteUserInput
+  ): Promise<boolean> {
     try {
-      await UserModel.findOneAndUpdate({ email }, { deleted: true });
+      await UserModel.findOneAndUpdateOrFail(
+        { companyId, email },
+        { deleted: true }
+      );
       await deleteFirebaseUser(email);
       return true;
     } catch (error) {
@@ -103,6 +137,7 @@ export class UserResolver {
     }
   }
 
+  // TODO: multitenant login based on company id saved in firebase metadata
   @Mutation(() => LoginResult)
   async login(@Arg("data") { token }: LoginInput): Promise<{ token: string }> {
     try {

@@ -1,14 +1,6 @@
 import { UserRole } from "dashboard-core";
-import {
-  Arg,
-  Authorized,
-  Ctx,
-  Int,
-  Mutation,
-  Query,
-  Resolver,
-} from "type-graphql";
-import { ResolverContext } from "../../lib/graphql";
+import { Arg, Authorized, Int, Mutation, Query, Resolver } from "type-graphql";
+import { TenantId } from "../user/user.decorator";
 import { CreatePurchaseOrderInput } from "./purchaseOrder.input";
 import { PurchaseOrder, PurchaseOrderModel } from "./purchaseOrder.model";
 
@@ -17,7 +9,7 @@ export class PurchaseOrderResolver {
   @Authorized()
   @Query(() => [PurchaseOrder])
   async purchaseOrders(
-    @Ctx() { user: { companyId } }: ResolverContext
+    @TenantId() companyId: string
   ): Promise<PurchaseOrder[]> {
     return await PurchaseOrderModel.find({ companyId })
       .populate([
@@ -44,7 +36,7 @@ export class PurchaseOrderResolver {
   @Query(() => PurchaseOrder)
   async purchaseOrder(
     @Arg("uid", () => Int) uid: number,
-    @Ctx() { user: { companyId } }: ResolverContext
+    @TenantId() companyId: string
   ): Promise<PurchaseOrder> {
     return await PurchaseOrderModel.findOneOrFail({ companyId, uid }, [
       {
@@ -69,7 +61,7 @@ export class PurchaseOrderResolver {
   @Mutation(() => PurchaseOrder)
   async createPurchaseOrder(
     @Arg("data") data: CreatePurchaseOrderInput,
-    @Ctx() { user: { companyId } }: ResolverContext
+    @TenantId() companyId: string
   ): Promise<PurchaseOrder> {
     const uid = await PurchaseOrderModel.getNextUID();
     return await new PurchaseOrderModel({
@@ -83,7 +75,7 @@ export class PurchaseOrderResolver {
   @Mutation(() => PurchaseOrder)
   async pushPurchaseOrderToNextStage(
     @Arg("uid", () => Int) uid: number,
-    @Ctx() { user: { companyId } }: ResolverContext
+    @TenantId() companyId: string
   ): Promise<PurchaseOrder> {
     const purchaseOrder = await PurchaseOrderModel.findOneOrFail({
       companyId,

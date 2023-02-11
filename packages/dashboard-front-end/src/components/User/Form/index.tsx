@@ -4,16 +4,18 @@ import {
   TextField,
   Button,
   Autocomplete,
+  Box,
 } from "@mui/material";
-import { FormEvent, ReactElement, useEffect, useState } from "react";
+import { FormEvent, ReactElement, useState } from "react";
 import { PopperButton } from "../../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
 import {
   CreateUserInput,
   useCreateUserMutation,
-  useFactoryCodesLazyQuery,
+  useFactoriesQuery,
 } from "../../../generated/graphql";
 import { toast } from "react-toastify";
+import { userRoles } from "dashboard-core";
 
 export function CreateUserForm({
   onCancel,
@@ -21,22 +23,11 @@ export function CreateUserForm({
   onCancel?: VoidFunction;
 }): ReactElement {
   const [role, setRole] = useState<string | null>(null);
-  const [factoryCodes, setFactoryCodes] = useState<string[]>([]);
+  const { data: { factories } = { factories: [] } } = useFactoriesQuery();
+  const [factoryId, setFactoryId] = useState<string | null>(null);
   const [newUserMutation] = useCreateUserMutation({
     refetchQueries: ["Users"],
   });
-  const [getFactoryCodes] = useFactoryCodesLazyQuery();
-  async function updateFactoryCodes() {
-    const { data } = await getFactoryCodes();
-    if (data != null) {
-      const factoryCodes = data.factories.map(({ code }) => code);
-      setFactoryCodes(factoryCodes);
-    }
-  }
-
-  useEffect(() => {
-    if (role === "Factory") void updateFactoryCodes();
-  }, [role]);
 
   async function createNewUser(
     event: FormEvent<HTMLFormElement>
@@ -49,7 +40,7 @@ export function CreateUserForm({
 
     try {
       await newUserMutation({
-        variables: { data: newUserData },
+        variables: { data: { ...newUserData, companyId: factoryId } },
       });
     } catch (error) {
       toast.error((error as Error).message);
@@ -70,7 +61,7 @@ export function CreateUserForm({
       <TextField label="First name" name="firstName" required />
       <TextField label="Last name" name="lastName" required />
       <Autocomplete
-        options={["Factory", "VChapman", "Admin"]}
+        options={userRoles}
         onChange={(_, value) => setRole(value)}
         renderInput={params => (
           <TextField {...params} name="role" label="Role" required />
@@ -78,14 +69,16 @@ export function CreateUserForm({
       />
       {role === "Factory" && (
         <Autocomplete
-          options={factoryCodes}
+          onChange={(_, value) => setFactoryId(value?.id ?? null)}
+          options={factories}
+          getOptionLabel={option => option.name}
+          renderOption={(props, option) => (
+            <Box component="li" {...props}>
+              {`${option.name}`}
+            </Box>
+          )}
           renderInput={params => (
-            <TextField
-              {...params}
-              name="factoryCode"
-              label="FactoryCode"
-              required
-            />
+            <TextField {...params} label="Factory" required />
           )}
         />
       )}

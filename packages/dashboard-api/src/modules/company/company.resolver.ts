@@ -1,5 +1,5 @@
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { ResolverContext } from "../../lib/graphql";
+import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
+import { TenantId } from "../user/user.decorator";
 import { UserService } from "../user/user.service";
 import { CreateCompanyInput } from "./company.input";
 import { Company, CompanyModel } from "./company.model";
@@ -19,9 +19,7 @@ export class CompanyResolver {
 
   @Authorized(["Admin"])
   @Query(() => [Company], { nullable: false })
-  async factories(
-    @Ctx() { user: { companyId: parentId } }: ResolverContext
-  ): Promise<Company[]> {
+  async factories(@TenantId() parentId: string): Promise<Company[]> {
     return CompanyModel.find({ parentId, role: "Factory" })
       .populate(["users", "contacts"])
       .exec();
@@ -38,7 +36,7 @@ export class CompanyResolver {
   @Mutation(() => Company)
   async createFactory(
     @Arg("data") data: CreateCompanyInput,
-    @Ctx() { user: { companyId: parentId } }: ResolverContext
+    @TenantId() parentId: string
   ): Promise<Company> {
     const factoryData = { ...data, role: "Factory", parentId };
     return new CompanyModel(factoryData).save();

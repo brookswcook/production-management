@@ -1,6 +1,6 @@
 import { UserRole } from "dashboard-core";
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { ResolverContext } from "../../lib/graphql";
+import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
+import { TenantId } from "../user/user.decorator";
 import { CreateOrderItemInput, GetOrderItemsInput } from "./orderItem.input";
 import { OrderItem, OrderItemModel } from "./orderItem.model";
 
@@ -8,7 +8,7 @@ import { OrderItem, OrderItemModel } from "./orderItem.model";
 export class OrderItemResolver {
   @Query(() => [OrderItem])
   async orderItems(
-    @Ctx() { user: { companyId } }: ResolverContext,
+    @TenantId() companyId: string,
     @Arg("data", { nullable: true }) data: GetOrderItemsInput
   ): Promise<OrderItem[]> {
     return OrderItemModel.find({ ...data, companyId })
@@ -23,7 +23,7 @@ export class OrderItemResolver {
   @Authorized<UserRole>(["Admin", "VChapman"])
   @Mutation(() => OrderItem)
   async createOrderItem(
-    @Ctx() { user: { companyId } }: ResolverContext,
+    @TenantId() companyId: string,
     @Arg("data") data: CreateOrderItemInput
   ): Promise<OrderItem> {
     return new OrderItemModel({ ...data, companyId }).save();

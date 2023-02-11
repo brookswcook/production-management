@@ -2,7 +2,10 @@ fragment fabricFields on Fabric {
   id
   code
   title
-  factoryCode
+  factory {
+    code
+    name
+  }
   colorName
   colorType
   colorCode

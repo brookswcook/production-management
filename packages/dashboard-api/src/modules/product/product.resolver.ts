@@ -1,32 +1,19 @@
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { CreateProductInput, GetProductsInput } from "./product.input";
+import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
+import { CreateProductInput } from "./product.input";
 import { Product, ProductModel } from "./product.model";
 import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
 import { StartProductionInput } from "../productProduction/productProduction.input";
 import { UserRole } from "dashboard-core";
-import { ResolverContext } from "../../lib/graphql";
-import { UserModel } from "../user/user.model";
-import { UserService } from "../user/user.service";
+import { TenantId } from "../user/user.decorator";
 
 @Resolver(Product)
 export class ProductResolver {
-  constructor(private readonly userService: UserService) {
-    // TODO: use DI as typedi if it gets annoying
-    this.userService = new UserService();
-  }
-
   // TODO: consider to use lean() with getter plugin
   // TODO: populate fitSamples only when needed; analyze AST
   @Authorized()
   @Query(() => [Product])
-  async products(
-    @Ctx() { user: { role } }: ResolverContext,
-    @Arg("data", { nullable: true }) data?: GetProductsInput
-  ) {
-    const factoryCode = UserModel.parseFactoryCodeRole(role);
-    const query: Partial<Product> = data ? ({ ...data } as Product) : {};
-    factoryCode && Object.assign(query, { factoryCode });
-    return ProductModel.find(query)
+  async products(@TenantId() companyId: string) {
+    return ProductModel.find({ companyId })
       .sort({ _id: -1 })
       .populate({ path: "notes", populate: { path: "user" } })
       .populate("fitSamples")
@@ -35,22 +22,39 @@ export class ProductResolver {
         path: "fabric",
         populate: { path: "samples" },
       })
+      .populate("factory")
       .exec();
   }
 
   @Authorized()
   @Query(() => Product)
   async product(
-    @Ctx() { user: { role } }: ResolverContext,
+    @TenantId() companyId: string,
     @Arg("code", { nullable: false }) code: string
   ) {
-    const factoryCode = this.userService.parseFactoryCodeRole(role);
-    return ProductModel.findByCodeOrFail(code, factoryCode);
+    return ProductModel.findOneOrFail({ code, companyId }, [
+      { path: "notes", populate: { path: "user" } },
+      { path: "fitSamples", populate: { path: "note" } },
+      { path: "style", populate: { path: "techPacks" } },
+      {
+        path: "fabric",
+        populate: {
+          path: "samples",
+          populate: {
+            path: "note",
+          },
+        },
+      },
+      { path: "factory" },
+    ]);
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Product)
-  async createProduct(@Arg("data") data: CreateProductInput) {
+  async createProduct(
+    @Arg("data") data: CreateProductInput,
+    @TenantId() companyId: string
+  ) {
     // TODO: use workflow saved in db. Calculate it based on delivery date
     const productWorkflowData: Partial<Product> = {
       fabricProduction: {
@@ -67,6 +71,7 @@ export class ProductResolver {
       },
     };
     return new ProductModel({
+      companyId,
       ...productWorkflowData,
       ...data,
     }).save();

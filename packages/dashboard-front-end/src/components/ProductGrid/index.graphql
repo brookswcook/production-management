@@ -48,7 +48,10 @@ fragment productFields on Product {
   dueIn
   onTime
   stage
-  factoryCode
+  factory {
+    code
+    name
+  }
   techPackUploaded
   fabricSampleDelivered
   fitSampleDelivered

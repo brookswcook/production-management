@@ -18,6 +18,7 @@ import { CreateProductForm } from "../ProductForm";
 import { Fragment, ReactElement } from "react";
 import { Link } from "react-router-dom";
 import RequireRole from "../Auth/RequireRole";
+import { renderCellExpand } from "../Common/GridCellExpand";
 
 export default function ProductGrid(): ReactElement {
   const { data, loading, error } = useProductsQuery({
@@ -87,6 +88,10 @@ export default function ProductGrid(): ReactElement {
       minWidth: 50,
       flex: 1,
       type: "string",
+      renderCell: renderCellExpand,
+      valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
+        return row.factory.name;
+      },
     },
     {
       field: "deliveryDate",

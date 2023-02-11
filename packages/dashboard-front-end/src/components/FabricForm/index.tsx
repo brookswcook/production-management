@@ -1,5 +1,6 @@
 import {
   Autocomplete,
+  Box,
   Button,
   Stack,
   TextField,
@@ -14,6 +15,7 @@ import {
   CreateFabricInput,
   useCreateFabricMutation,
   useFabricLazyQuery,
+  useFactoriesQuery,
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
 
@@ -24,6 +26,8 @@ export function CreateFabricForm({
 }): ReactElement {
   const [selectedColorType, setSelectedColorType] = useState<string>("");
   const [printFiles, setPrintFiles] = useState<File[] | null>(null);
+  const { data: { factories } = { factories: [] } } = useFactoriesQuery();
+  const [factoryId, setFactoryId] = useState<string | null>(null);
   const [newFabricMutation] = useCreateFabricMutation({
     refetchQueries: ["Fabrics"],
   });
@@ -33,10 +37,12 @@ export function CreateFabricForm({
   async function createNewFabric(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const { code, title, factoryCode, colorName, colorCode } =
-      Object.fromEntries(data.entries()) as unknown as CreateFabricInput;
+    const { code, title, colorName, colorCode } = Object.fromEntries(
+      data.entries()
+    ) as unknown as CreateFabricInput;
 
     try {
+      if (factoryId == null) return toast.error("Factory should be selected");
       const { data: fabricData } = await getFabric({
         variables: { code },
       });
@@ -49,9 +55,9 @@ export function CreateFabricForm({
         const newFabricData: CreateFabricInput = {
           code,
           title,
-          factoryCode,
           colorName,
           colorCode,
+          factoryId,
           print: null,
           type: null,
         };
@@ -86,17 +92,24 @@ export function CreateFabricForm({
         helperText="Example: Cotton organza in white rose print"
         required
       />
-      <Autocomplete
-        options={["Amy", "Kevin"]}
-        renderInput={params => (
-          <TextField {...params} name="factoryCode" label="Factory" required />
-        )}
-      />
       <TextField
         label="Fabric Code"
         name="code"
         helperText="Example: K865"
         required
+      />
+      <Autocomplete
+        onChange={(_, value) => setFactoryId(value?.id ?? null)}
+        options={factories}
+        getOptionLabel={option => option.name}
+        renderOption={(props, option) => (
+          <Box component="li" {...props}>
+            {`${option.name}`}
+          </Box>
+        )}
+        renderInput={params => (
+          <TextField {...params} name="factoryId" label="Factory" required />
+        )}
       />
       <TextField
         label="Color Name"

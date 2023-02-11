@@ -1,11 +1,8 @@
-import {
-  getModelForClass,
-  prop as Property,
-  ReturnModelType,
-} from "@typegoose/typegoose";
+import { getModelForClass, prop as Property } from "@typegoose/typegoose";
 import { ColorType, NoteType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
 import { ExpectResultModel } from "../common/expectResultModel";
+import { Company } from "../company/company.model";
 import { Note } from "../note/note.model";
 import { FabricSample } from "../sample/sample.model";
 
@@ -39,9 +36,29 @@ export class Fabric extends ExpectResultModel {
   })
   colorType?: ColorType;
 
-  @Field()
   @Property({ required: true })
-  factoryCode!: string;
+  companyId!: string;
+
+  @Field()
+  @Property({
+    ref: () => Company,
+    foreignField: "_id",
+    localField: "companyId",
+    justOne: true,
+  })
+  company!: Company;
+
+  @Property({ required: true })
+  factoryId!: string;
+
+  @Field()
+  @Property({
+    ref: () => Company,
+    foreignField: "_id",
+    localField: "factoryId",
+    justOne: true,
+  })
+  factory!: Company;
 
   @Field({ nullable: true })
   @Property()
@@ -82,30 +99,6 @@ export class Fabric extends ExpectResultModel {
     options: { sort: { _id: -1 } },
   })
   notes!: Note[];
-
-  // TODO: reuse
-  static async findByCodeOrFail(
-    this: ReturnModelType<typeof Fabric>,
-    code: string,
-    factoryCode?: string
-  ): Promise<Fabric> {
-    const query: Partial<Fabric> = { code };
-    factoryCode && Object.assign(query, { factoryCode });
-    const fabric = await this.findOne(query)
-      .populate({ path: "notes", populate: { path: "user" } })
-      .populate({
-        path: "samples",
-        populate: {
-          path: "note",
-          populate: {
-            path: "user",
-          },
-        },
-      })
-      .exec();
-    if (fabric == null) throw Error(`Fabric with given code not found`);
-    return fabric;
-  }
 }
 
 export const FabricModel = getModelForClass(Fabric);

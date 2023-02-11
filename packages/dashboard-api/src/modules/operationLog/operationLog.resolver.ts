@@ -1,4 +1,5 @@
 import { Authorized, FieldResolver, Query, Resolver, Root } from "type-graphql";
+import { TenantId } from "../user/user.decorator";
 import { OperationLog, OperationLogModel } from "./operationLog.model";
 
 @Resolver(OperationLog)
@@ -10,7 +11,10 @@ export class OperationLogResolver {
 
   @Authorized("Admin")
   @Query(() => [OperationLog])
-  operationLogs() {
-    return OperationLogModel.find().sort({ _id: -1 }).populate("user").exec();
+  operationLogs(@TenantId() companyId: string) {
+    return OperationLogModel.find({ companyId })
+      .sort({ _id: -1 })
+      .populate("user")
+      .exec();
   }
 }

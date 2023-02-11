@@ -1,5 +1,5 @@
-import { Arg, Ctx, Query, Resolver } from "type-graphql";
-import { ResolverContext } from "../../lib/graphql";
+import { Arg, Query, Resolver } from "type-graphql";
+import { TenantId } from "../user/user.decorator";
 import {
   AttributeDefinition,
   AttributeDefinitionModel,
@@ -9,14 +9,14 @@ import {
 export class AttributeDefinitionResolver {
   @Query(() => [AttributeDefinition])
   async attributeDefinitions(
-    @Ctx() { user: { companyId } }: ResolverContext
+    @TenantId() companyId: string
   ): Promise<AttributeDefinition[]> {
     return AttributeDefinitionModel.find({ companyId }).exec();
   }
 
   @Query(() => [AttributeDefinition])
   async attributeDefinition(
-    @Ctx() { user: { companyId } }: ResolverContext,
+    @TenantId() companyId: string,
     @Arg("name") name: string
   ): Promise<AttributeDefinition[]> {
     return AttributeDefinitionModel.find({ companyId, name }).exec();

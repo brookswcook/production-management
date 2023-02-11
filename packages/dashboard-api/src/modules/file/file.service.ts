@@ -5,6 +5,7 @@ import { getDownloadLink, upload } from "../../lib/s3";
 import { FileModel, File } from "./file.model";
 import { IFileUpload } from "./file.types";
 
+// TODO: add companyId
 export async function uploadFile(
   parentId: string,
   userId: string,

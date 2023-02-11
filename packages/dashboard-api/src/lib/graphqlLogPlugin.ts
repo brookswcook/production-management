@@ -21,15 +21,17 @@ export const logPlugin = {
           user == null
         )
           return;
-        const userId = user.id;
+        const { id: userId, companyId } = user;
         const isMutation = query.match(/^\w+/)?.pop() === "mutation";
         if (isMutation) {
           try {
             const variables = JSON.stringify(variablesObject, null, 2);
+            // TODO: replace with service call
             await OperationLogModel.createLogRecord({
               name,
               variables,
               userId,
+              companyId,
             });
           } catch (err) {
             logger.error(err);

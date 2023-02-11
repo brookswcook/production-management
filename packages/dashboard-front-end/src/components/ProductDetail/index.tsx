@@ -42,7 +42,7 @@ export default function ProductDetail(): ReactElement {
     dueIn,
     deliveryDate,
     stage,
-    factoryCode,
+    factory,
     techPackUploaded,
     style,
     fabric,
@@ -101,7 +101,7 @@ export default function ProductDetail(): ReactElement {
               </Grid>
               {/* <TextProperty title="Style No." value={style.code} /> */}
               <TextProperty title="Stage" value={stage} />
-              <TextProperty title="Factory" value={factoryCode} />
+              <TextProperty title="Factory" value={factory.code} />
               <Grid
                 direction={"row"}
                 justifyContent={"left"}

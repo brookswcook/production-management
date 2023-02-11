@@ -13,6 +13,7 @@ import { FabricFieldsFragment, useFabricsQuery } from "../../generated/graphql";
 import { Fragment, ReactElement } from "react";
 import { CreateFabricPopperButton } from "../FabricForm";
 import RequireRole from "../Auth/RequireRole";
+import { renderCellExpand } from "../Common/GridCellExpand";
 
 export default function FabricGrid(): ReactElement {
   const { data, loading, error } = useFabricsQuery({});
@@ -59,8 +60,12 @@ export default function FabricGrid(): ReactElement {
       field: "factoryCode",
       headerName: "Factory",
       minWidth: 50,
-      flex: 1,
+      flex: 2,
       type: "string",
+      renderCell: renderCellExpand,
+      valueGetter: ({ row }: { row: FabricFieldsFragment }) => {
+        return row.factory.name;
+      },
     },
     {
       field: "productCodes",

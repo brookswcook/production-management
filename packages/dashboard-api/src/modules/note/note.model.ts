@@ -17,6 +17,9 @@ export class Note extends ExpectResultModel implements TimeStamps {
   @Field()
   id?: string;
 
+  @Property({ required: true })
+  companyId!: string;
+
   @Field(() => String)
   @Property({ required: true })
   parentId!: string;

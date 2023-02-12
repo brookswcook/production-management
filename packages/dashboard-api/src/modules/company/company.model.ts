@@ -17,6 +17,16 @@ export class Company implements TimeStamps {
   @Field()
   id!: string;
 
+  @Property({
+    required: true,
+    default(this: Company): string {
+      if (this.parentId == null)
+        throw Error("Non root company doesn't have parentId!");
+      return this.isRoot ? this.id : this.parentId;
+    },
+  })
+  companyId!: string;
+
   @Field()
   @Property({
     required: true,

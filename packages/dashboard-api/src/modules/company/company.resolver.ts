@@ -19,8 +19,8 @@ export class CompanyResolver {
 
   @Authorized(["Admin"])
   @Query(() => [Company], { nullable: false })
-  async factories(@TenantId() parentId: string): Promise<Company[]> {
-    return CompanyModel.find({ parentId, role: "Factory" })
+  async factories(@TenantId() companyId: string): Promise<Company[]> {
+    return CompanyModel.find({ companyId, role: "Factory" })
       .populate(["users", "contacts"])
       .exec();
   }

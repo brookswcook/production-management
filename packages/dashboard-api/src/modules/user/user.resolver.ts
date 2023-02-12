@@ -6,7 +6,6 @@ import {
 import {
   Arg,
   Authorized,
-  Ctx,
   Field,
   FieldResolver,
   Mutation,
@@ -120,18 +119,18 @@ export class UserResolver {
   }
 
   @Authorized(["Admin"])
-  @Mutation(() => Boolean)
+  @Mutation(() => User)
   async deleteUser(
     @TenantId() companyId: string,
     @Arg("data") { email }: DeleteUserInput
-  ): Promise<boolean> {
+  ): Promise<User> {
     try {
-      await UserModel.findOneAndUpdateOrFail(
+      const user = await UserModel.findOneAndUpdateOrFail(
         { companyId, email },
         { deleted: true }
       );
       await deleteFirebaseUser(email);
-      return true;
+      return user;
     } catch (error) {
       throw new UserInputError((error as Error).message);
     }

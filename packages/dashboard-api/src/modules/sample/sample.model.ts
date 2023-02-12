@@ -52,10 +52,11 @@ export class Sample {
 
   static getSamplesByParentCode(
     this: ReturnModelType<typeof Sample>,
+    companyId: string,
     parentCode: string,
     params: Partial<Omit<Sample, "parentCode">> = {}
   ): Promise<Sample[]> {
-    return this.find({ parentCode, ...params } as Sample).exec();
+    return this.find({ companyId, parentCode, ...params } as Sample).exec();
   }
 
   static async findOneSampleAndUpdateOrFail(
@@ -74,6 +75,7 @@ export class Sample {
 
   static async sendSample(this: ReturnModelType<typeof Sample>, data: Sample) {
     const unapprovedSample = await this.getSamplesByParentCode(
+      data.companyId,
       data.parentCode,
       {
         delivered: false,
@@ -86,11 +88,12 @@ export class Sample {
 
   static async markAsDelivered(
     this: ReturnModelType<typeof Sample>,
+    companyId: string,
     parentCode: string,
     sku: string
   ) {
     const sample = await this.findOneSampleAndUpdateOrFail(
-      { parentCode, sku },
+      { companyId, parentCode, sku },
       { delivered: true }
     );
     return sample;
@@ -98,11 +101,12 @@ export class Sample {
 
   static async rejectSample(
     this: ReturnModelType<typeof Sample>,
+    companyId: string,
     parentCode: string,
     sku: string
   ) {
     const sample = await this.findOneSampleAndUpdateOrFail(
-      { parentCode, sku },
+      { companyId, parentCode, sku },
       { approved: false }
     );
     return sample;
@@ -110,11 +114,12 @@ export class Sample {
 
   static async approveSample(
     this: ReturnModelType<typeof Sample>,
+    companyId: string,
     parentCode: string,
     sku: string
   ) {
     const sample = await this.findOneSampleAndUpdateOrFail(
-      { parentCode, sku },
+      { companyId, parentCode, sku },
       { approved: true }
     );
     return sample;

@@ -16,6 +16,10 @@ export class Sample {
   id?: string;
 
   @Field()
+  @Property({ required: true })
+  companyId!: string;
+
+  @Field()
   @Property({ required: true, index: true })
   parentCode!: string;
 

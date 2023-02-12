@@ -1,4 +1,12 @@
-import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
+import { UserActionLog } from "../../lib/userActionLogMiddleware";
 import { TenantId } from "../user/user.decorator";
 import { UserService } from "../user/user.service";
 import { CreateCompanyInput } from "./company.input";
@@ -27,6 +35,7 @@ export class CompanyResolver {
 
   @Authorized(["Admin"])
   @Mutation(() => Company)
+  @UseMiddleware(UserActionLog<Company>("Company is created"))
   async createCompany(@Arg("data") data: CreateCompanyInput): Promise<Company> {
     const companyData = { ...data, role: "Owner" };
     return new CompanyModel(companyData).save();
@@ -34,6 +43,7 @@ export class CompanyResolver {
 
   @Authorized(["Admin"])
   @Mutation(() => Company)
+  @UseMiddleware(UserActionLog<Company>("Factory is created"))
   async createFactory(
     @Arg("data") data: CreateCompanyInput,
     @TenantId() parentId: string

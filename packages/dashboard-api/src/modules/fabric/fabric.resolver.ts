@@ -8,8 +8,10 @@ import {
   Query,
   Resolver,
   Root,
+  UseMiddleware,
 } from "type-graphql";
 import { ResolverContext } from "../../lib/graphql";
+import { UserActionLog } from "../../lib/userActionLogMiddleware";
 import { getDownloadFileLink, uploadFile } from "../file/file.service";
 import { ProductService } from "../product/product.service";
 import { TenantId } from "../user/user.decorator";
@@ -68,6 +70,7 @@ export class FabricResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
+  @UseMiddleware(UserActionLog<Fabric>("Fabric is created"))
   async createFabric(
     @TenantId() companyId: string,
     @Arg("data") { print, ...data }: CreateFabricInput,
@@ -100,6 +103,7 @@ export class FabricResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
+  @UseMiddleware(UserActionLog<Fabric>("Print is uploaded"))
   async uploadPrint(
     @TenantId() companyId: string,
     @Arg("data") { code, print: { file, fileSize } }: UploadPrintInput,

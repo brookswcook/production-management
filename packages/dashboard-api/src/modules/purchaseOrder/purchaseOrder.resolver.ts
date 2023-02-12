@@ -1,5 +1,14 @@
 import { UserRole } from "dashboard-core";
-import { Arg, Authorized, Int, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
+import { UserActionLog } from "../../lib/userActionLogMiddleware";
 import { TenantId } from "../user/user.decorator";
 import { CreatePurchaseOrderInput } from "./purchaseOrder.input";
 import { PurchaseOrder, PurchaseOrderModel } from "./purchaseOrder.model";
@@ -59,6 +68,7 @@ export class PurchaseOrderResolver {
 
   @Authorized<UserRole>(["Admin", "VChapman"])
   @Mutation(() => PurchaseOrder)
+  @UseMiddleware(UserActionLog<PurchaseOrder>("Purchase order is created"))
   async createPurchaseOrder(
     @Arg("data") data: CreatePurchaseOrderInput,
     @TenantId() companyId: string
@@ -73,6 +83,9 @@ export class PurchaseOrderResolver {
 
   @Authorized()
   @Mutation(() => PurchaseOrder)
+  @UseMiddleware(
+    UserActionLog<PurchaseOrder>("Purchase order status is updated")
+  )
   async pushPurchaseOrderToNextStage(
     @Arg("uid", () => Int) uid: number,
     @TenantId() companyId: string

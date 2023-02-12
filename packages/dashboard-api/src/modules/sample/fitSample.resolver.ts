@@ -1,13 +1,21 @@
-import { Arg, Authorized, Mutation, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Mutation,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 import { FitSample, FitSampleModel } from "./sample.model";
 import { SendSampleInput, UniqueSampleInput } from "./sample.input";
 import { UserRole } from "dashboard-core";
+import { UserActionLog } from "../../lib/userActionLogMiddleware";
 import { TenantId } from "../user/user.decorator";
 
 @Resolver(FitSample)
 export class FitSampleResolver {
-  @Authorized(["Admin", "Factory:.+"] as UserRole[])
+  @Authorized(["Admin", "Factory"] as UserRole[])
   @Mutation(() => FitSample)
+  @UseMiddleware(UserActionLog<FitSample>("Fit sample is sent"))
   async sendFitSample(
     @TenantId() companyId: string,
     @Arg("data") { ...data }: SendSampleInput
@@ -15,8 +23,9 @@ export class FitSampleResolver {
     return FitSampleModel.sendSample({ ...data, companyId });
   }
 
-  @Authorized(["Admin", "Factory:.+"] as UserRole[])
+  @Authorized(["Admin", "Factory"] as UserRole[])
   @Mutation(() => FitSample)
+  @UseMiddleware(UserActionLog<FitSample>("Fit sample is delivered"))
   async markFitSampleAsDelivered(
     @TenantId() companyId: string,
     @Arg("data") { parentCode, sku }: UniqueSampleInput
@@ -26,6 +35,7 @@ export class FitSampleResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FitSample)
+  @UseMiddleware(UserActionLog<FitSample>("Fit sample is rejected"))
   async rejectFitSample(
     @TenantId() companyId: string,
     @Arg("data") { parentCode, sku }: UniqueSampleInput
@@ -35,6 +45,7 @@ export class FitSampleResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FitSample)
+  @UseMiddleware(UserActionLog<FitSample>("Fit sample is approved"))
   async approveFitSample(
     @TenantId() companyId: string,
     @Arg("data") { parentCode, sku }: UniqueSampleInput

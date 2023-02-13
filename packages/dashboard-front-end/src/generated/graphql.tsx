@@ -21,6 +21,7 @@ export type Scalars = {
 
 export type ActionLog = {
   __typename?: 'ActionLog';
+  createdAt: Maybe<Scalars['DateTime']>;
   entityId: Scalars['String'];
   entityType: Scalars['String'];
   id: Scalars['String'];
@@ -477,6 +478,7 @@ export type PurchaseOrder = {
 
 export type Query = {
   __typename?: 'Query';
+  actionLogs: Array<ActionLog>;
   attributeDefinition: Array<AttributeDefinition>;
   attributeDefinitions: Array<AttributeDefinition>;
   companies: Array<Company>;

@@ -15,7 +15,6 @@ export class Sample {
   @Field()
   id?: string;
 
-  @Field()
   @Property({ required: true })
   companyId!: string;
 

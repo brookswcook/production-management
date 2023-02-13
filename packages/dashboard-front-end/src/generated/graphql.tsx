@@ -19,6 +19,16 @@ export type Scalars = {
   Upload: any;
 };
 
+export type ActionLog = {
+  __typename?: 'ActionLog';
+  entityId: Scalars['String'];
+  entityType: Scalars['String'];
+  id: Scalars['String'];
+  title: Scalars['String'];
+  user: Maybe<User>;
+  userId: Scalars['String'];
+};
+
 export type Attribute = {
   __typename?: 'Attribute';
   key: Scalars['String'];
@@ -120,6 +130,7 @@ export type Fabric = {
   colorCode: Maybe<Scalars['String']>;
   colorName: Scalars['String'];
   colorType: Scalars['String'];
+  company: Company;
   factory: Company;
   id: Scalars['String'];
   notes: Array<Note>;
@@ -225,7 +236,7 @@ export type Mutation = {
   createPurchaseOrder: PurchaseOrder;
   createStyle: Style;
   createUser: User;
-  deleteUser: Scalars['Boolean'];
+  deleteUser: User;
   login: LoginResult;
   markFabricSampleAsDelivered: FabricSample;
   markFitSampleAsDelivered: FitSample;

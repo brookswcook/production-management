@@ -16,6 +16,7 @@ import { NoteType } from "dashboard-core";
 import { Company } from "../company/company.model";
 import { ExpectResultModel } from "../common/expectResultModel";
 
+// TODO: review all indexes to keep in mind companyId
 @index<Product>({ styleCode: 1, fabricCode: 1 }, { unique: true })
 @ObjectType()
 export class Product extends ExpectResultModel {

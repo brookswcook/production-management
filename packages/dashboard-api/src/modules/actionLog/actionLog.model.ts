@@ -1,5 +1,6 @@
 import {
   getModelForClass,
+  index,
   ModelOptions,
   prop as Property,
 } from "@typegoose/typegoose";
@@ -7,6 +8,7 @@ import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
 import { User } from "../user/user.model";
 
+@index<ActionLog>({ companyId: 1, entityType: 1, entityId: 1 })
 @ModelOptions({
   schemaOptions: { collection: "action_logs", timestamps: true },
 })

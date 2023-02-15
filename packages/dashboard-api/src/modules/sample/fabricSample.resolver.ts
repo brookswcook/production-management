@@ -15,7 +15,7 @@ import { TenantId } from "../user/user.decorator";
 export class FabricSampleResolver {
   @Authorized(["Admin", "Factory"] as UserRole[])
   @Mutation(() => FabricSample)
-  @UseMiddleware(UserActionLog<FabricSample>("Fabric sample is sent"))
+  @UseMiddleware(UserActionLog<FabricSample>("New fabric sample is sent"))
   async sendFabricSample(
     @TenantId() companyId: string,
     @Arg("data") { ...data }: SendSampleInput

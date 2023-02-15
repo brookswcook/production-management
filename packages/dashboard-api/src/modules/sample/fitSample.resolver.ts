@@ -15,7 +15,7 @@ import { TenantId } from "../user/user.decorator";
 export class FitSampleResolver {
   @Authorized(["Admin", "Factory"] as UserRole[])
   @Mutation(() => FitSample)
-  @UseMiddleware(UserActionLog<FitSample>("Fit sample is sent"))
+  @UseMiddleware(UserActionLog<FitSample>("New fit sample is sent"))
   async sendFitSample(
     @TenantId() companyId: string,
     @Arg("data") { ...data }: SendSampleInput

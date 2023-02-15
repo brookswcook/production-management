@@ -42,8 +42,8 @@ class DashboardApolloServer extends Server {
       plugins: [
         ApolloServerPluginLandingPageGraphQLPlayground(),
         ApolloServerPluginDrainHttpServer({ httpServer: this.httpServer }),
-        logPlugin,
         graphqlLoaderPlugin(`${__dirname}/modules/**/*.loader.{js,ts}`),
+        logPlugin,
       ],
       introspection: true,
       schema,

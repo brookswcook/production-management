@@ -23,6 +23,7 @@ export function UserActionLog<T extends { companyId: string }>(
     const entityId = String(document.id);
     const { companyId } = document;
     void new ActionLogModel({
+      // replace with code and do mapping code/title since title potentionally might be changed
       title: logTitle,
       companyId,
       userId,

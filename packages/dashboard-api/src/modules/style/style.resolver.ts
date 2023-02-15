@@ -75,7 +75,7 @@ export class StyleResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Style)
-  @UseMiddleware(UserActionLog<Style>("Tech pack is uploaded"))
+  @UseMiddleware(UserActionLog<Style>("New tech pack is uploaded"))
   async uploadTechPack(
     @TenantId() companyId: string,
     @Arg("data") { code, techPack }: UploadTechPackInput,

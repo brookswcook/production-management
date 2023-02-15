@@ -14,7 +14,7 @@ import mongoose from "mongoose";
 import { authChecker } from "./lib/auth";
 import { graphqlUploadExpress } from "graphql-upload";
 import { logPlugin } from "./lib/graphqlLogPlugin";
-import { TypegooseMiddleware } from "./lib/typegoose-middleware";
+import { TypegooseMiddleware } from "./lib/typegooseMiddleware";
 import { graphqlLoaderPlugin } from "./lib/graphqlLoaderPlugin";
 
 class DashboardApolloServer extends Server {
@@ -42,8 +42,8 @@ class DashboardApolloServer extends Server {
       plugins: [
         ApolloServerPluginLandingPageGraphQLPlayground(),
         ApolloServerPluginDrainHttpServer({ httpServer: this.httpServer }),
-        logPlugin,
         graphqlLoaderPlugin(`${__dirname}/modules/**/*.loader.{js,ts}`),
+        logPlugin,
       ],
       introspection: true,
       schema,

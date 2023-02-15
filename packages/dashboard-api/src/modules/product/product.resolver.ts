@@ -1,10 +1,18 @@
-import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 import { CreateProductInput } from "./product.input";
 import { Product, ProductModel } from "./product.model";
 import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
 import { StartProductionInput } from "../productProduction/productProduction.input";
 import { UserRole } from "dashboard-core";
 import { TenantId } from "../user/user.decorator";
+import { UserActionLog } from "../../lib/userActionLogMiddleware";
 
 @Resolver(Product)
 export class ProductResolver {
@@ -51,6 +59,7 @@ export class ProductResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Product)
+  @UseMiddleware(UserActionLog<Product>("Product is created"))
   async createProduct(
     @Arg("data") data: CreateProductInput,
     @TenantId() companyId: string
@@ -79,6 +88,7 @@ export class ProductResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Product)
+  @UseMiddleware(UserActionLog<Product>("Product fabric production is started"))
   async startFabricProduction(
     @Arg("data") { productName }: StartFabricProductionInput
   ): Promise<Product> {
@@ -91,6 +101,7 @@ export class ProductResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Product)
+  @UseMiddleware(UserActionLog<Product>("Product production is started"))
   async startProduction(
     @Arg("data") { productName }: StartProductionInput
   ): Promise<Product> {

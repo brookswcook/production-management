@@ -21,6 +21,7 @@ import SampleGrid from "../SampleGrid";
 import { DetailViewSection } from "../Common/DetailViewSection";
 import { TextProperty } from "../Properties";
 import { ObjectProperty } from "../Properties/ObjectProperty";
+import ActionLogList from "../ActionLog/ListView";
 
 export default function ProductDetail(): ReactElement {
   const { code = "" } = useParams();
@@ -150,6 +151,16 @@ export default function ProductDetail(): ReactElement {
           notes={notes as Note[]}
           type={"productNote" as NoteType}
           parentId={id}
+        />
+      </DetailViewSection>
+      <DetailViewSection headerTitle="Log records:">
+        <ActionLogList
+          entityIds={[
+            id,
+            ...notes.map(({ id }) => id),
+            ...fitSamples.map(({ id }) => id),
+          ]}
+          entityTypes={["Product", "Note", "FitSample"]}
         />
       </DetailViewSection>
     </Container>

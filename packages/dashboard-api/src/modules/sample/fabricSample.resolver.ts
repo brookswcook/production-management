@@ -1,39 +1,55 @@
-import { Arg, Authorized, Mutation, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Mutation,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 import { FabricSample, FabricSampleModel } from "./sample.model";
 import { SendSampleInput, UniqueSampleInput } from "./sample.input";
 import { UserRole } from "dashboard-core";
+import { UserActionLog } from "../../lib/userActionLogMiddleware";
+import { TenantId } from "../user/user.decorator";
 
 @Resolver(FabricSample)
 export class FabricSampleResolver {
-  @Authorized(["Admin", "Factory:.+"] as UserRole[])
+  @Authorized(["Admin", "Factory"] as UserRole[])
   @Mutation(() => FabricSample)
+  @UseMiddleware(UserActionLog<FabricSample>("New fabric sample is sent"))
   async sendFabricSample(
+    @TenantId() companyId: string,
     @Arg("data") { ...data }: SendSampleInput
   ): Promise<FabricSample> {
-    return FabricSampleModel.sendSample(data);
+    return FabricSampleModel.sendSample({ ...data, companyId });
   }
 
-  @Authorized(["Admin", "Factory:.+"] as UserRole[])
+  @Authorized(["Admin", "Factory"] as UserRole[])
   @Mutation(() => FabricSample)
+  @UseMiddleware(UserActionLog<FabricSample>("Fabric sample is delivered"))
   async markFabricSampleAsDelivered(
+    @TenantId() companyId: string,
     @Arg("data") { parentCode, sku }: UniqueSampleInput
   ): Promise<FabricSample> {
-    return FabricSampleModel.markAsDelivered(parentCode, sku);
+    return FabricSampleModel.markAsDelivered(companyId, parentCode, sku);
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FabricSample)
+  @UseMiddleware(UserActionLog<FabricSample>("Fabric sample is rejected"))
   async rejectFabricSample(
+    @TenantId() companyId: string,
     @Arg("data") { parentCode, sku }: UniqueSampleInput
   ): Promise<FabricSample> {
-    return FabricSampleModel.rejectSample(parentCode, sku);
+    return FabricSampleModel.rejectSample(companyId, parentCode, sku);
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FabricSample)
+  @UseMiddleware(UserActionLog<FabricSample>("Fabric sample is approved"))
   async approveFabricSample(
+    @TenantId() companyId: string,
     @Arg("data") { parentCode, sku }: UniqueSampleInput
   ): Promise<FabricSample> {
-    return FabricSampleModel.approveSample(parentCode, sku);
+    return FabricSampleModel.approveSample(companyId, parentCode, sku);
   }
 }

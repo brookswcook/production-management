@@ -1,5 +1,13 @@
 import { UserRole } from "dashboard-core";
-import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
+import { UserActionLog } from "../../lib/userActionLogMiddleware";
 import { TenantId } from "../user/user.decorator";
 import { CreateOrderItemInput, GetOrderItemsInput } from "./orderItem.input";
 import { OrderItem, OrderItemModel } from "./orderItem.model";
@@ -22,6 +30,7 @@ export class OrderItemResolver {
 
   @Authorized<UserRole>(["Admin", "VChapman"])
   @Mutation(() => OrderItem)
+  @UseMiddleware(UserActionLog<OrderItem>("Order item is created"))
   async createOrderItem(
     @TenantId() companyId: string,
     @Arg("data") data: CreateOrderItemInput

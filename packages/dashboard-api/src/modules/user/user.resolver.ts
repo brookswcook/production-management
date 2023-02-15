@@ -6,7 +6,6 @@ import {
 import {
   Arg,
   Authorized,
-  Ctx,
   Field,
   FieldResolver,
   Mutation,
@@ -14,6 +13,7 @@ import {
   Query,
   Resolver,
   Root,
+  UseMiddleware,
 } from "type-graphql";
 import {
   CreateUserInput,
@@ -34,6 +34,7 @@ import {
 } from "../../lib/firebase";
 import { TenantId } from "./user.decorator";
 import { CompanyService } from "../company/company.service";
+import { UserActionLog } from "../../lib/userActionLogMiddleware";
 
 @Resolver(User)
 export class UserResolver {
@@ -61,6 +62,7 @@ export class UserResolver {
 
   @Authorized(["Admin"])
   @Mutation(() => User)
+  @UseMiddleware(UserActionLog<User>("User is created"))
   async createUser(
     @TenantId() adminCompanyId: string,
     @Arg("data")
@@ -96,6 +98,7 @@ export class UserResolver {
 
   @Authorized(["Admin"])
   @Mutation(() => User)
+  @UseMiddleware(UserActionLog<User>("User is updated"))
   async updateUser(
     @TenantId() companyId: string,
     @Arg("data") { email, ...props }: UpdateUserInput
@@ -120,18 +123,19 @@ export class UserResolver {
   }
 
   @Authorized(["Admin"])
-  @Mutation(() => Boolean)
+  @Mutation(() => User)
+  @UseMiddleware(UserActionLog<User>("User is deleted"))
   async deleteUser(
     @TenantId() companyId: string,
     @Arg("data") { email }: DeleteUserInput
-  ): Promise<boolean> {
+  ): Promise<User> {
     try {
-      await UserModel.findOneAndUpdateOrFail(
+      const user = await UserModel.findOneAndUpdateOrFail(
         { companyId, email },
         { deleted: true }
       );
       await deleteFirebaseUser(email);
-      return true;
+      return user;
     } catch (error) {
       throw new UserInputError((error as Error).message);
     }

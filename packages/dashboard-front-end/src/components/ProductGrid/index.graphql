@@ -21,6 +21,7 @@ fragment sampleFields on Sample {
 }
 
 fragment fitSampleFields on FitSample {
+  id
   sku
   approved
   trackNumber
@@ -31,6 +32,7 @@ fragment fitSampleFields on FitSample {
 }
 
 fragment fabricSampleFields on FabricSample {
+  id
   sku
   approved
   trackNumber

@@ -8,19 +8,17 @@ import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
 import { User } from "../user/user.model";
 
-@index<OperationLog>({ variables: "text" })
-@ModelOptions({ schemaOptions: { timestamps: true } })
+@index<ActionLog>({ companyId: 1, entityType: 1, entityId: 1 })
+@ModelOptions({
+  schemaOptions: { collection: "action_logs", timestamps: true },
+})
 @ObjectType()
-export class OperationLog extends TimeStamps {
+export class ActionLog extends TimeStamps {
   @Field()
-  id?: string;
+  id!: string;
 
   @Property({ required: true })
   companyId!: string;
-
-  @Field()
-  @Property({ required: true })
-  name!: string;
 
   @Field()
   @Property({ required: true })
@@ -28,7 +26,15 @@ export class OperationLog extends TimeStamps {
 
   @Field()
   @Property({ required: true })
-  variables!: string;
+  entityId!: string;
+
+  @Field()
+  @Property({ required: true })
+  title!: string;
+
+  @Field()
+  @Property({ required: true })
+  entityType!: string;
 
   @Field(() => User, { nullable: true })
   @Property({
@@ -38,10 +44,6 @@ export class OperationLog extends TimeStamps {
     justOne: true,
   })
   user!: User;
-
-  static createLogRecord(data: Omit<OperationLog, "user">) {
-    return new OperationLogModel(data).save();
-  }
 }
 
-export const OperationLogModel = getModelForClass(OperationLog);
+export const ActionLogModel = getModelForClass(ActionLog);

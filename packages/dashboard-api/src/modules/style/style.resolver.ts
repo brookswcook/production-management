@@ -7,6 +7,7 @@ import {
   Query,
   Resolver,
   Root,
+  UseMiddleware,
 } from "type-graphql";
 import { CreateStyleInput, UploadTechPackInput } from "./style.input";
 import { Style, StyleModel } from "./style.model";
@@ -16,6 +17,7 @@ import { ProductService } from "../product/product.service";
 import { Fabric } from "../fabric/fabric.model";
 import { ResolverContext } from "../../lib/graphql";
 import { TenantId } from "../user/user.decorator";
+import { UserActionLog } from "../../lib/userActionLogMiddleware";
 
 @Resolver(Style)
 export class StyleResolver {
@@ -52,6 +54,7 @@ export class StyleResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Style)
+  @UseMiddleware(UserActionLog<Style>("Style is created"))
   async createStyle(
     @TenantId() companyId: string,
     @Arg("data") { code, name, techPack }: CreateStyleInput,
@@ -72,6 +75,7 @@ export class StyleResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Style)
+  @UseMiddleware(UserActionLog<Style>("New tech pack is uploaded"))
   async uploadTechPack(
     @TenantId() companyId: string,
     @Arg("data") { code, techPack }: UploadTechPackInput,

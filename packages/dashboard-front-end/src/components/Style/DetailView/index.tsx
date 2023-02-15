@@ -2,6 +2,7 @@ import { Box, Grid, LinearProgress, Stack } from "@mui/material";
 import { Fragment, ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { StyleFieldsFragment, useStyleQuery } from "../../../generated/graphql";
+import ActionLogList from "../../ActionLog/ListView";
 import RequireRole from "../../Auth/RequireRole";
 import { DetailView } from "../../Common/DetailView";
 import { DetailViewHeaderTitle } from "../../Common/DetailViewHeaderTitle";
@@ -81,6 +82,9 @@ export function StyleDetail(): ReactElement {
     <DetailView headerSections={<StyleHeaderSection style={data.style} />}>
       <DetailViewSection headerTitle="Tech pack:">
         <FileGrid fileType="tech-pack" parentID={id} files={techPacks} />
+      </DetailViewSection>
+      <DetailViewSection headerTitle="Log records:">
+        <ActionLogList entityIds={[id]} entityTypes={["Style"]} />
       </DetailViewSection>
     </DetailView>
   );

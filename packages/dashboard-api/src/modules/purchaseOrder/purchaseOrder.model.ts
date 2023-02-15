@@ -15,6 +15,9 @@ import { PurchaseOrderStatus, purchaseOrderStatusSet } from "dashboard-core";
 })
 @ObjectType()
 export class PurchaseOrder extends ExpectResultModel implements TimeStamps {
+  @Field()
+  id!: string;
+
   @Field(() => Int)
   @Property({
     required: true,

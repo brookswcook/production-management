@@ -18,6 +18,7 @@ import {
   useFabricQuery,
   usePrintLinkLazyQuery,
 } from "../../generated/graphql";
+import ActionLogList from "../ActionLog/ListView";
 import { DetailViewSection } from "../Common/DetailViewSection";
 import NoteGrid from "../NoteGrid";
 import { BooleanProperty, TextProperty } from "../Properties";
@@ -165,6 +166,16 @@ export function FabricDetail(): ReactElement {
           notes={notes as Note[]}
           type={"fabricNote" as NoteType}
           parentId={id}
+        />
+      </DetailViewSection>
+      <DetailViewSection headerTitle="Log records:">
+        <ActionLogList
+          entityIds={[
+            id,
+            ...notes.map(({ id }) => id),
+            ...samples.map(({ id }) => id),
+          ]}
+          entityTypes={["Fabric", "Note", "FabricSample"]}
         />
       </DetailViewSection>
     </Container>

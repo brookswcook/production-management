@@ -18,7 +18,7 @@ import { Note, NoteModel } from "./note.model";
 export class NoteResolver {
   @Authorized()
   @Mutation(() => Note)
-  @UseMiddleware(UserActionLog<Note>("Note is created"))
+  @UseMiddleware(UserActionLog<Note>("New note is added"))
   async createNote(
     @TenantId() companyId: string,
     @Arg("data") data: CreateNoteInput,

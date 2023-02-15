@@ -619,6 +619,15 @@ export type UserContactDetails = {
   phone: Maybe<Scalars['String']>;
 };
 
+export type ActionLogsQueryVariables = Exact<{
+  data: InputMaybe<GetActionLogsInput>;
+}>;
+
+
+export type ActionLogsQuery = { __typename?: 'Query', actionLogs: Array<{ __typename?: 'ActionLog', id: string, title: string, entityId: string, entityType: string, createdAt: string, user: { __typename?: 'User', firstName: string } | null }> };
+
+export type ActionLogListFieldsFragment = { __typename?: 'ActionLog', id: string, title: string, entityId: string, entityType: string, createdAt: string, user: { __typename?: 'User', firstName: string } | null };
+
 export type LoginMutationVariables = Exact<{
   data: LoginInput;
 }>;

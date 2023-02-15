@@ -1,0 +1,16 @@
+query ActionLogs($data: GetActionLogsInput) {
+  actionLogs(data: $data) {
+    ...ActionLogListFields
+  }
+}
+
+fragment ActionLogListFields on ActionLog {
+  id
+  title
+  user {
+    firstName
+  }
+  entityId
+  entityType
+  createdAt
+}

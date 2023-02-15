@@ -12,9 +12,9 @@ import { ActionLog, ActionLogModel } from "./actionLog.model";
 
 @Resolver(ActionLog)
 export class ActionLogResolver {
-  @FieldResolver(() => Date, { nullable: true })
-  createdAt(@Root() opLog: ActionLog) {
-    return opLog.createdAt;
+  @FieldResolver(() => Date)
+  createdAt(@Root() { createdAt }: ActionLog) {
+    return createdAt;
   }
 
   @Authorized("Admin")

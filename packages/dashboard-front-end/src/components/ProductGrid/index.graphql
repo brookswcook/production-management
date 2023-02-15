@@ -21,6 +21,7 @@ fragment sampleFields on Sample {
 }
 
 fragment fitSampleFields on FitSample {
+  id
   sku
   approved
   trackNumber

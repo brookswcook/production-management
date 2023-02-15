@@ -474,6 +474,7 @@ export type PurchaseOrder = {
   createdAt: Scalars['DateTime'];
   expectedDeliveryDate: Scalars['DateTime'];
   factory: Company;
+  id: Scalars['String'];
   items: Array<OrderItem>;
   nextStatus: Maybe<Scalars['String']>;
   status: Scalars['String'];
@@ -753,27 +754,27 @@ export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Prod
 export type PurchaseOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PurchaseOrdersQuery = { __typename?: 'Query', purchaseOrders: Array<{ __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } }> };
+export type PurchaseOrdersQuery = { __typename?: 'Query', purchaseOrders: Array<{ __typename?: 'PurchaseOrder', id: string, uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } }> };
 
 export type PurchaseOrderQueryVariables = Exact<{
   uid: Scalars['Int'];
 }>;
 
 
-export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } } };
+export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder: { __typename?: 'PurchaseOrder', id: string, uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, items: Array<{ __typename?: 'OrderItem', id: string }> } };
 
 export type CreatePurchaseOrderMutationVariables = Exact<{
   data: CreatePurchaseOrderInput;
 }>;
 
 
-export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null } };
+export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', id: string, uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null } };
 
-export type PurchaseOrderDetailFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> } };
+export type PurchaseOrderDetailFieldsFragment = { __typename?: 'PurchaseOrder', id: string, uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, items: Array<{ __typename?: 'OrderItem', id: string }> };
 
-export type PurchaseOrderListFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } };
+export type PurchaseOrderListFieldsFragment = { __typename?: 'PurchaseOrder', id: string, uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } };
 
-export type PurchaseOrderScalarFieldsFragment = { __typename?: 'PurchaseOrder', uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null };
+export type PurchaseOrderScalarFieldsFragment = { __typename?: 'PurchaseOrder', id: string, uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null };
 
 export type AttributeDefinitionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1111,6 +1112,7 @@ ${FitSampleFieldsFragmentDoc}
 ${NoteFieldsFragmentDoc}`;
 export const PurchaseOrderScalarFieldsFragmentDoc = gql`
     fragment PurchaseOrderScalarFields on PurchaseOrder {
+  id
   uid
   createdAt
   expectedDeliveryDate
@@ -1138,6 +1140,9 @@ export const PurchaseOrderDetailFieldsFragmentDoc = gql`
       email
       phone
     }
+  }
+  items {
+    id
   }
 }
     ${PurchaseOrderScalarFieldsFragmentDoc}`;

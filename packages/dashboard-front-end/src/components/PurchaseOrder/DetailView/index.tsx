@@ -6,6 +6,7 @@ import {
   usePurchaseOrderQuery,
   usePushPurchaseOrderToNextStageMutation,
 } from "../../../generated/graphql";
+import ActionLogList from "../../ActionLog/ListView";
 import { DetailView } from "../../Common/DetailView";
 import { DetailViewHeaderTitle } from "../../Common/DetailViewHeaderTitle";
 import { DetailViewSection } from "../../Common/DetailViewSection";
@@ -131,6 +132,15 @@ export function PurchaseOrderDetail(): ReactElement {
         <OrderItemList
           orderUid={Number(uid)}
           addActionDisabled={data.purchaseOrder.status !== "draft"}
+        />
+      </DetailViewSection>
+      <DetailViewSection headerTitle="Log records:">
+        <ActionLogList
+          entityIds={[
+            data.purchaseOrder.id,
+            ...data.purchaseOrder.items.map(({ id }) => id),
+          ]}
+          entityTypes={["PurchaseOrder", "OrderItem"]}
         />
       </DetailViewSection>
     </DetailView>

@@ -36,6 +36,9 @@ fragment PurchaseOrderDetailFields on PurchaseOrder {
       phone
     }
   }
+  items {
+    id
+  }
 }
 
 fragment PurchaseOrderListFields on PurchaseOrder {
@@ -49,6 +52,7 @@ fragment PurchaseOrderListFields on PurchaseOrder {
 }
 
 fragment PurchaseOrderScalarFields on PurchaseOrder {
+  id
   uid
   createdAt
   expectedDeliveryDate

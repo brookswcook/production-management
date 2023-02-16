@@ -47,7 +47,7 @@ export default function SampleGrid({
   samples: Omit<Sample, "typename">[];
 }): ReactElement {
   const refetchPolicy = {
-    refetchQueries: ["Fabric"],
+    refetchQueries: ["Fabrics", "ActionLogs", "Products", "Fabric", "Product"],
   };
   const [selectedGridItems, setSelectedGridItems] =
     useState<GridSelectionModel>([]);

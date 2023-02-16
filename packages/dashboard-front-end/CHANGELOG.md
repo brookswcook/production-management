@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.3.0...dashboard-front-end@1.4.0) (2023-02-16)
+
+
+### Bug Fixes
+
+* update graphql schema ([1a2f6fa](https://github.com/brookswcook/production-management/commit/1a2f6fa537bc070fbe239b8524cd55344a93b357))
+* update graphql schema ([a12da77](https://github.com/brookswcook/production-management/commit/a12da77ed5e4400c41785ddc8c736f3d0f300dcd))
+
+
+### Features
+
+* action log list view ([7b98819](https://github.com/brookswcook/production-management/commit/7b98819a155912e28c62bd08fca65dff3f0205bc))
+* add action log to fabric detail view ([ea596d6](https://github.com/brookswcook/production-management/commit/ea596d69d7a6cb9bdabb5b970c01cfab0ae28229))
+* add action log to product detail view ([4bf53b4](https://github.com/brookswcook/production-management/commit/4bf53b4af05a8072ccafb05b6cbd712e38884689))
+* add action log to purchase order detail view ([6b6056c](https://github.com/brookswcook/production-management/commit/6b6056ceccf7dcf48093eff0317b07ef540728d5))
+* add action log to style detail view ([1b9bc37](https://github.com/brookswcook/production-management/commit/1b9bc370f79998af22a092dd0c4ec3e8336557ef))
+
+
+
+
+
 # [1.3.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.2.0...dashboard-front-end@1.3.0) (2023-02-11)
 
 

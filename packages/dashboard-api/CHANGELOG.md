@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.3.0...dashboard-api@1.4.0) (2023-02-16)
+
+
+### Bug Fixes
+
+* add a note about log title ([374d6be](https://github.com/brookswcook/production-management/commit/374d6be6283e57cd54604d8e6bfa3f625d8f63ce))
+* add an index to increase performance of getting action logs ([cb1b669](https://github.com/brookswcook/production-management/commit/cb1b669dc885016eb02d44e2302cee146aceb423))
+* add companyId to sample schema ([0d9732c](https://github.com/brookswcook/production-management/commit/0d9732cd8617dcd7d1d09b5de8c65f6f577effb0))
+* add id to graphql schema of purchase order ([71f2974](https://github.com/brookswcook/production-management/commit/71f2974cd3ed716acea2fd9b0518412376d7393c))
+* add text index to oplog variables ([3438be4](https://github.com/brookswcook/production-management/commit/3438be4af7812c33b5c8ee0d5ed15f7e8f5d60f8))
+* do not expose company id of sample ([e71b004](https://github.com/brookswcook/production-management/commit/e71b00410d905ab45c910c97a8efd03f40a1a1a0))
+* rearrange plugin order ([956219e](https://github.com/brookswcook/production-management/commit/956219ef5c0f891e3d55e7f8da7e42302a3b8542))
+* rename typegoose middleware ([329a59d](https://github.com/brookswcook/production-management/commit/329a59d3955cc948e2c221ec50461cf2be59720f))
+* **samples:** support multitenancy ([b352373](https://github.com/brookswcook/production-management/commit/b35237336c1f6bf206834fa8cc8c550d0764aec2))
+* **tenantIdDecorator:** simlify an id obtaining ([613da31](https://github.com/brookswcook/production-management/commit/613da317010b4efaa6d12e45bdd7af02377f1f9a))
+* update sample logs title ([ecf5aec](https://github.com/brookswcook/production-management/commit/ecf5aec8c9c644f3a1b2e85c4e276a8877097a4a))
+* update tech pack creation title ([09c7722](https://github.com/brookswcook/production-management/commit/09c7722de74961e0f0714638681d6fc6d67688b6))
+* update title of note creation log record ([284d438](https://github.com/brookswcook/production-management/commit/284d4380333ab58ec3b4d2cd20f9740538b3030e))
+
+
+### Features
+
+* **action-logging:** action log entity ([15c00c9](https://github.com/brookswcook/production-management/commit/15c00c97601f6e7b8367db98b571013a079eccbd))
+* **action-logging:** action log middleware ([7bcdcb3](https://github.com/brookswcook/production-management/commit/7bcdcb3b3652552fd1322056876eb19d28137410))
+* **action-logging:** enable logging for mutations ([c3815ae](https://github.com/brookswcook/production-management/commit/c3815aeb63fa52b2bf2db280505d3f7e95a87533))
+* add action log resolver ([11adcc1](https://github.com/brookswcook/production-management/commit/11adcc1a4df061d896d85b1455eae3ee45ad5d7e))
+* be able to get action logs of specific types and ids ([9276885](https://github.com/brookswcook/production-management/commit/92768851260617813188abc788edeb6730039bab))
+* **company:** company should have tenant field too ([f9a4d04](https://github.com/brookswcook/production-management/commit/f9a4d0415e52cb8c6831f400814536e87e892195))
+* createdAt field is not nullable ([103bfa2](https://github.com/brookswcook/production-management/commit/103bfa291ec297feb8e12f0027789a42fcd273d1))
+* **user:** return user in delete mutation instead of boolean ([77601bc](https://github.com/brookswcook/production-management/commit/77601bc9dac21693a830ce943da1838a1690ab6d))
+
+
+
+
+
 # [1.3.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.2.0...dashboard-api@1.3.0) (2023-02-11)
 
 

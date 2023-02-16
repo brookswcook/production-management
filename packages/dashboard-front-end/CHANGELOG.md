@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.1](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.4.0...dashboard-front-end@1.4.1) (2023-02-16)
+
+
+### Bug Fixes
+
+* fix refetch once action with sample is done ([b4c4551](https://github.com/brookswcook/production-management/commit/b4c4551ed22606b8e02fd19be13b90c7615a1d11))
+
+
+
+
+
 # [1.4.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.3.0...dashboard-front-end@1.4.0) (2023-02-16)
 
 

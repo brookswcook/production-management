@@ -37,6 +37,7 @@ export class PurchaseOrderResolver {
         {
           path: "items",
         },
+        { path: "notes", populate: { path: "user" } },
       ])
       .exec();
   }
@@ -63,6 +64,7 @@ export class PurchaseOrderResolver {
       {
         path: "items",
       },
+      { path: "notes", populate: { path: "user" } },
     ]);
   }
 

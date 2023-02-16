@@ -8,7 +8,12 @@ import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Company } from "../company/company.model";
 import { ExpectResultModel } from "../common/expectResultModel";
 import { OrderItem } from "../orderItem/orderItem.model";
-import { PurchaseOrderStatus, purchaseOrderStatusSet } from "dashboard-core";
+import {
+  NoteType,
+  PurchaseOrderStatus,
+  purchaseOrderStatusSet,
+} from "dashboard-core";
+import { Note } from "../note/note.model";
 
 @ModelOptions({
   schemaOptions: { timestamps: true, collection: "purchase_orders" },
@@ -91,6 +96,16 @@ export class PurchaseOrder extends ExpectResultModel implements TimeStamps {
     justOne: true,
   })
   factory!: Company;
+
+  @Field(() => [Note])
+  @Property({
+    ref: () => Note,
+    foreignField: "parentId" as Partial<Note>,
+    localField: "_id",
+    match: { type: "purchaseOrderNote" as NoteType } as Partial<Note>,
+    options: { sort: { _id: -1 } },
+  })
+  notes!: Note[];
 
   static async getNextUID() {
     const [{ uid } = { uid: 0 }] = await PurchaseOrderModel.aggregate<

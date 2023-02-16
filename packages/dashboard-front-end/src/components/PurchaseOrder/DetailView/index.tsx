@@ -1,7 +1,10 @@
 import { Box, Button, Grid, LinearProgress, Stack } from "@mui/material";
+import { NoteType } from "dashboard-core";
+import { id } from "date-fns/locale";
 import { Fragment, ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import {
+  Note,
   PurchaseOrderDetailFieldsFragment,
   usePurchaseOrderQuery,
   usePushPurchaseOrderToNextStageMutation,
@@ -10,6 +13,7 @@ import ActionLogList from "../../ActionLog/ListView";
 import { DetailView } from "../../Common/DetailView";
 import { DetailViewHeaderTitle } from "../../Common/DetailViewHeaderTitle";
 import { DetailViewSection } from "../../Common/DetailViewSection";
+import NoteGrid from "../../NoteGrid";
 import { OrderItemList } from "../../OrderItem/ListView";
 import { ObjectProperty } from "../../Properties/ObjectProperty";
 import { TextProperty } from "../../Properties/TextProperty";
@@ -132,6 +136,13 @@ export function PurchaseOrderDetail(): ReactElement {
         <OrderItemList
           orderUid={Number(uid)}
           addActionDisabled={data.purchaseOrder.status !== "draft"}
+        />
+      </DetailViewSection>
+      <DetailViewSection headerTitle="Notes:">
+        <NoteGrid
+          notes={data.purchaseOrder.notes as Note[]}
+          type={"purchaseOrderNote" as NoteType}
+          parentId={data.purchaseOrder.id}
         />
       </DetailViewSection>
       <DetailViewSection headerTitle="Log records:">

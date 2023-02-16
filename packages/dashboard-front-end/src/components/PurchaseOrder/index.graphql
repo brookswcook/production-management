@@ -39,6 +39,9 @@ fragment PurchaseOrderDetailFields on PurchaseOrder {
   items {
     id
   }
+  notes {
+    ...noteFields
+  }
 }
 
 fragment PurchaseOrderListFields on PurchaseOrder {

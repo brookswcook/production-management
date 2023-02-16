@@ -477,6 +477,7 @@ export type PurchaseOrder = {
   id: Scalars['String'];
   items: Array<OrderItem>;
   nextStatus: Maybe<Scalars['String']>;
+  notes: Array<Note>;
   status: Scalars['String'];
   uid: Scalars['Int'];
   updatedAt: Scalars['DateTime'];
@@ -761,7 +762,7 @@ export type PurchaseOrderQueryVariables = Exact<{
 }>;
 
 
-export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder: { __typename?: 'PurchaseOrder', id: string, uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, items: Array<{ __typename?: 'OrderItem', id: string }> } };
+export type PurchaseOrderQuery = { __typename?: 'Query', purchaseOrder: { __typename?: 'PurchaseOrder', id: string, uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, items: Array<{ __typename?: 'OrderItem', id: string }>, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }> } };
 
 export type CreatePurchaseOrderMutationVariables = Exact<{
   data: CreatePurchaseOrderInput;
@@ -770,7 +771,7 @@ export type CreatePurchaseOrderMutationVariables = Exact<{
 
 export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', createPurchaseOrder: { __typename?: 'PurchaseOrder', id: string, uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null } };
 
-export type PurchaseOrderDetailFieldsFragment = { __typename?: 'PurchaseOrder', id: string, uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, items: Array<{ __typename?: 'OrderItem', id: string }> };
+export type PurchaseOrderDetailFieldsFragment = { __typename?: 'PurchaseOrder', id: string, uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, factory: { __typename?: 'Company', name: string, address: string, contacts: Array<{ __typename?: 'User', fullName: string, email: string, phone: string | null }> }, items: Array<{ __typename?: 'OrderItem', id: string }>, notes: Array<{ __typename?: 'Note', id: string, type: string, text: string, imageFileNames: Array<string>, createdAt: string | null, user: { __typename?: 'User', firstName: string, fullName: string } | null }> };
 
 export type PurchaseOrderListFieldsFragment = { __typename?: 'PurchaseOrder', id: string, uid: number, createdAt: string, expectedDeliveryDate: string, status: string, nextStatus: string | null, company: { __typename?: 'Company', name: string }, factory: { __typename?: 'Company', name: string } };
 
@@ -1144,8 +1145,12 @@ export const PurchaseOrderDetailFieldsFragmentDoc = gql`
   items {
     id
   }
+  notes {
+    ...noteFields
+  }
 }
-    ${PurchaseOrderScalarFieldsFragmentDoc}`;
+    ${PurchaseOrderScalarFieldsFragmentDoc}
+${NoteFieldsFragmentDoc}`;
 export const PurchaseOrderListFieldsFragmentDoc = gql`
     fragment PurchaseOrderListFields on PurchaseOrder {
   ...PurchaseOrderScalarFields

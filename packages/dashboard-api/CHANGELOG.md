@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.4.0...dashboard-api@1.5.0) (2023-02-16)
+
+
+### Features
+
+* add notes to po entity ([8e1fdb1](https://github.com/brookswcook/production-management/commit/8e1fdb112410e65d3b04b88dbd6c356ffaddbabb))
+
+
+
+
+
 # [1.4.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.3.0...dashboard-api@1.4.0) (2023-02-16)
 
 

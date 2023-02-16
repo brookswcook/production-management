@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.4.1...dashboard-front-end@1.5.0) (2023-02-16)
+
+
+### Features
+
+* add notes to PO detail view ([349e6c1](https://github.com/brookswcook/production-management/commit/349e6c1b518b70315bf6ad93e4dd21f8da5681af))
+
+
+
+
+
 ## [1.4.1](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.4.0...dashboard-front-end@1.4.1) (2023-02-16)
 
 

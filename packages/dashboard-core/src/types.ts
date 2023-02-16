@@ -1,5 +1,9 @@
 export type ColorType = "print" | "solid";
-export type NoteType = "sampleRejectionComment" | "productNote" | "fabricNote";
+export type NoteType =
+  | "sampleRejectionComment"
+  | "productNote"
+  | "fabricNote"
+  | "purchaseOrderNote";
 export type UserRole = "Factory" | "VChapman" | "Admin";
 export const userRoles = ["Factory", "VChapman", "Admin"];
 export type UserPayload = {

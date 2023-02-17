@@ -32,7 +32,7 @@ export function CreateOrderItemForm({
   const [attributes, setAttributes] = useState<CreateAttributeInput[]>([]);
   const { data: { products } = { products: [] } } = useProductsQuery();
   const [newOrderItem] = useCreateOrderItemMutation({
-    refetchQueries: ["OrderItems"],
+    refetchQueries: ["PurchaseOrder", "OrderItems", "ActionLogs"],
   });
 
   async function createOrderItem(event: FormEvent<HTMLFormElement>) {

@@ -53,7 +53,7 @@ function PurchaseOrderHeaderSection({
 }): ReactElement {
   const [pushPurchaseOrderToNextStage] =
     usePushPurchaseOrderToNextStageMutation({
-      refetchQueries: ["PurchaseOrders", "PurchaseOrder"],
+      refetchQueries: ["PurchaseOrders", "PurchaseOrder", "ActionLogs"],
     });
 
   function updateStatus() {

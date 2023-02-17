@@ -76,6 +76,7 @@ export default function NoteGrid({
     const refetchQueries = [];
     if (type === "productNote") refetchQueries.push("Product");
     if (type === "fabricNote") refetchQueries.push("Fabric");
+    if (type === "purchaseOrderNote") refetchQueries.push("PurchaseOrder");
     const refetchPolicy = {
       refetchQueries,
     };

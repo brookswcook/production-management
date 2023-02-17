@@ -150,8 +150,9 @@ export function PurchaseOrderDetail(): ReactElement {
           entityIds={[
             data.purchaseOrder.id,
             ...data.purchaseOrder.items.map(({ id }) => id),
+            ...data.purchaseOrder.notes.map(({ id }) => id),
           ]}
-          entityTypes={["PurchaseOrder", "OrderItem"]}
+          entityTypes={["PurchaseOrder", "OrderItem", "Note"]}
         />
       </DetailViewSection>
     </DetailView>

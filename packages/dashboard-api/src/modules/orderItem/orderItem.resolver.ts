@@ -30,7 +30,7 @@ export class OrderItemResolver {
 
   @Authorized<UserRole>(["Admin", "VChapman"])
   @Mutation(() => OrderItem)
-  @UseMiddleware(UserActionLog<OrderItem>("Order item is created"))
+  @UseMiddleware(UserActionLog<OrderItem>("New order item is added"))
   async createOrderItem(
     @TenantId() companyId: string,
     @Arg("data") data: CreateOrderItemInput

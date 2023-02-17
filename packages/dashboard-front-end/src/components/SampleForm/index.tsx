@@ -24,7 +24,7 @@ export function SendSampleForm({
   sampleType: SampleType;
 }): ReactElement {
   const mutationOptions = {
-    refetchQueries: ["Products", "Product"],
+    refetchQueries: ["Products", "Product", "ActionLogs"],
   };
   const [sendFabricSampleMutation] =
     useSendFabricSampleMutation(mutationOptions);

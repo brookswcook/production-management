@@ -19,7 +19,7 @@ export function UploadTechPackForm({
 }): ReactElement {
   const [techPackFiles, setTechPackFiles] = useState<File[]>();
   const mutationOptions = {
-    refetchQueries: ["Style"],
+    refetchQueries: ["Style", "ActionLogs"],
   };
   const [uploadTechPackMutation] = useUploadTechPackMutation(mutationOptions);
 

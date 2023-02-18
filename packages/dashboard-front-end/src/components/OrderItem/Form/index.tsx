@@ -17,6 +17,7 @@ import {
 } from "../../../generated/graphql";
 import { PopperButton } from "../../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import { toast } from "react-toastify";
 import FloatTextField from "../../Common/FloatTextField";
 
@@ -101,12 +102,23 @@ export function CreateOrderItemForm({
         >
           <AddIcon />
         </IconButton>
+        <IconButton
+          size="medium"
+          color="secondary"
+          onClick={() => {
+            const withoutLast = attributes.slice(0, -1);
+            setAttributes(withoutLast);
+          }}
+        >
+          <RemoveIcon />
+        </IconButton>
       </Typography>
       {attributes.map((_, index, attributes) => (
         <AddOrderItemAttributeForm
-          key={String(index)}
+          key={index}
           attribute={attributes[index]}
           title={`Attribute ${index + 1}`}
+          attributesToExclude={attributes.map(({ key }) => key)}
         />
       ))}
       <>
@@ -122,9 +134,11 @@ export function CreateOrderItemForm({
 function AddOrderItemAttributeForm({
   attribute,
   title,
+  attributesToExclude = [],
 }: {
   attribute: CreateAttributeInput;
   title?: string;
+  attributesToExclude?: string[];
 }) {
   const [attributeDefinitionName, setAttributeDefinitionName] = useState<
     string | null
@@ -152,7 +166,9 @@ function AddOrderItemAttributeForm({
           setAttributeDefinitionName(String(value));
           attribute.key = String(value);
         }}
-        options={attributeDefinitions.flatMap(item => item.name)}
+        options={attributeDefinitions
+          .flatMap(item => item.name)
+          .filter(name => !~attributesToExclude.indexOf(name))}
         renderOption={(props, option) => (
           <Box component="li" {...props}>
             {`${option}`}

@@ -1,6 +1,5 @@
 import { Box, Button, Grid, LinearProgress, Stack } from "@mui/material";
 import { NoteType } from "dashboard-core";
-import { id } from "date-fns/locale";
 import { Fragment, ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import {

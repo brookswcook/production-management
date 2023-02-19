@@ -31,6 +31,9 @@ export function CreateOrderItemForm({
   footerEl?: ReactElement;
 }) {
   const [attributes, setAttributes] = useState<CreateAttributeInput[]>([]);
+  const [attributeNamesToOmit, setAttributeNamesToOmit] = useState<string[]>(
+    []
+  );
   const { data: { products } = { products: [] } } = useProductsQuery();
   const [newOrderItem] = useCreateOrderItemMutation({
     refetchQueries: ["PurchaseOrder", "OrderItems", "ActionLogs"],
@@ -108,6 +111,7 @@ export function CreateOrderItemForm({
           onClick={() => {
             const withoutLast = attributes.slice(0, -1);
             setAttributes(withoutLast);
+            setAttributeNamesToOmit(withoutLast.map(({ key }) => key));
           }}
         >
           <RemoveIcon />
@@ -118,7 +122,10 @@ export function CreateOrderItemForm({
           key={index}
           attribute={attributes[index]}
           title={`Attribute ${index + 1}`}
-          attributesToExclude={attributes.map(({ key }) => key)}
+          onChange={() =>
+            setAttributeNamesToOmit(attributes.map(({ key }) => key))
+          }
+          attributeNamesToOmit={attributeNamesToOmit}
         />
       ))}
       <>
@@ -134,27 +141,32 @@ export function CreateOrderItemForm({
 function AddOrderItemAttributeForm({
   attribute,
   title,
-  attributesToExclude = [],
+  onChange = () => {},
+  attributeNamesToOmit = [],
 }: {
   attribute: CreateAttributeInput;
   title?: string;
-  attributesToExclude?: string[];
+  onChange?: () => void;
+  attributeNamesToOmit?: string[];
 }) {
-  const [attributeDefinitionName, setAttributeDefinitionName] = useState<
-    string | null
-  >(null);
+  const [selectedAttributeDefinitionName, setSelectedAttributeDefinitionName] =
+    useState<string | null>(null);
   const [attributeOptions, setAttributeOptions] = useState<string[] | null>(
     null
   );
-  const { data: { attributeDefinitions } = { attributeDefinitions: [] } } =
-    useAttributeDefinitionsQuery();
+  const {
+    data: { attributeDefinitions: allAttributeDefinitions } = {
+      attributeDefinitions: [],
+    },
+  } = useAttributeDefinitionsQuery();
 
   useEffect(() => {
-    const attributeDefinition = attributeDefinitions.find(
-      item => item.name === attributeDefinitionName
+    const selectedAttributeDefinition = allAttributeDefinitions.find(
+      item => item.name === selectedAttributeDefinitionName
     );
-    attributeDefinition && setAttributeOptions(attributeDefinition.values);
-  }, [attributeDefinitionName, attributeDefinitions]);
+    selectedAttributeDefinition &&
+      setAttributeOptions(selectedAttributeDefinition.values);
+  }, [selectedAttributeDefinitionName, allAttributeDefinitions]);
 
   return (
     <Stack component="div" spacing={2}>
@@ -163,12 +175,13 @@ function AddOrderItemAttributeForm({
       </Typography>
       <Autocomplete
         onChange={(_, value) => {
-          setAttributeDefinitionName(String(value));
+          setSelectedAttributeDefinitionName(String(value));
           attribute.key = String(value);
+          onChange();
         }}
-        options={attributeDefinitions
+        options={allAttributeDefinitions
           .flatMap(item => item.name)
-          .filter(name => !~attributesToExclude.indexOf(name))}
+          .filter(name => !~attributeNamesToOmit.indexOf(name))}
         renderOption={(props, option) => (
           <Box component="li" {...props}>
             {`${option}`}
@@ -189,7 +202,7 @@ function AddOrderItemAttributeForm({
           )}
           renderInput={params => <TextField {...params} required />}
         />
-      ) : attributeDefinitionName != null ? (
+      ) : selectedAttributeDefinitionName != null ? (
         <TextField required />
       ) : (
         <></>

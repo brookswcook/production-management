@@ -42,7 +42,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProductDetail from "../ProductDetail";
 import React from "react";
-import OperationLogGrid from "../OperationLogGrid";
 import RequireRole from "../Auth/RequireRole";
 import FabricGrid from "../FabricGrid";
 import { FabricDetail } from "../FabricDetail";
@@ -132,13 +131,6 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
                     <RequireRole authorizedRoles={["Admin"]}>
                       <MenuItemLink
                         onClick={handleCloseNavMenu}
-                        name="Operation logs"
-                        to="/oplog"
-                      />
-                    </RequireRole>
-                    <RequireRole authorizedRoles={["Admin"]}>
-                      <MenuItemLink
-                        onClick={handleCloseNavMenu}
                         name="Users"
                         to="/users"
                       />
@@ -183,16 +175,6 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
                         </Button>
                       )
                     )}
-                    <RequireRole authorizedRoles={["Admin"]}>
-                      <Button variant="text" size="small">
-                        <Link
-                          to={`/oplog`}
-                          style={{ textDecoration: "none", color: "white" }}
-                        >
-                          Operation logs
-                        </Link>
-                      </Button>
-                    </RequireRole>
                     <RequireRole authorizedRoles={["Admin"]}>
                       <Button variant="text" size="small">
                         <Link
@@ -331,10 +313,6 @@ function ApolloApp() {
             <Route
               path="/purchase-orders/:uid"
               element={<Dashboard children={<PurchaseOrderDetail />} />}
-            />
-            <Route
-              path="/oplog"
-              element={<Dashboard children={<OperationLogGrid />} />}
             />
           </Routes>
         </Router>

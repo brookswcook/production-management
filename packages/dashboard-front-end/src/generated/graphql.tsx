@@ -396,16 +396,6 @@ export type Note = {
   userId: Scalars['String'];
 };
 
-export type OperationLog = {
-  __typename?: 'OperationLog';
-  createdAt: Maybe<Scalars['DateTime']>;
-  id: Scalars['String'];
-  name: Scalars['String'];
-  user: Maybe<User>;
-  userId: Scalars['String'];
-  variables: Scalars['String'];
-};
-
 export type OrderItem = {
   __typename?: 'OrderItem';
   id: Scalars['String'];
@@ -493,7 +483,6 @@ export type Query = {
   fabrics: Array<Fabric>;
   factories: Array<Company>;
   imageLink: Scalars['String'];
-  operationLogs: Array<OperationLog>;
   orderItems: Array<OrderItem>;
   printLink: Scalars['String'];
   product: Product;
@@ -690,13 +679,6 @@ export type FactoryListFieldsFragment = { __typename?: 'Company', id: string, co
 export type FactoryCodesFragment = { __typename?: 'Company', code: string };
 
 export type FileFieldsFragment = { __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt: string | null, user: { __typename?: 'User', fullName: string } | null };
-
-export type OperationLogFieldsFragment = { __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt: string | null, user: { __typename?: 'User', firstName: string } | null };
-
-export type OperationLogsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type OperationLogsQuery = { __typename?: 'Query', operationLogs: Array<{ __typename?: 'OperationLog', id: string, name: string, variables: string, createdAt: string | null, user: { __typename?: 'User', firstName: string } | null }> };
 
 export type OrderItemsQueryVariables = Exact<{
   data: InputMaybe<GetOrderItemsInput>;
@@ -983,17 +965,6 @@ export const FactoryListFieldsFragmentDoc = gql`
 export const FactoryCodesFragmentDoc = gql`
     fragment FactoryCodes on Company {
   code
-}
-    `;
-export const OperationLogFieldsFragmentDoc = gql`
-    fragment operationLogFields on OperationLog {
-  id
-  name
-  variables
-  user {
-    firstName
-  }
-  createdAt
 }
     `;
 export const OrderItemOwnFieldsFragmentDoc = gql`
@@ -1484,40 +1455,6 @@ export function useCreateFactoryMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateFactoryMutationHookResult = ReturnType<typeof useCreateFactoryMutation>;
 export type CreateFactoryMutationResult = Apollo.MutationResult<CreateFactoryMutation>;
 export type CreateFactoryMutationOptions = Apollo.BaseMutationOptions<CreateFactoryMutation, CreateFactoryMutationVariables>;
-export const OperationLogsDocument = gql`
-    query OperationLogs {
-  operationLogs {
-    ...operationLogFields
-  }
-}
-    ${OperationLogFieldsFragmentDoc}`;
-
-/**
- * __useOperationLogsQuery__
- *
- * To run a query within a React component, call `useOperationLogsQuery` and pass it any options that fit your needs.
- * When your component renders, `useOperationLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useOperationLogsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useOperationLogsQuery(baseOptions?: Apollo.QueryHookOptions<OperationLogsQuery, OperationLogsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OperationLogsQuery, OperationLogsQueryVariables>(OperationLogsDocument, options);
-      }
-export function useOperationLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OperationLogsQuery, OperationLogsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OperationLogsQuery, OperationLogsQueryVariables>(OperationLogsDocument, options);
-        }
-export type OperationLogsQueryHookResult = ReturnType<typeof useOperationLogsQuery>;
-export type OperationLogsLazyQueryHookResult = ReturnType<typeof useOperationLogsLazyQuery>;
-export type OperationLogsQueryResult = Apollo.QueryResult<OperationLogsQuery, OperationLogsQueryVariables>;
 export const OrderItemsDocument = gql`
     query OrderItems($data: GetOrderItemsInput) {
   orderItems(data: $data) {

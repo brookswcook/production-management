@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.5.0...dashboard-front-end@1.6.0) (2023-02-21)
+
+
+### Bug Fixes
+
+* action logs refetching on several actions ([c1485b1](https://github.com/brookswcook/production-management/commit/c1485b13da1c12bbd41220d83beae6b85921dc41))
+* PO item attribute set ([549ffb0](https://github.com/brookswcook/production-management/commit/549ffb0c79f3b413d90f366a5728e0b5c77d4b89))
+* remove oplog ([52fc2fc](https://github.com/brookswcook/production-management/commit/52fc2fcf2dda6ba46b828a0fa6ea0a9e24126214))
+* update PO view once note is added ([a748854](https://github.com/brookswcook/production-management/commit/a748854b891c9ce248e965dccfc344bf24284b48))
+
+
+### Features
+
+* unique attribute set in PO item creation form ([2fe9783](https://github.com/brookswcook/production-management/commit/2fe9783bf5695eaf0336b10918279c35281aa030))
+
+
+
+
+
 # [1.5.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.4.1...dashboard-front-end@1.5.0) (2023-02-16)
 
 

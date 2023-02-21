@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.1](https://github.com/brookswcook/production-management/compare/dashboard-api@1.5.0...dashboard-api@1.5.1) (2023-02-21)
+
+
+### Bug Fixes
+
+* action logs refetching on several actions ([c1485b1](https://github.com/brookswcook/production-management/commit/c1485b13da1c12bbd41220d83beae6b85921dc41))
+* remove oplog ([52fc2fc](https://github.com/brookswcook/production-management/commit/52fc2fcf2dda6ba46b828a0fa6ea0a9e24126214))
+
+
+
+
+
 # [1.5.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.4.0...dashboard-api@1.5.0) (2023-02-16)
 
 

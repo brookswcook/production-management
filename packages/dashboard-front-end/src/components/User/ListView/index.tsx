@@ -19,15 +19,6 @@ export function UserList(): ReactElement {
       minWidth: 50,
       flex: 1,
       type: "string",
-      // renderCell({ id, formattedValue }: GridRenderCellParams) {
-      //   const linkPath = `/users/${id}`;
-      //   const linkText = `${String(formattedValue)}`;
-      //   return (
-      //     <Link to={linkPath} style={{ textDecoration: "none" }}>
-      //       {linkText}
-      //     </Link>
-      //   );
-      // },
     },
     {
       field: "email",

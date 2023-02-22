@@ -110,14 +110,4 @@ export class ProductResolver {
       "production.started": true,
     });
   }
-
-  // @Mutation(() => Product)
-  // async scheduleQCVisit(
-  //   @Arg("data") { productName }: StartProductionInput
-  // ): Promise<Product> {
-  //   return this.updatePerProductNameOrFail(productName, {
-  //     "production.actualStartDate": new Date(),
-  //     "production.started": true,
-  //   });
-  // }
 }

@@ -16,7 +16,6 @@ import { UserActionLog } from "../../lib/userActionLogMiddleware";
 
 @Resolver(Product)
 export class ProductResolver {
-  // TODO: consider to use lean() with getter plugin
   // TODO: populate fitSamples only when needed; analyze AST
   @Authorized()
   @Query(() => [Product])

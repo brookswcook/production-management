@@ -17,6 +17,7 @@ import { UserActionLog } from "../../lib/userActionLogMiddleware";
 @Resolver(Product)
 export class ProductResolver {
   // TODO: populate fitSamples only when needed; analyze AST
+  // maybe it's possible to get populate data from reflect metadata
   @Authorized()
   @Query(() => [Product])
   async products(@TenantId() companyId: string) {

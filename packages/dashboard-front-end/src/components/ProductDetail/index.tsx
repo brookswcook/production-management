@@ -5,6 +5,7 @@ import {
   Grid,
   LinearProgress,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import { NoteType } from "dashboard-core";
@@ -22,6 +23,11 @@ import { DetailViewSection } from "../Common/DetailViewSection";
 import { TextProperty } from "../Properties";
 import { ObjectProperty } from "../Properties/ObjectProperty";
 import ActionLogList from "../ActionLog/ListView";
+
+// TODO: create wrapped currency value typography
+function toCurrency(number: number, currency = "$"): string {
+  return `${currency}${number.toFixed(2)}`;
+}
 
 export default function ProductDetail(): ReactElement {
   const { code = "" } = useParams();
@@ -45,6 +51,7 @@ export default function ProductDetail(): ReactElement {
     stage,
     factory,
     techPackUploaded,
+    productionCost,
     style,
     fabric,
     fitSamples,
@@ -135,6 +142,12 @@ export default function ProductDetail(): ReactElement {
                 title="Next Production Due"
                 value={new Date(deliveryDate).toLocaleDateString()}
               />
+              <Stack direction={"row"} spacing={2}>
+                <TextProperty
+                  title="Production cost"
+                  value={toCurrency(productionCost)}
+                />
+              </Stack>
             </Stack>
           </Grid>
         </Grid>

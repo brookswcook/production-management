@@ -1,3 +1,10 @@
 query PrintLink($fileName: String!) {
   printLink(fileName: $fileName)
 }
+
+mutation UpdateCost($data: UpdateProductionCostInput!) {
+  updateCost(data: $data) {
+    code
+    productionCost
+  }
+}

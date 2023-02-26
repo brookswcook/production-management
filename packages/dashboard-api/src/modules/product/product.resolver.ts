@@ -6,7 +6,7 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { CreateProductInput } from "./product.input";
+import { CreateProductInput, UpdateProductionCostInput } from "./product.input";
 import { Product, ProductModel } from "./product.model";
 import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
 import { StartProductionInput } from "../productProduction/productProduction.input";
@@ -84,6 +84,19 @@ export class ProductResolver {
       ...productWorkflowData,
       ...data,
     }).save();
+  }
+
+  @Authorized(["Admin", "VChapman", "Factory"] as UserRole[])
+  @Mutation(() => Product)
+  @UseMiddleware(UserActionLog<Product>("Production cost is updated"))
+  async updateCost(
+    @Arg("data") { code, productionCost }: UpdateProductionCostInput,
+    @TenantId() companyId: string
+  ): Promise<Product> {
+    return ProductModel.findOneAndUpdateOrFail<Product>(
+      { companyId, code },
+      { productionCost }
+    );
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])

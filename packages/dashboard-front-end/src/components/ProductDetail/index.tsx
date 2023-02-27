@@ -89,6 +89,7 @@ export default function ProductDetail(): ReactElement {
             setNewCost(Number(value))
           }
           required
+          sx={{ mt: 1 }}
         />
       </ActionDialog>
       <Box sx={{ p: 1 }}>

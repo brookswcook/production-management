@@ -34,7 +34,7 @@ export function CreateOrderItemForm({
   const [attributeNamesToOmit, setAttributeNamesToOmit] = useState<string[]>(
     []
   );
-  const [productCode, setProductCode] = useState<string>("");
+  const [productCode, setProductCode] = useState<string | null>(null);
   const [predefinedProductionCost, setPredefinedProductionCost] =
     useState<number>(0);
   const { data: { products } = { products: [] } } = useProductsQuery();
@@ -54,17 +54,18 @@ export function CreateOrderItemForm({
       data.entries()
     ) as unknown as CreateOrderItemInput;
     try {
-      await newOrderItem({
-        variables: {
-          data: {
-            orderUid,
-            productCode,
-            quantity: Number(quantity),
-            price: Number(price),
-            variantAttributes: attributes,
+      productCode &&
+        (await newOrderItem({
+          variables: {
+            data: {
+              orderUid,
+              productCode,
+              quantity: Number(quantity),
+              price: Number(price),
+              variantAttributes: attributes,
+            },
           },
-        },
-      });
+        }));
     } catch (error) {
       toast.error((error as Error).message);
     }
@@ -90,10 +91,18 @@ export function CreateOrderItemForm({
           </Box>
         )}
         renderInput={params => (
-          <TextField {...params} name="productCode" label="Product" required />
+          <TextField {...params} label="Product" required />
         )}
       />
-      <FloatTextField label="Price per unit" name="price" required />
+      <FloatTextField
+        label="Price per unit"
+        name="price"
+        value={String(predefinedProductionCost)}
+        onChange={({ target: { value } }) =>
+          setPredefinedProductionCost(Number(value))
+        }
+        required
+      />
       <TextField
         label="Quantity"
         name="quantity"

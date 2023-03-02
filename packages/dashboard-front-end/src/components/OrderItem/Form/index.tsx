@@ -103,15 +103,6 @@ export function CreateOrderItemForm({
         }
         required
       />
-      <TextField
-        label="Quantity"
-        name="quantity"
-        type="number"
-        InputProps={{
-          inputProps: { min: 1 },
-        }}
-        required
-      />
       <Typography component="h4" variant="inherit">
         Item Attributes{" "}
         <IconButton
@@ -136,15 +127,26 @@ export function CreateOrderItemForm({
         </IconButton>
       </Typography>
       {attributes.map((_, index, attributes) => (
-        <AddOrderItemAttributeForm
-          key={index}
-          attribute={attributes[index]}
-          title={`Attribute ${index + 1}`}
-          onChange={() =>
-            setAttributeNamesToOmit(attributes.map(({ key }) => key))
-          }
-          attributeNamesToOmit={attributeNamesToOmit}
-        />
+        <>
+          <AddOrderItemAttributeForm
+            key={index}
+            attribute={attributes[index]}
+            title={`Attribute ${index + 1}`}
+            onChange={() =>
+              setAttributeNamesToOmit(attributes.map(({ key }) => key))
+            }
+            attributeNamesToOmit={attributeNamesToOmit}
+          />
+          <TextField
+            label="Quantity"
+            name="quantity"
+            type="number"
+            InputProps={{
+              inputProps: { min: 1 },
+            }}
+            required
+          />
+        </>
       ))}
       <>
         <Button variant="contained" type="submit">

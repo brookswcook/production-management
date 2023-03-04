@@ -7,13 +7,10 @@ import {
   Button,
   IconButton,
   Divider,
-  Grid,
 } from "@mui/material";
 import { useState, useEffect, ReactElement, FormEvent } from "react";
 import {
   CreateAttributeInput,
-  CreateOrderItemInput,
-  useAttributeDefinitionsQuery,
   useCreateOrderItemMutation,
   useProductsQuery,
 } from "../../../generated/graphql";
@@ -22,8 +19,9 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { toast } from "react-toastify";
 import FloatTextField from "../../Common/FloatTextField";
+import { Variant } from "../../Attribute";
 
-type ItemSet = {
+type VariantSet = {
   attributes: CreateAttributeInput[];
   quantity: number;
 };
@@ -37,39 +35,61 @@ export function CreateOrderItemBulkyForm({
   title: string;
   footerEl?: ReactElement;
 }) {
-  const [itemSets, setItemSets] = useState<ItemSet[]>([]);
+  const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
   const [productCode, setProductCode] = useState<string | null>(null);
-  const [predefinedProductionCost, setPredefinedProductionCost] =
-    useState<number>(0);
+  const [pricePerItem, setPricePerItem] = useState<number>(0);
   const { data: { products } = { products: [] } } = useProductsQuery();
   const [newOrderItem] = useCreateOrderItemMutation({
     refetchQueries: ["PurchaseOrder", "OrderItems", "ActionLogs"],
   });
 
+  function checkForDuplicatedVariant(
+    variant: CreateAttributeInput[],
+    index: number
+  ) {
+    const usedVariantObjects: Record<string, string>[] = variantSets.map(
+      ({ attributes }) =>
+        attributes.reduce<{ [x: string]: string }>((acc, { key, value }) => {
+          return { ...acc, ...{ [key]: value } };
+        }, {})
+    );
+    const variantObject = variant.reduce(
+      (acc, { key, value }) => ({ ...acc, ...{ [key]: value } }),
+      {}
+    );
+
+    const variantIndex = usedVariantObjects.findIndex(
+      item => JSON.stringify(item) === JSON.stringify(variantObject)
+    );
+
+    if (variantIndex != index)
+      toast.warn("You are about to use the same variant specified before!");
+  }
+
   useEffect(() => {
     const selectedProduct = products.find(item => item.code === productCode);
-    setPredefinedProductionCost(selectedProduct?.productionCost ?? 0);
+    setPricePerItem(selectedProduct?.productionCost ?? 0);
   }, [products, productCode]);
 
-  async function createOrderItem(event: FormEvent<HTMLFormElement>) {
+  async function createOrderItemsByVariantSets(
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const { price, quantity } = Object.fromEntries(
-      data.entries()
-    ) as unknown as CreateOrderItemInput;
     try {
-      productCode &&
-        (await newOrderItem({
-          variables: {
-            data: {
-              orderUid,
-              productCode,
-              quantity: Number(quantity),
-              price: Number(price),
-              variantAttributes: [], // set attributes form item set
+      if (productCode != null)
+        for await (const { attributes, quantity } of variantSets) {
+          await newOrderItem({
+            variables: {
+              data: {
+                orderUid,
+                productCode,
+                quantity: Number(quantity),
+                price: Number(pricePerItem),
+                variantAttributes: attributes,
+              },
             },
-          },
-        }));
+          });
+        }
     } catch (error) {
       toast.error((error as Error).message);
     }
@@ -78,7 +98,7 @@ export function CreateOrderItemBulkyForm({
   return (
     <Stack
       component="form"
-      onSubmit={createOrderItem}
+      onSubmit={createOrderItemsByVariantSets}
       spacing={2}
       autoComplete="off"
     >
@@ -101,26 +121,23 @@ export function CreateOrderItemBulkyForm({
 
       <FloatTextField
         label="Price per item"
-        name="price"
-        value={String(predefinedProductionCost)}
-        onChange={({ target: { value } }) =>
-          setPredefinedProductionCost(Number(value))
-        }
+        value={String(pricePerItem)}
+        onChange={({ target: { value } }) => setPricePerItem(Number(value))}
         required
       />
       {productCode && (
         <>
           <Typography component="h4" variant="inherit">
-            Item sets of selected product{" "}
+            Variant sets of selected product{" "}
             <IconButton
               size="medium"
               color="secondary"
               onClick={() => {
-                const newItemSet: ItemSet = {
+                const newVariantSet: VariantSet = {
                   quantity: 0,
                   attributes: [{ key: "", value: "", unit: null }],
                 };
-                setItemSets([...itemSets, newItemSet]);
+                setVariantSets([...variantSets, newVariantSet]);
               }}
             >
               <AddIcon />
@@ -129,15 +146,41 @@ export function CreateOrderItemBulkyForm({
               size="medium"
               color="secondary"
               onClick={() => {
-                const withoutLast = itemSets.slice(0, -1);
-                setItemSets(withoutLast);
+                const withoutLast = variantSets.slice(0, -1);
+                setVariantSets(withoutLast);
               }}
             >
               <RemoveIcon />
             </IconButton>
           </Typography>
-          {itemSets.map(({ attributes, quantity }, index) => (
-            <PurchaseOrderItemSet key={index} />
+
+          {variantSets.map((_, index) => (
+            <>
+              <Variant
+                key={`Variant_${index}`}
+                onChange={variant => {
+                  const updatedVariantSets = [...variantSets];
+                  updatedVariantSets[index].attributes = variant;
+                  checkForDuplicatedVariant(variant, index);
+                  setVariantSets(updatedVariantSets);
+                }}
+              />
+              <TextField
+                key={`QuantityTextField_${index}`}
+                label="Quantity"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 1 },
+                }}
+                onChange={({ target: { value } }) => {
+                  const updatedVariantSets = [...variantSets];
+                  updatedVariantSets[index].quantity = Number(value);
+                  setVariantSets(updatedVariantSets);
+                }}
+                required
+              />
+              <Divider key={`Divider_${index}`} />
+            </>
           ))}
         </>
       )}
@@ -149,49 +192,9 @@ export function CreateOrderItemBulkyForm({
       </>
     </Stack>
   );
-
-  function PurchaseOrderItemSet() {
-    const {
-      data: { attributeDefinitions } = {
-        attributeDefinitions: [],
-      },
-      loading,
-    } = useAttributeDefinitionsQuery();
-    if (loading) return <></>;
-    return (
-      <>
-        <Grid container justifyContent={"space-between"}>
-          <Grid item xs={6}>
-            {attributeDefinitions.map(({ name, values }) => (
-              <Autocomplete
-                options={values ?? []}
-                renderOption={(props, option) => (
-                  <Box component="li" {...props}>
-                    {`${option}`}
-                  </Box>
-                )}
-                renderInput={params => (
-                  <TextField {...params} label={name} type={"text"} required />
-                )}
-              />
-            ))}
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="Quantity"
-              type="number"
-              InputProps={{
-                inputProps: { min: 1 },
-              }}
-              required
-            />
-          </Grid>
-        </Grid>
-        <Divider />
-      </>
-    );
-  }
 }
+
+// TODO: disallow to specify more than 1 same combination of attributes
 
 export function CreateOrderItemBulkyPopperButton({
   orderUid,
@@ -208,7 +211,7 @@ export function CreateOrderItemBulkyPopperButton({
   return (
     <PopperButton
       icon={<AddIcon />}
-      title={"Add item"}
+      title={"Add items"}
       disabled={disabled}
       closeSwitch={closeSwitch}
     >

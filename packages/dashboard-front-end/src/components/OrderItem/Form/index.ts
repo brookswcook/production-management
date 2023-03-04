@@ -1,2 +1,2 @@
 export * from "./CreateOrderItemForm";
-export * from "./CreateOrderItemBulkyForm";
+export * from "./CreateOrderItemByVariantSetsForm";

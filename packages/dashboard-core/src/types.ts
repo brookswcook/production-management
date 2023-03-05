@@ -35,6 +35,7 @@ export type PurchaseOrderStatus =
   | "processing"
   | "shipped"
   | "received"
+  | "completed"
   | "cancelled";
 
 export const purchaseOrderStatusSet = [
@@ -42,5 +43,6 @@ export const purchaseOrderStatusSet = [
   "processing",
   "shipped",
   "received",
+  "completed",
   "cancelled",
 ];

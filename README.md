@@ -21,6 +21,9 @@ npx lerna bootstrap
 
 # run api in dev environment
 npx lerna run dev --scope=dashboard-api
+
+# publish & generate changelog
+npx lerna publish --conventional-commits
 ```
 
 ## Prettier

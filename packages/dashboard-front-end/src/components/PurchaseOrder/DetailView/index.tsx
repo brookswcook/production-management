@@ -1,5 +1,15 @@
-import { Box, Button, Grid, LinearProgress, Stack } from "@mui/material";
-import { NoteType } from "dashboard-core";
+import {
+  Box,
+  Button,
+  Grid,
+  LinearProgress,
+  Stack,
+  Step,
+  StepLabel,
+  Stepper,
+  Typography,
+} from "@mui/material";
+import { NoteType, purchaseOrderStatusSet } from "dashboard-core";
 import { Fragment, ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -73,7 +83,24 @@ function PurchaseOrderHeaderSection({
             value={new Date(expectedDeliveryDate).toLocaleDateString()}
           />
           <Stack spacing={2} direction={"row"}>
-            <TextProperty title="Status" value={status} />
+            <Typography component={"span"} variant="subtitle2">
+              Status
+            </Typography>
+            <Typography component={"span"} variant="subtitle2">
+              <Stepper
+                activeStep={
+                  purchaseOrderStatusSet.indexOf(status) +
+                  (nextStatus == null ? 1 : 0)
+                }
+                alternativeLabel={false}
+              >
+                {purchaseOrderStatusSet.slice(0, -1).map(statusName => (
+                  <Step key={statusName}>
+                    <StepLabel>{statusName}</StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+            </Typography>
             {nextStatus != null && (
               <Button size="small" variant="contained" onClick={updateStatus}>
                 {`Set to ${nextStatus}`}

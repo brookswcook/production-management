@@ -94,14 +94,6 @@ export function CreateUserForm({
   );
 }
 
-// If factory option selected add dropdown of available factories then apply Factory:FactoryCode to the user role
-// Add Factory entity; it should has a list of users who represent this factory
-
-// Review current entities which support factory to show only related records
-// Add Factory to the style; maybe it requires some interface like FactorySupportEntity or smth
-
-// separated actions to mark delivered and approved/rejected. delivered is set by factory
-
 export function CreateUserPopperButton({
   disabled = false,
 }: {

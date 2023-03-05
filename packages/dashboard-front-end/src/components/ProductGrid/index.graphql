@@ -50,6 +50,7 @@ fragment productFields on Product {
   dueIn
   onTime
   stage
+  productionCost
   factory {
     code
     name

@@ -23,6 +23,20 @@ export class Product extends ExpectResultModel {
   @Field()
   id?: string;
 
+  @Property({ required: true })
+  companyId!: string;
+
+  @Field()
+  @Property({ required: true })
+  styleCode!: string;
+
+  @Field()
+  @Property({ required: true })
+  fabricCode!: string;
+
+  @Property({ required: true })
+  factoryId!: string;
+
   @Field()
   @Property({
     default(this: Product) {
@@ -33,66 +47,20 @@ export class Product extends ExpectResultModel {
   code!: string;
 
   @Field()
+  @Property({ required: true })
+  deliveryDate!: Date;
+
+  @Field()
+  @Property({ required: true })
+  productionCost!: number;
+
+  @Field()
   @Property({
     get(this: Product) {
       return `${this.style?.name ?? ""} in ${this.fabric?.colorName ?? ""}`;
     },
   })
   name!: string;
-
-  @Field()
-  @Property({ required: true })
-  styleCode!: string;
-
-  @Field()
-  @Property({ required: true })
-  fabricCode!: string;
-
-  @Field()
-  @Property({
-    ref: () => Style,
-    foreignField: "code",
-    localField: "styleCode",
-    justOne: true,
-  } as StylePropParams)
-  style?: Style;
-
-  @Property({ required: true })
-  companyId!: string;
-
-  @Field()
-  @Property({
-    ref: () => Company,
-    foreignField: "_id",
-    localField: "companyId",
-    justOne: true,
-  })
-  company!: Company;
-
-  @Field()
-  @Property({
-    ref: () => Fabric,
-    foreignField: "code",
-    localField: "fabricCode",
-    justOne: true,
-  } as FabricPropParams)
-  fabric?: Fabric;
-
-  @Property({ required: true })
-  factoryId!: string;
-
-  @Field()
-  @Property({
-    ref: () => Company,
-    foreignField: "_id",
-    localField: "factoryId",
-    justOne: true,
-  })
-  factory!: Company;
-
-  @Field()
-  @Property({ required: true })
-  deliveryDate!: Date;
 
   @Field(() => Int)
   @Property({
@@ -153,6 +121,58 @@ export class Product extends ExpectResultModel {
   })
   fitSampleDelivered?: boolean;
 
+  @Field(() => FabricProduction, { nullable: true })
+  @Property({ _id: false })
+  fabricProduction?: FabricProduction;
+
+  @Field(() => ProductProduction, { nullable: true })
+  @Property({ _id: false })
+  production?: ProductProduction;
+
+  @Field(() => ProductQualityControl, { nullable: true })
+  @Property({ _id: false })
+  qualityControl?: ProductQualityControl;
+
+  @Field(() => ProductShipping, { nullable: true })
+  @Property({ _id: false })
+  shipping?: ProductShipping;
+
+  @Field()
+  @Property({
+    ref: () => Style,
+    foreignField: "code",
+    localField: "styleCode",
+    justOne: true,
+  } as StylePropParams)
+  style?: Style;
+
+  @Field()
+  @Property({
+    ref: () => Company,
+    foreignField: "_id",
+    localField: "companyId",
+    justOne: true,
+  })
+  company!: Company;
+
+  @Field()
+  @Property({
+    ref: () => Fabric,
+    foreignField: "code",
+    localField: "fabricCode",
+    justOne: true,
+  } as FabricPropParams)
+  fabric?: Fabric;
+
+  @Field()
+  @Property({
+    ref: () => Company,
+    foreignField: "_id",
+    localField: "factoryId",
+    justOne: true,
+  })
+  factory!: Company;
+
   @Field(() => [FitSample])
   @Property({
     ref: () => FitSample,
@@ -179,22 +199,6 @@ export class Product extends ExpectResultModel {
     options: { sort: { _id: -1 } },
   })
   notes!: Note[];
-
-  @Field(() => FabricProduction, { nullable: true })
-  @Property({ _id: false })
-  fabricProduction?: FabricProduction;
-
-  @Field(() => ProductProduction, { nullable: true })
-  @Property({ _id: false })
-  production?: ProductProduction;
-
-  @Field(() => ProductQualityControl, { nullable: true })
-  @Property({ _id: false })
-  qualityControl?: ProductQualityControl;
-
-  @Field(() => ProductShipping, { nullable: true })
-  @Property({ _id: false })
-  shipping?: ProductShipping;
 
   static async updatePerProductNameOrFail(
     productName: string,

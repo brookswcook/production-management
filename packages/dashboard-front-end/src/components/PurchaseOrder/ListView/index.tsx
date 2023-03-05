@@ -114,11 +114,15 @@ export function PurchaseOrderList(): ReactElement {
           rows={rows}
           columns={columns}
           getRowId={item => item.uid}
-          pageSize={100}
           loading={loading}
           error={error}
           autoHeight
-          rowsPerPageOptions={[10]}
+          initialState={{
+            pagination: {
+              pageSize: 20,
+            },
+          }}
+          rowsPerPageOptions={[5, 10, 20, 50, 100]}
           components={{
             Toolbar: CustomToolbar,
           }}

@@ -8,8 +8,6 @@ import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
 import { User } from "../user/user.model";
 
-// Note: it should be used as tenant entity
-// TODO: Review all entities to support multitenancy by company
 @index<Company>({ parentId: 1, code: 1 }, { unique: true })
 @ModelOptions({ schemaOptions: { timestamps: true } })
 @ObjectType()

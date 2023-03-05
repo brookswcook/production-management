@@ -80,7 +80,7 @@ export function StyleDetail(): ReactElement {
 
   return (
     <DetailView headerSections={<StyleHeaderSection style={data.style} />}>
-      <DetailViewSection headerTitle="Tech pack:">
+      <DetailViewSection headerTitle="Tech packs:">
         <FileGrid fileType="tech-pack" parentID={id} files={techPacks} />
       </DetailViewSection>
       <DetailViewSection headerTitle="Log records:">

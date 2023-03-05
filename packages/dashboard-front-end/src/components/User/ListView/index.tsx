@@ -19,15 +19,6 @@ export function UserList(): ReactElement {
       minWidth: 50,
       flex: 1,
       type: "string",
-      // renderCell({ id, formattedValue }: GridRenderCellParams) {
-      //   const linkPath = `/users/${id}`;
-      //   const linkText = `${String(formattedValue)}`;
-      //   return (
-      //     <Link to={linkPath} style={{ textDecoration: "none" }}>
-      //       {linkText}
-      //     </Link>
-      //   );
-      // },
     },
     {
       field: "email",
@@ -109,13 +100,18 @@ export function UserList(): ReactElement {
         rows={rows}
         columns={columns}
         getRowId={item => item.id}
-        pageSize={100}
         loading={loading}
         error={error}
         autoHeight
         components={{
           Toolbar: CustomToolbar,
         }}
+        initialState={{
+          pagination: {
+            pageSize: 20,
+          },
+        }}
+        rowsPerPageOptions={[5, 10, 20, 50, 100]}
         disableSelectionOnClick
         sx={{ mt: 1 }}
       />

@@ -34,29 +34,38 @@ export function CreateOrderItemForm({
   const [attributeNamesToOmit, setAttributeNamesToOmit] = useState<string[]>(
     []
   );
+  const [productCode, setProductCode] = useState<string | null>(null);
+  const [predefinedProductionCost, setPredefinedProductionCost] =
+    useState<number>(0);
   const { data: { products } = { products: [] } } = useProductsQuery();
   const [newOrderItem] = useCreateOrderItemMutation({
     refetchQueries: ["PurchaseOrder", "OrderItems", "ActionLogs"],
   });
 
+  useEffect(() => {
+    const selectedProduct = products.find(item => item.code === productCode);
+    setPredefinedProductionCost(selectedProduct?.productionCost ?? 0);
+  }, [products, productCode]);
+
   async function createOrderItem(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const { price, productCode, quantity } = Object.fromEntries(
+    const { price, quantity } = Object.fromEntries(
       data.entries()
     ) as unknown as CreateOrderItemInput;
     try {
-      await newOrderItem({
-        variables: {
-          data: {
-            orderUid,
-            productCode,
-            quantity: Number(quantity),
-            price: Number(price),
-            variantAttributes: attributes,
+      productCode &&
+        (await newOrderItem({
+          variables: {
+            data: {
+              orderUid,
+              productCode,
+              quantity: Number(quantity),
+              price: Number(price),
+              variantAttributes: attributes,
+            },
           },
-        },
-      });
+        }));
     } catch (error) {
       toast.error((error as Error).message);
     }
@@ -75,16 +84,25 @@ export function CreateOrderItemForm({
       <Autocomplete
         options={products}
         getOptionLabel={option => option.code}
+        onChange={(_, value) => value != null && setProductCode(value?.code)}
         renderOption={(props, option) => (
           <Box component="li" {...props}>
             {`${option.code}`}
           </Box>
         )}
         renderInput={params => (
-          <TextField {...params} name="productCode" label="Product" required />
+          <TextField {...params} label="Product" required />
         )}
       />
-      <FloatTextField label="Price per unit" name="price" required />
+      <FloatTextField
+        label="Price per unit"
+        name="price"
+        value={String(predefinedProductionCost)}
+        onChange={({ target: { value } }) =>
+          setPredefinedProductionCost(Number(value))
+        }
+        required
+      />
       <TextField
         label="Quantity"
         name="quantity"

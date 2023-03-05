@@ -63,9 +63,13 @@ export default function NoteGrid({
       <DataGrid
         rows={rows}
         columns={columns}
-        pageSize={5}
         getRowId={item => item.id}
-        rowsPerPageOptions={[5]}
+        initialState={{
+          pagination: {
+            pageSize: 5,
+          },
+        }}
+        rowsPerPageOptions={[5, 10, 20, 50, 100]}
         disableSelectionOnClick
         components={{ Toolbar: CustomToolbar }}
       />

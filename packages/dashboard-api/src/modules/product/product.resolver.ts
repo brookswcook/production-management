@@ -6,7 +6,7 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { CreateProductInput } from "./product.input";
+import { CreateProductInput, UpdateProductionCostInput } from "./product.input";
 import { Product, ProductModel } from "./product.model";
 import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
 import { StartProductionInput } from "../productProduction/productProduction.input";
@@ -16,8 +16,8 @@ import { UserActionLog } from "../../lib/userActionLogMiddleware";
 
 @Resolver(Product)
 export class ProductResolver {
-  // TODO: consider to use lean() with getter plugin
   // TODO: populate fitSamples only when needed; analyze AST
+  // maybe it's possible to get populate data from reflect metadata
   @Authorized()
   @Query(() => [Product])
   async products(@TenantId() companyId: string) {
@@ -86,6 +86,19 @@ export class ProductResolver {
     }).save();
   }
 
+  @Authorized(["Admin", "VChapman", "Factory"] as UserRole[])
+  @Mutation(() => Product)
+  @UseMiddleware(UserActionLog<Product>("Production cost is updated"))
+  async updateCost(
+    @Arg("data") { code, productionCost }: UpdateProductionCostInput,
+    @TenantId() companyId: string
+  ): Promise<Product> {
+    return ProductModel.findOneAndUpdateOrFail<Product>(
+      { companyId, code },
+      { productionCost }
+    );
+  }
+
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Product)
   @UseMiddleware(UserActionLog<Product>("Product fabric production is started"))
@@ -110,14 +123,4 @@ export class ProductResolver {
       "production.started": true,
     });
   }
-
-  // @Mutation(() => Product)
-  // async scheduleQCVisit(
-  //   @Arg("data") { productName }: StartProductionInput
-  // ): Promise<Product> {
-  //   return this.updatePerProductNameOrFail(productName, {
-  //     "production.actualStartDate": new Date(),
-  //     "production.started": true,
-  //   });
-  // }
 }

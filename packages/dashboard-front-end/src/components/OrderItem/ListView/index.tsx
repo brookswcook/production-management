@@ -13,7 +13,7 @@ import {
   useOrderItemsQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
-import { CreateOrderItemPopperButton } from "../Form";
+import { CreateOrderItemBulkyPopperButton } from "../Form";
 
 function toCurrency(number: number, currency = "$"): string {
   return `${currency}${number.toFixed(2)}`;
@@ -122,7 +122,7 @@ export function OrderItemList({
       <Fragment>
         <GridToolbarContainer>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <CreateOrderItemPopperButton
+            <CreateOrderItemBulkyPopperButton
               disabled={addActionDisabled}
               orderUid={orderUid}
             />
@@ -137,7 +137,6 @@ export function OrderItemList({
       rows={rows}
       columns={columns}
       getRowId={item => item.id}
-      pageSize={100}
       loading={loading}
       error={error}
       autoHeight
@@ -163,6 +162,12 @@ export function OrderItemList({
           );
         },
       }}
+      initialState={{
+        pagination: {
+          pageSize: 10,
+        },
+      }}
+      rowsPerPageOptions={[5, 10, 20, 50, 100]}
       disableSelectionOnClick
       sx={{ mt: 1 }}
     />

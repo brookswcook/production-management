@@ -8,7 +8,7 @@ import {
   IconButton,
   Divider,
 } from "@mui/material";
-import { useState, useEffect, ReactElement, FormEvent } from "react";
+import { useState, useEffect, ReactElement, FormEvent, Fragment } from "react";
 import {
   CreateAttributeInput,
   useCreateOrderItemMutation,
@@ -110,7 +110,7 @@ export function CreateOrderItemBulkyForm({
         getOptionLabel={option => option.code}
         onChange={(_, value) => value != null && setProductCode(value?.code)}
         renderOption={(props, option) => (
-          <Box component="li" {...props}>
+          <Box component="li" key={option.code} {...props}>
             {`${option.code}`}
           </Box>
         )}
@@ -155,9 +155,8 @@ export function CreateOrderItemBulkyForm({
           </Typography>
 
           {variantSets.map((_, index) => (
-            <>
+            <Fragment key={index}>
               <Variant
-                key={`Variant_${index}`}
                 onChange={variant => {
                   const updatedVariantSets = [...variantSets];
                   updatedVariantSets[index].attributes = variant;
@@ -166,7 +165,6 @@ export function CreateOrderItemBulkyForm({
                 }}
               />
               <TextField
-                key={`QuantityTextField_${index}`}
                 label="Quantity"
                 type="number"
                 InputProps={{
@@ -179,8 +177,8 @@ export function CreateOrderItemBulkyForm({
                 }}
                 required
               />
-              <Divider key={`Divider_${index}`} />
-            </>
+              <Divider />
+            </Fragment>
           ))}
         </>
       )}

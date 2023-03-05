@@ -40,19 +40,13 @@ export function Variant({
           key={`Autocomplete_${index}`}
           options={values ?? []}
           renderOption={(props, option) => (
-            <Box component="li" key={`${name}_${index}`} {...props}>
+            <Box component="li" {...props}>
               {`${option}`}
             </Box>
           )}
           onChange={(_, value) => onValueChange(name, String(value))}
           renderInput={params => (
-            <TextField
-              {...params}
-              label={name}
-              type={"text"}
-              key={`${name}_${index}`}
-              required
-            />
+            <TextField {...params} label={name} type={"text"} required />
           )}
         />
       ))}

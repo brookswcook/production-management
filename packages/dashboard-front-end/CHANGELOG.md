@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.6.0...dashboard-front-end@1.7.0) (2023-03-05)
+
+
+### Bug Fixes
+
+* increase margin of text field in fialog ([0fd89d8](https://github.com/brookswcook/production-management/commit/0fd89d8bbd241517fac53359ef7bef9ed6028bb1))
+* key issue ([f30a733](https://github.com/brookswcook/production-management/commit/f30a7330a14f53b6302ec5d40cad92cf39fb0021))
+* list view page size dropdown ([aef2236](https://github.com/brookswcook/production-management/commit/aef2236c6c33cb91bbb8ba3d278d1c21e0783f1a))
+* move quantity under attribute section ([8464dc5](https://github.com/brookswcook/production-management/commit/8464dc5dc2427fcf00dbfa23bf11c21f1b924d89))
+* pagination options ([a281c0f](https://github.com/brookswcook/production-management/commit/a281c0f902f9455a56f647e48981916d5c045b4a))
+* refactor order item form ([6ae5c38](https://github.com/brookswcook/production-management/commit/6ae5c3861e1dcc840017e22e276a43771abaad14))
+* remove redundant comments ([a1de252](https://github.com/brookswcook/production-management/commit/a1de252c5d62e9c2791afc801366e4fc9abec7b6))
+* tech pack label ([1776ba8](https://github.com/brookswcook/production-management/commit/1776ba885454949a47966e63bee7a7fd3eb5a791))
+* update graphql definition ([747480b](https://github.com/brookswcook/production-management/commit/747480b56b90a7d807ed0e0c6d9a45a4cf5ca169))
+* update graphql schema ([00409b2](https://github.com/brookswcook/production-management/commit/00409b2dd4e0975c1797b58ae7968945e812b3e8))
+* update text field when another product is selected ([4e1b9d4](https://github.com/brookswcook/production-management/commit/4e1b9d481e6e2a7a54b0ea0823c2fcda75b7b289))
+* use timeline component ([0ae558f](https://github.com/brookswcook/production-management/commit/0ae558f87ffb4ab9c04eb6c8849ddb266e214490))
+
+
+### Features
+
+* action dialog ([b329b83](https://github.com/brookswcook/production-management/commit/b329b83c3c22a4e1e8f4ec671a736f0c96859695))
+* add items by variant sets ([13a6f52](https://github.com/brookswcook/production-management/commit/13a6f52ee26aefe00783250ed8014894723699a9))
+* add prodcution cost text prop ([83fb02d](https://github.com/brookswcook/production-management/commit/83fb02d5f5cd9a05b200db260e5cb2577cffc634))
+* add status step workflow ([a4359e9](https://github.com/brookswcook/production-management/commit/a4359e983dd869b800c995712fcd1837b5949972))
+* add variant component ([bef5365](https://github.com/brookswcook/production-management/commit/bef53656734c870b6d2a1c6b532cea9649e65dd3))
+* timeline component instead of logs and notes ([f218346](https://github.com/brookswcook/production-management/commit/f2183464935c0daa11ec60f73ba353cd903e4c34))
+* update cost dialog ([5318ba4](https://github.com/brookswcook/production-management/commit/5318ba4c7b7006dec1602a7226949f8b2b43be66))
+* wip propose predefined cost on order item creation form ([cb30612](https://github.com/brookswcook/production-management/commit/cb3061262c4969c359300848bd39c98d2cc53b88))
+
+
+
+
+
 # [1.6.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.5.0...dashboard-front-end@1.6.0) (2023-02-21)
 
 

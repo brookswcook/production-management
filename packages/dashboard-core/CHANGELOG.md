@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/brookswcook/production-management/compare/dashboard-core@1.4.0...dashboard-core@1.5.0) (2023-03-05)
+
+
+### Features
+
+* add completed status to po ([bc0d3f6](https://github.com/brookswcook/production-management/commit/bc0d3f63cd09b2562467fbe437d7c4f78f19b39a))
+
+
+
+
+
 # [1.4.0](https://github.com/brookswcook/production-management/compare/dashboard-core@1.3.0...dashboard-core@1.4.0) (2023-02-16)
 
 

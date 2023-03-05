@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.5.1...dashboard-api@1.6.0) (2023-03-05)
+
+
+### Bug Fixes
+
+* add a note about populate ([217c4f1](https://github.com/brookswcook/production-management/commit/217c4f1d61c622e495dbcaa090dfcb7e7174b7f8))
+* implement timestamps properly ([a6fe45a](https://github.com/brookswcook/production-management/commit/a6fe45a67122ff14c4566bab2f6f2d985354092c))
+* refactor fields in model ([a1fbe4d](https://github.com/brookswcook/production-management/commit/a1fbe4d9249c89800d8f085a10495083757aecf8))
+* remove more redundant comments ([058676f](https://github.com/brookswcook/production-management/commit/058676f4c97f1ff5988b174713d33ec29140eaf9))
+* remove redundant comments ([a1de252](https://github.com/brookswcook/production-management/commit/a1de252c5d62e9c2791afc801366e4fc9abec7b6))
+
+
+### Features
+
+* add production cost field & rearrange other ([6117099](https://github.com/brookswcook/production-management/commit/61170996bcfef41a44f4aef9f0f9f494c61e95a7))
+* be able to get notes from query ([a223474](https://github.com/brookswcook/production-management/commit/a223474ff11421707364e7f2dc6f173fa16cc1ad))
+* update cost mutation ([705ccb0](https://github.com/brookswcook/production-management/commit/705ccb0e8b2dd790d3a74f57d9ba9eb6c044bd78))
+
+
+
+
+
 ## [1.5.1](https://github.com/brookswcook/production-management/compare/dashboard-api@1.5.0...dashboard-api@1.5.1) (2023-02-21)
 
 

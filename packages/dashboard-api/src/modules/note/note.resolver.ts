@@ -11,11 +11,23 @@ import { ResolverContext } from "../../lib/graphql";
 import { UserActionLog } from "../../lib/userActionLogMiddleware";
 import { getDownloadFileLink, uploadFiles } from "../file/file.service";
 import { TenantId } from "../user/user.decorator";
-import { CreateNoteInput } from "./note.input";
+import { CreateNoteInput, GetNotesInput } from "./note.input";
 import { Note, NoteModel } from "./note.model";
 
 @Resolver(Note)
 export class NoteResolver {
+  @Authorized()
+  @Query(() => [Note])
+  async notes(
+    @TenantId() companyId: string,
+    @Arg("data") { entityId: parentId, type }: GetNotesInput
+  ): Promise<Note[]> {
+    return NoteModel.find({ companyId, parentId, type })
+      .sort({ _id: -1 })
+      .populate("user")
+      .exec();
+  }
+
   @Authorized()
   @Mutation(() => Note)
   @UseMiddleware(UserActionLog<Note>("New note is added"))

@@ -1,0 +1,16 @@
+query Notes($data: GetNotesInput!) {
+  notes(data: $data) {
+    ...NotesFields
+  }
+}
+
+fragment NotesFields on Note {
+  id
+  text
+  user {
+    firstName
+  }
+  parentId
+  type
+  createdAt
+}

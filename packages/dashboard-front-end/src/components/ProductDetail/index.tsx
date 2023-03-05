@@ -7,24 +7,21 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { NoteType } from "dashboard-core";
 import { ChangeEvent, Fragment, ReactElement, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   ProductFieldsFragment,
   Sample,
   useProductQuery,
-  Note,
   useUpdateCostMutation,
 } from "../../generated/graphql";
-import NoteGrid from "../NoteGrid";
 import SampleGrid from "../SampleGrid";
 import { DetailViewSection } from "../Common/DetailViewSection";
 import { TextProperty } from "../Properties";
 import { ObjectProperty } from "../Properties/ObjectProperty";
-import ActionLogList from "../ActionLog/ListView";
 import { ActionDialog } from "../Common/ActionDialog";
 import FloatTextField from "../Common/FloatTextField";
+import EntityTimeline from "../EntityTimeline";
 
 // TODO: create wrapped currency value typography
 function toCurrency(number: number, currency = "$"): string {
@@ -71,7 +68,6 @@ export default function ProductDetail(): ReactElement {
     style,
     fabric,
     fitSamples,
-    notes,
   }: ProductFieldsFragment = data.product;
 
   return (
@@ -198,21 +194,11 @@ export default function ProductDetail(): ReactElement {
           samples={fitSamples as Sample[]}
         />
       </DetailViewSection>
-      <DetailViewSection headerTitle="Notes:">
-        <NoteGrid
-          notes={notes as Note[]}
-          type={"productNote" as NoteType}
-          parentId={id}
-        />
-      </DetailViewSection>
-      <DetailViewSection headerTitle="Log records:">
-        <ActionLogList
-          entityIds={[
-            id,
-            ...notes.map(({ id }) => id),
-            ...fitSamples.map(({ id }) => id),
-          ]}
-          entityTypes={["Product", "Note", "FitSample"]}
+      <DetailViewSection headerTitle="Timeline">
+        <EntityTimeline
+          entityIds={[id, ...fitSamples.map(({ id }) => id)]}
+          entityTypes={["Product", "FitSample"]}
+          noteType="productNote"
         />
       </DetailViewSection>
     </Container>

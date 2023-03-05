@@ -15,31 +15,39 @@ import { ExpectResultModel } from "../common/expectResultModel";
 @ObjectType()
 export class Note extends ExpectResultModel implements TimeStamps {
   @Field()
-  id?: string;
+  id!: string;
 
   @Property({ required: true })
   companyId!: string;
 
   @Field(() => String)
   @Property({ required: true })
-  parentId!: string;
+  userId!: string;
 
-  // TODO: maybe note should not know about given types; create service with needed functions instead
-  @Field()
+  @Field(() => String)
   @Property({ required: true })
-  type!: NoteType;
+  parentId!: string;
 
   @Field()
   @Property({ required: true })
   text!: string;
 
+  // TODO: maybe note should not know about given types; create service with needed functions instead
+  // TODO: type field of actionLog seems like a better idea
+  @Field()
+  @Property({ required: true })
+  type!: NoteType;
+
+  // TODO: replace with attachments?
   @Field(() => [String])
   @Property({ type: () => [String], default: [] })
   imageFileNames?: string[];
 
-  @Field(() => String)
-  @Property({ required: true })
-  userId!: string;
+  @Field({ nullable: true })
+  createdAt?: Date;
+
+  @Field({ nullable: true })
+  updatedAt?: Date;
 
   @Field(() => User, { nullable: true })
   @Property({
@@ -49,12 +57,6 @@ export class Note extends ExpectResultModel implements TimeStamps {
     justOne: true,
   })
   user!: User;
-
-  @Field({ nullable: true })
-  createdAt?: Date;
-
-  @Field({ nullable: true })
-  updatedAt?: Date;
 }
 
 export const NoteModel = getModelForClass(Note);

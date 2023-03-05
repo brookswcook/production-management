@@ -6,6 +6,7 @@ import {
 } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
+import { ExpectResultModel } from "../common/expectResultModel";
 import { User } from "../user/user.model";
 
 @index<ActionLog>({ companyId: 1, entityType: 1, entityId: 1 })
@@ -13,7 +14,7 @@ import { User } from "../user/user.model";
   schemaOptions: { collection: "action_logs", timestamps: true },
 })
 @ObjectType()
-export class ActionLog extends TimeStamps {
+export class ActionLog extends ExpectResultModel implements TimeStamps {
   @Field()
   id!: string;
 
@@ -35,6 +36,12 @@ export class ActionLog extends TimeStamps {
   @Field()
   @Property({ required: true })
   entityType!: string;
+
+  @Field({ nullable: true })
+  createdAt?: Date;
+
+  @Field({ nullable: true })
+  updatedAt?: Date;
 
   @Field(() => User, { nullable: true })
   @Property({

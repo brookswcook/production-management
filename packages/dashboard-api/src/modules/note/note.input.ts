@@ -3,6 +3,15 @@ import { FileUploadInput } from "../file/file.input";
 import { NoteType } from "dashboard-core";
 
 @InputType()
+export class GetNotesInput {
+  @Field(() => String)
+  type!: NoteType;
+
+  @Field(() => String)
+  entityId!: string;
+}
+
+@InputType()
 export class CreateNoteInput {
   @Field()
   parentId!: string;

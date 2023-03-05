@@ -9,20 +9,18 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
-import { NoteType, purchaseOrderStatusSet } from "dashboard-core";
+import { purchaseOrderStatusSet } from "dashboard-core";
 import { Fragment, ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import {
-  Note,
   PurchaseOrderDetailFieldsFragment,
   usePurchaseOrderQuery,
   usePushPurchaseOrderToNextStageMutation,
 } from "../../../generated/graphql";
-import ActionLogList from "../../ActionLog/ListView";
 import { DetailView } from "../../Common/DetailView";
 import { DetailViewHeaderTitle } from "../../Common/DetailViewHeaderTitle";
 import { DetailViewSection } from "../../Common/DetailViewSection";
-import NoteGrid from "../../NoteGrid";
+import EntityTimeline from "../../EntityTimeline";
 import { OrderItemList } from "../../OrderItem/ListView";
 import { ObjectProperty } from "../../Properties/ObjectProperty";
 import { TextProperty } from "../../Properties/TextProperty";
@@ -164,21 +162,14 @@ export function PurchaseOrderDetail(): ReactElement {
           addActionDisabled={data.purchaseOrder.status !== "draft"}
         />
       </DetailViewSection>
-      <DetailViewSection headerTitle="Notes:">
-        <NoteGrid
-          notes={data.purchaseOrder.notes as Note[]}
-          type={"purchaseOrderNote" as NoteType}
-          parentId={data.purchaseOrder.id}
-        />
-      </DetailViewSection>
-      <DetailViewSection headerTitle="Log records:">
-        <ActionLogList
+      <DetailViewSection headerTitle="Timeline">
+        <EntityTimeline
           entityIds={[
             data.purchaseOrder.id,
             ...data.purchaseOrder.items.map(({ id }) => id),
-            ...data.purchaseOrder.notes.map(({ id }) => id),
           ]}
-          entityTypes={["PurchaseOrder", "OrderItem", "Note"]}
+          entityTypes={["PurchaseOrder", "OrderItem"]}
+          noteType="purchaseOrderNote"
         />
       </DetailViewSection>
     </DetailView>

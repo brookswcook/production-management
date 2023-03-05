@@ -53,8 +53,12 @@ export function FileGrid({
     <DataGrid
       rows={files ?? []}
       columns={columns}
-      pageSize={5}
       getRowId={item => item.id}
+      initialState={{
+        pagination: {
+          pageSize: 5,
+        },
+      }}
       rowsPerPageOptions={[5, 10, 20, 50, 100]}
       disableSelectionOnClick={true}
       autoHeight

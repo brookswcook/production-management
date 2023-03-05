@@ -58,7 +58,6 @@ export default function ActionLogList({
         rows={rows}
         columns={columns}
         getRowId={item => item.id}
-        pageSize={20}
         loading={loading}
         error={error}
         autoHeight
@@ -70,6 +69,11 @@ export default function ActionLogList({
                 {error?.message}
               </Typography>
             );
+          },
+        }}
+        initialState={{
+          pagination: {
+            pageSize: 10,
           },
         }}
         rowsPerPageOptions={[5, 10, 20, 50, 100]}

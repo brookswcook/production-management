@@ -128,8 +128,12 @@ export default function SampleGrid({
       <DataGrid
         rows={rows ?? []}
         columns={columns}
-        pageSize={5}
         getRowId={item => item.sku}
+        initialState={{
+          pagination: {
+            pageSize: 5,
+          },
+        }}
         rowsPerPageOptions={[5, 10, 20, 50, 100]}
         checkboxSelection
         onSelectionModelChange={selectionModel =>

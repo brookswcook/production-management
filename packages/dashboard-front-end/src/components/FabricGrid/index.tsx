@@ -112,12 +112,16 @@ export default function FabricGrid(): ReactElement {
           rows={rows}
           columns={columns}
           getRowId={item => item.code}
-          pageSize={20}
           loading={loading}
           error={error}
           autoHeight
           components={{
             Toolbar: CustomToolbar,
+          }}
+          initialState={{
+            pagination: {
+              pageSize: 20,
+            },
           }}
           rowsPerPageOptions={[5, 10, 20, 50, 100]}
           disableSelectionOnClick

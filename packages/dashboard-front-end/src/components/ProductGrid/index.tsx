@@ -177,11 +177,11 @@ export default function ProductGrid(): ReactElement {
           rows={rows}
           columns={columns}
           getRowId={item => item.code}
-          pageSize={100}
+          pageSize={20}
           loading={loading}
           error={error}
           autoHeight
-          rowsPerPageOptions={[10]}
+          rowsPerPageOptions={[5, 10, 20, 50, 100]}
           components={{
             Toolbar: CustomToolbar,
           }}

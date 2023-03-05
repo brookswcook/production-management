@@ -7,20 +7,17 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { NoteType } from "dashboard-core";
 import { Fragment, ReactElement, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   FabricFieldsFragment,
-  Note,
   Sample,
   useFabricQuery,
   usePrintLinkLazyQuery,
 } from "../../generated/graphql";
-import ActionLogList from "../ActionLog/ListView";
 import { DetailViewSection } from "../Common/DetailViewSection";
-import NoteGrid from "../NoteGrid";
+import EntityTimeline from "../EntityTimeline";
 import { BooleanProperty, TextProperty } from "../Properties";
 import { LinkProperty } from "../Properties/LinkProperty";
 import { ObjectProperty } from "../Properties/ObjectProperty";
@@ -58,7 +55,6 @@ export function FabricDetail(): ReactElement {
     printFileName,
     productCodes,
     samples,
-    notes,
   }: FabricFieldsFragment = data.fabric;
 
   const colorFieldSet: {
@@ -161,21 +157,11 @@ export function FabricDetail(): ReactElement {
           samples={samples as Sample[]}
         />
       </DetailViewSection>
-      <DetailViewSection headerTitle="Notes:">
-        <NoteGrid
-          notes={notes as Note[]}
-          type={"fabricNote" as NoteType}
-          parentId={id}
-        />
-      </DetailViewSection>
-      <DetailViewSection headerTitle="Log records:">
-        <ActionLogList
-          entityIds={[
-            id,
-            ...notes.map(({ id }) => id),
-            ...samples.map(({ id }) => id),
-          ]}
-          entityTypes={["Fabric", "Note", "FabricSample"]}
+      <DetailViewSection headerTitle="Timeline">
+        <EntityTimeline
+          entityIds={[id, ...samples.map(({ id }) => id)]}
+          entityTypes={["Fabric", "FabricSample"]}
+          noteType="fabricNote"
         />
       </DetailViewSection>
     </Container>

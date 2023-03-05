@@ -10,7 +10,5 @@ fragment ActionLogListFields on ActionLog {
   user {
     firstName
   }
-  entityId
-  entityType
   createdAt
 }

@@ -1,14 +1,5 @@
-import {
-  Arg,
-  Authorized,
-  Ctx,
-  Mutation,
-  Query,
-  Resolver,
-  UseMiddleware,
-} from "type-graphql";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { ResolverContext } from "../../lib/graphql";
-import { UserActionLog } from "../../lib/userActionLogMiddleware";
 import { getDownloadFileLink, uploadFiles } from "../file/file.service";
 import { TenantId } from "../user/user.decorator";
 import { CreateNoteInput, GetNotesInput } from "./note.input";
@@ -30,7 +21,6 @@ export class NoteResolver {
 
   @Authorized()
   @Mutation(() => Note)
-  @UseMiddleware(UserActionLog<Note>("New note is added"))
   async createNote(
     @TenantId() companyId: string,
     @Arg("data") data: CreateNoteInput,

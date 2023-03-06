@@ -644,6 +644,13 @@ export type UserContactDetails = {
   phone: Maybe<Scalars['String']>;
 };
 
+export type LoginMutationVariables = Exact<{
+  data: LoginInput;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResult', token: string } };
+
 export type ActionLogsQueryVariables = Exact<{
   data: InputMaybe<GetActionLogsInput>;
 }>;
@@ -653,12 +660,14 @@ export type ActionLogsQuery = { __typename?: 'Query', actionLogs: Array<{ __type
 
 export type ActionLogListFieldsFragment = { __typename?: 'ActionLog', id: string, title: string, createdAt: string | null, user: { __typename?: 'User', firstName: string } | null };
 
-export type LoginMutationVariables = Exact<{
-  data: LoginInput;
+export type NotesQueryVariables = Exact<{
+  data: GetNotesInput;
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResult', token: string } };
+export type NotesQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', id: string, text: string, parentId: string, type: string, createdAt: string | null, user: { __typename?: 'User', firstName: string } | null }> };
+
+export type NotesFieldsFragment = { __typename?: 'Note', id: string, text: string, parentId: string, type: string, createdAt: string | null, user: { __typename?: 'User', firstName: string } | null };
 
 export type FabricQueryVariables = Exact<{
   code: Scalars['String'];
@@ -703,15 +712,6 @@ export type FactoryListFieldsFragment = { __typename?: 'Company', id: string, co
 export type FactoryCodesFragment = { __typename?: 'Company', code: string };
 
 export type FileFieldsFragment = { __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt: string | null, user: { __typename?: 'User', fullName: string } | null };
-
-export type NotesQueryVariables = Exact<{
-  data: GetNotesInput;
-}>;
-
-
-export type NotesQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', id: string, text: string, parentId: string, type: string, createdAt: string | null, user: { __typename?: 'User', firstName: string } | null }> };
-
-export type NotesFieldsFragment = { __typename?: 'Note', id: string, text: string, parentId: string, type: string, createdAt: string | null, user: { __typename?: 'User', firstName: string } | null };
 
 export type OrderItemsQueryVariables = Exact<{
   data: InputMaybe<GetOrderItemsInput>;
@@ -940,6 +940,18 @@ export const ActionLogListFieldsFragmentDoc = gql`
   createdAt
 }
     `;
+export const NotesFieldsFragmentDoc = gql`
+    fragment NotesFields on Note {
+  id
+  text
+  user {
+    firstName
+  }
+  parentId
+  type
+  createdAt
+}
+    `;
 export const NoteFieldsFragmentDoc = gql`
     fragment noteFields on Note {
   id
@@ -1003,18 +1015,6 @@ export const FactoryListFieldsFragmentDoc = gql`
 export const FactoryCodesFragmentDoc = gql`
     fragment FactoryCodes on Company {
   code
-}
-    `;
-export const NotesFieldsFragmentDoc = gql`
-    fragment NotesFields on Note {
-  id
-  text
-  user {
-    firstName
-  }
-  parentId
-  type
-  createdAt
 }
     `;
 export const OrderItemOwnFieldsFragmentDoc = gql`
@@ -1232,6 +1232,39 @@ export const UserListFieldsFragmentDoc = gql`
   }
 }
     `;
+export const LoginDocument = gql`
+    mutation Login($data: LoginInput!) {
+  login(data: $data) {
+    token
+  }
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const ActionLogsDocument = gql`
     query ActionLogs($data: GetActionLogsInput) {
   actionLogs(data: $data) {
@@ -1267,39 +1300,41 @@ export function useActionLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type ActionLogsQueryHookResult = ReturnType<typeof useActionLogsQuery>;
 export type ActionLogsLazyQueryHookResult = ReturnType<typeof useActionLogsLazyQuery>;
 export type ActionLogsQueryResult = Apollo.QueryResult<ActionLogsQuery, ActionLogsQueryVariables>;
-export const LoginDocument = gql`
-    mutation Login($data: LoginInput!) {
-  login(data: $data) {
-    token
+export const NotesDocument = gql`
+    query Notes($data: GetNotesInput!) {
+  notes(data: $data) {
+    ...NotesFields
   }
 }
-    `;
-export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+    ${NotesFieldsFragmentDoc}`;
 
 /**
- * __useLoginMutation__
+ * __useNotesQuery__
  *
- * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useNotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ * const { data, loading, error } = useNotesQuery({
  *   variables: {
  *      data: // value for 'data'
  *   },
  * });
  */
-export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+export function useNotesQuery(baseOptions: Apollo.QueryHookOptions<NotesQuery, NotesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+        return Apollo.useQuery<NotesQuery, NotesQueryVariables>(NotesDocument, options);
       }
-export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
-export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
-export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export function useNotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NotesQuery, NotesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<NotesQuery, NotesQueryVariables>(NotesDocument, options);
+        }
+export type NotesQueryHookResult = ReturnType<typeof useNotesQuery>;
+export type NotesLazyQueryHookResult = ReturnType<typeof useNotesLazyQuery>;
+export type NotesQueryResult = Apollo.QueryResult<NotesQuery, NotesQueryVariables>;
 export const FabricDocument = gql`
     query Fabric($code: String!) {
   fabric(code: $code) {
@@ -1506,41 +1541,6 @@ export function useCreateFactoryMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateFactoryMutationHookResult = ReturnType<typeof useCreateFactoryMutation>;
 export type CreateFactoryMutationResult = Apollo.MutationResult<CreateFactoryMutation>;
 export type CreateFactoryMutationOptions = Apollo.BaseMutationOptions<CreateFactoryMutation, CreateFactoryMutationVariables>;
-export const NotesDocument = gql`
-    query Notes($data: GetNotesInput!) {
-  notes(data: $data) {
-    ...NotesFields
-  }
-}
-    ${NotesFieldsFragmentDoc}`;
-
-/**
- * __useNotesQuery__
- *
- * To run a query within a React component, call `useNotesQuery` and pass it any options that fit your needs.
- * When your component renders, `useNotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useNotesQuery({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useNotesQuery(baseOptions: Apollo.QueryHookOptions<NotesQuery, NotesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<NotesQuery, NotesQueryVariables>(NotesDocument, options);
-      }
-export function useNotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NotesQuery, NotesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<NotesQuery, NotesQueryVariables>(NotesDocument, options);
-        }
-export type NotesQueryHookResult = ReturnType<typeof useNotesQuery>;
-export type NotesLazyQueryHookResult = ReturnType<typeof useNotesLazyQuery>;
-export type NotesQueryResult = Apollo.QueryResult<NotesQuery, NotesQueryVariables>;
 export const OrderItemsDocument = gql`
     query OrderItems($data: GetOrderItemsInput) {
   orderItems(data: $data) {

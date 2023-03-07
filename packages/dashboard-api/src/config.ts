@@ -5,6 +5,8 @@ import { S3ClientConfig } from "@aws-sdk/client-s3";
 const {
   NODE_ENV: environment = "development",
   PORT: port = 4000,
+  APP_URI: appURI = "localhost",
+
   MONGO_URI: mongoURI,
   MONGO_DEBUG_MODE_ENABLED: mongoDebugModeEnabled = false,
 
@@ -23,6 +25,7 @@ const {
 
   JWT_SECRET: jwtSecret,
   JWT_EXPIRE: jwtExpire,
+
   LOG_LEVEL: logLevel = LoggingLevel.info,
 } = process.env;
 
@@ -45,6 +48,7 @@ if (
 const config: ApiConfig = {
   port: Number(port),
   environment: environment as EnvironmentType,
+  appURI,
   db: {
     uri: mongoURI,
     debugModeEnabled: mongoDebugModeEnabled === "true",
@@ -121,6 +125,7 @@ export type ApiConfig = {
   logging: ApiLoggingConfig;
   environment: EnvironmentType;
   port: number;
+  appURI: string;
   s3: S3Config;
   sendgrid: SendgridConfig;
 };

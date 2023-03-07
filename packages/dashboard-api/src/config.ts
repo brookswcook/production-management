@@ -19,6 +19,8 @@ const {
   FIREBASE_CLIENT_EMAIL: firebaseClientEmail,
   FIREBASE_PRIVATE_KEY: firebasePrivateKey,
 
+  SENDGRID_API_KEY: sendgridApiKey,
+
   JWT_SECRET: jwtSecret,
   JWT_EXPIRE: jwtExpire,
   LOG_LEVEL: logLevel = LoggingLevel.info,
@@ -34,7 +36,8 @@ if (
   firebaseApiKey == null ||
   firebaseProjectId == null ||
   firebaseClientEmail == null ||
-  firebasePrivateKey == null
+  firebasePrivateKey == null ||
+  sendgridApiKey == null
 ) {
   throw new Error("One of the required env variables was not provided");
 }
@@ -68,6 +71,9 @@ const config: ApiConfig = {
       },
     },
     bucketName: s3BucketName,
+  },
+  sendgrid: {
+    apiKey: sendgridApiKey,
   },
   logging: { level: logLevel as LoggingLevel },
 };
@@ -116,11 +122,16 @@ export type ApiConfig = {
   environment: EnvironmentType;
   port: number;
   s3: S3Config;
+  sendgrid: SendgridConfig;
 };
 
 export type S3Config = {
   client: S3ClientConfig;
   bucketName: string;
+};
+
+export type SendgridConfig = {
+  apiKey: string;
 };
 
 export default config;

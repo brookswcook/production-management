@@ -156,7 +156,7 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
                           to="/"
                           style={{ textDecoration: "none", color: "white" }}
                         >
-                          Production Management Tool
+                          Production Management App
                         </Link>
                       </Typography>
                     </Button>

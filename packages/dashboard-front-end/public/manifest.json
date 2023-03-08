@@ -1,6 +1,6 @@
 {
-  "short_name": "Production control app",
-  "name": "Production control application",
+  "short_name": "Production management app",
+  "name": "Production management application",
   "icons": [
     {
       "src": "favicon.ico",

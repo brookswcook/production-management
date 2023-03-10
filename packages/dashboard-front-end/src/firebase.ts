@@ -6,10 +6,13 @@ import { config } from "./config";
 const firebaseApp = initializeApp(config.firebase);
 const firebaseAuth = getAuth(firebaseApp);
 const firebaseMessaging = getMessaging(firebaseApp);
-const getMessagingToken = () =>
-  getToken(firebaseMessaging, {
+const getMessagingToken = async () => {
+  const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+  return getToken(firebaseMessaging, {
+    serviceWorkerRegistration,
     vapidKey: config.firebase.vapidKey,
   });
+};
 
 if (config.nodeEnv === "development" && config.enableAuthEmulator === "true") {
   connectAuthEmulator(firebaseAuth, "http://localhost:9099");

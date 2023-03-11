@@ -50,6 +50,8 @@ import { UserList } from "../User";
 import { FactoryList } from "../Factory/ListView";
 import { ProductDetail, ProductList } from "../Product";
 import { PurchaseOrderList, PurchaseOrderDetail } from "../PurchaseOrder";
+import useMessagingToken from "../Notifications/useMessagingToken";
+import { getMessagingToken } from "../../firebase";
 
 function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const { signOut } = useContext(AuthContext);
@@ -255,9 +257,35 @@ function ApolloApp() {
     ApolloClient<NormalizedCacheObject>
   >(createApolloClient(token, signOut));
 
+  // TODO: move messaging related stuff away
+  const [messagingPermission, setMessagingPermission] = useState(false);
+  const { messagingToken, setMessagingToken } = useMessagingToken();
+
   useEffect(() => {
     setApolloClient(createApolloClient(token, signOut));
   }, [token]);
+
+  useEffect(() => {
+    async function requestNotificationsPermission() {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        void setMessagingPermission(true);
+      } else {
+        void setMessagingPermission(false);
+      }
+    }
+    void requestNotificationsPermission();
+  });
+
+  useEffect(() => {
+    async function setupMessaging() {
+      const token = await getMessagingToken();
+      setMessagingToken(token);
+    }
+    if (messagingPermission && messagingToken == null) {
+      void setupMessaging();
+    }
+  }, [messagingPermission, messagingToken, setMessagingToken]);
 
   return (
     <ApolloProvider client={apolloClient}>

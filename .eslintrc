@@ -9,7 +9,7 @@
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "prettier"
   ],
-  "ignorePatterns": ["**/generated/*"],
+  "ignorePatterns": ["**/generated/*", "**/public/*", "**/build/*"],
   "rules": {
     "react/prop-types": 0,
     "react/react-in-jsx-scope": 0,

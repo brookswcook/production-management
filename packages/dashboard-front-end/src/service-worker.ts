@@ -79,4 +79,13 @@ self.addEventListener("message", event => {
   }
 });
 
+self.addEventListener("push", e => {
+  const notificationOptions = {
+    body: "Background Message body.",
+    icon: "/favicon-32x32.png",
+  };
+
+  e.waitUntil(self.registration.showNotification("Title", notificationOptions));
+});
+
 // Any other custom service worker logic can go here.

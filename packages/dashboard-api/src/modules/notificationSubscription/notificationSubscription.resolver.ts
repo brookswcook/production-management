@@ -16,10 +16,14 @@ export class NotificationSubscriptionResolver {
     @Arg("data") { token }: CreateNotificationSubscriptionInput,
     @Ctx() { user: { id: userId } }: ResolverContext
   ): Promise<NotificationSubscription> {
-    return await new NotificationSubscriptionModel({
-      companyId,
-      userId,
-      token,
-    }).save();
+    return await NotificationSubscriptionModel.findOneAndUpdate(
+      {
+        companyId,
+        userId,
+        token,
+      },
+      { companyId, userId, token },
+      { upsert: true, new: true }
+    ).exec();
   }
 }

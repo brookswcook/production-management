@@ -1,9 +1,17 @@
-import { getModelForClass, prop as Property } from "@typegoose/typegoose";
+import {
+  getModelForClass,
+  index,
+  prop as Property,
+} from "@typegoose/typegoose";
 import { ModelOptions } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
 import { ExpectResultModel } from "../common/expectResultModel";
 
+@index<NotificationSubscription>(
+  { companyId: 1, userId: 1, token: 1 },
+  { unique: true }
+)
 @ModelOptions({
   schemaOptions: { timestamps: true, collection: "notification_subscriptions" },
 })

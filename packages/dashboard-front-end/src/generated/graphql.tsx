@@ -88,6 +88,10 @@ export type CreateNoteInput = {
   type: Scalars['String'];
 };
 
+export type CreateNotificationSubscriptionInput = {
+  token: Scalars['String'];
+};
+
 export type CreateOrderItemInput = {
   orderUid: Scalars['Float'];
   price: Scalars['Float'];
@@ -243,6 +247,7 @@ export type Mutation = {
   createFabric: Fabric;
   createFactory: Company;
   createNote: Note;
+  createNotificationSubscription: NotificationSubscription;
   createOrderItem: OrderItem;
   createProduct: Product;
   createPurchaseOrder: PurchaseOrder;
@@ -293,6 +298,11 @@ export type MutationCreateFactoryArgs = {
 
 export type MutationCreateNoteArgs = {
   data: CreateNoteInput;
+};
+
+
+export type MutationCreateNotificationSubscriptionArgs = {
+  data: CreateNotificationSubscriptionInput;
 };
 
 
@@ -405,6 +415,16 @@ export type Note = {
   type: Scalars['String'];
   updatedAt: Maybe<Scalars['DateTime']>;
   user: Maybe<User>;
+  userId: Scalars['String'];
+};
+
+export type NotificationSubscription = {
+  __typename?: 'NotificationSubscription';
+  companyId: Scalars['String'];
+  createdAt: Maybe<Scalars['DateTime']>;
+  id: Scalars['String'];
+  token: Scalars['String'];
+  updatedAt: Maybe<Scalars['DateTime']>;
   userId: Scalars['String'];
 };
 
@@ -748,6 +768,13 @@ export type FactoryListFieldsFragment = { __typename?: 'Company', id: string, co
 export type FactoryCodesFragment = { __typename?: 'Company', code: string };
 
 export type FileFieldsFragment = { __typename?: 'File', id: string, name: string, extName: string, uploadingKey: string, link: string, createdAt: string | null, user: { __typename?: 'User', fullName: string } | null };
+
+export type CreateNotificationSubscriptionMutationVariables = Exact<{
+  data: CreateNotificationSubscriptionInput;
+}>;
+
+
+export type CreateNotificationSubscriptionMutation = { __typename?: 'Mutation', createNotificationSubscription: { __typename?: 'NotificationSubscription', id: string, token: string } };
 
 export type OrderItemsQueryVariables = Exact<{
   data: InputMaybe<GetOrderItemsInput>;
@@ -1607,6 +1634,40 @@ export function useCreateFactoryMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateFactoryMutationHookResult = ReturnType<typeof useCreateFactoryMutation>;
 export type CreateFactoryMutationResult = Apollo.MutationResult<CreateFactoryMutation>;
 export type CreateFactoryMutationOptions = Apollo.BaseMutationOptions<CreateFactoryMutation, CreateFactoryMutationVariables>;
+export const CreateNotificationSubscriptionDocument = gql`
+    mutation CreateNotificationSubscription($data: CreateNotificationSubscriptionInput!) {
+  createNotificationSubscription(data: $data) {
+    id
+    token
+  }
+}
+    `;
+export type CreateNotificationSubscriptionMutationFn = Apollo.MutationFunction<CreateNotificationSubscriptionMutation, CreateNotificationSubscriptionMutationVariables>;
+
+/**
+ * __useCreateNotificationSubscriptionMutation__
+ *
+ * To run a mutation, you first call `useCreateNotificationSubscriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNotificationSubscriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNotificationSubscriptionMutation, { data, loading, error }] = useCreateNotificationSubscriptionMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateNotificationSubscriptionMutation(baseOptions?: Apollo.MutationHookOptions<CreateNotificationSubscriptionMutation, CreateNotificationSubscriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateNotificationSubscriptionMutation, CreateNotificationSubscriptionMutationVariables>(CreateNotificationSubscriptionDocument, options);
+      }
+export type CreateNotificationSubscriptionMutationHookResult = ReturnType<typeof useCreateNotificationSubscriptionMutation>;
+export type CreateNotificationSubscriptionMutationResult = Apollo.MutationResult<CreateNotificationSubscriptionMutation>;
+export type CreateNotificationSubscriptionMutationOptions = Apollo.BaseMutationOptions<CreateNotificationSubscriptionMutation, CreateNotificationSubscriptionMutationVariables>;
 export const OrderItemsDocument = gql`
     query OrderItems($data: GetOrderItemsInput) {
   orderItems(data: $data) {

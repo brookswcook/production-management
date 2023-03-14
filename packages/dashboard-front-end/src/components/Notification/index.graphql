@@ -1,0 +1,8 @@
+mutation CreateNotificationSubscription(
+  $data: CreateNotificationSubscriptionInput!
+) {
+  createNotificationSubscription(data: $data) {
+    id
+    token
+  }
+}

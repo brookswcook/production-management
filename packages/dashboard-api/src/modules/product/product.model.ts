@@ -50,6 +50,7 @@ export class Product extends ExpectResultModel {
   @Property({ required: true })
   deliveryDate!: Date;
 
+  // TODO: add a key-value set of price where key is number of units and price for that amount of units
   @Field()
   @Property({ required: true })
   productionCost!: number;

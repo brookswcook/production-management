@@ -48,6 +48,39 @@ export class OrderItem {
   @Field()
   @Property({ required: true })
   price!: number;
+
+  static async getOrderItemsGroupedByAttributes(
+    companyId: string,
+    orderUid: number
+  ) {
+    return await OrderItemModel.aggregate<{
+      productCode: string;
+      keys: string[];
+      values: string[];
+      qty: number;
+    }>([
+      { $match: { companyId, orderUid } },
+      {
+        $group: {
+          _id: {
+            productCode: "$productCode",
+            key: "$variantAttributes.key",
+            value: "$variantAttributes.value",
+          },
+          qty: { $sum: "$quantity" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          productCode: "$_id.productCode",
+          keys: "$_id.key",
+          values: "$_id.value",
+          qty: "$qty",
+        },
+      },
+    ]).exec();
+  }
 }
 
 export const OrderItemModel = getModelForClass(OrderItem);

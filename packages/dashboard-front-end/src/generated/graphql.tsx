@@ -417,6 +417,15 @@ export type OrderItem = {
   variantAttributes: Array<Attribute>;
 };
 
+export type OrderItemsGroupedByAttributes = {
+  __typename?: 'OrderItemsGroupedByAttributes';
+  extPrice: Scalars['Float'];
+  productCode: Scalars['String'];
+  quantity: Scalars['Float'];
+  unitPrice: Scalars['Float'];
+  variantSets: Array<VariantSet>;
+};
+
 export type Product = {
   __typename?: 'Product';
   code: Scalars['String'];
@@ -498,6 +507,7 @@ export type Query = {
   imageLink: Scalars['String'];
   notes: Array<Note>;
   orderItems: Array<OrderItem>;
+  orderItemsGroupedByAttributes: Array<OrderItemsGroupedByAttributes>;
   printLink: Scalars['String'];
   product: Product;
   products: Array<Product>;
@@ -536,6 +546,11 @@ export type QueryNotesArgs = {
 
 export type QueryOrderItemsArgs = {
   data: InputMaybe<GetOrderItemsInput>;
+};
+
+
+export type QueryOrderItemsGroupedByAttributesArgs = {
+  data: GetOrderItemsInput;
 };
 
 
@@ -644,6 +659,12 @@ export type UserContactDetails = {
   phone: Maybe<Scalars['String']>;
 };
 
+export type VariantSet = {
+  __typename?: 'VariantSet';
+  attributes: Array<Attribute>;
+  quantity: Scalars['Float'];
+};
+
 export type LoginMutationVariables = Exact<{
   data: LoginInput;
 }>;
@@ -719,6 +740,15 @@ export type OrderItemsQueryVariables = Exact<{
 
 
 export type OrderItemsQuery = { __typename?: 'Query', orderItems: Array<{ __typename?: 'OrderItem', id: string, quantity: number, price: number, product: { __typename?: 'Product', code: string }, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> }> };
+
+export type OrderItemsGroupedByAttributesQueryVariables = Exact<{
+  data: GetOrderItemsInput;
+}>;
+
+
+export type OrderItemsGroupedByAttributesQuery = { __typename?: 'Query', orderItemsGroupedByAttributes: Array<{ __typename?: 'OrderItemsGroupedByAttributes', productCode: string, quantity: number, unitPrice: number, extPrice: number, variantSets: Array<{ __typename?: 'VariantSet', quantity: number, attributes: Array<{ __typename?: 'Attribute', key: string, value: string }> }> }> };
+
+export type OrderItemsGroupedByAttributesFieldsFragment = { __typename?: 'OrderItemsGroupedByAttributes', productCode: string, quantity: number, unitPrice: number, extPrice: number, variantSets: Array<{ __typename?: 'VariantSet', quantity: number, attributes: Array<{ __typename?: 'Attribute', key: string, value: string }> }> };
 
 export type OrderItemListFieldsFragment = { __typename?: 'OrderItem', id: string, quantity: number, price: number, product: { __typename?: 'Product', code: string }, variantAttributes: Array<{ __typename?: 'Attribute', key: string, value: string }> };
 
@@ -1015,6 +1045,21 @@ export const FactoryListFieldsFragmentDoc = gql`
 export const FactoryCodesFragmentDoc = gql`
     fragment FactoryCodes on Company {
   code
+}
+    `;
+export const OrderItemsGroupedByAttributesFieldsFragmentDoc = gql`
+    fragment OrderItemsGroupedByAttributesFields on OrderItemsGroupedByAttributes {
+  productCode
+  variantSets {
+    quantity
+    attributes {
+      key
+      value
+    }
+  }
+  quantity
+  unitPrice
+  extPrice
 }
     `;
 export const OrderItemOwnFieldsFragmentDoc = gql`
@@ -1576,6 +1621,41 @@ export function useOrderItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type OrderItemsQueryHookResult = ReturnType<typeof useOrderItemsQuery>;
 export type OrderItemsLazyQueryHookResult = ReturnType<typeof useOrderItemsLazyQuery>;
 export type OrderItemsQueryResult = Apollo.QueryResult<OrderItemsQuery, OrderItemsQueryVariables>;
+export const OrderItemsGroupedByAttributesDocument = gql`
+    query OrderItemsGroupedByAttributes($data: GetOrderItemsInput!) {
+  orderItemsGroupedByAttributes(data: $data) {
+    ...OrderItemsGroupedByAttributesFields
+  }
+}
+    ${OrderItemsGroupedByAttributesFieldsFragmentDoc}`;
+
+/**
+ * __useOrderItemsGroupedByAttributesQuery__
+ *
+ * To run a query within a React component, call `useOrderItemsGroupedByAttributesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrderItemsGroupedByAttributesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrderItemsGroupedByAttributesQuery({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useOrderItemsGroupedByAttributesQuery(baseOptions: Apollo.QueryHookOptions<OrderItemsGroupedByAttributesQuery, OrderItemsGroupedByAttributesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrderItemsGroupedByAttributesQuery, OrderItemsGroupedByAttributesQueryVariables>(OrderItemsGroupedByAttributesDocument, options);
+      }
+export function useOrderItemsGroupedByAttributesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderItemsGroupedByAttributesQuery, OrderItemsGroupedByAttributesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrderItemsGroupedByAttributesQuery, OrderItemsGroupedByAttributesQueryVariables>(OrderItemsGroupedByAttributesDocument, options);
+        }
+export type OrderItemsGroupedByAttributesQueryHookResult = ReturnType<typeof useOrderItemsGroupedByAttributesQuery>;
+export type OrderItemsGroupedByAttributesLazyQueryHookResult = ReturnType<typeof useOrderItemsGroupedByAttributesLazyQuery>;
+export type OrderItemsGroupedByAttributesQueryResult = Apollo.QueryResult<OrderItemsGroupedByAttributesQuery, OrderItemsGroupedByAttributesQueryVariables>;
 export const CreateOrderItemDocument = gql`
     mutation CreateOrderItem($data: CreateOrderItemInput!) {
   createOrderItem(data: $data) {

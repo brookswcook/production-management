@@ -69,28 +69,30 @@ export class OrderItem {
       },
       { $match: { companyId: companyId, orderUid: orderUid } },
       {
+        $project: {
+          productCode: 1,
+          quantity: 1,
+          price: 1,
+          attributes: "$variantAttributes",
+        },
+      },
+      {
         $group: {
-          _id: {
-            productCode: "$productCode",
-            key: "$variantAttributes.key",
-            value: "$variantAttributes.value",
-            unitPrice: "$price",
+          _id: { productCode: "$productCode", price: "$price" },
+          quantity: { $sum: "$quantity" },
+          variantSets: {
+            $push: { quantity: "$quantity", attributes: "$attributes" },
           },
-          qty: { $sum: "$quantity" },
         },
       },
       {
         $project: {
           _id: 0,
           productCode: "$_id.productCode",
-          attributes: {
-            $zip: {
-              inputs: ["$_id.key", "$_id.value"],
-            },
-          },
-          qty: "$qty",
-          unitPrice: "$_id.unitPrice",
-          extPrice: { $multiply: ["$qty", "$_id.unitPrice"] },
+          unitPrice: "$_id.price",
+          quantity: 1,
+          extPrice: { $multiply: ["$quantity", "$_id.price"] },
+          variantSets: 1,
         },
       },
     ]).exec();
@@ -104,15 +106,24 @@ export class OrderItemsGroupedByAttributes {
   @Field()
   productCode!: string;
 
-  @Field(() => [[String, String]])
-  attributes!: [string, string][];
+  @Field(() => [VariantSet])
+  variantSets!: VariantSet[];
 
   @Field()
-  qty!: number;
+  quantity!: number;
 
   @Field()
   unitPrice!: number;
 
   @Field()
   extPrice!: number;
+}
+
+@ObjectType()
+export class VariantSet {
+  @Field()
+  quantity!: number;
+
+  @Field(() => [Attribute])
+  attributes!: Attribute[];
 }

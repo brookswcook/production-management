@@ -40,7 +40,12 @@ export function CreateOrderItemBulkyForm({
   const [pricePerItem, setPricePerItem] = useState<number>(0);
   const { data: { products } = { products: [] } } = useProductsQuery();
   const [newOrderItem] = useCreateOrderItemMutation({
-    refetchQueries: ["PurchaseOrder", "OrderItems", "ActionLogs"],
+    refetchQueries: [
+      "PurchaseOrder",
+      "OrderItems",
+      "ActionLogs",
+      "OrderItemsGroupedByAttributes",
+    ],
   });
 
   function checkForDuplicatedVariant(

@@ -10,7 +10,11 @@ import {
 import { UserActionLog } from "../../lib/userActionLogMiddleware";
 import { TenantId } from "../user/user.decorator";
 import { CreateOrderItemInput, GetOrderItemsInput } from "./orderItem.input";
-import { OrderItem, OrderItemModel } from "./orderItem.model";
+import {
+  OrderItem,
+  OrderItemModel,
+  OrderItemsGroupedByAttributes,
+} from "./orderItem.model";
 
 @Resolver(OrderItem)
 export class OrderItemResolver {
@@ -26,6 +30,14 @@ export class OrderItemResolver {
         },
       ])
       .exec();
+  }
+
+  @Query(() => [OrderItemsGroupedByAttributes])
+  async orderItemsGroupedByAttributes(
+    @TenantId() companyId: string,
+    @Arg("data") { orderUid }: GetOrderItemsInput
+  ): Promise<OrderItemsGroupedByAttributes[]> {
+    return OrderItemModel.getOrderItemsGroupedByAttributes(companyId, orderUid);
   }
 
   @Authorized<UserRole>(["Admin", "VChapman"])

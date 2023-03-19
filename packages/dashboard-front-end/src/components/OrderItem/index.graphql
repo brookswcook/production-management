@@ -4,6 +4,26 @@ query OrderItems($data: GetOrderItemsInput) {
   }
 }
 
+query OrderItemsGroupedByAttributes($data: GetOrderItemsInput!) {
+  orderItemsGroupedByAttributes(data: $data) {
+    ...OrderItemsGroupedByAttributesFields
+  }
+}
+
+fragment OrderItemsGroupedByAttributesFields on OrderItemsGroupedByAttributes {
+  productCode
+  variantSets {
+    quantity
+    attributes {
+      key
+      value
+    }
+  }
+  quantity
+  unitPrice
+  extPrice
+}
+
 fragment OrderItemListFields on OrderItem {
   ...OrderItemOwnFields
   product {

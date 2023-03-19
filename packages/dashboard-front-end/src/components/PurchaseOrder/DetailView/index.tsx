@@ -21,7 +21,10 @@ import { DetailView } from "../../Common/DetailView";
 import { DetailViewHeaderTitle } from "../../Common/DetailViewHeaderTitle";
 import { DetailViewSection } from "../../Common/DetailViewSection";
 import EntityTimeline from "../../EntityTimeline";
-import { OrderItemList } from "../../OrderItem/ListView";
+import {
+  OrderItemList,
+  OrderItemsGroupedByAttributeList,
+} from "../../OrderItem/ListView";
 import { ObjectProperty } from "../../Properties/ObjectProperty";
 import { TextProperty } from "../../Properties/TextProperty";
 
@@ -157,7 +160,7 @@ export function PurchaseOrderDetail(): ReactElement {
       }
     >
       <DetailViewSection headerTitle="Order items:">
-        <OrderItemList
+        <OrderItemsGroupedByAttributeList
           orderUid={Number(uid)}
           addActionDisabled={data.purchaseOrder.status !== "draft"}
         />

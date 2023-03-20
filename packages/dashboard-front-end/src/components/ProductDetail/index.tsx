@@ -7,21 +7,19 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { ChangeEvent, Fragment, ReactElement, useState } from "react";
+import { Fragment, ReactElement, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   ProductFieldsFragment,
   Sample,
   useProductQuery,
-  useUpdateCostMutation,
 } from "../../generated/graphql";
 import SampleGrid from "../SampleGrid";
 import { DetailViewSection } from "../Common/DetailViewSection";
 import { TextProperty } from "../Properties";
 import { ObjectProperty } from "../Properties/ObjectProperty";
-import { ActionDialog } from "../Common/ActionDialog";
-import FloatTextField from "../Common/FloatTextField";
 import EntityTimeline from "../EntityTimeline";
+import { UpdateProductionCostDialog } from "../ProductDialog";
 
 // TODO: create wrapped currency value typography
 function toCurrency(number: number, currency = "$"): string {
@@ -35,18 +33,6 @@ export default function ProductDetail(): ReactElement {
   const { data, error, loading } = useProductQuery({
     variables: { code },
   });
-  const [newCost, setNewCost] = useState<number | null>(null);
-  const [newCostMutation] = useUpdateCostMutation({
-    refetchQueries: ["Product"],
-  });
-
-  async function updateCostDialogHandle() {
-    newCost &&
-      (await newCostMutation({
-        variables: { data: { code, productionCost: newCost } },
-      }));
-    setUpdateCostDialogOpen(false);
-  }
 
   if (loading)
     return (
@@ -72,22 +58,13 @@ export default function ProductDetail(): ReactElement {
 
   return (
     <Container maxWidth="xl">
-      <ActionDialog
-        title="Update cost"
+      <UpdateProductionCostDialog
+        productCode={code}
+        currentCost={productionCost}
         open={updateCostDialogOpen}
-        onSave={updateCostDialogHandle}
+        onSave={() => setUpdateCostDialogOpen(false)}
         onClose={() => setUpdateCostDialogOpen(false)}
-      >
-        <FloatTextField
-          label="New cost"
-          value={newCost != null ? newCost : productionCost}
-          onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) =>
-            setNewCost(Number(value))
-          }
-          required
-          sx={{ mt: 1 }}
-        />
-      </ActionDialog>
+      />
       <Box sx={{ p: 1 }}>
         <Grid
           justifyContent={"left"}
@@ -180,7 +157,7 @@ export default function ProductDetail(): ReactElement {
                   size={"small"}
                   onClick={() => setUpdateCostDialogOpen(true)}
                 >
-                  Update cost
+                  Update costs
                 </Button>
               </Stack>
             </Stack>

@@ -92,6 +92,11 @@ fragment productFields on Product {
   }
   production {
     cost
+    bulkProductionCostDiscounts {
+      quantityThreshold
+      discount
+      discountType
+    }
     lastStartDate
     actualStartDate
     onTime

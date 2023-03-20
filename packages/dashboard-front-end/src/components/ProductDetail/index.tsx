@@ -60,7 +60,6 @@ export default function ProductDetail(): ReactElement {
     <Container maxWidth="xl">
       <UpdateProductionCostDialog
         productCode={code}
-        currentCost={productionCost}
         open={updateCostDialogOpen}
         onSave={() => setUpdateCostDialogOpen(false)}
         onClose={() => setUpdateCostDialogOpen(false)}

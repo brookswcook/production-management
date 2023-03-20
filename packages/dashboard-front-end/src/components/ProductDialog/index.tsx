@@ -1,33 +1,62 @@
-import { ChangeEvent, useState } from "react";
-import { useUpdateCostMutation } from "../../generated/graphql";
+import { Box, LinearProgress } from "@mui/material";
+import { ChangeEvent, useEffect, useState } from "react";
+import {
+  ProductBulkProductionCostDiscount,
+  useProductQuery,
+  useUpdateCostMutation,
+} from "../../generated/graphql";
 import { ActionDialog } from "../Common/ActionDialog";
 import FloatTextField from "../Common/FloatTextField";
 
 export function UpdateProductionCostDialog({
   productCode: code,
-  currentCost,
   open = false,
   onSave = () => {},
   onClose = () => {},
 }: {
   productCode: string;
-  currentCost: number;
   open?: boolean;
   onSave?: () => void;
   onClose?: () => void;
 }) {
-  const [newCost, setNewCost] = useState<number | null>(null);
+  const [costData, setCostData] = useState<{
+    cost: number;
+    bulkProductionCostDiscounts?: ProductBulkProductionCostDiscount[];
+  } | null>(null);
   const [newCostMutation] = useUpdateCostMutation({
     refetchQueries: ["Product"],
   });
+  const { data, error, loading } = useProductQuery({
+    variables: { code },
+  });
+
+  useEffect(() => {
+    if (data == null) return;
+    const { cost, bulkProductionCostDiscounts } = data.product.production;
+    setCostData({ cost, bulkProductionCostDiscounts });
+  }, [data]);
 
   async function updateCostDialogHandle() {
-    newCost &&
+    costData &&
       (await newCostMutation({
-        variables: { data: { code, productionCost: newCost } },
+        variables: {
+          data: {
+            code,
+            productionCost: costData.cost,
+            bulkProductionCostDiscounts: [],
+          },
+        },
       }));
     onSave();
   }
+
+  if (loading)
+    return (
+      <Box sx={{ width: "100%" }}>
+        <LinearProgress />
+      </Box>
+    );
+  if (data == null || error) return <>An error occured</>;
 
   return (
     <ActionDialog
@@ -38,9 +67,9 @@ export function UpdateProductionCostDialog({
     >
       <FloatTextField
         label="New base cost"
-        value={newCost != null ? newCost : currentCost}
+        value={costData != null ? costData.cost : 0}
         onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) =>
-          setNewCost(Number(value))
+          setCostData({ ...costData, cost: Number(value) })
         }
         required
         sx={{ mt: 1 }}

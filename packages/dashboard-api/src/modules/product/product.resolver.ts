@@ -6,10 +6,13 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { CreateProductInput, UpdateProductionCostInput } from "./product.input";
+import { CreateProductInput } from "./product.input";
 import { Product, ProductModel } from "./product.model";
 import { StartFabricProductionInput } from "../fabricProduction/fabricProduction.input";
-import { StartProductionInput } from "../productProduction/productProduction.input";
+import {
+  StartProductionInput,
+  UpdateProductionCostInput,
+} from "../productProduction/productProduction.input";
 import { UserRole } from "dashboard-core";
 import { TenantId } from "../user/user.decorator";
 import { UserActionLog } from "../../lib/userActionLogMiddleware";
@@ -92,13 +95,24 @@ export class ProductResolver {
   @Mutation(() => Product)
   @UseMiddleware(UserActionLog<Product>("Production cost is updated"))
   async updateCost(
-    @Arg("data") { code, productionCost }: UpdateProductionCostInput,
+    @Arg("data")
+    {
+      code,
+      productionCost,
+      bulkProductionCostDiscounts,
+    }: UpdateProductionCostInput,
     @TenantId() companyId: string
   ): Promise<Product> {
-    return ProductModel.findOneAndUpdateOrFail<Product>(
-      { companyId, code },
-      { "production.cost": productionCost }
-    );
+    const product = await ProductModel.findOneOrFail<Product>({
+      companyId,
+      code,
+    });
+    product.production.cost = productionCost;
+    if (bulkProductionCostDiscounts != null) {
+      product.production.bulkProductionCostDiscounts =
+        bulkProductionCostDiscounts;
+    }
+    return await product.save();
   }
 
   @Authorized(["Admin", "VChapman"] as UserRole[])

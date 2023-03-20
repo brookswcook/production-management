@@ -14,12 +14,3 @@ export class CreateProductInput {
   @Field()
   deliveryDate!: Date;
 }
-
-@InputType()
-export class UpdateProductionCostInput {
-  @Field()
-  code!: string;
-
-  @Field()
-  productionCost!: number;
-}

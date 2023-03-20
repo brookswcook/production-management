@@ -1,6 +1,7 @@
 import { prop as Property } from "@typegoose/typegoose";
 import { Field, ObjectType } from "type-graphql";
 import { Production } from "../common/production";
+import { CostDiscountType } from "./productProduction.types";
 
 @ObjectType()
 export class ProductBulkProductionCostDiscount {
@@ -17,8 +18,6 @@ export class ProductBulkProductionCostDiscount {
   discountType!: CostDiscountType;
 }
 
-type CostDiscountType = "currency" | "percent";
-
 @ObjectType()
 export class ProductProduction extends Production {
   @Field()
@@ -32,5 +31,4 @@ export class ProductProduction extends Production {
     type: [ProductBulkProductionCostDiscount],
   })
   bulkProductionCostDiscounts!: ProductBulkProductionCostDiscount[];
-
 }

@@ -73,7 +73,7 @@ export function CreateOrderItemBulkyForm({
 
   useEffect(() => {
     const selectedProduct = products.find(item => item.code === productCode);
-    setPricePerItem(selectedProduct?.productionCost ?? 0);
+    setPricePerItem(selectedProduct?.production.cost ?? 0);
   }, [products, productCode]);
 
   async function createOrderItemsByVariantSets(

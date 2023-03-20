@@ -64,7 +64,7 @@ export default function ProductDetail(): ReactElement {
     stage,
     factory,
     techPackUploaded,
-    productionCost,
+    production: { cost: productionCost },
     style,
     fabric,
     fitSamples,

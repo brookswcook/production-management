@@ -50,7 +50,6 @@ fragment productFields on Product {
   dueIn
   onTime
   stage
-  productionCost
   factory {
     code
     name
@@ -92,6 +91,7 @@ fragment productFields on Product {
     onTime
   }
   production {
+    cost
     lastStartDate
     actualStartDate
     onTime

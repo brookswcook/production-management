@@ -5,6 +5,8 @@ query PrintLink($fileName: String!) {
 mutation UpdateCost($data: UpdateProductionCostInput!) {
   updateCost(data: $data) {
     code
-    productionCost
+    production {
+      cost
+    }
   }
 }

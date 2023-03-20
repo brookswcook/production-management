@@ -50,11 +50,6 @@ export class Product extends ExpectResultModel {
   @Property({ required: true })
   deliveryDate!: Date;
 
-  // TODO: add a key-value set of price where key is number of units and price for that amount of units
-  @Field()
-  @Property({ required: true })
-  productionCost!: number;
-
   @Field()
   @Property({
     get(this: Product) {
@@ -96,7 +91,7 @@ export class Product extends ExpectResultModel {
   @Field()
   @Property({
     get(this: Product): ProductStage {
-      if (this.production?.started) return "Production";
+      if (this.production.started) return "Production";
       else if (this.fabricProduction?.started) return "Pre-Cut & Sew";
       else if (this.fitSamples?.length ?? 0 > 0) return "Fit Sampling";
       else if (this.fabric?.samples?.length ?? 0 > 0) return "Fabric Sampling";
@@ -126,9 +121,9 @@ export class Product extends ExpectResultModel {
   @Property({ _id: false })
   fabricProduction?: FabricProduction;
 
-  @Field(() => ProductProduction, { nullable: true })
+  @Field(() => ProductProduction, { nullable: false })
   @Property({ _id: false })
-  production?: ProductProduction;
+  production!: ProductProduction;
 
   @Field(() => ProductQualityControl, { nullable: true })
   @Property({ _id: false })

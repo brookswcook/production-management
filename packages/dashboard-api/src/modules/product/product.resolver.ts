@@ -71,6 +71,8 @@ export class ProductResolver {
       },
       production: {
         lastStartDate: new Date(new Date().getTime() + 21 * 8.64e7),
+        cost: 0,
+        bulkProductionCostDiscounts: [],
       },
       qualityControl: {
         lastVisitDate: new Date(new Date().getTime() + 28 * 8.64e7),
@@ -95,7 +97,7 @@ export class ProductResolver {
   ): Promise<Product> {
     return ProductModel.findOneAndUpdateOrFail<Product>(
       { companyId, code },
-      { productionCost }
+      { "production.cost": productionCost }
     );
   }
 

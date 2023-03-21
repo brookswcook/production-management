@@ -1,4 +1,11 @@
-import { Box, LinearProgress } from "@mui/material";
+import {
+  Box,
+  Grid,
+  IconButton,
+  LinearProgress,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import {
   ProductBulkProductionCostDiscount,
@@ -7,6 +14,8 @@ import {
 } from "../../generated/graphql";
 import { ActionDialog } from "../Common/ActionDialog";
 import FloatTextField from "../Common/FloatTextField";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 export function UpdateProductionCostDialog({
   productCode: code,
@@ -19,10 +28,10 @@ export function UpdateProductionCostDialog({
   onSave?: () => void;
   onClose?: () => void;
 }) {
-  const [costData, setCostData] = useState<{
+  const [{ cost, bulkProductionCostDiscounts }, setCostData] = useState<{
     cost: number;
-    bulkProductionCostDiscounts?: ProductBulkProductionCostDiscount[];
-  } | null>(null);
+    bulkProductionCostDiscounts: ProductBulkProductionCostDiscount[];
+  }>({ cost: 0, bulkProductionCostDiscounts: [] });
   const [newCostMutation] = useUpdateCostMutation({
     refetchQueries: ["Product"],
   });
@@ -33,20 +42,28 @@ export function UpdateProductionCostDialog({
   useEffect(() => {
     if (data == null) return;
     const { cost, bulkProductionCostDiscounts } = data.product.production;
-    setCostData({ cost, bulkProductionCostDiscounts });
+    setCostData({
+      cost,
+      bulkProductionCostDiscounts: bulkProductionCostDiscounts.map(
+        ({ discount, discountType, quantityThreshold }) => ({
+          discount,
+          discountType,
+          quantityThreshold,
+        })
+      ),
+    });
   }, [data]);
 
   async function updateCostDialogHandle() {
-    costData &&
-      (await newCostMutation({
-        variables: {
-          data: {
-            code,
-            productionCost: costData.cost,
-            bulkProductionCostDiscounts: [],
-          },
+    await newCostMutation({
+      variables: {
+        data: {
+          code,
+          productionCost: cost,
+          bulkProductionCostDiscounts,
         },
-      }));
+      },
+    });
     onSave();
   }
 
@@ -65,15 +82,122 @@ export function UpdateProductionCostDialog({
       onSave={updateCostDialogHandle}
       onClose={onClose}
     >
-      <FloatTextField
-        label="New base cost"
-        value={costData != null ? costData.cost : 0}
-        onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) =>
-          setCostData({ ...costData, cost: Number(value) })
-        }
-        required
-        sx={{ mt: 1 }}
-      />
+      <Grid container rowSpacing={1}>
+        <Grid item xs={12}>
+          <FloatTextField
+            fullWidth
+            label="New base cost"
+            value={cost}
+            onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) =>
+              setCostData({ cost: Number(value), bulkProductionCostDiscounts })
+            }
+            required
+            sx={{ mt: 1 }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography component="h4" variant="inherit">
+            Discounts based on quantities{" "}
+            <IconButton
+              size="medium"
+              color="secondary"
+              onClick={() => {
+                const bulkProductionCostDiscount: ProductBulkProductionCostDiscount =
+                  {
+                    quantityThreshold: 0,
+                    discount: 0,
+                    discountType: "currency",
+                  };
+                setCostData({
+                  cost,
+                  bulkProductionCostDiscounts: [
+                    ...bulkProductionCostDiscounts,
+                    bulkProductionCostDiscount,
+                  ],
+                });
+              }}
+            >
+              <AddIcon />
+            </IconButton>
+            <IconButton
+              size="medium"
+              color="secondary"
+              onClick={() => {
+                const withoutLast = bulkProductionCostDiscounts.slice(0, -1);
+                setCostData({
+                  cost,
+                  bulkProductionCostDiscounts: withoutLast,
+                });
+              }}
+            >
+              <RemoveIcon />
+            </IconButton>
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          {bulkProductionCostDiscounts != null ? (
+            bulkProductionCostDiscounts.map((discountData, index) => (
+              <CreateProductionCostDiscountForm
+                key={index}
+                discountData={discountData}
+                onChange={value => {
+                  bulkProductionCostDiscounts[index] = value;
+                  setCostData({
+                    cost: cost,
+                    bulkProductionCostDiscounts,
+                  });
+                }}
+              />
+            ))
+          ) : (
+            <></>
+          )}
+        </Grid>
+      </Grid>
     </ActionDialog>
+  );
+}
+
+function CreateProductionCostDiscountForm({
+  discountData,
+  onChange,
+}: {
+  discountData: ProductBulkProductionCostDiscount;
+  onChange: (value: ProductBulkProductionCostDiscount) => void;
+}) {
+  return (
+    <Grid container columnSpacing={{ xs: 1 }}>
+      <Grid item xs={12} sm={6}>
+        <TextField
+          fullWidth
+          label="Qty from"
+          value={discountData.quantityThreshold}
+          onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+            const data = {
+              ...discountData,
+              quantityThreshold: Number(value),
+            };
+            onChange(data);
+          }}
+          required
+          type={"number"}
+          sx={{ mt: 1 }}
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <FloatTextField
+          fullWidth
+          label="Discount, $"
+          value={discountData.discount}
+          onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+            const data = { ...discountData, discount: Number(value) };
+            onChange(data);
+          }}
+          required
+          type={"number"}
+          sx={{ mt: 1 }}
+        />
+      </Grid>
+    </Grid>
   );
 }

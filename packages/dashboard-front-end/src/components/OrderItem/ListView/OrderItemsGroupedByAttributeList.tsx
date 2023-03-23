@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -14,7 +14,8 @@ import {
   useOrderItemsGroupedByAttributesQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
-import { CreateOrderItemBulkyPopperButton } from "../Form";
+import { CreateOrderItemByVariantSetsDialog } from "../Dialog/CreateOrderItemByVariantSetsDialog";
+import AddIcon from "@mui/icons-material/Add";
 
 function toCurrency(number: number, currency = "$"): string {
   return `${currency}${number.toFixed(2)}`;
@@ -50,6 +51,8 @@ export function OrderItemsGroupedByAttributeList({
   const [attributeColumns, setAttributeColumns] = useState<
     GridColDef<OrderItemsGroupedByAttributesFieldsFragment>[]
   >([]);
+  const [createOrderItemsDialogOpen, setCreateOrderItemsDialogOpen] =
+    useState(false);
 
   const rows: OrderItemsGroupedByAttributesFieldsFragment[] =
     data?.orderItemsGroupedByAttributes ?? [];
@@ -168,10 +171,15 @@ export function OrderItemsGroupedByAttributeList({
       <Fragment>
         <GridToolbarContainer>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <CreateOrderItemBulkyPopperButton
+            <Button
               disabled={addActionDisabled}
-              orderUid={orderUid}
-            />
+              variant={"text"}
+              size={"small"}
+              onClick={() => setCreateOrderItemsDialogOpen(true)}
+            >
+              <AddIcon />
+              Add items
+            </Button>
           </RequireRole>
         </GridToolbarContainer>
       </Fragment>
@@ -179,49 +187,62 @@ export function OrderItemsGroupedByAttributeList({
   }
 
   return (
-    <DataGrid
-      rows={rows}
-      columns={columns}
-      getRowId={item =>
-        item.productCode +
-        stringifyVariantSetsAttributes(item).join(";") +
-        item.quantity.toString()
-      }
-      loading={loading}
-      error={error}
-      autoHeight
-      components={{
-        Toolbar: CustomToolbar,
-        Footer: () => {
-          return (
-            <GridFooterContainer sx={{ pl: 1, pr: 1 }}>
-              <Stack direction={"row"} justifyContent={"flex-end"} spacing={2}>
-                <Typography>Total:</Typography>
-                <Typography>{`Quantity: ${rows.reduce(
-                  (acc, { quantity }) => acc + quantity,
-                  0
-                )}`}</Typography>
-                <Typography>{`Price: ${toCurrency(
-                  rows.reduce((acc, { extPrice }) => acc + extPrice, 0)
-                )}`}</Typography>
-              </Stack>
-              <GridFooter
-                sx={{
-                  border: "none",
-                }}
-              />
-            </GridFooterContainer>
-          );
-        },
-      }}
-      initialState={{
-        pagination: {
-          pageSize: 10,
-        },
-      }}
-      rowsPerPageOptions={[5, 10, 20, 50, 100]}
-      disableSelectionOnClick
-      sx={{ mt: 1 }}
-    />
+    <>
+      <CreateOrderItemByVariantSetsDialog
+        orderUid={orderUid}
+        open={createOrderItemsDialogOpen}
+        onSave={() => setCreateOrderItemsDialogOpen(false)}
+        onClose={() => setCreateOrderItemsDialogOpen(false)}
+      />
+
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        getRowId={item =>
+          item.productCode +
+          stringifyVariantSetsAttributes(item).join(";") +
+          item.quantity.toString()
+        }
+        loading={loading}
+        error={error}
+        autoHeight
+        components={{
+          Toolbar: CustomToolbar,
+          Footer: () => {
+            return (
+              <GridFooterContainer sx={{ pl: 1, pr: 1 }}>
+                <Stack
+                  direction={"row"}
+                  justifyContent={"flex-end"}
+                  spacing={2}
+                >
+                  <Typography>Total:</Typography>
+                  <Typography>{`Quantity: ${rows.reduce(
+                    (acc, { quantity }) => acc + quantity,
+                    0
+                  )}`}</Typography>
+                  <Typography>{`Price: ${toCurrency(
+                    rows.reduce((acc, { extPrice }) => acc + extPrice, 0)
+                  )}`}</Typography>
+                </Stack>
+                <GridFooter
+                  sx={{
+                    border: "none",
+                  }}
+                />
+              </GridFooterContainer>
+            );
+          },
+        }}
+        initialState={{
+          pagination: {
+            pageSize: 10,
+          },
+        }}
+        rowsPerPageOptions={[5, 10, 20, 50, 100]}
+        disableSelectionOnClick
+        sx={{ mt: 1 }}
+      />
+    </>
   );
 }

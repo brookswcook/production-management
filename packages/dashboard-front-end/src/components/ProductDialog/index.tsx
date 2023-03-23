@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {
   ProductBulkProductionCostDiscount,
   useProductQuery,
@@ -79,10 +79,19 @@ export function UpdateProductionCostDialog({
     <ActionDialog
       title="Update costs"
       open={open}
-      onSave={updateCostDialogHandle}
       onClose={onClose}
+      form="createProductionCostDiscountForm"
     >
-      <Grid container rowSpacing={1}>
+      <Grid
+        container
+        rowSpacing={1}
+        component={"form"}
+        id="createProductionCostDiscountForm"
+        onSubmit={async (e: FormEvent<HTMLFormElement>) => {
+          e.preventDefault();
+          await updateCostDialogHandle();
+        }}
+      >
         <Grid item xs={12}>
           <FloatTextField
             fullWidth
@@ -181,6 +190,7 @@ function CreateProductionCostDiscountForm({
           }}
           required
           type={"number"}
+          inputProps={{ min: 0 }}
           sx={{ mt: 1 }}
         />
       </Grid>

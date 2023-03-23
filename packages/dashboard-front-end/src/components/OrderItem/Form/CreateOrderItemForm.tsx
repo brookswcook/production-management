@@ -44,7 +44,7 @@ export function CreateOrderItemForm({
 
   useEffect(() => {
     const selectedProduct = products.find(item => item.code === productCode);
-    setPredefinedProductionCost(selectedProduct?.productionCost ?? 0);
+    setPredefinedProductionCost(selectedProduct?.production.cost ?? 0);
   }, [products, productCode]);
 
   async function createOrderItem(event: FormEvent<HTMLFormElement>) {

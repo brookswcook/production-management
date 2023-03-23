@@ -1,52 +1,53 @@
 import {
-  Stack,
   Typography,
   Autocomplete,
   Box,
   TextField,
-  Button,
   IconButton,
   Divider,
+  Grid,
 } from "@mui/material";
-import { useState, useEffect, ReactElement, FormEvent, Fragment } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import {
   CreateAttributeInput,
-  useCreateOrderItemMutation,
+  Product,
+  ProductFieldsFragment,
   useProductsQuery,
 } from "../../../generated/graphql";
-import { PopperButton } from "../../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { toast } from "react-toastify";
 import FloatTextField from "../../Common/FloatTextField";
 import { Variant } from "../../Attribute";
+import { toCurrency } from "../../Common";
 
 type VariantSet = {
   attributes: CreateAttributeInput[];
   quantity: number;
 };
 
+export type OrderItemBulkyFormType = {
+  productCode: string;
+  pricePerItem: number;
+  variantSets: VariantSet[];
+};
+
 export function CreateOrderItemBulkyForm({
-  orderUid,
-  title,
-  footerEl,
+  onSubmit,
+  onChange,
+  id = "createOrderItemBulkyForm",
 }: {
-  orderUid: number;
-  title: string;
-  footerEl?: ReactElement;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onChange: (value: OrderItemBulkyFormType) => void;
+  id?: string;
 }) {
-  const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
-  const [productCode, setProductCode] = useState<string | null>(null);
   const [pricePerItem, setPricePerItem] = useState<number>(0);
+  const [productCode, setProductCode] = useState<string | null>(null);
+  const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
+  const [totalQuantity, setTotalQuantity] = useState<number>(0);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [discountPerItem, setDiscountPerItem] = useState<number>(0);
   const { data: { products } = { products: [] } } = useProductsQuery();
-  const [newOrderItem] = useCreateOrderItemMutation({
-    refetchQueries: [
-      "PurchaseOrder",
-      "OrderItems",
-      "ActionLogs",
-      "OrderItemsGroupedByAttributes",
-    ],
-  });
 
   function checkForDuplicatedVariant(
     variant: CreateAttributeInput[],
@@ -73,160 +74,158 @@ export function CreateOrderItemBulkyForm({
 
   useEffect(() => {
     const selectedProduct = products.find(item => item.code === productCode);
-    setPricePerItem(selectedProduct?.productionCost ?? 0);
-  }, [products, productCode]);
-
-  async function createOrderItemsByVariantSets(
-    event: FormEvent<HTMLFormElement>
-  ) {
-    event.preventDefault();
-    try {
-      if (productCode != null)
-        for await (const { attributes, quantity } of variantSets) {
-          await newOrderItem({
-            variables: {
-              data: {
-                orderUid,
-                productCode,
-                quantity: Number(quantity),
-                price: Number(pricePerItem),
-                variantAttributes: attributes,
-              },
-            },
-          });
-        }
-    } catch (error) {
-      toast.error((error as Error).message);
+    if (selectedProduct != null) {
+      const { cost: baseCost, bulkProductionCostDiscounts } =
+        selectedProduct.production;
+      const bulkProductionCost = [...bulkProductionCostDiscounts]
+        .sort((a, b) => b.quantityThreshold - a.quantityThreshold)
+        .find(({ quantityThreshold }) => totalQuantity > quantityThreshold);
+      const costWithDiscountApplied =
+        bulkProductionCost != null
+          ? baseCost - bulkProductionCost.discount
+          : baseCost;
+      setPricePerItem(costWithDiscountApplied);
+      setDiscountPerItem(bulkProductionCost?.discount ?? 0);
     }
-  }
+  }, [products, productCode, totalQuantity]);
+
+  useEffect(() => {
+    productCode != null && onChange({ productCode, pricePerItem, variantSets });
+    setTotalQuantity(
+      variantSets.reduce<number>((acc, { quantity }) => acc + quantity, 0)
+    );
+  }, [pricePerItem, productCode, JSON.stringify(variantSets)]);
+
+  useEffect(() => {
+    setTotalPrice(pricePerItem * totalQuantity);
+  }, [totalQuantity, pricePerItem]);
 
   return (
-    <Stack
-      component="form"
-      onSubmit={createOrderItemsByVariantSets}
-      spacing={2}
-      autoComplete="off"
-    >
-      <Typography component="h4" variant="inherit">
-        {title}
-      </Typography>
-      <Autocomplete
-        options={products}
-        getOptionLabel={option => option.code}
-        onChange={(_, value) => value != null && setProductCode(value?.code)}
-        renderOption={(props, option) => (
-          <Box component="li" key={option.code} {...props}>
-            {`${option.code}`}
-          </Box>
-        )}
-        renderInput={params => (
-          <TextField {...params} label="Product" required />
-        )}
-      />
-
-      <FloatTextField
-        label="Price per item"
-        value={String(pricePerItem)}
-        onChange={({ target: { value } }) => setPricePerItem(Number(value))}
-        required
-      />
+    <Grid container component="form" id={id} onSubmit={onSubmit}>
+      <Grid container item>
+        <Grid item xs={12}>
+          <Autocomplete
+            options={products}
+            getOptionLabel={option => option.code}
+            onChange={(_, value) =>
+              value != null && setProductCode(value?.code)
+            }
+            renderOption={(props, option) => (
+              <Box component="li" key={option.code} {...props}>
+                {`${option.code}`}
+              </Box>
+            )}
+            renderInput={params => {
+              params.fullWidth = true;
+              return (
+                <TextField
+                  {...params}
+                  label="Product"
+                  required
+                  sx={{ mt: 1 }}
+                />
+              );
+            }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <FloatTextField
+            fullWidth
+            label="Price per item"
+            value={String(pricePerItem)}
+            onChange={({ target: { value } }) => setPricePerItem(Number(value))}
+            required
+            sx={{ mt: 1 }}
+          />
+        </Grid>
+      </Grid>
+      <Grid item container gap={1}>
+        <Grid item xs={12} sm={"auto"}>
+          <Typography
+            component="h4"
+            variant="subtitle2"
+          >{`Total quantity: ${totalQuantity}`}</Typography>
+        </Grid>
+        <Grid item xs={12} sm={"auto"}>
+          <Typography
+            component="h4"
+            variant="subtitle2"
+          >{`Total price: ${toCurrency(totalPrice)}`}</Typography>
+        </Grid>
+        <Grid item xs={12} sm={"auto"}>
+          {discountPerItem !== 0 && (
+            <Typography component="h4" variant="subtitle2">
+              Discount: {`${toCurrency(discountPerItem)}/unit is applied`}
+            </Typography>
+          )}
+        </Grid>
+      </Grid>
       {productCode && (
         <>
-          <Typography component="h4" variant="inherit">
-            Variant sets of selected product{" "}
-            <IconButton
-              size="medium"
-              color="secondary"
-              onClick={() => {
-                const newVariantSet: VariantSet = {
-                  quantity: 0,
-                  attributes: [{ key: "", value: "", unit: null }],
-                };
-                setVariantSets([...variantSets, newVariantSet]);
-              }}
-            >
-              <AddIcon />
-            </IconButton>
-            <IconButton
-              size="medium"
-              color="secondary"
-              onClick={() => {
-                const withoutLast = variantSets.slice(0, -1);
-                setVariantSets(withoutLast);
-              }}
-            >
-              <RemoveIcon />
-            </IconButton>
-          </Typography>
+          <Grid item xs={12}>
+            <Typography component="h4" variant="inherit">
+              Variant sets of selected product{" "}
+              <IconButton
+                size="medium"
+                color="secondary"
+                onClick={() => {
+                  const newVariantSet: VariantSet = {
+                    quantity: 0,
+                    attributes: [{ key: "", value: "", unit: null }],
+                  };
+                  setVariantSets([...variantSets, newVariantSet]);
+                }}
+              >
+                <AddIcon />
+              </IconButton>
+              <IconButton
+                size="medium"
+                color="secondary"
+                onClick={() => {
+                  const withoutLast = variantSets.slice(0, -1);
+                  setVariantSets(withoutLast);
+                }}
+              >
+                <RemoveIcon />
+              </IconButton>
+            </Typography>
+          </Grid>
 
           {variantSets.map((_, index) => (
-            <Fragment key={index}>
-              <Variant
-                onChange={variant => {
-                  const updatedVariantSets = [...variantSets];
-                  updatedVariantSets[index].attributes = variant;
-                  checkForDuplicatedVariant(variant, index);
-                  setVariantSets(updatedVariantSets);
-                }}
-              />
-              <TextField
-                label="Quantity"
-                type="number"
-                InputProps={{
-                  inputProps: { min: 1 },
-                }}
-                onChange={({ target: { value } }) => {
-                  const updatedVariantSets = [...variantSets];
-                  updatedVariantSets[index].quantity = Number(value);
-                  setVariantSets(updatedVariantSets);
-                }}
-                required
-              />
-              <Divider />
-            </Fragment>
+            <Grid item container xs={12} rowSpacing={1} key={index}>
+              <Grid item xs={12}>
+                <Variant
+                  onChange={variant => {
+                    const updatedVariantSets = [...variantSets];
+                    updatedVariantSets[index].attributes = variant;
+                    checkForDuplicatedVariant(variant, index);
+                    setVariantSets(updatedVariantSets);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Quantity"
+                  type="number"
+                  InputProps={{
+                    inputProps: { min: 1 },
+                  }}
+                  onChange={({ target: { value } }) => {
+                    const updatedVariantSets = [...variantSets];
+                    updatedVariantSets[index].quantity = Number(value);
+                    setVariantSets(updatedVariantSets);
+                  }}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Divider sx={{ mb: 1 }} />
+              </Grid>
+            </Grid>
           ))}
         </>
       )}
-      <>
-        <Button variant="contained" type="submit">
-          Create
-        </Button>
-        {footerEl}
-      </>
-    </Stack>
-  );
-}
-
-// TODO: disallow to specify more than 1 same combination of attributes
-
-export function CreateOrderItemBulkyPopperButton({
-  orderUid,
-  disabled = false,
-}: {
-  orderUid: number;
-  disabled?: boolean;
-}): ReactElement {
-  const [closeSwitch, setCloseSwitch] = useState(0);
-  function closePopper() {
-    setCloseSwitch(closeSwitch + 1);
-  }
-
-  return (
-    <PopperButton
-      icon={<AddIcon />}
-      title={"Add items"}
-      disabled={disabled}
-      closeSwitch={closeSwitch}
-    >
-      <CreateOrderItemBulkyForm
-        orderUid={orderUid}
-        title="Select product"
-        footerEl={
-          <Button variant="contained" onClick={closePopper}>
-            Cancel
-          </Button>
-        }
-      />
-    </PopperButton>
+    </Grid>
   );
 }

@@ -8,6 +8,8 @@ import {
   StepLabel,
   Stepper,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { purchaseOrderStatusSet } from "dashboard-core";
 import { Fragment, ReactElement } from "react";
@@ -21,10 +23,7 @@ import { DetailView } from "../../Common/DetailView";
 import { DetailViewHeaderTitle } from "../../Common/DetailViewHeaderTitle";
 import { DetailViewSection } from "../../Common/DetailViewSection";
 import EntityTimeline from "../../EntityTimeline";
-import {
-  OrderItemList,
-  OrderItemsGroupedByAttributeList,
-} from "../../OrderItem/ListView";
+import { OrderItemsGroupedByAttributeList } from "../../OrderItem/ListView";
 import { ObjectProperty } from "../../Properties/ObjectProperty";
 import { TextProperty } from "../../Properties/TextProperty";
 
@@ -70,6 +69,9 @@ function PurchaseOrderHeaderSection({
     void pushPurchaseOrderToNextStage({ variables: { uid } });
   }
 
+  const theme = useTheme();
+  const greaterThanXS = useMediaQuery(theme.breakpoints.up("sm"));
+
   return (
     <>
       <DetailViewHeaderTitle
@@ -83,31 +85,45 @@ function PurchaseOrderHeaderSection({
             title="Delivery"
             value={new Date(expectedDeliveryDate).toLocaleDateString()}
           />
-          <Stack spacing={2} direction={"row"}>
-            <Typography component={"span"} variant="subtitle2">
-              Status
-            </Typography>
-            <Typography component={"span"} variant="subtitle2">
-              <Stepper
-                activeStep={
-                  purchaseOrderStatusSet.indexOf(status) +
-                  (nextStatus == null ? 1 : 0)
-                }
-                alternativeLabel={false}
-              >
-                {purchaseOrderStatusSet.slice(0, -1).map(statusName => (
-                  <Step key={statusName}>
-                    <StepLabel>{statusName}</StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
-            </Typography>
-            {nextStatus != null && (
-              <Button size="small" variant="contained" onClick={updateStatus}>
-                {`Set to ${nextStatus}`}
-              </Button>
-            )}
-          </Stack>
+          <Grid
+            container
+            columnGap={{ xs: 1, sm: 2 }}
+            rowGap={{ xs: 2, md: 0 }}
+            justifyContent={"flex-start"}
+          >
+            <Grid item xs={12} sm={10} md={"auto"}>
+              <Typography component={"span"} variant="subtitle2">
+                Status
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={10} md={"auto"}>
+              <Typography component={"span"} variant="subtitle2">
+                <Stepper
+                  orientation={greaterThanXS ? "horizontal" : "vertical"}
+                  activeStep={
+                    purchaseOrderStatusSet.indexOf(status) +
+                    (nextStatus == null ? 1 : 0)
+                  }
+                  alternativeLabel={false}
+                >
+                  {purchaseOrderStatusSet
+                    .slice(0, -1)
+                    .map((statusName, index) => (
+                      <Step key={index}>
+                        <StepLabel>{statusName}</StepLabel>
+                      </Step>
+                    ))}
+                </Stepper>
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={"auto"}>
+              {nextStatus != null && (
+                <Button size="small" variant="contained" onClick={updateStatus}>
+                  {`Set to ${nextStatus}`}
+                </Button>
+              )}
+            </Grid>
+          </Grid>
           <ObjectProperty
             title="To       "
             value={{

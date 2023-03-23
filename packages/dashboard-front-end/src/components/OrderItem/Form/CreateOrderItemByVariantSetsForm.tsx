@@ -10,6 +10,8 @@ import {
 import { useState, useEffect, FormEvent } from "react";
 import {
   CreateAttributeInput,
+  Product,
+  ProductFieldsFragment,
   useProductsQuery,
 } from "../../../generated/graphql";
 import AddIcon from "@mui/icons-material/Add";
@@ -17,6 +19,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { toast } from "react-toastify";
 import FloatTextField from "../../Common/FloatTextField";
 import { Variant } from "../../Attribute";
+import { toCurrency } from "../../Common";
 
 type VariantSet = {
   attributes: CreateAttributeInput[];
@@ -41,6 +44,9 @@ export function CreateOrderItemBulkyForm({
   const [pricePerItem, setPricePerItem] = useState<number>(0);
   const [productCode, setProductCode] = useState<string | null>(null);
   const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
+  const [totalQuantity, setTotalQuantity] = useState<number>(0);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [discountPerItem, setDiscountPerItem] = useState<number>(0);
   const { data: { products } = { products: [] } } = useProductsQuery();
 
   function checkForDuplicatedVariant(
@@ -68,12 +74,31 @@ export function CreateOrderItemBulkyForm({
 
   useEffect(() => {
     const selectedProduct = products.find(item => item.code === productCode);
-    setPricePerItem(selectedProduct?.production.cost ?? 0);
-  }, [products, productCode]);
+    if (selectedProduct != null) {
+      const { cost: baseCost, bulkProductionCostDiscounts } =
+        selectedProduct.production;
+      const bulkProductionCost = [...bulkProductionCostDiscounts]
+        .sort((a, b) => b.quantityThreshold - a.quantityThreshold)
+        .find(({ quantityThreshold }) => totalQuantity > quantityThreshold);
+      const costWithDiscountApplied =
+        bulkProductionCost != null
+          ? baseCost - bulkProductionCost.discount
+          : baseCost;
+      setPricePerItem(costWithDiscountApplied);
+      setDiscountPerItem(bulkProductionCost?.discount ?? 0);
+    }
+  }, [products, productCode, totalQuantity]);
 
   useEffect(() => {
     productCode != null && onChange({ productCode, pricePerItem, variantSets });
+    setTotalQuantity(
+      variantSets.reduce<number>((acc, { quantity }) => acc + quantity, 0)
+    );
   }, [pricePerItem, productCode, JSON.stringify(variantSets)]);
+
+  useEffect(() => {
+    setTotalPrice(pricePerItem * totalQuantity);
+  }, [totalQuantity, pricePerItem]);
 
   return (
     <Grid container component="form" id={id} onSubmit={onSubmit}>
@@ -112,6 +137,27 @@ export function CreateOrderItemBulkyForm({
             required
             sx={{ mt: 1 }}
           />
+        </Grid>
+      </Grid>
+      <Grid item container gap={1}>
+        <Grid item xs={12} sm={"auto"}>
+          <Typography
+            component="h4"
+            variant="subtitle2"
+          >{`Total quantity: ${totalQuantity}`}</Typography>
+        </Grid>
+        <Grid item xs={12} sm={"auto"}>
+          <Typography
+            component="h4"
+            variant="subtitle2"
+          >{`Total price: ${toCurrency(totalPrice)}`}</Typography>
+        </Grid>
+        <Grid item xs={12} sm={"auto"}>
+          {discountPerItem !== 0 && (
+            <Typography component="h4" variant="subtitle2">
+              Discount: {`${toCurrency(discountPerItem)}/unit is applied`}
+            </Typography>
+          )}
         </Grid>
       </Grid>
       {productCode && (

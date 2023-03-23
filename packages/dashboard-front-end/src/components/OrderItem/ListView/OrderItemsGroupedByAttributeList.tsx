@@ -16,10 +16,7 @@ import {
 import RequireRole from "../../Auth/RequireRole";
 import { CreateOrderItemByVariantSetsDialog } from "../Dialog/CreateOrderItemByVariantSetsDialog";
 import AddIcon from "@mui/icons-material/Add";
-
-function toCurrency(number: number, currency = "$"): string {
-  return `${currency}${number.toFixed(2)}`;
-}
+import { toCurrency } from "../../Common";
 
 function stringifyAttributes(attributes: { key: string; value: string }[]) {
   return attributes.length > 0

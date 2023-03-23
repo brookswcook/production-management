@@ -197,7 +197,7 @@ function CreateProductionCostDiscountForm({
       <Grid item xs={12} sm={6}>
         <FloatTextField
           fullWidth
-          label="Discount, $"
+          label="Discount per unit, $"
           value={discountData.discount}
           onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
             const data = { ...discountData, discount: Number(value) };

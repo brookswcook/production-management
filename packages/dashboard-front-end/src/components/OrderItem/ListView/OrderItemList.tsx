@@ -13,11 +13,8 @@ import {
   useOrderItemsQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
+import { toCurrency } from "../../Common";
 import { CreateOrderItemPopperButton } from "../Form";
-
-function toCurrency(number: number, currency = "$"): string {
-  return `${currency}${number.toFixed(2)}`;
-}
 
 export function OrderItemList({
   orderUid,

@@ -20,11 +20,7 @@ import { TextProperty } from "../Properties";
 import { ObjectProperty } from "../Properties/ObjectProperty";
 import EntityTimeline from "../EntityTimeline";
 import { UpdateProductionCostDialog } from "../ProductDialog";
-
-// TODO: create wrapped currency value typography
-function toCurrency(number: number, currency = "$"): string {
-  return `${currency}${number.toFixed(2)}`;
-}
+import { toCurrency } from "../Common";
 
 export default function ProductDetail(): ReactElement {
   const [updateCostDialogOpen, setUpdateCostDialogOpen] =

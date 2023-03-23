@@ -7,7 +7,7 @@ import {
   Divider,
   Grid,
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import {
   CreateAttributeInput,
   useProductsQuery,
@@ -30,9 +30,13 @@ export type OrderItemBulkyFormType = {
 };
 
 export function CreateOrderItemBulkyForm({
+  onSubmit,
   onChange,
+  id = "createOrderItemBulkyForm",
 }: {
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onChange: (value: OrderItemBulkyFormType) => void;
+  id?: string;
 }) {
   const [pricePerItem, setPricePerItem] = useState<number>(0);
   const [productCode, setProductCode] = useState<string | null>(null);
@@ -72,7 +76,7 @@ export function CreateOrderItemBulkyForm({
   }, [pricePerItem, productCode, JSON.stringify(variantSets)]);
 
   return (
-    <Grid container>
+    <Grid container component="form" id={id} onSubmit={onSubmit}>
       <Grid container item>
         <Grid item xs={12}>
           <Autocomplete

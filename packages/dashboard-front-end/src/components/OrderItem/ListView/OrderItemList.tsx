@@ -13,7 +13,7 @@ import {
   useOrderItemsQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
-import { CreateOrderItemBulkyPopperButton } from "../Form";
+import { CreateOrderItemPopperButton } from "../Form";
 
 function toCurrency(number: number, currency = "$"): string {
   return `${currency}${number.toFixed(2)}`;
@@ -122,7 +122,7 @@ export function OrderItemList({
       <Fragment>
         <GridToolbarContainer>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <CreateOrderItemBulkyPopperButton
+            <CreateOrderItemPopperButton
               disabled={addActionDisabled}
               orderUid={orderUid}
             />

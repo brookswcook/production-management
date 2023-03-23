@@ -52,13 +52,18 @@ export function CreateOrderItemByVariantSetsDialog({
     <ActionDialog
       title="Add order items"
       open={open}
-      onSave={async () => {
-        await createOrderItemsByVariantSets();
-        onSave();
-      }}
       onClose={onClose}
+      form="createOrderItemBulkyForm"
     >
-      <CreateOrderItemBulkyForm onChange={setVariantSetsData} />
+      <CreateOrderItemBulkyForm
+        onSubmit={async e => {
+          e.preventDefault();
+          await createOrderItemsByVariantSets();
+          onSave();
+        }}
+        onChange={setVariantSetsData}
+        id="createOrderItemBulkyForm"
+      />
     </ActionDialog>
   );
 }

@@ -10,15 +10,17 @@ import { ReactElement } from "react";
 export function ActionDialog({
   open,
   title,
-  onSave,
-  onClose,
   children,
+  onSave = () => {},
+  onClose = () => {},
+  form = "",
 }: {
   open: boolean;
   title: string;
-  onSave: () => void;
-  onClose: () => void;
   children: ReactElement | ReactElement[];
+  onSave?: () => void;
+  onClose?: () => void;
+  form?: string;
 }): ReactElement {
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
@@ -26,10 +28,10 @@ export function ActionDialog({
       <DialogContent>{children}</DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Cancel
+          Close
         </Button>
-        <Button onClick={onSave} color="primary">
-          Save
+        <Button type="submit" form={form} onClick={onSave} color="primary">
+          Submit
         </Button>
       </DialogActions>
     </Dialog>

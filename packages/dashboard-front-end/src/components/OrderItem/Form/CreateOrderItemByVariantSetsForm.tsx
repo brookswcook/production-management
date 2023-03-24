@@ -10,8 +10,6 @@ import {
 import { useState, useEffect, FormEvent } from "react";
 import {
   CreateAttributeInput,
-  Product,
-  ProductFieldsFragment,
   useProductsQuery,
 } from "../../../generated/graphql";
 import AddIcon from "@mui/icons-material/Add";
@@ -24,6 +22,7 @@ import { toCurrency } from "../../Common";
 type VariantSet = {
   attributes: CreateAttributeInput[];
   quantity: number;
+  id: number;
 };
 
 export type OrderItemBulkyFormType = {
@@ -51,7 +50,7 @@ export function CreateOrderItemBulkyForm({
 
   function checkForDuplicatedVariant(
     variant: CreateAttributeInput[],
-    index: number
+    id: number
   ) {
     const usedVariantObjects: Record<string, string>[] = variantSets.map(
       ({ attributes }) =>
@@ -64,11 +63,13 @@ export function CreateOrderItemBulkyForm({
       {}
     );
 
-    const variantIndex = usedVariantObjects.findIndex(
-      item => JSON.stringify(item) === JSON.stringify(variantObject)
-    );
+    const variantId = usedVariantObjects
+      .reverse()
+      .findIndex(
+        item => JSON.stringify(item) === JSON.stringify(variantObject)
+      );
 
-    if (variantIndex != index)
+    if (variantId != id)
       toast.warn("You are about to use the same variant specified before!");
   }
 
@@ -172,8 +173,9 @@ export function CreateOrderItemBulkyForm({
                   const newVariantSet: VariantSet = {
                     quantity: 0,
                     attributes: [{ key: "", value: "", unit: null }],
+                    id: variantSets.length,
                   };
-                  setVariantSets([...variantSets, newVariantSet]);
+                  setVariantSets([newVariantSet, ...variantSets]);
                 }}
               >
                 <AddIcon />
@@ -191,15 +193,19 @@ export function CreateOrderItemBulkyForm({
             </Typography>
           </Grid>
 
-          {variantSets.map((_, index) => (
-            <Grid item container xs={12} rowSpacing={1} key={index}>
+          {variantSets.map(({ id }) => (
+            <Grid item container xs={12} rowSpacing={1} key={id}>
               <Grid item xs={12}>
                 <Variant
                   onChange={variant => {
-                    const updatedVariantSets = [...variantSets];
-                    updatedVariantSets[index].attributes = variant;
-                    checkForDuplicatedVariant(variant, index);
-                    setVariantSets(updatedVariantSets);
+                    const variantSetToUpdateIndex = variantSets.findIndex(
+                      ({ id: itemId }) => itemId === id
+                    );
+                    const variantSetsClone = [...variantSets];
+                    variantSetsClone[variantSetToUpdateIndex].attributes =
+                      variant;
+                    checkForDuplicatedVariant(variant, id);
+                    setVariantSets(variantSetsClone);
                   }}
                 />
               </Grid>
@@ -212,9 +218,13 @@ export function CreateOrderItemBulkyForm({
                     inputProps: { min: 1 },
                   }}
                   onChange={({ target: { value } }) => {
-                    const updatedVariantSets = [...variantSets];
-                    updatedVariantSets[index].quantity = Number(value);
-                    setVariantSets(updatedVariantSets);
+                    const variantSetToUpdateIndex = variantSets.findIndex(
+                      ({ id: itemId }) => itemId === id
+                    );
+                    const variantSetsClone = [...variantSets];
+                    variantSetsClone[variantSetToUpdateIndex].quantity =
+                      Number(value);
+                    setVariantSets(variantSetsClone);
                   }}
                   required
                 />

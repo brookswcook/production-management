@@ -12,19 +12,14 @@ export function LinkProperty({
   resources: { id: string; text: string }[];
 }): ReactElement {
   return (
-    <Grid
-      container
-      direction="row"
-      justifyContent="flex-start"
-      alignItems="center"
-    >
+    <Grid container columnGap={2} alignItems={"center"}>
       <Grid item>
         <Typography component="span" variant="subtitle2">
           {title}
         </Typography>
       </Grid>
       {resources.map(({ id, text }) => (
-        <Grid item sx={{ pl: 3 }} key={id}>
+        <Grid item key={id}>
           <Link
             key={id}
             to={`/${baseUrl}/${id}`}

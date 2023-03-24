@@ -1,25 +1,23 @@
-import { Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { ReactElement } from "react";
 
 export function TextProperty({
-  title,
   value,
-  vertical = false,
+  title,
 }: {
-  title: string;
   value: string;
-  vertical?: boolean;
+  title?: string;
 }): ReactElement {
   return (
-    <Typography component={vertical ? "div" : "span"} variant="subtitle2">
-      {title}
-      <Typography
-        component={vertical ? "div" : "span"}
-        variant="overline"
-        sx={{ pl: 3 }}
-      >
-        {value}
-      </Typography>
-    </Typography>
+    <Grid container columnGap={2} alignItems={"center"}>
+      {title != null && (
+        <Grid item>
+          <Typography variant="subtitle2">{title}</Typography>
+        </Grid>
+      )}
+      <Grid item>
+        <Typography variant="overline">{value}</Typography>
+      </Grid>
+    </Grid>
   );
 }

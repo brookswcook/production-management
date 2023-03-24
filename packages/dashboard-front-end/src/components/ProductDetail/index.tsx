@@ -4,7 +4,6 @@ import {
   Container,
   Grid,
   LinearProgress,
-  Stack,
   Typography,
 } from "@mui/material";
 import { Fragment, ReactElement, useState } from "react";
@@ -46,7 +45,7 @@ export default function ProductDetail(): ReactElement {
     stage,
     factory,
     techPackUploaded,
-    production: { cost: productionCost },
+    production: { cost: productionCost, bulkProductionCostDiscounts },
     style,
     fabric,
     fitSamples,
@@ -62,7 +61,6 @@ export default function ProductDetail(): ReactElement {
       />
       <Box sx={{ p: 1 }}>
         <Grid
-          justifyContent={"left"}
           container
           sx={{
             border: "1px solid rgba(224, 224, 224, 1)",
@@ -80,73 +78,90 @@ export default function ProductDetail(): ReactElement {
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} sx={{ pl: 1 }}>
-            <Stack spacing={2} sx={{ pl: 0.5 }}>
-              <Grid
-                direction={"row"}
-                justifyContent={"left"}
-                alignItems="baseline"
-                container
-              >
-                <Grid item xs={12} md={"auto"}>
-                  <ObjectProperty
-                    title="Style"
-                    value={{
-                      Code: style.code,
-                      "Tech Pack Uploaded": techPackUploaded,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} md={"auto"} sx={{ pl: 2 }}>
-                  <Button
-                    href={`/styles/${style.code}`}
-                    size={"small"}
-                    variant={"contained"}
-                  >
-                    Style details
-                  </Button>
-                </Grid>
+          <Grid item container xs={12} sx={{ pl: 1.5 }} rowSpacing={1}>
+            <Grid item container alignItems="baseline" xs={12}>
+              <Grid item xs={12} md={"auto"}>
+                <ObjectProperty
+                  title="Style"
+                  value={{
+                    Code: style.code,
+                    "Tech Pack Uploaded": techPackUploaded,
+                  }}
+                />
               </Grid>
-              {/* <TextProperty title="Style No." value={style.code} /> */}
+              <Grid item xs={12} md={"auto"} sx={{ pl: 2 }}>
+                <Button
+                  href={`/styles/${style.code}`}
+                  size={"small"}
+                  variant={"contained"}
+                >
+                  Style details
+                </Button>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
               <TextProperty title="Stage" value={stage} />
+            </Grid>
+            <Grid item xs={12}>
               <TextProperty title="Factory" value={factory.code} />
-              <Grid
-                direction={"row"}
-                justifyContent={"left"}
-                alignItems="baseline"
-                container
-              >
-                <Grid item xs={12} md={"auto"}>
-                  <ObjectProperty
-                    title="Fabric"
-                    value={{
-                      Name: fabric.title,
-                      Code: fabric.code,
-                      "Color Type": fabric.colorType,
-                      "Color Name": fabric.colorName,
-                      "Fabric Approved?": fabric.stage === "Approved",
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} md={"auto"} sx={{ pl: 2 }}>
-                  <Button
-                    href={`/fabrics/${fabric.code}`}
-                    variant={"contained"}
-                    size={"small"}
-                  >
-                    Fabric details
-                  </Button>
-                </Grid>
+            </Grid>
+            <Grid
+              item
+              container
+              justifyContent={"left"}
+              alignItems="baseline"
+              gap={2}
+              xs={12}
+            >
+              <Grid item xs={12} md={"auto"}>
+                <ObjectProperty
+                  title="Fabric"
+                  value={{
+                    Name: fabric.title,
+                    Code: fabric.code,
+                    "Color Type": fabric.colorType,
+                    "Color Name": fabric.colorName,
+                    "Fabric Approved?": fabric.stage === "Approved",
+                  }}
+                />
               </Grid>
+              <Grid item xs={12} md={"auto"}>
+                <Button
+                  href={`/fabrics/${fabric.code}`}
+                  variant={"contained"}
+                  size={"small"}
+                >
+                  Fabric details
+                </Button>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
               <TextProperty
                 title="Next Production Due"
                 value={new Date(deliveryDate).toLocaleDateString()}
               />
-              <Stack direction={"row"} spacing={2}>
-                <TextProperty
+            </Grid>
+            <Grid item container gap={2} alignItems={"center"} xs={12}>
+              <Grid item xs={12} sm={"auto"}>
+                <ObjectProperty
                   title="Production cost"
-                  value={toCurrency(productionCost)}
+                  value={{
+                    Base: toCurrency(productionCost),
+                    ...bulkProductionCostDiscounts.reduce<
+                      Record<string, string>
+                    >(
+                      (acc, { quantityThreshold, discount }) => ({
+                        ...acc,
+                        [`> ${quantityThreshold} Units`]: toCurrency(
+                          productionCost - discount
+                        ),
+                      }),
+                      {}
+                    ),
+                  }}
                 />
+              </Grid>
+              <Grid item xs={12} sm={"auto"}>
                 <Button
                   variant={"contained"}
                   size={"small"}
@@ -154,8 +169,8 @@ export default function ProductDetail(): ReactElement {
                 >
                   Update costs
                 </Button>
-              </Stack>
-            </Stack>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Box>

@@ -6,6 +6,13 @@ import {
   IconButton,
   Divider,
   Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from "@mui/material";
 import { useState, useEffect, FormEvent } from "react";
 import {
@@ -30,6 +37,23 @@ export type OrderItemBulkyFormType = {
   pricePerItem: number;
   variantSets: VariantSet[];
 };
+
+function stringifyAttributes(attributes: { key: string; value: string }[]) {
+  return attributes.length > 0
+    ? attributes.map(({ key, value }) => `${key}: ${value}`).join("; ")
+    : "No Attributes";
+}
+
+function stringifyVariantSetsAttributes({
+  variantSets,
+}: {
+  variantSets: { attributes: { key: string; value: string }[] }[];
+}): string[] {
+  return variantSets.reduce<string[]>((acc, { attributes }) => {
+    const stringifiedAttributes = stringifyAttributes(attributes);
+    return [...acc, stringifiedAttributes];
+  }, []);
+}
 
 export function CreateOrderItemBulkyForm({
   onSubmit,
@@ -160,6 +184,32 @@ export function CreateOrderItemBulkyForm({
             </Typography>
           )}
         </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {stringifyVariantSetsAttributes({ variantSets }).map(
+                  attributes => (
+                    <TableCell align="right" key={attributes}>
+                      {attributes}
+                    </TableCell>
+                  )
+                )}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                {variantSets.map(row => (
+                  <TableCell align="right" key={JSON.stringify(row.attributes)}>
+                    {row.quantity}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Grid>
       {productCode && (
         <>

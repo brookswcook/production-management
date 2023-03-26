@@ -47,19 +47,6 @@ function stringifyAttributes(
     : null;
 }
 
-function stringifyVariantSetsAttributes({
-  variantSets,
-}: {
-  variantSets: { attributes: { key: string; value: string }[] }[];
-}): string[] {
-  return variantSets.reduce<string[]>((acc, { attributes }) => {
-    const stringifiedAttributes = stringifyAttributes(attributes);
-    return stringifiedAttributes != null
-      ? [...acc, stringifiedAttributes]
-      : acc;
-  }, []);
-}
-
 export function CreateOrderItemBulkyForm({
   onSubmit,
   onChange,

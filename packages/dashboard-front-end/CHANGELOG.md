@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.7.0...dashboard-front-end@1.8.0) (2023-03-27)
+
+
+### Bug Fixes
+
+* add new variant sets to the beginning of form for convenience ([859fb62](https://github.com/brookswcook/production-management/commit/859fb62de15a49ccf8e6e523ddc72e50994d386e))
+* enable qty validation ([948a4b3](https://github.com/brookswcook/production-management/commit/948a4b3cd1637a34596e77ecb9735ea21e2c5abc))
+* improve layout for small devices ([76c5c81](https://github.com/brookswcook/production-management/commit/76c5c81386e25e3f813c2b7a740509c5f9b3f07a))
+* refactor graphql notes and action logs files ([3b417a9](https://github.com/brookswcook/production-management/commit/3b417a91d627640a832cb04b16ad2d4771ffbe69))
+* refactor prop components ([e657562](https://github.com/brookswcook/production-management/commit/e65756264f5d62b85809362e4d38c676e172b406))
+* refactor update cost dialog out of detail view ([692c7e1](https://github.com/brookswcook/production-management/commit/692c7e1c08a85903e404102bb54c9a3a09ac7c76))
+* remove not needed function ([76cc0d7](https://github.com/brookswcook/production-management/commit/76cc0d72474c8a6319854d2387d9ecdf96770206))
+* replace order item creation popover with dialog ([4a47142](https://github.com/brookswcook/production-management/commit/4a471425ada15b684dbcb247164e8b15204a34c6))
+* support onSubmit on create items form ([e4c45b1](https://github.com/brookswcook/production-management/commit/e4c45b18f611a958678eb29a44bcf201cb7fc935))
+* support validation on create items dialog ([2c5aa18](https://github.com/brookswcook/production-management/commit/2c5aa180ef28cec0053816a3793a3ec7f44dcff5))
+* use regular create order item popper button on regular order item list ([95902c0](https://github.com/brookswcook/production-management/commit/95902c0c46f01e681ede15e263d4af85831e2bfe))
+* use updated graphql schema ([bbd2b52](https://github.com/brookswcook/production-management/commit/bbd2b526c07a5007560f73146e325b18538e2776))
+* use updated product cost api ([605a99b](https://github.com/brookswcook/production-management/commit/605a99b2ed4fa059f8863e6f73c2065baa8f0797))
+* wip create items overview table ([bd8ef8b](https://github.com/brookswcook/production-management/commit/bd8ef8b6bb71aca8be492bc74147d8fa51a57709))
+
+
+### Features
+
+* add cost discounts on product detail view ([58b4d04](https://github.com/brookswcook/production-management/commit/58b4d044c3a8a59571d67d1af170803ee7dd81b7))
+* cost discounts addition to update costs dialog ([a467f86](https://github.com/brookswcook/production-management/commit/a467f86fe8bdc539a87331c82d028cac626ed8a2))
+* order items grouped by attribute list wip ([6bc8181](https://github.com/brookswcook/production-management/commit/6bc8181d536ecb40557a8c691eb9bd3fdd7bad67))
+* order items grouped by attributes list view ([3bcd4a0](https://github.com/brookswcook/production-management/commit/3bcd4a0d039def1d449b94651d5daa7aa66aecc6))
+* po items to add summary table ([e393f46](https://github.com/brookswcook/production-management/commit/e393f46523904e3042d2c8cba0f9a0e10b52ce08))
+* price discounts are applied on items creation form ([f3f6a19](https://github.com/brookswcook/production-management/commit/f3f6a1988d311851d2648e19c9dbc95780321aaa))
+
+
+
+
+
 # [1.7.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.6.0...dashboard-front-end@1.7.0) (2023-03-05)
 
 

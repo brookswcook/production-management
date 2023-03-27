@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.6.0...dashboard-api@1.7.0) (2023-03-27)
+
+
+### Bug Fixes
+
+* add a note about price ([6a5816d](https://github.com/brookswcook/production-management/commit/6a5816de6873420fc067359e0e07d47e32f83d37))
+* grouped order items by attributes ([f1bda3e](https://github.com/brookswcook/production-management/commit/f1bda3ec7b3e465fd0741258b681c2b2a30e273f))
+* remove note creating action log ([56e5358](https://github.com/brookswcook/production-management/commit/56e535841489743e12d00357f8e83149c0a8e76d))
+
+
+### Features
+
+* bulk production cost discounts api ([6c36123](https://github.com/brookswcook/production-management/commit/6c36123dc51dab4e606445f017c8a91270fdbd72))
+* get order items grouped by attribute graphql query ([6cb5410](https://github.com/brookswcook/production-management/commit/6cb5410ca8a212cc4f08fa8cfc1854bdb71391e1))
+* get order items grouped by attributes query ([ec938e8](https://github.com/brookswcook/production-management/commit/ec938e83209b4b1cf5f145b269367d395e86a877))
+* keep prod cost under production section of product ([efea164](https://github.com/brookswcook/production-management/commit/efea1648e204f95e43578e998904e42c3977e0db))
+
+
+
+
+
 # [1.6.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.5.1...dashboard-api@1.6.0) (2023-03-05)
 
 

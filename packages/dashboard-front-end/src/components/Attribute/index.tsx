@@ -15,7 +15,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useState } from "react";
 import { toast } from "react-toastify";
 import {
   CreateAttributeInput,
@@ -94,12 +94,12 @@ function stringifyAttributes(
     ? attributes.map(({ key, value }) => `${key}: ${value}`).join("; ")
     : null;
 }
+// const [totalQuantity, setTotalQuantity] = useState<number>(0);
+// const [totalPrice, setTotalPrice] = useState<number>(0);
+// const [discountPerItem, setDiscountPerItem] = useState<number>(0);
 
 export function VariantSet({ productCode }: { productCode: string }) {
   const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
-  const [totalQuantity, setTotalQuantity] = useState<number>(0);
-  const [totalPrice, setTotalPrice] = useState<number>(0);
-  const [discountPerItem, setDiscountPerItem] = useState<number>(0);
 
   function checkForDuplicatedVariant(
     variant: CreateAttributeInput[],
@@ -157,128 +157,126 @@ export function VariantSet({ productCode }: { productCode: string }) {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {variantSets.map(({ attributes, id }) => {
-                  const stringifiedAttributes = stringifyAttributes(attributes);
-                  return (
-                    <TableCell align="right" key={id}>
-                      {stringifiedAttributes}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                {variantSets.map(row => (
-                  <TableCell align="right" key={row.id}>
-                    {row.quantity}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Typography component="h4" variant="inherit">
+          {`Variant sets of product with code ${productCode}`}
+          <IconButton
+            size="medium"
+            color="secondary"
+            onClick={() => {
+              const newVariantSet: VariantSet = {
+                quantity: 0,
+                attributes: [],
+                id: variantSets.length,
+              };
+              setVariantSets([newVariantSet, ...variantSets]);
+            }}
+          >
+            <AddIcon />
+          </IconButton>
+          <IconButton
+            size="medium"
+            color="secondary"
+            onClick={() => {
+              const withoutLast = variantSets.slice(0, -1);
+              setVariantSets(withoutLast);
+            }}
+          >
+            <RemoveIcon />
+          </IconButton>
+        </Typography>
       </Grid>
-      <Grid item container gap={1}>
-        <Grid item xs={12} sm={"auto"}>
-          <Typography
-            component="h4"
-            variant="subtitle2"
-          >{`Total quantity: ${totalQuantity}`}</Typography>
-        </Grid>
-        <Grid item xs={12} sm={"auto"}>
-          <Typography
-            component="h4"
-            variant="subtitle2"
-          >{`Total price: ${toCurrency(totalPrice)}`}</Typography>
-        </Grid>
-        <Grid item xs={12} sm={"auto"}>
-          {discountPerItem !== 0 && (
-            <Typography component="h4" variant="subtitle2">
-              Discount: {`${toCurrency(discountPerItem)}/unit is applied`}
-            </Typography>
-          )}
-        </Grid>
-      </Grid>
-      {productCode && (
-        <>
-          <Grid item xs={12}>
-            <Typography component="h4" variant="inherit">
-              Variant sets of selected product{" "}
-              <IconButton
-                size="medium"
-                color="secondary"
-                onClick={() => {
-                  const newVariantSet: VariantSet = {
-                    quantity: 0,
-                    attributes: [],
-                    id: variantSets.length,
-                  };
-                  setVariantSets([newVariantSet, ...variantSets]);
-                }}
-              >
-                <AddIcon />
-              </IconButton>
-              <IconButton
-                size="medium"
-                color="secondary"
-                onClick={() => {
-                  const withoutLast = variantSets.slice(0, -1);
-                  setVariantSets(withoutLast);
-                }}
-              >
-                <RemoveIcon />
-              </IconButton>
-            </Typography>
-          </Grid>
 
-          {variantSets.map(({ id }) => (
-            <Grid item container xs={12} rowSpacing={1} key={id}>
-              <Grid item xs={12}>
-                <Variant
-                  onChange={variant => {
-                    const variantSetToUpdateIndex = variantSets.findIndex(
-                      ({ id: itemId }) => itemId === id
-                    );
-                    const variantSetsClone = [...variantSets];
-                    variantSetsClone[variantSetToUpdateIndex].attributes =
-                      variant;
-                    checkForDuplicatedVariant(variant, id);
-                    setVariantSets(variantSetsClone);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Quantity"
-                  type="number"
-                  InputProps={{
-                    inputProps: { min: 1 },
-                  }}
-                  onChange={({ target: { value } }) => {
-                    const variantSetToUpdateIndex = variantSets.findIndex(
-                      ({ id: itemId }) => itemId === id
-                    );
-                    const variantSetsClone = [...variantSets];
-                    variantSetsClone[variantSetToUpdateIndex].quantity =
-                      Number(value);
-                    setVariantSets(variantSetsClone);
-                  }}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Divider sx={{ mb: 1 }} />
-              </Grid>
-            </Grid>
-          ))}
-        </>
-      )}
+      {variantSets.map(({ id }) => (
+        <Grid item container xs={12} rowSpacing={1} key={id}>
+          <Grid item xs={12}>
+            <Variant
+              onChange={variant => {
+                const variantSetToUpdateIndex = variantSets.findIndex(
+                  ({ id: itemId }) => itemId === id
+                );
+                const variantSetsClone = [...variantSets];
+                variantSetsClone[variantSetToUpdateIndex].attributes = variant;
+                checkForDuplicatedVariant(variant, id);
+                setVariantSets(variantSetsClone);
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Quantity"
+              type="number"
+              InputProps={{
+                inputProps: { min: 1 },
+              }}
+              onChange={({ target: { value } }) => {
+                const variantSetToUpdateIndex = variantSets.findIndex(
+                  ({ id: itemId }) => itemId === id
+                );
+                const variantSetsClone = [...variantSets];
+                variantSetsClone[variantSetToUpdateIndex].quantity =
+                  Number(value);
+                setVariantSets(variantSetsClone);
+              }}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Divider sx={{ mb: 1 }} />
+          </Grid>
+        </Grid>
+      ))}
     </Grid>
   );
+}
+
+{
+  /* <Grid item xs={12}>
+<TableContainer component={Paper}>
+  <Table>
+    <TableHead>
+      <TableRow>
+        {variantSets.map(({ attributes, id }) => {
+          const stringifiedAttributes = stringifyAttributes(attributes);
+          return (
+            <TableCell align="right" key={id}>
+              {stringifiedAttributes}
+            </TableCell>
+          );
+        })}
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      <TableRow>
+        {variantSets.map(row => (
+          <TableCell align="right" key={row.id}>
+            {row.quantity}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableBody>
+  </Table>
+</TableContainer>
+</Grid>
+<Grid item container gap={1}>
+<Grid item xs={12} sm={"auto"}>
+  <Typography
+    component="h4"
+    variant="subtitle2"
+  >{`Total quantity: ${totalQuantity}`}</Typography>
+</Grid>
+<Grid item xs={12} sm={"auto"}>
+  <Typography
+    component="h4"
+    variant="subtitle2"
+  >{`Total price: ${toCurrency(totalPrice)}`}</Typography>
+</Grid>
+<Grid item xs={12} sm={"auto"}>
+  {discountPerItem !== 0 && (
+    <Typography component="h4" variant="subtitle2">
+      Discount: {`${toCurrency(discountPerItem)}/unit is applied`}
+    </Typography>
+  )}
+</Grid>
+</Grid> */
 }

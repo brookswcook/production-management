@@ -90,7 +90,13 @@ function stringifyAttributes(
 // const [totalPrice, setTotalPrice] = useState<number>(0);
 // const [discountPerItem, setDiscountPerItem] = useState<number>(0);
 
-export function VariantSet({ productCode }: { productCode: string }) {
+export function VariantSet({
+  productCode,
+  onChange,
+}: {
+  productCode: string;
+  onChange: (variantSet: VariantSet[]) => void;
+}) {
   const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
 
   function checkForDuplicatedVariant(
@@ -160,7 +166,9 @@ export function VariantSet({ productCode }: { productCode: string }) {
                 attributes: [],
                 id: variantSets.length,
               };
-              setVariantSets([newVariantSet, ...variantSets]);
+              const updatedVariantSets = [newVariantSet, ...variantSets];
+              setVariantSets(updatedVariantSets);
+              onChange(updatedVariantSets);
             }}
           >
             <AddIcon />
@@ -171,6 +179,7 @@ export function VariantSet({ productCode }: { productCode: string }) {
             onClick={() => {
               const withoutLast = variantSets.slice(0, -1);
               setVariantSets(withoutLast);
+              onChange(withoutLast);
             }}
           >
             <RemoveIcon />
@@ -190,6 +199,7 @@ export function VariantSet({ productCode }: { productCode: string }) {
                 variantSetsClone[variantSetToUpdateIndex].attributes = variant;
                 checkForDuplicatedVariant(variant, id);
                 setVariantSets(variantSetsClone);
+                onChange(variantSetsClone);
               }}
             />
           </Grid>
@@ -209,6 +219,7 @@ export function VariantSet({ productCode }: { productCode: string }) {
                 variantSetsClone[variantSetToUpdateIndex].quantity =
                   Number(value);
                 setVariantSets(variantSetsClone);
+                onChange(variantSetsClone);
               }}
               required
             />

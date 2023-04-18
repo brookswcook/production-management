@@ -1,103 +1,26 @@
 import {
-  Autocomplete,
-  Box,
-  Divider,
   Grid,
-  IconButton,
-  Stack,
-  TextField,
   Typography,
+  IconButton,
+  TextField,
+  Divider,
 } from "@mui/material";
-import { ReactElement, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
-import {
-  CreateAttributeInput,
-  useAttributeDefinitionsQuery,
-} from "../../generated/graphql";
+import { CreateAttributeInput } from "../../generated/graphql";
+import { VariantAttributesDropDown } from "./VariantAttributeDropDown";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { VariantAttributeSet } from "./types";
 
-export function Variant({
-  onChange,
-}: {
-  onChange: (variant: CreateAttributeInput[]) => void;
-}): ReactElement {
-  const [variant, setVariant] = useState<CreateAttributeInput[]>([]);
-  const {
-    data: { attributeDefinitions } = {
-      attributeDefinitions: [],
-    },
-    loading: attributeDefinitionLoading,
-  } = useAttributeDefinitionsQuery();
-
-  // TODO: support unit
-  function onValueChange(key: string, value: string) {
-    const attributeIndex = variant.findIndex(item => item.key == key);
-    const updatedVariant = [...variant];
-    if (attributeIndex === -1) {
-      const newAttributeIndex = updatedVariant.length;
-      updatedVariant[newAttributeIndex] = { key, value, unit: null };
-    } else {
-      updatedVariant[attributeIndex] = { key, value, unit: null };
-    }
-    setVariant(updatedVariant);
-    onChange(updatedVariant);
-  }
-
-  if (attributeDefinitionLoading) return <></>;
-  return (
-    <Stack spacing={1}>
-      {attributeDefinitions.map(({ name, values }, index) => (
-        <Autocomplete
-          key={`Autocomplete_${index}`}
-          options={values ?? []}
-          renderOption={(props, option) => (
-            <Box component="li" {...props}>
-              {`${option}`}
-            </Box>
-          )}
-          onChange={(_, value) => onValueChange(name, String(value))}
-          renderInput={params => (
-            <TextField {...params} label={name} type={"text"} required />
-          )}
-        />
-      ))}
-    </Stack>
-  );
-}
-
-type VariantSet = {
-  attributes: CreateAttributeInput[];
-  quantity: number;
-  id: number;
-};
-
-export type OrderItemBulkyFormType = {
-  productCode: string;
-  pricePerItem: number;
-  variantSets: VariantSet[];
-};
-
-//TODO: move to another file for attributes
-function stringifyAttributes(
-  attributes: { key: string; value: string }[]
-): string | null {
-  return attributes.length > 0
-    ? attributes.map(({ key, value }) => `${key}: ${value}`).join("; ")
-    : null;
-}
-// const [totalQuantity, setTotalQuantity] = useState<number>(0);
-// const [totalPrice, setTotalPrice] = useState<number>(0);
-// const [discountPerItem, setDiscountPerItem] = useState<number>(0);
-
-export function VariantSet({
+export function VariantAttributeSetDropDown({
   productCode,
   onChange,
 }: {
   productCode: string;
-  onChange: (variantSet: VariantSet[]) => void;
+  onChange: (variantSet: VariantAttributeSet[]) => void;
 }) {
-  const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
+  const [variantSets, setVariantSets] = useState<VariantAttributeSet[]>([]);
 
   function checkForDuplicatedVariant(
     variant: CreateAttributeInput[],
@@ -161,7 +84,7 @@ export function VariantSet({
             size="medium"
             color="secondary"
             onClick={() => {
-              const newVariantSet: VariantSet = {
+              const newVariantSet: VariantAttributeSet = {
                 quantity: 0,
                 attributes: [],
                 id: variantSets.length,
@@ -190,7 +113,7 @@ export function VariantSet({
       {variantSets.map(({ id }) => (
         <Grid item container xs={12} rowSpacing={1} key={id}>
           <Grid item xs={12}>
-            <Variant
+            <VariantAttributesDropDown
               onChange={variant => {
                 const variantSetToUpdateIndex = variantSets.findIndex(
                   ({ id: itemId }) => itemId === id

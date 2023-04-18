@@ -2,7 +2,10 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useCreateOrderItemMutation } from "../../../generated/graphql";
 import { ActionDialog } from "../../Common/ActionDialog";
-import { CreateOrderItemBulkyForm, OrderItemBulkyFormType } from "../Form";
+import {
+  CreateOrderItemBulkyDropdownForm,
+  OrderItemBulkyFormType,
+} from "../Form";
 
 export function CreateOrderItemByVariantSetsDialog({
   orderUid,
@@ -55,7 +58,7 @@ export function CreateOrderItemByVariantSetsDialog({
       onClose={onClose}
       form="createOrderItemBulkyForm"
     >
-      <CreateOrderItemBulkyForm
+      <CreateOrderItemBulkyDropdownForm
         onSubmit={async e => {
           e.preventDefault();
           await createOrderItemsByVariantSets();

@@ -3,7 +3,8 @@ import { useState, FormEvent } from "react";
 import { useProductsQuery } from "../../../generated/graphql";
 
 import FloatTextField from "../../Common/FloatTextField";
-import { OrderItemBulkyFormType } from "../../Attribute";
+import { VariantAttributeSetTable } from "../../VariantAttribute/VariantAttributeSetTable";
+import { OrderItemBulkyFormType } from "./types";
 
 export function CreateOrderItemBulkyDropdownForm({
   onSubmit,
@@ -15,7 +16,7 @@ export function CreateOrderItemBulkyDropdownForm({
   id?: string;
 }) {
   const [pricePerItem, setPricePerItem] = useState<number>(0);
-  const [productCode, setProductCode] = useState<string | null>(null);
+  const [productCode, setProductCode] = useState<string>("");
   const { data: { products } = { products: [] } } = useProductsQuery();
 
   return (
@@ -55,6 +56,9 @@ export function CreateOrderItemBulkyDropdownForm({
             required
             sx={{ mt: 1 }}
           />
+        </Grid>
+        <Grid item xs={12}>
+          <VariantAttributeSetTable variantSets={[]}></VariantAttributeSetTable>
         </Grid>
       </Grid>
     </Grid>

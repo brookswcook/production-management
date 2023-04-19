@@ -18,10 +18,10 @@ import { DetailViewSection } from "../../Common/DetailViewSection";
 import { TextProperty } from "../../Properties";
 import { ObjectProperty } from "../../Properties/ObjectProperty";
 import EntityTimeline from "../../EntityTimeline";
-import { UpdateProductionCostDialog } from "../Dialog";
+import { UpdateProductionCostDialog } from "../Dialog/UpdateProductionCostDialog";
 import { toCurrency } from "../../Common";
 
-export default function ProductDetail(): ReactElement {
+export function ProductDetail(): ReactElement {
   const [updateCostDialogOpen, setUpdateCostDialogOpen] =
     useState<boolean>(false);
   const { code = "" } = useParams();

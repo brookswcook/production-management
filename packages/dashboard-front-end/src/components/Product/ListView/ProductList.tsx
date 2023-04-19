@@ -14,13 +14,13 @@ import {
 } from "../../../generated/graphql";
 import { PopperButton } from "../../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
-import { CreateProductForm } from "../Form";
+import { CreateProductForm } from "../Form/CreateProductForm";
 import { Fragment, ReactElement } from "react";
 import { Link } from "react-router-dom";
 import RequireRole from "../../Auth/RequireRole";
 import { renderCellExpand } from "../../Common/GridCellExpand";
 
-export default function ProductGrid(): ReactElement {
+export function ProductList(): ReactElement {
   const { data, loading, error } = useProductsQuery({
     variables: {},
   });

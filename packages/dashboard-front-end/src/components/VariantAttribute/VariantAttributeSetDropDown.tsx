@@ -47,34 +47,6 @@ export function VariantAttributeSetDropDown({
       toast.warn("You are about to use the same variant specified before!");
   }
 
-  // useEffect(() => {
-  //   const selectedProduct = products.find(item => item.code === productCode);
-  //   if (selectedProduct != null) {
-  //     const { cost: baseCost, bulkProductionCostDiscounts } =
-  //       selectedProduct.production;
-  //     const bulkProductionCost = [...bulkProductionCostDiscounts]
-  //       .sort((a, b) => b.quantityThreshold - a.quantityThreshold)
-  //       .find(({ quantityThreshold }) => totalQuantity > quantityThreshold);
-  //     const costWithDiscountApplied =
-  //       bulkProductionCost != null
-  //         ? baseCost - bulkProductionCost.discount
-  //         : baseCost;
-  //     setPricePerItem(costWithDiscountApplied);
-  //     setDiscountPerItem(bulkProductionCost?.discount ?? 0);
-  //   }
-  // }, [products, productCode, totalQuantity]);
-
-  // useEffect(() => {
-  //   productCode != null && onChange({ productCode, pricePerItem, variantSets });
-  //   setTotalQuantity(
-  //     variantSets.reduce<number>((acc, { quantity }) => acc + quantity, 0)
-  //   );
-  // }, [pricePerItem, productCode, JSON.stringify(variantSets)]);
-
-  // useEffect(() => {
-  //   setTotalPrice(pricePerItem * totalQuantity);
-  // }, [totalQuantity, pricePerItem]);
-
   return (
     <Grid container>
       <Grid item xs={12}>

@@ -10,10 +10,6 @@ import {
 } from "@mui/material";
 import { VariantAttributeSet } from "./types";
 
-// const [totalQuantity, setTotalQuantity] = useState<number>(0);
-// const [totalPrice, setTotalPrice] = useState<number>(0);
-// const [discountPerItem, setDiscountPerItem] = useState<number>(0);
-
 //TODO: move to another file for attributes
 function stringifyAttributes(
   attributes: { key: string; value: string }[]
@@ -59,28 +55,4 @@ export function VariantAttributeSetTable({
       </Grid>
     </Grid>
   );
-}
-
-{
-  /* <Grid item container gap={1}>
-<Grid item xs={12} sm={"auto"}>
-  <Typography
-    component="h4"
-    variant="subtitle2"
-  >{`Total quantity: ${totalQuantity}`}</Typography>
-</Grid>
-<Grid item xs={12} sm={"auto"}>
-  <Typography
-    component="h4"
-    variant="subtitle2"
-  >{`Total price: ${toCurrency(totalPrice)}`}</Typography>
-</Grid>
-<Grid item xs={12} sm={"auto"}>
-  {discountPerItem !== 0 && (
-    <Typography component="h4" variant="subtitle2">
-      Discount: {`${toCurrency(discountPerItem)}/unit is applied`}
-    </Typography>
-  )}
-</Grid>
-</Grid> */
 }

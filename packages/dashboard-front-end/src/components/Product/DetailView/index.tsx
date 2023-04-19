@@ -12,14 +12,14 @@ import {
   ProductFieldsFragment,
   Sample,
   useProductQuery,
-} from "../../generated/graphql";
-import SampleGrid from "../SampleGrid";
-import { DetailViewSection } from "../Common/DetailViewSection";
-import { TextProperty } from "../Properties";
-import { ObjectProperty } from "../Properties/ObjectProperty";
-import EntityTimeline from "../EntityTimeline";
-import { UpdateProductionCostDialog } from "../ProductDialog";
-import { toCurrency } from "../Common";
+} from "../../../generated/graphql";
+import SampleGrid from "../../SampleGrid";
+import { DetailViewSection } from "../../Common/DetailViewSection";
+import { TextProperty } from "../../Properties";
+import { ObjectProperty } from "../../Properties/ObjectProperty";
+import EntityTimeline from "../../EntityTimeline";
+import { UpdateProductionCostDialog } from "../Dialog";
+import { toCurrency } from "../../Common";
 
 export default function ProductDetail(): ReactElement {
   const [updateCostDialogOpen, setUpdateCostDialogOpen] =

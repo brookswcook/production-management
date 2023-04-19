@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import ProductGrid from "../ProductGrid";
+import ProductGrid from "../Product/ListView";
 import {
   Fragment,
   MouseEventHandler,
@@ -40,7 +40,7 @@ import RequireAuth from "../Auth/RequireAuth";
 import { AuthContext, AuthProvider } from "../Auth/AuthProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ProductDetail from "../ProductDetail";
+import ProductDetail from "../Product/DetailView";
 import React from "react";
 import RequireRole from "../Auth/RequireRole";
 import FabricGrid from "../FabricGrid";

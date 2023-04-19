@@ -11,14 +11,14 @@ import {
 import {
   ProductFieldsFragment,
   useProductsQuery,
-} from "../../generated/graphql";
-import { PopperButton } from "../PopperButton";
+} from "../../../generated/graphql";
+import { PopperButton } from "../../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
-import { CreateProductForm } from "../ProductForm";
+import { CreateProductForm } from "../Form";
 import { Fragment, ReactElement } from "react";
 import { Link } from "react-router-dom";
-import RequireRole from "../Auth/RequireRole";
-import { renderCellExpand } from "../Common/GridCellExpand";
+import RequireRole from "../../Auth/RequireRole";
+import { renderCellExpand } from "../../Common/GridCellExpand";
 
 export default function ProductGrid(): ReactElement {
   const { data, loading, error } = useProductsQuery({

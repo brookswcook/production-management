@@ -129,3 +129,27 @@ query Product($code: String!) {
     ...productFields
   }
 }
+
+mutation CreateProduct($data: CreateProductInput!) {
+  createProduct(data: $data) {
+    code
+  }
+}
+
+query PrintLink($fileName: String!) {
+  printLink(fileName: $fileName)
+}
+
+mutation UpdateCost($data: UpdateProductionCostInput!) {
+  updateCost(data: $data) {
+    code
+    production {
+      cost
+      bulkProductionCostDiscounts {
+        quantityThreshold
+        discount
+        discountType
+      }
+    }
+  }
+}

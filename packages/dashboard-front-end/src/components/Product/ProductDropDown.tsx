@@ -1,10 +1,13 @@
 import { Autocomplete, Box, TextField } from "@mui/material";
-import { useProductsQuery } from "../../generated/graphql";
+import {
+  ProductFieldsFragment,
+  useProductsQuery,
+} from "../../generated/graphql";
 
-export function ProductCodeDropDown({
+export function ProductDropDown({
   onChange,
 }: {
-  onChange: (value: string) => void;
+  onChange: (value: ProductFieldsFragment) => void;
 }) {
   const { data: { products } = { products: [] } } = useProductsQuery();
 
@@ -12,7 +15,7 @@ export function ProductCodeDropDown({
     <Autocomplete
       options={products}
       getOptionLabel={option => option.code}
-      onChange={(_, value) => value != null && onChange(String(value))}
+      onChange={(_, value) => value != null && onChange(value)}
       renderOption={(props, option) => (
         <Box component="li" key={option.code} {...props}>
           {`${option.code}`}

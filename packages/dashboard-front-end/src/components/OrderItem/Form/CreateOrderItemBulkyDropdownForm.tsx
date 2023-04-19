@@ -1,9 +1,10 @@
-import { Autocomplete, Box, TextField, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useState, FormEvent } from "react";
-import { useProductsQuery } from "../../../generated/graphql";
+import { ProductFieldsFragment } from "../../../generated/graphql";
+import { ProductDropDown } from "../../Product";
 
-import FloatTextField from "../../Common/FloatTextField";
-import { VariantAttributeSetTable } from "../../VariantAttribute/VariantAttributeSetTable";
+import { VariantAttributeSetDropDown } from "../../VariantAttribute";
+import { OrderItemPrice } from "../OrderItemPrice";
 import { OrderItemBulkyFormType } from "./types";
 
 export function CreateOrderItemBulkyDropdownForm({
@@ -15,51 +16,34 @@ export function CreateOrderItemBulkyDropdownForm({
   onChange: (value: OrderItemBulkyFormType) => void;
   id?: string;
 }) {
-  const [pricePerItem, setPricePerItem] = useState<number>(0);
-  const [productCode, setProductCode] = useState<string>("");
-  const { data: { products } = { products: [] } } = useProductsQuery();
+  const [priceDetailsPerItem, setPriceDetailsPerItem] = useState<{
+    itemPrice: number;
+    discountPerItem: number;
+  }>({ itemPrice: 0, discountPerItem: 0 });
+  const [product, setProduct] = useState<ProductFieldsFragment | null>(null);
 
   return (
     <Grid container component="form" id={id} onSubmit={onSubmit} rowGap={1}>
       <Grid container item>
         <Grid item xs={12}>
-          <Autocomplete
-            options={products}
-            getOptionLabel={option => option.code}
-            onChange={(_, value) =>
-              value != null && setProductCode(value?.code)
-            }
-            renderOption={(props, option) => (
-              <Box component="li" key={option.code} {...props}>
-                {`${option.code}`}
-              </Box>
-            )}
-            renderInput={params => {
-              params.fullWidth = true;
-              return (
-                <TextField
-                  {...params}
-                  label="Product"
-                  required
-                  sx={{ mt: 1 }}
-                />
-              );
-            }}
+          <ProductDropDown onChange={setProduct} />
+        </Grid>
+        {product != null && (
+          <>
+        <Grid item xs={12}>
+              <OrderItemPrice
+                onChange={setPriceDetailsPerItem}
+                product={product}
           />
         </Grid>
         <Grid item xs={12}>
-          <FloatTextField
-            fullWidth
-            label="Price per item"
-            value={String(pricePerItem)}
-            onChange={({ target: { value } }) => setPricePerItem(Number(value))}
-            required
-            sx={{ mt: 1 }}
-          />
+              <VariantAttributeSetDropDown
+                productCode={product.code}
+                onChange={e => console.log(e)}
+              />
         </Grid>
-        <Grid item xs={12}>
-          <VariantAttributeSetTable variantSets={[]}></VariantAttributeSetTable>
-        </Grid>
+          </>
+        )}
       </Grid>
     </Grid>
   );

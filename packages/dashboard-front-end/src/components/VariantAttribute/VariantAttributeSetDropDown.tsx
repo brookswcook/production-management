@@ -18,7 +18,7 @@ export function VariantAttributeSetDropDown({
   onChange,
 }: {
   productCode: string;
-  onChange: (variantSet: VariantAttributeSet[]) => void;
+  onChange: (variantSets: VariantAttributeSet[]) => void;
 }) {
   const [variantSets, setVariantSets] = useState<VariantAttributeSet[]>([]);
 

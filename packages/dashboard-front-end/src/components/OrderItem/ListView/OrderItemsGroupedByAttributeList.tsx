@@ -17,23 +17,10 @@ import RequireRole from "../../Auth/RequireRole";
 import { CreateOrderItemByVariantSetsDialog } from "../Dialog/CreateOrderItemByVariantSetsDialog";
 import AddIcon from "@mui/icons-material/Add";
 import { toCurrency } from "../../Common";
-
-function stringifyAttributes(attributes: { key: string; value: string }[]) {
-  return attributes.length > 0
-    ? attributes.map(({ key, value }) => `${key}: ${value}`).join("; ")
-    : "No Attributes";
-}
-
-function stringifyVariantSetsAttributes({
-  variantSets,
-}: {
-  variantSets: { attributes: { key: string; value: string }[] }[];
-}): string[] {
-  return variantSets.reduce<string[]>((acc, { attributes }) => {
-    const attributesIdentifier = stringifyAttributes(attributes);
-    return [...acc, attributesIdentifier];
-  }, []);
-}
+import {
+  stringifyAttributes,
+  stringifyVariantSetsAttributes,
+} from "../../VariantAttribute";
 
 export function OrderItemsGroupedByAttributeList({
   orderUid,

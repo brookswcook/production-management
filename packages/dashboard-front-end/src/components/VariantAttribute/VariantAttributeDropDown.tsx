@@ -39,7 +39,7 @@ export function VariantAttributesDropDown({
     <Stack spacing={1}>
       {attributeDefinitions.map(({ name, values }, index) => (
         <Autocomplete
-          key={`Autocomplete_${index}`}
+          key={index}
           options={values ?? []}
           renderOption={(props, option) => (
             <Box component="li" {...props}>

@@ -10,13 +10,23 @@ import {
 } from "@mui/material";
 import { VariantAttributeSet } from "./types";
 
-//TODO: move to another file for attributes
-function stringifyAttributes(
+export function stringifyAttributes(
   attributes: { key: string; value: string }[]
-): string | null {
+) {
   return attributes.length > 0
     ? attributes.map(({ key, value }) => `${key}: ${value}`).join("; ")
-    : null;
+    : "No Attributes";
+}
+
+export function stringifyVariantSetsAttributes({
+  variantSets,
+}: {
+  variantSets: { attributes: { key: string; value: string }[] }[];
+}): string[] {
+  return variantSets.reduce<string[]>((acc, { attributes }) => {
+    const attributesIdentifier = stringifyAttributes(attributes);
+    return [...acc, attributesIdentifier];
+  }, []);
 }
 
 export function VariantAttributeSetTable({

@@ -8,6 +8,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
 import { VariantAttributeSet } from "./types";
 
 export function stringifyAttributes(
@@ -30,39 +31,57 @@ export function stringifyVariantSetsAttributes({
 }
 
 export function VariantAttributeSetTable({
-  variantSets,
+  productCode,
 }: {
-  variantSets: VariantAttributeSet[];
+  productCode?: string;
 }) {
+  const columns: GridColDef[] = [
+    { field: "name", headerName: "Name", width: 180, editable: true },
+  ];
+
+  const rows: GridRowsProp = [
+    {
+      id: 1,
+      name: "size_01",
+      editable: true,
+    },
+  ];
+
   return (
     <Grid container>
-      <Grid item xs={12}>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {variantSets.map(({ attributes, id }) => {
-                  const stringifiedAttributes = stringifyAttributes(attributes);
-                  return (
-                    <TableCell align="right" key={id}>
-                      {stringifiedAttributes}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                {variantSets.map(row => (
-                  <TableCell align="right" key={row.id}>
-                    {row.quantity}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Grid>
+      <DataGrid autoHeight editMode="row" rows={rows} columns={columns} />
     </Grid>
   );
+
+  // return (
+  //   <Grid container>
+  //     <Grid item xs={12}>
+  //       <TableContainer component={Paper}>
+  //         <Table>
+  //           <TableHead>
+  //             <TableRow>
+  //               {variantSets.map(({ attributes, id }) => {
+  //                 const stringifiedAttributes = stringifyAttributes(attributes);
+  //                 return (
+  //                   <TableCell align="right" key={id}>
+  //                     {stringifiedAttributes}
+  //                   </TableCell>
+  //                 );
+  //               })}
+  //             </TableRow>
+  //           </TableHead>
+  //           <TableBody>
+  //             <TableRow>
+  //               {variantSets.map(row => (
+  //                 <TableCell align="right" key={row.id}>
+  //                   {row.quantity}
+  //                 </TableCell>
+  //               ))}
+  //             </TableRow>
+  //           </TableBody>
+  //         </Table>
+  //       </TableContainer>
+  //     </Grid>
+  //   </Grid>
+  // );
 }

@@ -19,7 +19,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { toCurrency } from "../../Common";
 import {
   stringifyAttributes,
-  stringifyVariantSetsAttributes,
+  stringifyVariantAttributes,
 } from "../../VariantAttribute";
 
 export function OrderItemsGroupedByAttributeList({
@@ -45,8 +45,8 @@ export function OrderItemsGroupedByAttributeList({
     if (data == null || data.orderItemsGroupedByAttributes == null) return [];
     const variantSetsAttributeIdentifiers = Array.from(
       new Set(
-        data.orderItemsGroupedByAttributes.flatMap(
-          stringifyVariantSetsAttributes
+        data.orderItemsGroupedByAttributes.flatMap(({ variantSets }) =>
+          stringifyVariantAttributes({ variants: variantSets })
         )
       )
     );
@@ -184,7 +184,7 @@ export function OrderItemsGroupedByAttributeList({
         columns={columns}
         getRowId={item =>
           item.productCode +
-          stringifyVariantSetsAttributes(item).join(";") +
+          stringifyVariantAttributes({ variants: item.variantSets }).join(";") +
           item.quantity.toString()
         }
         loading={loading}

@@ -1,33 +1,64 @@
+import { Grid } from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { useEffect, useState } from "react";
 import {
-  Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
-import { VariantAttributeSet } from "./types";
+  AttributeDefinition,
+  CreateAttributeInput,
+  useAttributeDefinitionsQuery,
+} from "../../generated/graphql";
 
 export function stringifyAttributes(
   attributes: { key: string; value: string }[]
-) {
+): string {
   return attributes.length > 0
     ? attributes.map(({ key, value }) => `${key}: ${value}`).join("; ")
     : "No Attributes";
 }
 
-export function stringifyVariantSetsAttributes({
-  variantSets,
+export function stringifyVariantAttributes({
+  variants,
 }: {
-  variantSets: { attributes: { key: string; value: string }[] }[];
+  variants: { attributes: { key: string; value: string }[] }[];
 }): string[] {
-  return variantSets.reduce<string[]>((acc, { attributes }) => {
+  return variants.reduce<string[]>((acc, { attributes }) => {
     const attributesIdentifier = stringifyAttributes(attributes);
     return [...acc, attributesIdentifier];
   }, []);
+}
+
+function cartesian<T>(args: T[][]) {
+  const result: T[][] = [];
+  const max = args.length - 1;
+  function helper(arr: T[], i: number) {
+    for (let j = 0, l = args[i].length; j < l; j++) {
+      const a = [...arr];
+      a.push(args[i][j]);
+      if (i == max) result.push(a);
+      else helper(a, i + 1);
+    }
+  }
+  helper([], 0);
+  return result;
+}
+
+export function createVariantsByAttributeDefinitions(
+  attributeDefinitions: AttributeDefinition[]
+) {
+  const predefinedAttributeDefinitions = attributeDefinitions.filter(
+    attributeDefinition =>
+      attributeDefinition.values != null &&
+      attributeDefinition.values.length > 0
+  ) as { name: string; values: string[] }[];
+
+  const attributes: Omit<CreateAttributeInput, "unit">[][] =
+    predefinedAttributeDefinitions.map(({ name, values }) =>
+      values.map(value => ({ key: name, value }))
+    );
+
+  const variants = cartesian<Omit<CreateAttributeInput, "unit">>(
+    attributes
+  ).map(attributes => ({ attributes }));
+  return variants;
 }
 
 export function VariantAttributeSetTable({
@@ -35,53 +66,56 @@ export function VariantAttributeSetTable({
 }: {
   productCode?: string;
 }) {
-  const columns: GridColDef[] = [
-    { field: "name", headerName: "Name", width: 180, editable: true },
-  ];
+  const [variantSetsTableRows, setVariantSetsTableRows] = useState<
+    { attributes: string; quantity: number }[]
+  >([]);
+  const {
+    data: { attributeDefinitions } = {
+      attributeDefinitions: [],
+    },
+    loading: attributeDefinitionLoading,
+  } = useAttributeDefinitionsQuery();
 
-  const rows: GridRowsProp = [
+  useEffect(() => {
+    if (attributeDefinitions.length === 0) return;
+    const variants = createVariantsByAttributeDefinitions(attributeDefinitions);
+    const stringifiedVariants = stringifyVariantAttributes({ variants });
+    const stringifiedVariantSetsRows = stringifiedVariants.map(attributes => ({
+      attributes,
+      quantity: 0,
+      id: attributes,
+    }));
+    setVariantSetsTableRows(stringifiedVariantSetsRows);
+  }, [attributeDefinitions]);
+
+  const columns: GridColDef[] = [
     {
-      id: 1,
-      name: "size_01",
+      field: "attributes",
+      headerName: "Variant",
+      minWidth: 100,
+      flex: 2,
+      type: "string",
+    },
+    {
+      field: "quantity",
+      headerName: "Quantity",
+      minWidth: 50,
+      flex: 1,
+      type: "number",
       editable: true,
     },
   ];
 
+  if (attributeDefinitionLoading) return <></>;
+
   return (
     <Grid container>
-      <DataGrid autoHeight editMode="row" rows={rows} columns={columns} />
+      <DataGrid
+        autoHeight
+        editMode="row"
+        rows={variantSetsTableRows}
+        columns={columns}
+      />
     </Grid>
   );
-
-  // return (
-  //   <Grid container>
-  //     <Grid item xs={12}>
-  //       <TableContainer component={Paper}>
-  //         <Table>
-  //           <TableHead>
-  //             <TableRow>
-  //               {variantSets.map(({ attributes, id }) => {
-  //                 const stringifiedAttributes = stringifyAttributes(attributes);
-  //                 return (
-  //                   <TableCell align="right" key={id}>
-  //                     {stringifiedAttributes}
-  //                   </TableCell>
-  //                 );
-  //               })}
-  //             </TableRow>
-  //           </TableHead>
-  //           <TableBody>
-  //             <TableRow>
-  //               {variantSets.map(row => (
-  //                 <TableCell align="right" key={row.id}>
-  //                   {row.quantity}
-  //                 </TableCell>
-  //               ))}
-  //             </TableRow>
-  //           </TableBody>
-  //         </Table>
-  //       </TableContainer>
-  //     </Grid>
-  //   </Grid>
-  // );
 }

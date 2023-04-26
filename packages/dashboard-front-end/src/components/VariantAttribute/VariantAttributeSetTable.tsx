@@ -1,11 +1,12 @@
 import { Grid } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowEditStopParams } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import {
   AttributeDefinition,
   CreateAttributeInput,
   useAttributeDefinitionsQuery,
 } from "../../generated/graphql";
+import { VariantAttributeSet } from "./types";
 
 export function stringifyAttributes(
   attributes: { key: string; value: string }[]
@@ -18,7 +19,7 @@ export function stringifyAttributes(
 export function stringifyVariantAttributes({
   variants,
 }: {
-  variants: { attributes: { key: string; value: string }[] }[];
+  variants: { attributes: CreateAttributeInput[] }[];
 }): string[] {
   return variants.reduce<string[]>((acc, { attributes }) => {
     const attributesIdentifier = stringifyAttributes(attributes);
@@ -48,26 +49,28 @@ export function createVariantsByAttributeDefinitions(
     attributeDefinition =>
       attributeDefinition.values != null &&
       attributeDefinition.values.length > 0
-  ) as { name: string; values: string[] }[];
+  ) as Omit<AttributeDefinition, "__typename">[];
 
-  const attributes: Omit<CreateAttributeInput, "unit">[][] =
-    predefinedAttributeDefinitions.map(({ name, values }) =>
-      values.map(value => ({ key: name, value }))
+  const attributes: CreateAttributeInput[][] =
+    predefinedAttributeDefinitions.map(({ name, values, ...rest }) =>
+      values!.map(value => ({ key: name, value, ...rest }))
     );
 
-  const variants = cartesian<Omit<CreateAttributeInput, "unit">>(
-    attributes
-  ).map(attributes => ({ attributes }));
+  const variants = cartesian<CreateAttributeInput>(attributes).map(
+    attributes => ({ attributes })
+  );
   return variants;
 }
 
+type UniqueVariantAttributeSet = VariantAttributeSet & { id: string };
+
 export function VariantAttributeSetTable({
-  productCode,
+  onChange,
 }: {
-  productCode?: string;
+  onChange: (variantAttributeSets: UniqueVariantAttributeSet[]) => void;
 }) {
-  const [variantSetsTableRows, setVariantSetsTableRows] = useState<
-    { attributes: string; quantity: number }[]
+  const [variantAttributeSets, setVariantAttributeSets] = useState<
+    UniqueVariantAttributeSet[]
   >([]);
   const {
     data: { attributeDefinitions } = {
@@ -79,27 +82,29 @@ export function VariantAttributeSetTable({
   useEffect(() => {
     if (attributeDefinitions.length === 0) return;
     const variants = createVariantsByAttributeDefinitions(attributeDefinitions);
-    const stringifiedVariants = stringifyVariantAttributes({ variants });
-    const stringifiedVariantSetsRows = stringifiedVariants.map(attributes => ({
+    const variantAttributeSets = variants.map(({ attributes }) => ({
       attributes,
       quantity: 0,
-      id: attributes,
+      id: stringifyAttributes(attributes),
     }));
-    setVariantSetsTableRows(stringifiedVariantSetsRows);
+    setVariantAttributeSets(variantAttributeSets);
   }, [attributeDefinitions]);
 
-  const columns: GridColDef[] = [
+  const columns: GridColDef<UniqueVariantAttributeSet>[] = [
     {
       field: "attributes",
       headerName: "Variant",
       minWidth: 100,
-      flex: 2,
+      flex: 1,
       type: "string",
+      valueGetter: ({ row }) => {
+        return stringifyAttributes(row.attributes);
+      },
     },
     {
       field: "quantity",
       headerName: "Quantity",
-      minWidth: 50,
+      minWidth: 100,
       flex: 1,
       type: "number",
       editable: true,
@@ -113,8 +118,19 @@ export function VariantAttributeSetTable({
       <DataGrid
         autoHeight
         editMode="row"
-        rows={variantSetsTableRows}
+        rows={variantAttributeSets}
         columns={columns}
+        onRowEditStop={(
+          params: GridRowEditStopParams<UniqueVariantAttributeSet>
+        ) => {
+          const changedVariantAttributeSetIndex =
+            variantAttributeSets.findIndex(({ id }) => id === params.row.id);
+          const updatedVariantAttributeSets = [...variantAttributeSets];
+          updatedVariantAttributeSets[changedVariantAttributeSetIndex] =
+            params.row;
+          setVariantAttributeSets(updatedVariantAttributeSets);
+          onChange(updatedVariantAttributeSets);
+        }}
       />
     </Grid>
   );

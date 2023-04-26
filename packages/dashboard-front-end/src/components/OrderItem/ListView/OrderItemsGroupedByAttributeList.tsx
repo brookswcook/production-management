@@ -184,7 +184,9 @@ export function OrderItemsGroupedByAttributeList({
         columns={columns}
         getRowId={item =>
           item.productCode +
-          stringifyVariantAttributes({ variants: item.variantSets }).join(";") +
+          stringifyVariantAttributes({
+            variants: item.variantSets,
+          }).join(";") +
           item.quantity.toString()
         }
         loading={loading}

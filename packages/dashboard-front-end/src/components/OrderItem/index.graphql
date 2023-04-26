@@ -17,6 +17,7 @@ fragment OrderItemsGroupedByAttributesFields on OrderItemsGroupedByAttributes {
     attributes {
       key
       value
+      unit
     }
   }
   quantity

@@ -54,11 +54,11 @@ export function CreateOrderItemBulkyDropdownForm({
             <Grid item xs={12}>
               <VariantAttributeSetDropDown
                 productCode={product.code}
-                onChange={variantSets =>
+                onChange={variantAttributeSets =>
                   onChange({
                     productCode: product.code,
                     pricePerItem: priceDetailsPerItem.itemPrice,
-                    variantSets,
+                    variantAttributeSets,
                   })
                 }
               />

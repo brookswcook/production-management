@@ -1,55 +1,54 @@
-export function CreateOrderItemBulkyTableForm() {
-  return <></>;
-  // return (
-  //   <Grid container>
-  //     <Grid item xs={12}>
-  //       <TableContainer component={Paper}>
-  //         <Table>
-  //           <TableHead>
-  //             <TableRow>
-  //               {variantSets.map(({ attributes, id }) => {
-  //                 const stringifiedAttributes = stringifyAttributes(attributes);
-  //                 return (
-  //                   <TableCell align="right" key={id}>
-  //                     {stringifiedAttributes}
-  //                   </TableCell>
-  //                 );
-  //               })}
-  //             </TableRow>
-  //           </TableHead>
-  //           <TableBody>
-  //             <TableRow>
-  //               {variantSets.map(row => (
-  //                 <TableCell align="right" key={row.id}>
-  //                   {row.quantity}
-  //                 </TableCell>
-  //               ))}
-  //             </TableRow>
-  //           </TableBody>
-  //         </Table>
-  //       </TableContainer>
-  //     </Grid>
-  //     <Grid item container gap={1}>
-  //       <Grid item xs={12} sm={"auto"}>
-  //         <Typography
-  //           component="h4"
-  //           variant="subtitle2"
-  //         >{`Total quantity: ${totalQuantity}`}</Typography>
-  //       </Grid>
-  //       <Grid item xs={12} sm={"auto"}>
-  //         <Typography
-  //           component="h4"
-  //           variant="subtitle2"
-  //         >{`Total price: ${toCurrency(totalPrice)}`}</Typography>
-  //       </Grid>
-  //       <Grid item xs={12} sm={"auto"}>
-  //         {discountPerItem !== 0 && (
-  //           <Typography component="h4" variant="subtitle2">
-  //             Discount: {`${toCurrency(discountPerItem)}/unit is applied`}
-  //           </Typography>
-  //         )}
-  //       </Grid>
-  //     </Grid>
-  //   </Grid>
-  // );
+import { Grid } from "@mui/material";
+import { FormEvent, useState } from "react";
+import { ProductFieldsFragment } from "../../../generated/graphql";
+import { ProductDropDown } from "../../Product";
+import { VariantAttributeSetTable } from "../../VariantAttribute";
+import { OrderItemPrice } from "../OrderItemPrice";
+import { OrderItemBulkyFormType } from "./types";
+
+export function CreateOrderItemBulkyTableForm({
+  onSubmit,
+  onChange,
+  id = "createOrderItemBulkyForm",
+}: {
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onChange: (value: OrderItemBulkyFormType) => void;
+  id?: string;
+}) {
+  const [priceDetailsPerItem, setPriceDetailsPerItem] = useState<{
+    itemPrice: number;
+    discountPerItem: number;
+  }>({ itemPrice: 0, discountPerItem: 0 });
+  const [product, setProduct] = useState<ProductFieldsFragment | null>(null);
+
+  return (
+    <Grid container component="form" id={id} onSubmit={onSubmit} rowGap={1}>
+      <Grid container item>
+        <Grid item xs={12}>
+          <ProductDropDown onChange={setProduct} />
+        </Grid>
+        {product != null && (
+          <>
+            <Grid item xs={12}>
+              <OrderItemPrice
+                onChange={setPriceDetailsPerItem}
+                product={product}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <VariantAttributeSetTable
+                onChange={variantAttributeSets =>
+                  onChange({
+                    productCode: product.code,
+                    pricePerItem: priceDetailsPerItem.itemPrice,
+                    variantAttributeSets,
+                  })
+                }
+              />
+            </Grid>
+          </>
+        )}
+      </Grid>
+    </Grid>
+  );
 }

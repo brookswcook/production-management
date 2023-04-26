@@ -12,15 +12,23 @@ import { VariantAttributesDropDown } from "./VariantAttributeDropDown";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { VariantAttributeSet } from "./types";
+import {
+  stringifyAttributes,
+  stringifyVariantAttributes,
+} from "./VariantAttributeSetTable";
+
+type UniqueVariantAttributeSet = VariantAttributeSet & { id: number };
 
 export function VariantAttributeSetDropDown({
   productCode,
   onChange,
 }: {
   productCode: string;
-  onChange: (variantSets: VariantAttributeSet[]) => void;
+  onChange: (variantAttributeSets: UniqueVariantAttributeSet[]) => void;
 }) {
-  const [variantSets, setVariantSets] = useState<VariantAttributeSet[]>([]);
+  const [variantSets, setVariantSets] = useState<UniqueVariantAttributeSet[]>(
+    []
+  );
 
   function checkForDuplicatedVariant(
     variant: CreateAttributeInput[],
@@ -56,7 +64,7 @@ export function VariantAttributeSetDropDown({
             size="medium"
             color="secondary"
             onClick={() => {
-              const newVariantSet: VariantAttributeSet = {
+              const newVariantSet: VariantAttributeSet & { id: number } = {
                 quantity: 0,
                 attributes: [],
                 id: variantSets.length,

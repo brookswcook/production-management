@@ -45,11 +45,16 @@ function cartesian<T>(args: T[][]) {
 export function createVariantsByAttributeDefinitions(
   attributeDefinitions: AttributeDefinition[]
 ) {
-  const predefinedAttributeDefinitions = attributeDefinitions.filter(
-    attributeDefinition =>
-      attributeDefinition.values != null &&
-      attributeDefinition.values.length > 0
-  ) as Omit<AttributeDefinition, "__typename">[];
+  const predefinedAttributeDefinitions = attributeDefinitions
+    .filter(
+      attributeDefinition =>
+        attributeDefinition.values != null &&
+        attributeDefinition.values.length > 0
+    )
+    .map(({ __typename, ...rest }) => ({ ...rest })) as Omit<
+    AttributeDefinition,
+    "__typename"
+  >[];
 
   const attributes: CreateAttributeInput[][] =
     predefinedAttributeDefinitions.map(({ name, values, ...rest }) =>
@@ -129,7 +134,9 @@ export function VariantAttributeSetTable({
           updatedVariantAttributeSets[changedVariantAttributeSetIndex] =
             params.row;
           setVariantAttributeSets(updatedVariantAttributeSets);
-          onChange(updatedVariantAttributeSets);
+          const specifiedVariantAttributeSets =
+            updatedVariantAttributeSets.filter(item => item.quantity > 0);
+          onChange(specifiedVariantAttributeSets);
         }}
       />
     </Grid>

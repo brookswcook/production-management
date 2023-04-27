@@ -23,32 +23,30 @@ export function CreateOrderItemBulkyTableForm({
 
   return (
     <Grid container component="form" id={id} onSubmit={onSubmit} rowGap={1}>
-      <Grid container item>
-        <Grid item xs={12}>
-          <ProductDropDown onChange={setProduct} />
-        </Grid>
-        {product != null && (
-          <>
-            <Grid item xs={12}>
-              <OrderItemPrice
-                onChange={setPriceDetailsPerItem}
-                product={product}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <VariantAttributeSetTable
-                onChange={variantAttributeSets =>
-                  onChange({
-                    productCode: product.code,
-                    pricePerItem: priceDetailsPerItem.itemPrice,
-                    variantAttributeSets,
-                  })
-                }
-              />
-            </Grid>
-          </>
-        )}
+      <Grid item xs={12}>
+        <ProductDropDown onChange={setProduct} />
       </Grid>
+      {product != null && (
+        <>
+          <Grid item xs={12}>
+            <OrderItemPrice
+              onChange={setPriceDetailsPerItem}
+              product={product}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <VariantAttributeSetTable
+              onChange={variantAttributeSets =>
+                onChange({
+                  productCode: product.code,
+                  pricePerItem: priceDetailsPerItem.itemPrice,
+                  variantAttributeSets,
+                })
+              }
+            />
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 }

@@ -15,7 +15,7 @@ import {
   useFabricsQuery,
   useFactoriesQuery,
   useStylesQuery,
-} from "../../generated/graphql";
+} from "../../../generated/graphql";
 import { toast } from "react-toastify";
 import { ApolloError } from "@apollo/client";
 

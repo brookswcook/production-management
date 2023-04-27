@@ -1,16 +1,18 @@
-import { Autocomplete, Box, Stack, TextField } from "@mui/material";
+import { Stack, Autocomplete, Box, TextField } from "@mui/material";
 import { ReactElement, useState } from "react";
 import {
   CreateAttributeInput,
   useAttributeDefinitionsQuery,
 } from "../../generated/graphql";
 
-export function Variant({
+export function VariantAttributesDropDown({
   onChange,
 }: {
-  onChange: (variant: CreateAttributeInput[]) => void;
+  onChange: (variantAttributes: CreateAttributeInput[]) => void;
 }): ReactElement {
-  const [variant, setVariant] = useState<CreateAttributeInput[]>([]);
+  const [variantAttributes, setVariantAttributes] = useState<
+    CreateAttributeInput[]
+  >([]);
   const {
     data: { attributeDefinitions } = {
       attributeDefinitions: [],
@@ -20,16 +22,16 @@ export function Variant({
 
   // TODO: support unit
   function onValueChange(key: string, value: string) {
-    const attributeIndex = variant.findIndex(item => item.key == key);
-    const updatedVariant = [...variant];
+    const attributeIndex = variantAttributes.findIndex(item => item.key == key);
+    const updatedVariantAttributes = [...variantAttributes];
     if (attributeIndex === -1) {
-      const newAttributeIndex = updatedVariant.length;
-      updatedVariant[newAttributeIndex] = { key, value, unit: null };
+      const newAttributeIndex = updatedVariantAttributes.length;
+      updatedVariantAttributes[newAttributeIndex] = { key, value, unit: null };
     } else {
-      updatedVariant[attributeIndex] = { key, value, unit: null };
+      updatedVariantAttributes[attributeIndex] = { key, value, unit: null };
     }
-    setVariant(updatedVariant);
-    onChange(updatedVariant);
+    setVariantAttributes(updatedVariantAttributes);
+    onChange(updatedVariantAttributes);
   }
 
   if (attributeDefinitionLoading) return <></>;
@@ -37,7 +39,7 @@ export function Variant({
     <Stack spacing={1}>
       {attributeDefinitions.map(({ name, values }, index) => (
         <Autocomplete
-          key={`Autocomplete_${index}`}
+          key={index}
           options={values ?? []}
           renderOption={(props, option) => (
             <Box component="li" {...props}>

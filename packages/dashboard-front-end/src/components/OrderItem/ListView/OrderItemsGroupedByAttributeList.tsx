@@ -17,23 +17,10 @@ import RequireRole from "../../Auth/RequireRole";
 import { CreateOrderItemByVariantSetsDialog } from "../Dialog/CreateOrderItemByVariantSetsDialog";
 import AddIcon from "@mui/icons-material/Add";
 import { toCurrency } from "../../Common";
-
-function stringifyAttributes(attributes: { key: string; value: string }[]) {
-  return attributes.length > 0
-    ? attributes.map(({ key, value }) => `${key}: ${value}`).join("; ")
-    : "No Attributes";
-}
-
-function stringifyVariantSetsAttributes({
-  variantSets,
-}: {
-  variantSets: { attributes: { key: string; value: string }[] }[];
-}): string[] {
-  return variantSets.reduce<string[]>((acc, { attributes }) => {
-    const attributesIdentifier = stringifyAttributes(attributes);
-    return [...acc, attributesIdentifier];
-  }, []);
-}
+import {
+  stringifyAttributes,
+  stringifyVariantAttributes,
+} from "../../VariantAttribute";
 
 export function OrderItemsGroupedByAttributeList({
   orderUid,
@@ -58,8 +45,8 @@ export function OrderItemsGroupedByAttributeList({
     if (data == null || data.orderItemsGroupedByAttributes == null) return [];
     const variantSetsAttributeIdentifiers = Array.from(
       new Set(
-        data.orderItemsGroupedByAttributes.flatMap(
-          stringifyVariantSetsAttributes
+        data.orderItemsGroupedByAttributes.flatMap(({ variantSets }) =>
+          stringifyVariantAttributes({ variants: variantSets })
         )
       )
     );
@@ -197,7 +184,9 @@ export function OrderItemsGroupedByAttributeList({
         columns={columns}
         getRowId={item =>
           item.productCode +
-          stringifyVariantSetsAttributes(item).join(";") +
+          stringifyVariantAttributes({
+            variants: item.variantSets,
+          }).join(";") +
           item.quantity.toString()
         }
         loading={loading}

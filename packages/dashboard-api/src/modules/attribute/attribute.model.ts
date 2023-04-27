@@ -11,7 +11,7 @@ export class Attribute {
   @Property()
   value!: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
   unit?: string;
 }

@@ -11,9 +11,9 @@ import {
   ProductBulkProductionCostDiscount,
   useProductQuery,
   useUpdateCostMutation,
-} from "../../generated/graphql";
-import { ActionDialog } from "../Common/ActionDialog";
-import FloatTextField from "../Common/FloatTextField";
+} from "../../../generated/graphql";
+import { ActionDialog } from "../../Common/ActionDialog";
+import FloatTextField from "../../Common/FloatTextField";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 

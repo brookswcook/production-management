@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import ProductGrid from "../ProductGrid";
 import {
   Fragment,
   MouseEventHandler,
@@ -40,7 +39,7 @@ import RequireAuth from "../Auth/RequireAuth";
 import { AuthContext, AuthProvider } from "../Auth/AuthProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ProductDetail from "../ProductDetail";
+
 import React from "react";
 import RequireRole from "../Auth/RequireRole";
 import FabricGrid from "../FabricGrid";
@@ -49,8 +48,8 @@ import { StyleDetail, StyleList } from "../Style";
 import { SignInWithEmailLink } from "../Auth/SignInWithEmail";
 import { UserList } from "../User";
 import { FactoryList } from "../Factory/ListView";
-import { PurchaseOrderList } from "../PurchaseOrder/ListView";
-import { PurchaseOrderDetail } from "../PurchaseOrder/DetailView";
+import { ProductDetail, ProductList } from "../Product";
+import { PurchaseOrderList, PurchaseOrderDetail } from "../PurchaseOrder";
 
 function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const { signOut } = useContext(AuthContext);
@@ -272,11 +271,11 @@ function ApolloApp() {
             />
             <Route
               path="/"
-              element={<Dashboard children={<ProductGrid />} />}
+              element={<Dashboard children={<ProductList />} />}
             />
             <Route
               path="/products"
-              element={<Dashboard children={<ProductGrid />} />}
+              element={<Dashboard children={<ProductList />} />}
             />
             <Route
               path="/products/:code"

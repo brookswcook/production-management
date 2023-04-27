@@ -21,17 +21,9 @@ export function CreateOrderItemBulkyDropdownForm({
     discountPerItem: number;
   }>({ itemPrice: 0, discountPerItem: 0 });
   const [product, setProduct] = useState<ProductFieldsFragment | null>(null);
-
-  // const [totalQuantity, setTotalQuantity] = useState<number>(0);
+  const [totalQuantity, setTotalQuantity] = useState<number>(0);
   // const [totalPrice, setTotalPrice] = useState<number>(0);
   // const [discountPerItem, setDiscountPerItem] = useState<number>(0);
-
-  // useEffect(() => {
-  //   productCode != null && onChange({ productCode, pricePerItem, variantSets });
-  //   setTotalQuantity(
-  //     variantSets.reduce<number>((acc, { quantity }) => acc + quantity, 0)
-  //   );
-  // }, [pricePerItem, productCode, JSON.stringify(variantSets)]);
 
   // useEffect(() => {
   //   setTotalPrice(pricePerItem * totalQuantity);
@@ -49,18 +41,25 @@ export function CreateOrderItemBulkyDropdownForm({
               <OrderItemPrice
                 onChange={setPriceDetailsPerItem}
                 product={product}
+                quantity={totalQuantity}
               />
             </Grid>
             <Grid item xs={12}>
               <VariantAttributeSetDropDown
                 productCode={product.code}
-                onChange={variantAttributeSets =>
+                onChange={variantAttributeSets => {
                   onChange({
                     productCode: product.code,
                     pricePerItem: priceDetailsPerItem.itemPrice,
                     variantAttributeSets,
-                  })
-                }
+                  });
+                  setTotalQuantity(
+                    variantAttributeSets.reduce<number>(
+                      (acc, { quantity }) => acc + quantity,
+                      0
+                    )
+                  );
+                }}
               />
             </Grid>
           </>

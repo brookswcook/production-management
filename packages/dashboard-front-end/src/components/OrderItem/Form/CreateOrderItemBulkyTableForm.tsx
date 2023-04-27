@@ -20,6 +20,7 @@ export function CreateOrderItemBulkyTableForm({
     discountPerItem: number;
   }>({ itemPrice: 0, discountPerItem: 0 });
   const [product, setProduct] = useState<ProductFieldsFragment | null>(null);
+  const [totalQuantity, setTotalQuantity] = useState<number>(0);
 
   return (
     <Grid container component="form" id={id} onSubmit={onSubmit} rowGap={1}>
@@ -32,17 +33,24 @@ export function CreateOrderItemBulkyTableForm({
             <OrderItemPrice
               onChange={setPriceDetailsPerItem}
               product={product}
+              quantity={totalQuantity}
             />
           </Grid>
           <Grid item xs={12}>
             <VariantAttributeSetTable
-              onChange={variantAttributeSets =>
+              onChange={variantAttributeSets => {
                 onChange({
                   productCode: product.code,
                   pricePerItem: priceDetailsPerItem.itemPrice,
                   variantAttributeSets,
-                })
-              }
+                });
+                setTotalQuantity(
+                  variantAttributeSets.reduce<number>(
+                    (acc, { quantity }) => acc + quantity,
+                    0
+                  )
+                );
+              }}
             />
           </Grid>
         </>

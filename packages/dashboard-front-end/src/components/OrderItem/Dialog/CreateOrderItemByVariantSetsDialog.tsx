@@ -1,3 +1,4 @@
+import { useMediaQuery, useTheme } from "@mui/material";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useCreateOrderItemMutation } from "../../../generated/graphql";
@@ -6,6 +7,7 @@ import {
   CreateOrderItemBulkyDropdownForm,
   OrderItemBulkyFormType,
 } from "../Form";
+import { CreateOrderItemBulkyTableForm } from "../Form/CreateOrderItemBulkyTableForm";
 
 export function CreateOrderItemByVariantSetsDialog({
   orderUid,
@@ -28,12 +30,14 @@ export function CreateOrderItemByVariantSetsDialog({
       "OrderItemsGroupedByAttributes",
     ],
   });
+  const theme = useTheme();
+  const greaterThanXS = useMediaQuery(theme.breakpoints.up("sm"));
 
-  async function createOrderItemsByVariantSets() {
+  async function createOrderItemsByVariantAttributeSets() {
     if (variantSetsData == null) return;
-    const { productCode, pricePerItem, variantSets } = variantSetsData;
+    const { productCode, pricePerItem, variantAttributeSets } = variantSetsData;
     try {
-      for await (const { attributes, quantity } of variantSets) {
+      for await (const { attributes, quantity } of variantAttributeSets) {
         await newOrderItem({
           variables: {
             data: {
@@ -58,15 +62,27 @@ export function CreateOrderItemByVariantSetsDialog({
       onClose={onClose}
       form="createOrderItemBulkyForm"
     >
-      <CreateOrderItemBulkyDropdownForm
-        onSubmit={async e => {
-          e.preventDefault();
-          await createOrderItemsByVariantSets();
-          onSave();
-        }}
-        onChange={setVariantSetsData}
-        id="createOrderItemBulkyForm"
-      />
+      {greaterThanXS ? (
+        <CreateOrderItemBulkyTableForm
+          onSubmit={async e => {
+            e.preventDefault();
+            await createOrderItemsByVariantAttributeSets();
+            onSave();
+          }}
+          onChange={setVariantSetsData}
+          id="createOrderItemBulkyForm"
+        />
+      ) : (
+        <CreateOrderItemBulkyDropdownForm
+          onSubmit={async e => {
+            e.preventDefault();
+            await createOrderItemsByVariantAttributeSets();
+            onSave();
+          }}
+          onChange={setVariantSetsData}
+          id="createOrderItemBulkyForm"
+        />
+      )}
     </ActionDialog>
   );
 }

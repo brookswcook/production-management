@@ -24,7 +24,7 @@ import { config } from "../../config";
 
 type JSONValue = string | number | { [x: string]: JSONValue };
 
-function Copyright(props: { [x: string]: JSONValue }): ReactElement {
+export function Copyright(props: { [x: string]: JSONValue }): ReactElement {
   return (
     <Typography
       variant="body2"

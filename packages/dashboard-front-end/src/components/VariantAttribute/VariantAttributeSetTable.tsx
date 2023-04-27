@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, Toolbar } from "@mui/material";
 import { DataGrid, GridColDef, GridRowEditStopParams } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import {
@@ -125,6 +125,11 @@ export function VariantAttributeSetTable({
         editMode="row"
         rows={variantAttributeSets}
         columns={columns}
+        components={{
+          Footer: () => {
+            return <></>;
+          },
+        }}
         onRowEditStop={(
           params: GridRowEditStopParams<UniqueVariantAttributeSet>
         ) => {

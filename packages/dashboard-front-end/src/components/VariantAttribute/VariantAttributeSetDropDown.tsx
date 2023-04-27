@@ -12,10 +12,6 @@ import { VariantAttributesDropDown } from "./VariantAttributeDropDown";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { VariantAttributeSet } from "./types";
-import {
-  stringifyAttributes,
-  stringifyVariantAttributes,
-} from "./VariantAttributeSetTable";
 
 type UniqueVariantAttributeSet = VariantAttributeSet & { id: number };
 

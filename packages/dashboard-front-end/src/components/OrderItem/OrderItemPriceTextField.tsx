@@ -1,8 +1,10 @@
+import { Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ProductFieldsFragment } from "../../generated/graphql";
+import { toCurrency } from "../Common";
 import FloatTextField from "../Common/FloatTextField";
 
-export function OrderItemPrice({
+export function OrderItemPriceTextField({
   onChange,
   product,
   quantity = 0,
@@ -43,13 +45,36 @@ export function OrderItemPrice({
   }, [itemPrice, discountPerItem]);
 
   return (
-    <FloatTextField
-      fullWidth
-      label="Price per item"
-      value={itemPrice}
-      onChange={({ target: { value } }) => setItemPrice(Number(value))}
-      required
-      sx={{ mt: 1 }}
-    />
+    <Grid item container gap={1}>
+      <Grid item xs={12}>
+        <FloatTextField
+          fullWidth
+          label="Price per item"
+          value={itemPrice}
+          onChange={({ target: { value } }) => setItemPrice(Number(value))}
+          required
+          sx={{ mt: 1 }}
+        />
+      </Grid>
+      <Grid item xs={12} sm={"auto"}>
+        <Typography
+          component="h4"
+          variant="subtitle2"
+        >{`Total quantity: ${quantity}`}</Typography>
+      </Grid>
+      <Grid item xs={12} sm={"auto"}>
+        <Typography
+          component="h4"
+          variant="subtitle2"
+        >{`Total price: ${toCurrency(itemPrice * quantity)}`}</Typography>
+      </Grid>
+      <Grid item xs={12} sm={"auto"}>
+        {discountPerItem !== 0 && (
+          <Typography component="h4" variant="subtitle2">
+            Discount: {`${toCurrency(discountPerItem)}/unit is applied`}
+          </Typography>
+        )}
+      </Grid>
+    </Grid>
   );
 }

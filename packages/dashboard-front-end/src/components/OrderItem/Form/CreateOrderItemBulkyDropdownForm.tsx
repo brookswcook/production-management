@@ -4,7 +4,7 @@ import { ProductFieldsFragment } from "../../../generated/graphql";
 import { ProductDropDown } from "../../Product";
 
 import { VariantAttributeSetDropDown } from "../../VariantAttribute";
-import { OrderItemPrice } from "../OrderItemPrice";
+import { OrderItemPriceTextField } from "../OrderItemPriceTextField";
 import { OrderItemBulkyFormType } from "./types";
 
 export function CreateOrderItemBulkyDropdownForm({
@@ -22,73 +22,41 @@ export function CreateOrderItemBulkyDropdownForm({
   }>({ itemPrice: 0, discountPerItem: 0 });
   const [product, setProduct] = useState<ProductFieldsFragment | null>(null);
   const [totalQuantity, setTotalQuantity] = useState<number>(0);
-  // const [totalPrice, setTotalPrice] = useState<number>(0);
-  // const [discountPerItem, setDiscountPerItem] = useState<number>(0);
-
-  // useEffect(() => {
-  //   setTotalPrice(pricePerItem * totalQuantity);
-  // }, [totalQuantity, pricePerItem]);
 
   return (
     <Grid container component="form" id={id} onSubmit={onSubmit} rowGap={1}>
-      <Grid container item>
-        <Grid item xs={12}>
-          <ProductDropDown onChange={setProduct} />
-        </Grid>
-        {product != null && (
-          <>
-            <Grid item xs={12}>
-              <OrderItemPrice
-                onChange={setPriceDetailsPerItem}
-                product={product}
-                quantity={totalQuantity}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <VariantAttributeSetDropDown
-                productCode={product.code}
-                onChange={variantAttributeSets => {
-                  onChange({
-                    productCode: product.code,
-                    pricePerItem: priceDetailsPerItem.itemPrice,
-                    variantAttributeSets,
-                  });
-                  setTotalQuantity(
-                    variantAttributeSets.reduce<number>(
-                      (acc, { quantity }) => acc + quantity,
-                      0
-                    )
-                  );
-                }}
-              />
-            </Grid>
-          </>
-        )}
+      <Grid item xs={12}>
+        <ProductDropDown onChange={setProduct} />
       </Grid>
+      {product != null && (
+        <>
+          <Grid item xs={12}>
+            <OrderItemPriceTextField
+              onChange={setPriceDetailsPerItem}
+              product={product}
+              quantity={totalQuantity}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <VariantAttributeSetDropDown
+              productCode={product.code}
+              onChange={variantAttributeSets => {
+                onChange({
+                  productCode: product.code,
+                  pricePerItem: priceDetailsPerItem.itemPrice,
+                  variantAttributeSets,
+                });
+                setTotalQuantity(
+                  variantAttributeSets.reduce<number>(
+                    (acc, { quantity }) => acc + quantity,
+                    0
+                  )
+                );
+              }}
+            />
+          </Grid>
+        </>
+      )}
     </Grid>
   );
-}
-
-{
-  /* <Grid item container gap={1}>
-<Grid item xs={12} sm={"auto"}>
-  <Typography
-    component="h4"
-    variant="subtitle2"
-  >{`Total quantity: ${totalQuantity}`}</Typography>
-</Grid>
-<Grid item xs={12} sm={"auto"}>
-  <Typography
-    component="h4"
-    variant="subtitle2"
-  >{`Total price: ${toCurrency(totalPrice)}`}</Typography>
-</Grid>
-<Grid item xs={12} sm={"auto"}>
-  {discountPerItem !== 0 && (
-    <Typography component="h4" variant="subtitle2">
-      Discount: {`${toCurrency(discountPerItem)}/unit is applied`}
-    </Typography>
-  )}
-</Grid>
-</Grid> */
 }

@@ -3,7 +3,7 @@ import { FormEvent, useState } from "react";
 import { ProductFieldsFragment } from "../../../generated/graphql";
 import { ProductDropDown } from "../../Product";
 import { VariantAttributeSetTable } from "../../VariantAttribute";
-import { OrderItemPrice } from "../OrderItemPrice";
+import { OrderItemPriceTextField } from "../OrderItemPriceTextField";
 import { OrderItemBulkyFormType } from "./types";
 
 export function CreateOrderItemBulkyTableForm({
@@ -30,7 +30,7 @@ export function CreateOrderItemBulkyTableForm({
       {product != null && (
         <>
           <Grid item xs={12}>
-            <OrderItemPrice
+            <OrderItemPriceTextField
               onChange={setPriceDetailsPerItem}
               product={product}
               quantity={totalQuantity}

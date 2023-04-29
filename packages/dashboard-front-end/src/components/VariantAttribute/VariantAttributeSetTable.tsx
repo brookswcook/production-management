@@ -1,5 +1,10 @@
 import { Grid } from "@mui/material";
-import { DataGrid, GridColDef, GridRowEditStopParams } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridRowEditStopParams,
+  GridValueSetterParams,
+} from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import {
   AttributeDefinition,
@@ -112,6 +117,12 @@ export function VariantAttributeSetTable({
       minWidth: 100,
       flex: 1,
       type: "number",
+      valueSetter: (
+        params: GridValueSetterParams<UniqueVariantAttributeSet, number>
+      ) => {
+        const { value } = params;
+        return { ...params.row, quantity: Number(Math.abs(value).toFixed(0)) };
+      },
       editable: true,
     },
   ];

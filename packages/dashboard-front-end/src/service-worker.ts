@@ -80,12 +80,15 @@ self.addEventListener("message", event => {
 });
 
 self.addEventListener("push", e => {
+  const {
+    notification: { title, body },
+  } = (e.data?.json() ?? { notification: { title: "", body: "" } }) as {
+    notification: { title: string; body: string };
+  };
   const notificationOptions = {
-    body: "Background Message body.",
+    body: body,
     icon: "/favicon-32x32.png",
   };
 
-  e.waitUntil(self.registration.showNotification("Title", notificationOptions));
+  e.waitUntil(self.registration.showNotification(title, notificationOptions));
 });
-
-// Any other custom service worker logic can go here.

@@ -90,6 +90,7 @@ export type CreateNoteInput = {
 
 export type CreateNotificationSubscriptionInput = {
   token: Scalars['String'];
+  userAgent: Scalars['String'];
 };
 
 export type CreateOrderItemInput = {
@@ -425,6 +426,7 @@ export type NotificationSubscription = {
   id: Scalars['String'];
   token: Scalars['String'];
   updatedAt: Maybe<Scalars['DateTime']>;
+  userAgent: Scalars['String'];
   userId: Scalars['String'];
 };
 

@@ -70,7 +70,9 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
       if (permission === "granted") {
         const token = await getMessagingToken();
         if (savedMessagingToken !== token) {
-          await newNotificationSubscription({ variables: { data: { token } } });
+          await newNotificationSubscription({
+            variables: { data: { token, userAgent: navigator.userAgent } },
+          });
           setMessagingToken(token);
         }
       }

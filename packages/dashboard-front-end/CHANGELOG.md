@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.8.0...dashboard-front-end@1.9.0) (2023-04-30)
+
+
+### Bug Fixes
+
+* build ([a60af6b](https://github.com/brookswcook/production-management/commit/a60af6bada4c3947b7f867dc006cea1d0f7296ce))
+* float order item quantites; closes [#56](https://github.com/brookswcook/production-management/issues/56) ([c0b7b80](https://github.com/brookswcook/production-management/commit/c0b7b80d1e9002e0da3c0e85d1e671fe4a0ded2a))
+* new order item price component ([23a7130](https://github.com/brookswcook/production-management/commit/23a7130ca28e87544aff7cb6f2a880f8693f5ddc))
+* new product code dropdown component ([2dd2a11](https://github.com/brookswcook/production-management/commit/2dd2a1186d6992e9a2003f5ef3ad29da203b9ba1))
+* omit __typename in attributes ([fde7f21](https://github.com/brookswcook/production-management/commit/fde7f21021940ac830163aa7b5f3b6cc63698551))
+* refactor variant attribute away of order items ([c5c1e82](https://github.com/brookswcook/production-management/commit/c5c1e8250e44bee3208a3d2d2fa6ead97678e0a2))
+* remove footer from order items adding table ([2150f1c](https://github.com/brookswcook/production-management/commit/2150f1cee7b3f277b24ff0769393adbfae4254d3))
+* remove not needed embedded grid ([6473905](https://github.com/brookswcook/production-management/commit/6473905936d5d78ebf19665351500b964f857b2c))
+* remove unused imports ([09a01f3](https://github.com/brookswcook/production-management/commit/09a01f3e2fc6629fd2310af40d1c8fb5f6cfa11d))
+* support price changing based on quantities and discount ([4bdd5da](https://github.com/brookswcook/production-management/commit/4bdd5da7d55d0a58ed2ccaf69175044f75517d62))
+* wip ([4df2567](https://github.com/brookswcook/production-management/commit/4df2567dcdee4f0f424e7e809d0efcdaa4d8c36c))
+
+
+### Features
+
+* add total quantities and price ([737149d](https://github.com/brookswcook/production-management/commit/737149d28a2213eddfc15042f831b97e9a56f134))
+* create order item bulky table form ([abfc997](https://github.com/brookswcook/production-management/commit/abfc997c5b9c218d7c63717eab0ae655d07af304))
+* represent possible variants in table form with quantities ([e452823](https://github.com/brookswcook/production-management/commit/e452823d250346551c4944dec2f41b762fc1f69f))
+* table form of adding new order items for screens bigger than 600px ([e99b5c6](https://github.com/brookswcook/production-management/commit/e99b5c65aebf84d3fa34e50bc98063d5c76733cb))
+* wip variat set table view ([f428232](https://github.com/brookswcook/production-management/commit/f4282325f179e45d89b02ce89f4d4d869d585ced))
+
+
+
+
+
 # [1.8.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.7.0...dashboard-front-end@1.8.0) (2023-03-27)
 
 

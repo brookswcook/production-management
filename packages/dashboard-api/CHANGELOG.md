@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.7.0...dashboard-api@1.8.0) (2023-04-30)
+
+
+### Features
+
+* create order item bulky table form ([abfc997](https://github.com/brookswcook/production-management/commit/abfc997c5b9c218d7c63717eab0ae655d07af304))
+
+
+
+
+
 # [1.7.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.6.0...dashboard-api@1.7.0) (2023-03-27)
 
 

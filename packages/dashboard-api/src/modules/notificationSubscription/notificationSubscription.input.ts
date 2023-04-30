@@ -4,4 +4,7 @@ import { InputType, Field } from "type-graphql";
 export class CreateNotificationSubscriptionInput {
   @Field()
   token!: string;
+
+  @Field()
+  userAgent!: string;
 }

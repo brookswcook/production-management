@@ -13,16 +13,16 @@ export class NotificationSubscriptionResolver {
   @Mutation(() => NotificationSubscription)
   async createNotificationSubscription(
     @TenantId() companyId: string,
-    @Arg("data") { token }: CreateNotificationSubscriptionInput,
+    @Arg("data") { token, userAgent }: CreateNotificationSubscriptionInput,
     @Ctx() { user: { id: userId } }: ResolverContext
   ): Promise<NotificationSubscription> {
     return await NotificationSubscriptionModel.findOneAndUpdate(
       {
         companyId,
         userId,
-        token,
+        userAgent,
       },
-      { companyId, userId, token },
+      { companyId, userId, userAgent, token },
       { upsert: true, new: true }
     ).exec();
   }

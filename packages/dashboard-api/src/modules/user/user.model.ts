@@ -101,6 +101,13 @@ export class User extends ExpectResultModel implements UserPayload, TimeStamps {
     const emails = await UserModel.find(query, { _id: 0, email: 1 }).lean();
     return emails.map(item => item.email);
   }
+
+  static async getUserIds(query: Partial<User>): Promise<string[]> {
+    const users = await UserModel.find(query, { _id: 1 }).lean<
+      { id: string }[]
+    >();
+    return users.map(item => item.id);
+  }
 }
 
 @ObjectType()

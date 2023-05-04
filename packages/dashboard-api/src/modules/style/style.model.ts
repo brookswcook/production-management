@@ -2,10 +2,11 @@ import { getModelForClass, prop as Property } from "@typegoose/typegoose";
 import { FileType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
 import { ExpectResultModel } from "../common/expectResultModel";
+import { IMultiTenant } from "../common/types";
 import { File } from "../file/file.model";
 
 @ObjectType()
-export class Style extends ExpectResultModel {
+export class Style extends ExpectResultModel implements IMultiTenant {
   @Field()
   id!: string;
 

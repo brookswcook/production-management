@@ -10,6 +10,7 @@ import {
   Root,
   UseMiddleware,
 } from "type-graphql";
+import { Service } from "typedi";
 import { ResolverContext } from "../../lib/graphql";
 import { UserActionLog } from "../../lib/userActionLogMiddleware";
 import { getDownloadFileLink, uploadFile } from "../file/file.service";
@@ -18,6 +19,7 @@ import { TenantId } from "../user/user.decorator";
 import { CreateFabricInput, UploadPrintInput } from "./fabric.input";
 import { Fabric, FabricModel } from "./fabric.model";
 
+@Service()
 @Resolver(() => Fabric)
 export class FabricResolver {
   constructor(private readonly productService: ProductService) {}

@@ -6,12 +6,14 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
+import { Service } from "typedi";
 import { UserActionLog } from "../../lib/userActionLogMiddleware";
 import { TenantId } from "../user/user.decorator";
 import { UserService } from "../user/user.service";
 import { CreateCompanyInput } from "./company.input";
 import { Company, CompanyModel } from "./company.model";
 
+@Service()
 @Resolver(() => Company)
 export class CompanyResolver {
   constructor(private readonly userService: UserService) {}

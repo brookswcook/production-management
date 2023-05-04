@@ -15,6 +15,7 @@ import { authChecker } from "./lib/auth";
 import { graphqlUploadExpress } from "graphql-upload";
 import { TypegooseMiddleware } from "./lib/typegooseMiddleware";
 import { graphqlLoaderPlugin } from "./lib/graphqlLoaderPlugin";
+import Container from "typedi";
 
 class DashboardApolloServer extends Server {
   constructor() {
@@ -36,6 +37,7 @@ class DashboardApolloServer extends Server {
       resolvers: [__dirname + "/modules/**/*.resolver.{js,ts}"],
       globalMiddlewares: [TypegooseMiddleware],
       authChecker,
+      container: Container,
     });
     return new ApolloServer({
       plugins: [

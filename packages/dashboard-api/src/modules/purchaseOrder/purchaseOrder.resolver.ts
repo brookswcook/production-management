@@ -8,11 +8,13 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
+import { Service } from "typedi";
 import { UserActionLog } from "../../lib/userActionLogMiddleware";
 import { TenantId } from "../user/user.decorator";
 import { CreatePurchaseOrderInput } from "./purchaseOrder.input";
 import { PurchaseOrder, PurchaseOrderModel } from "./purchaseOrder.model";
 
+@Service()
 @Resolver(PurchaseOrder)
 export class PurchaseOrderResolver {
   @Authorized()

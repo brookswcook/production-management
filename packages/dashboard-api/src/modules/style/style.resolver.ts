@@ -17,8 +17,9 @@ import { ProductService } from "../product/product.service";
 import { Fabric } from "../fabric/fabric.model";
 import { ResolverContext } from "../../lib/graphql";
 import { TenantId } from "../user/user.decorator";
-import { UserActionLog } from "../../lib/userActionLogMiddleware";
+import { Service } from "typedi";
 
+@Service()
 @Resolver(Style)
 export class StyleResolver {
   constructor(

@@ -1,4 +1,5 @@
 import { Arg, Authorized, Ctx, Mutation, Resolver } from "type-graphql";
+import { Service } from "typedi";
 import { ResolverContext } from "../../lib/graphql";
 import { TenantId } from "../user/user.decorator";
 import { CreateNotificationSubscriptionInput } from "./notificationSubscription.input";
@@ -7,6 +8,7 @@ import {
   NotificationSubscriptionModel,
 } from "./notificationSubscription.model";
 
+@Service()
 @Resolver(NotificationSubscription)
 export class NotificationSubscriptionResolver {
   @Authorized()

@@ -35,7 +35,9 @@ import {
 import { TenantId } from "./user.decorator";
 import { CompanyService } from "../company/company.service";
 import { UserActionLog } from "../../lib/userActionLogMiddleware";
+import { Service } from "typedi";
 
+@Service()
 @Resolver(User)
 export class UserResolver {
   constructor(private readonly companyService: CompanyService) {}

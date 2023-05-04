@@ -16,7 +16,9 @@ import {
 import { UserRole } from "dashboard-core";
 import { TenantId } from "../user/user.decorator";
 import { UserActionLog } from "../../lib/userActionLogMiddleware";
+import { Service } from "typedi";
 
+@Service()
 @Resolver(Product)
 export class ProductResolver {
   // TODO: populate fitSamples only when needed; analyze AST

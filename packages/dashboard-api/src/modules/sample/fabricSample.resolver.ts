@@ -10,7 +10,9 @@ import { SendSampleInput, UniqueSampleInput } from "./sample.input";
 import { UserRole } from "dashboard-core";
 import { UserActionLog } from "../../lib/userActionLogMiddleware";
 import { TenantId } from "../user/user.decorator";
+import { Service } from "typedi";
 
+@Service()
 @Resolver(FabricSample)
 export class FabricSampleResolver {
   @Authorized(["Admin", "Factory"] as UserRole[])

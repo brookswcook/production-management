@@ -20,10 +20,7 @@ import { Fabric, FabricModel } from "./fabric.model";
 
 @Resolver(() => Fabric)
 export class FabricResolver {
-  constructor(private readonly productService: ProductService) {
-    // TODO: use DI as typedi if it gets annoying
-    this.productService = new ProductService();
-  }
+  constructor(private readonly productService: ProductService) {}
 
   @FieldResolver(() => [String])
   async productCodes(@Root() { code }: Fabric): Promise<string[]> {

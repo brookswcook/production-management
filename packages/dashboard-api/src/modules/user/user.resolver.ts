@@ -38,10 +38,7 @@ import { UserActionLog } from "../../lib/userActionLogMiddleware";
 
 @Resolver(User)
 export class UserResolver {
-  constructor(private readonly companyService: CompanyService) {
-    // TODO: use DI as typedi if it gets annoying
-    this.companyService = new CompanyService();
-  }
+  constructor(private readonly companyService: CompanyService) {}
 
   @FieldResolver(() => FirebaseUser, { nullable: true })
   async firebaseUser(@Root() { email }: User): Promise<FirebaseUser | null> {

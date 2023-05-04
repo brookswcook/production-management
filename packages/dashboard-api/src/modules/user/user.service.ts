@@ -1,13 +1,15 @@
 import { UserRole } from "dashboard-core";
+import { Service } from "typedi";
 import { UserContactDetails, UserModel } from "./user.model";
 
+@Service()
 export class UserService {
   getUserEmailsByCompany(companyId: string): Promise<string[]> {
     return UserModel.getUserEmails({ companyId });
   }
 
-  getUserIdsByRole(companyId: string, role: UserRole): Promise<string[]> {
-    return UserModel.getUserIds({ companyId, role });
+  getUserIdsByRoles(companyId: string, roles: UserRole[]): Promise<string[]> {
+    return UserModel.getUserIds({ companyId, role: { $in: roles } });
   }
 
   getUserContactDetailsByCompany(

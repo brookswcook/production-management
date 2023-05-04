@@ -21,10 +21,10 @@ import { UserActionLog } from "../../lib/userActionLogMiddleware";
 
 @Resolver(Style)
 export class StyleResolver {
-  constructor(private readonly productService: ProductService) {
-    // TODO: use DI as typedi if it gets annoying
-    this.productService = new ProductService();
-  }
+  constructor(
+    private readonly productService: ProductService,
+    private readonly notificationSubscriptionService: NotificationSubscriptionService
+  ) {}
 
   @FieldResolver(() => [String])
   async productCodes(@Root() { code }: Fabric): Promise<string[]> {

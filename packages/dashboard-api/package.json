@@ -41,6 +41,7 @@
     "reflect-metadata": "^0.1.13",
     "ts-mixer": "^6.0.2",
     "type-graphql": "^1.1.1",
+    "typedi": "^0.10.0",
     "winston": "^3.5.0"
   },
   "devDependencies": {

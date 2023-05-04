@@ -14,10 +14,7 @@ import { Company, CompanyModel } from "./company.model";
 
 @Resolver(() => Company)
 export class CompanyResolver {
-  constructor(private readonly userService: UserService) {
-    // TODO: use DI as typedi if it gets annoying
-    this.userService = new UserService();
-  }
+  constructor(private readonly userService: UserService) {}
 
   @Authorized(["Admin"])
   @Query(() => [Company], { nullable: false })

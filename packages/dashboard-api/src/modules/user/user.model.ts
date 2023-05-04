@@ -104,9 +104,9 @@ export class User extends ExpectResultModel implements UserPayload, TimeStamps {
   }
 
   static async getUserIds(query: FilterQuery<User>): Promise<string[]> {
-    const users = await UserModel.find(query, { _id: 1 }).lean<
-      { id: string }[]
-    >();
+    const users = await UserModel.find<{ id: string }>(query, {
+      _id: 1,
+    }).exec();
     return users.map(item => item.id);
   }
 }

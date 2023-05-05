@@ -6,5 +6,5 @@ export class CreateNotificationSubscriptionInput {
   token!: string;
 
   @Field()
-  userAgent!: string;
+  fingerprint!: string;
 }

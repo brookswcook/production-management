@@ -10,7 +10,7 @@ import { Field, ObjectType } from "type-graphql";
 import { ExpectResultModel } from "../common/expectResultModel";
 
 @index<NotificationSubscription>(
-  { companyId: 1, userId: 1, userAgent: 1 },
+  { companyId: 1, userId: 1, fingerprint: 1 },
   { unique: true }
 )
 @ModelOptions({
@@ -38,7 +38,7 @@ export class NotificationSubscription
 
   @Field()
   @Property({ required: true })
-  userAgent!: string;
+  fingerprint!: string;
 
   @Field({ nullable: true })
   createdAt?: Date;

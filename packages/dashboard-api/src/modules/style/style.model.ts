@@ -29,12 +29,13 @@ export class Style extends ExpectResultModel implements IMultiTenant {
     match: { type: "tech-pack" as FileType } as Partial<File>,
     options: { sort: { _id: -1 } },
   })
-  techPacks!: File[];
+  techPacks?: File[];
 
   @Field({ nullable: false })
   @Property({
     get(this: Style) {
-      return this.techPacks.length > 0;
+      if (this.techPacks == null) return false;
+      return this.techPacks?.length > 0;
     },
   })
   techPackUploaded?: boolean;

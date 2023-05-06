@@ -17,15 +17,13 @@ import { ProductService } from "../product/product.service";
 import { Fabric } from "../fabric/fabric.model";
 import { ResolverContext } from "../../lib/graphql";
 import { TenantId } from "../user/user.decorator";
+import { UserActionLogWithNotification } from "../../lib/userActionLogMiddleware";
 import { Service } from "typedi";
 
 @Service()
 @Resolver(Style)
 export class StyleResolver {
-  constructor(
-    private readonly productService: ProductService,
-    private readonly notificationSubscriptionService: NotificationSubscriptionService
-  ) {}
+  constructor(private readonly productService: ProductService) {}
 
   @FieldResolver(() => [String])
   async productCodes(@Root() { code }: Fabric): Promise<string[]> {

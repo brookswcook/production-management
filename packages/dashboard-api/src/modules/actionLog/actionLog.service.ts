@@ -37,7 +37,10 @@ export class ActionLogService {
         roles
       );
     await sendMessageToDevice(notificationTokens, {
-      notification: { title, body },
+      notification: {
+        title,
+        body,
+      },
     });
   }
 }

@@ -8,7 +8,7 @@ import {
 import { FabricSample, FabricSampleModel } from "./sample.model";
 import { SendSampleInput, UniqueSampleInput } from "./sample.input";
 import { UserRole } from "dashboard-core";
-import { UserActionLog } from "../../lib/userActionLogMiddleware";
+import { UserActionLogWithNotification } from "../../lib/userActionLogMiddleware";
 import { TenantId } from "../user/user.decorator";
 import { Service } from "typedi";
 
@@ -17,7 +17,13 @@ import { Service } from "typedi";
 export class FabricSampleResolver {
   @Authorized(["Admin", "Factory"] as UserRole[])
   @Mutation(() => FabricSample)
-  @UseMiddleware(UserActionLog<FabricSample>("New fabric sample is sent"))
+  @UseMiddleware(
+    UserActionLogWithNotification<FabricSample>("New fabric sample is sent", [
+      "Admin",
+      "VChapman",
+      "Factory",
+    ])
+  )
   async sendFabricSample(
     @TenantId() companyId: string,
     @Arg("data") { ...data }: SendSampleInput
@@ -27,7 +33,13 @@ export class FabricSampleResolver {
 
   @Authorized(["Admin", "Factory"] as UserRole[])
   @Mutation(() => FabricSample)
-  @UseMiddleware(UserActionLog<FabricSample>("Fabric sample is delivered"))
+  @UseMiddleware(
+    UserActionLogWithNotification<FabricSample>("Fabric sample is delivered", [
+      "Admin",
+      "VChapman",
+      "Factory",
+    ])
+  )
   async markFabricSampleAsDelivered(
     @TenantId() companyId: string,
     @Arg("data") { parentCode, sku }: UniqueSampleInput
@@ -37,7 +49,13 @@ export class FabricSampleResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FabricSample)
-  @UseMiddleware(UserActionLog<FabricSample>("Fabric sample is rejected"))
+  @UseMiddleware(
+    UserActionLogWithNotification<FabricSample>("Fabric sample is rejected", [
+      "Admin",
+      "VChapman",
+      "Factory",
+    ])
+  )
   async rejectFabricSample(
     @TenantId() companyId: string,
     @Arg("data") { parentCode, sku }: UniqueSampleInput
@@ -47,7 +65,13 @@ export class FabricSampleResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FabricSample)
-  @UseMiddleware(UserActionLog<FabricSample>("Fabric sample is approved"))
+  @UseMiddleware(
+    UserActionLogWithNotification<FabricSample>("Fabric sample is approved", [
+      "Admin",
+      "VChapman",
+      "Factory",
+    ])
+  )
   async approveFabricSample(
     @TenantId() companyId: string,
     @Arg("data") { parentCode, sku }: UniqueSampleInput

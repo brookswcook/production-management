@@ -15,7 +15,10 @@ import {
 } from "../productProduction/productProduction.input";
 import { UserRole } from "dashboard-core";
 import { TenantId } from "../user/user.decorator";
-import { UserActionLog } from "../../lib/userActionLogMiddleware";
+import {
+  UserActionLog,
+  UserActionLogWithNotification,
+} from "../../lib/userActionLogMiddleware";
 import { Service } from "typedi";
 
 @Service()
@@ -64,7 +67,12 @@ export class ProductResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Product)
-  @UseMiddleware(UserActionLog<Product>("Product is created"))
+  @UseMiddleware(
+    UserActionLogWithNotification<Product>("Product is created", [
+      "Admin",
+      "VChapman",
+    ])
+  )
   async createProduct(
     @Arg("data") data: CreateProductInput,
     @TenantId() companyId: string
@@ -95,7 +103,12 @@ export class ProductResolver {
 
   @Authorized(["Admin", "VChapman", "Factory"] as UserRole[])
   @Mutation(() => Product)
-  @UseMiddleware(UserActionLog<Product>("Production cost is updated"))
+  @UseMiddleware(
+    UserActionLogWithNotification<Product>("Production cost is updated", [
+      "Admin",
+      "VChapman",
+    ])
+  )
   async updateCost(
     @Arg("data")
     {

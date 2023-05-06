@@ -53,7 +53,12 @@ export class StyleResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Style)
-  @UseMiddleware(UserActionLog<Style>("Style is created"))
+  @UseMiddleware(
+    UserActionLogWithNotification<Style>("Style is created", [
+      "Admin",
+      "VChapman",
+    ])
+  )
   async createStyle(
     @TenantId() companyId: string,
     @Arg("data") { code, name, techPack }: CreateStyleInput,
@@ -74,7 +79,13 @@ export class StyleResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Style)
-  @UseMiddleware(UserActionLog<Style>("New tech pack is uploaded"))
+  @UseMiddleware(
+    UserActionLogWithNotification<Style>("New tech pack is uploaded", [
+      "Admin",
+      "VChapman",
+      "Factory",
+    ])
+  )
   async uploadTechPack(
     @TenantId() companyId: string,
     @Arg("data") { code, techPack }: UploadTechPackInput,

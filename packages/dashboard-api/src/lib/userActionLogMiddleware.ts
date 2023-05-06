@@ -58,7 +58,7 @@ export function UserActionLogWithNotification<T extends IMultiTenant & ISlug>(
       payload: {
         title: "Production management app notification",
         body: `${logTitle}
-${entityType} code: ${code}`,
+Related code: ${code}`,
       },
     });
   };

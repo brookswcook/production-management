@@ -12,7 +12,7 @@ import {
 } from "type-graphql";
 import { Service } from "typedi";
 import { ResolverContext } from "../../lib/graphql";
-import { UserActionLog } from "../../lib/userActionLogMiddleware";
+import { UserActionLogWithNotification } from "../../lib/userActionLogMiddleware";
 import { getDownloadFileLink, uploadFile } from "../file/file.service";
 import { ProductService } from "../product/product.service";
 import { TenantId } from "../user/user.decorator";
@@ -69,7 +69,12 @@ export class FabricResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
-  @UseMiddleware(UserActionLog<Fabric>("Fabric is created"))
+  @UseMiddleware(
+    UserActionLogWithNotification<Fabric>("Fabric is created", [
+      "Admin",
+      "VChapman",
+    ])
+  )
   async createFabric(
     @TenantId() companyId: string,
     @Arg("data") { print, ...data }: CreateFabricInput,
@@ -102,7 +107,12 @@ export class FabricResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
-  @UseMiddleware(UserActionLog<Fabric>("Print is uploaded"))
+  @UseMiddleware(
+    UserActionLogWithNotification<Fabric>("Print is uploaded", [
+      "Admin",
+      "VChapman",
+    ])
+  )
   async uploadPrint(
     @TenantId() companyId: string,
     @Arg("data") { code, print: { file, fileSize } }: UploadPrintInput,

@@ -5,6 +5,8 @@ import { S3ClientConfig } from "@aws-sdk/client-s3";
 const {
   NODE_ENV: environment = "development",
   PORT: port = 4000,
+  APP_URI: appURI = "localhost",
+
   MONGO_URI: mongoURI,
   MONGO_DEBUG_MODE_ENABLED: mongoDebugModeEnabled = false,
 
@@ -19,8 +21,11 @@ const {
   FIREBASE_CLIENT_EMAIL: firebaseClientEmail,
   FIREBASE_PRIVATE_KEY: firebasePrivateKey,
 
+  SENDGRID_API_KEY: sendgridApiKey,
+
   JWT_SECRET: jwtSecret,
   JWT_EXPIRE: jwtExpire,
+
   LOG_LEVEL: logLevel = LoggingLevel.info,
 } = process.env;
 
@@ -34,7 +39,8 @@ if (
   firebaseApiKey == null ||
   firebaseProjectId == null ||
   firebaseClientEmail == null ||
-  firebasePrivateKey == null
+  firebasePrivateKey == null ||
+  sendgridApiKey == null
 ) {
   throw new Error("One of the required env variables was not provided");
 }
@@ -42,6 +48,7 @@ if (
 const config: ApiConfig = {
   port: Number(port),
   environment: environment as EnvironmentType,
+  appURI,
   db: {
     uri: mongoURI,
     debugModeEnabled: mongoDebugModeEnabled === "true",
@@ -68,6 +75,9 @@ const config: ApiConfig = {
       },
     },
     bucketName: s3BucketName,
+  },
+  sendgrid: {
+    apiKey: sendgridApiKey,
   },
   logging: { level: logLevel as LoggingLevel },
 };
@@ -115,12 +125,18 @@ export type ApiConfig = {
   logging: ApiLoggingConfig;
   environment: EnvironmentType;
   port: number;
+  appURI: string;
   s3: S3Config;
+  sendgrid: SendgridConfig;
 };
 
 export type S3Config = {
   client: S3ClientConfig;
   bucketName: string;
+};
+
+export type SendgridConfig = {
+  apiKey: string;
 };
 
 export default config;

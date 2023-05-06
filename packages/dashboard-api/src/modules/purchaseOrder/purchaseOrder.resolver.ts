@@ -8,11 +8,13 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { UserActionLog } from "../../lib/userActionLogMiddleware";
+import { Service } from "typedi";
+import { UserActionLogWithNotification } from "../../lib/userActionLogMiddleware";
 import { TenantId } from "../user/user.decorator";
 import { CreatePurchaseOrderInput } from "./purchaseOrder.input";
 import { PurchaseOrder, PurchaseOrderModel } from "./purchaseOrder.model";
 
+@Service()
 @Resolver(PurchaseOrder)
 export class PurchaseOrderResolver {
   @Authorized()
@@ -70,7 +72,12 @@ export class PurchaseOrderResolver {
 
   @Authorized<UserRole>(["Admin", "VChapman"])
   @Mutation(() => PurchaseOrder)
-  @UseMiddleware(UserActionLog<PurchaseOrder>("Purchase order is created"))
+  @UseMiddleware(
+    UserActionLogWithNotification<PurchaseOrder>("Purchase order is created", [
+      "Admin",
+      "VChapman",
+    ])
+  )
   async createPurchaseOrder(
     @Arg("data") data: CreatePurchaseOrderInput,
     @TenantId() companyId: string
@@ -86,7 +93,10 @@ export class PurchaseOrderResolver {
   @Authorized()
   @Mutation(() => PurchaseOrder)
   @UseMiddleware(
-    UserActionLog<PurchaseOrder>("Purchase order status is updated")
+    UserActionLogWithNotification<PurchaseOrder>(
+      "Purchase order status is updated",
+      ["Admin", "VChapman", "Factory"]
+    )
   )
   async pushPurchaseOrderToNextStage(
     @Arg("uid", () => Int) uid: number,

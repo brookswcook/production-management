@@ -1,10 +1,12 @@
 import { Arg, Query, Resolver } from "type-graphql";
+import { Service } from "typedi";
 import { TenantId } from "../user/user.decorator";
 import {
   AttributeDefinition,
   AttributeDefinitionModel,
 } from "./attributeDefinition.model";
 
+@Service()
 @Resolver(AttributeDefinition)
 export class AttributeDefinitionResolver {
   @Query(() => [AttributeDefinition])

@@ -1,8 +1,10 @@
 import { Arg, Authorized, Query, Resolver } from "type-graphql";
+import { Service } from "typedi";
 import { TenantId } from "../user/user.decorator";
 import { GetActionLogsInput } from "./actionLog.input";
 import { ActionLog, ActionLogModel } from "./actionLog.model";
 
+@Service()
 @Resolver(ActionLog)
 export class ActionLogResolver {
   @Authorized("Admin")

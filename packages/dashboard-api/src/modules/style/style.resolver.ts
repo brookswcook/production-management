@@ -17,14 +17,13 @@ import { ProductService } from "../product/product.service";
 import { Fabric } from "../fabric/fabric.model";
 import { ResolverContext } from "../../lib/graphql";
 import { TenantId } from "../user/user.decorator";
-import { UserActionLog } from "../../lib/userActionLogMiddleware";
+import { UserActionLogWithNotification } from "../../lib/userActionLogMiddleware";
+import { Service } from "typedi";
 
+@Service()
 @Resolver(Style)
 export class StyleResolver {
-  constructor(private readonly productService: ProductService) {
-    // TODO: use DI as typedi if it gets annoying
-    this.productService = new ProductService();
-  }
+  constructor(private readonly productService: ProductService) {}
 
   @FieldResolver(() => [String])
   async productCodes(@Root() { code }: Fabric): Promise<string[]> {
@@ -54,7 +53,12 @@ export class StyleResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Style)
-  @UseMiddleware(UserActionLog<Style>("Style is created"))
+  @UseMiddleware(
+    UserActionLogWithNotification<Style>("Style is created", [
+      "Admin",
+      "VChapman",
+    ])
+  )
   async createStyle(
     @TenantId() companyId: string,
     @Arg("data") { code, name, techPack }: CreateStyleInput,
@@ -75,7 +79,13 @@ export class StyleResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Style)
-  @UseMiddleware(UserActionLog<Style>("New tech pack is uploaded"))
+  @UseMiddleware(
+    UserActionLogWithNotification<Style>("New tech pack is uploaded", [
+      "Admin",
+      "VChapman",
+      "Factory",
+    ])
+  )
   async uploadTechPack(
     @TenantId() companyId: string,
     @Arg("data") { code, techPack }: UploadTechPackInput,

@@ -7,11 +7,12 @@ import {
 } from "@typegoose/typegoose";
 import { NoteType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
+import { ISlug } from "../common/types";
 import { Note } from "../note/note.model";
 
 @index<Sample>({ parentCode: 1, sku: 1 }, { unique: true })
 @ObjectType()
-export class Sample {
+export class Sample implements ISlug {
   @Field()
   id?: string;
 
@@ -21,6 +22,14 @@ export class Sample {
   @Field()
   @Property({ required: true, index: true })
   parentCode!: string;
+
+  @Field()
+  @Property({
+    get(this: Sample) {
+      return `${this.parentCode}-${this.sku}`;
+    },
+  })
+  code!: string;
 
   @Field()
   @Property()
@@ -72,7 +81,10 @@ export class Sample {
     return updatedSample;
   }
 
-  static async sendSample(this: ReturnModelType<typeof Sample>, data: Sample) {
+  static async sendSample(
+    this: ReturnModelType<typeof Sample>,
+    data: Omit<Sample, "code">
+  ) {
     const unapprovedSample = await this.getSamplesByParentCode(
       data.companyId,
       data.parentCode,

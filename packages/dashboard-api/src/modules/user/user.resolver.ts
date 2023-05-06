@@ -34,14 +34,13 @@ import {
 } from "../../lib/firebase";
 import { TenantId } from "./user.decorator";
 import { CompanyService } from "../company/company.service";
-import { UserActionLog } from "../../lib/userActionLogMiddleware";
+import { UserActionLogWithNotification } from "../../lib/userActionLogMiddleware";
+import { Service } from "typedi";
 
+@Service()
 @Resolver(User)
 export class UserResolver {
-  constructor(private readonly companyService: CompanyService) {
-    // TODO: use DI as typedi if it gets annoying
-    this.companyService = new CompanyService();
-  }
+  constructor(private readonly companyService: CompanyService) {}
 
   @FieldResolver(() => FirebaseUser, { nullable: true })
   async firebaseUser(@Root() { email }: User): Promise<FirebaseUser | null> {
@@ -62,7 +61,9 @@ export class UserResolver {
 
   @Authorized(["Admin"])
   @Mutation(() => User)
-  @UseMiddleware(UserActionLog<User>("User is created"))
+  @UseMiddleware(
+    UserActionLogWithNotification<User>("User is created", ["Admin"])
+  )
   async createUser(
     @TenantId() adminCompanyId: string,
     @Arg("data")
@@ -98,7 +99,9 @@ export class UserResolver {
 
   @Authorized(["Admin"])
   @Mutation(() => User)
-  @UseMiddleware(UserActionLog<User>("User is updated"))
+  @UseMiddleware(
+    UserActionLogWithNotification<User>("User is updated", ["Admin"])
+  )
   async updateUser(
     @TenantId() companyId: string,
     @Arg("data") { email, ...props }: UpdateUserInput
@@ -124,7 +127,9 @@ export class UserResolver {
 
   @Authorized(["Admin"])
   @Mutation(() => User)
-  @UseMiddleware(UserActionLog<User>("User is deleted"))
+  @UseMiddleware(
+    UserActionLogWithNotification<User>("User is deleted", ["Admin"])
+  )
   async deleteUser(
     @TenantId() companyId: string,
     @Arg("data") { email }: DeleteUserInput

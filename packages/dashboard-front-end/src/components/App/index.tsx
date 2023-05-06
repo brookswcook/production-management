@@ -50,12 +50,39 @@ import { UserList } from "../User";
 import { FactoryList } from "../Factory/ListView";
 import { ProductDetail, ProductList } from "../Product";
 import { PurchaseOrderList, PurchaseOrderDetail } from "../PurchaseOrder";
+import { getMessagingToken } from "../../firebase";
+import { useCreateNotificationSubscriptionMutation } from "../../generated/graphql";
+import useMessagingToken from "../Notification/useMessagingToken";
+import fingerprintjs from "@fingerprintjs/fingerprintjs";
 
 function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const { signOut } = useContext(AuthContext);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
+  const { messagingToken: savedMessagingToken, setMessagingToken } =
+    useMessagingToken();
+  const [newNotificationSubscription] =
+    useCreateNotificationSubscriptionMutation();
+
+  useEffect(() => {
+    async function requestNotificationsPermission() {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        const token = await getMessagingToken();
+        if (savedMessagingToken !== token) {
+          const fingerprintAgent = await fingerprintjs.load();
+          const { visitorId: fingerprint } = await fingerprintAgent.get();
+          await newNotificationSubscription({
+            variables: { data: { token, fingerprint } },
+          });
+          setMessagingToken(token);
+        }
+      }
+    }
+    void requestNotificationsPermission();
+  }, []);
+
   const { decodedToken } = useContext(AuthContext);
   const firstName = decodedToken?.firstName ?? "";
 
@@ -156,7 +183,7 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
                           to="/"
                           style={{ textDecoration: "none", color: "white" }}
                         >
-                          Production Management Tool
+                          Production Management App
                         </Link>
                       </Typography>
                     </Button>

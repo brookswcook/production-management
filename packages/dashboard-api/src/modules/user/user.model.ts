@@ -9,6 +9,8 @@ import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { Field, ObjectType } from "type-graphql";
 import { UserPayload, UserRole } from "dashboard-core";
 import { ExpectResultModel } from "../common/expectResultModel";
+import { FilterQuery } from "mongoose";
+import { ISlug } from "../common/types";
 
 // TODO: add unique compound index {companyId, email} once we support multitenancy in auth; until then email should be unique
 @index<User>(
@@ -17,9 +19,20 @@ import { ExpectResultModel } from "../common/expectResultModel";
 )
 @ModelOptions({ schemaOptions: { timestamps: true } })
 @ObjectType()
-export class User extends ExpectResultModel implements UserPayload, TimeStamps {
+export class User
+  extends ExpectResultModel
+  implements UserPayload, TimeStamps, ISlug
+{
   @Field()
   id!: string;
+
+  @Field()
+  @Property({
+    get(this: User) {
+      return this.email;
+    },
+  })
+  code!: string;
 
   @Field()
   @Property({ unique: true, required: true })
@@ -100,6 +113,13 @@ export class User extends ExpectResultModel implements UserPayload, TimeStamps {
   static async getUserEmails(query: Partial<User>): Promise<string[]> {
     const emails = await UserModel.find(query, { _id: 0, email: 1 }).lean();
     return emails.map(item => item.email);
+  }
+
+  static async getUserIds(query: FilterQuery<User>): Promise<string[]> {
+    const users = await UserModel.find<{ id: string }>(query, {
+      _id: 1,
+    }).exec();
+    return users.map(item => item.id);
   }
 }
 

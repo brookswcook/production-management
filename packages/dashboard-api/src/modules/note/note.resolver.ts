@@ -1,10 +1,12 @@
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Service } from "typedi";
 import { ResolverContext } from "../../lib/graphql";
 import { getDownloadFileLink, uploadFiles } from "../file/file.service";
 import { TenantId } from "../user/user.decorator";
 import { CreateNoteInput, GetNotesInput } from "./note.input";
 import { Note, NoteModel } from "./note.model";
 
+@Service()
 @Resolver(Note)
 export class NoteResolver {
   @Authorized()

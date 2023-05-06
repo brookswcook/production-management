@@ -15,7 +15,7 @@ import {
   sendSignInLinkToEmail,
   sendEmailVerification,
 } from "firebase/auth";
-import { auth } from "./firebaseAuth";
+import { firebaseAuth } from "../../firebase";
 import { FirebaseError } from "firebase/app";
 import { Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -55,7 +55,7 @@ export default function SignIn(): ReactElement {
       event.preventDefault();
       if (authType === "password") {
         const userCredential = await signInWithEmailAndPassword(
-          auth,
+          firebaseAuth,
           email,
           password
         );
@@ -79,7 +79,7 @@ export default function SignIn(): ReactElement {
           url: `${config.appURI}/singinwithemaillink`,
           handleCodeInApp: true,
         };
-        await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+        await sendSignInLinkToEmail(firebaseAuth, email, actionCodeSettings);
         window.localStorage.setItem("emailForSignIn", email);
         toast.info(`Verification link was sent to ${email}`);
       }

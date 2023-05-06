@@ -14,12 +14,16 @@ import {
   purchaseOrderStatusSet,
 } from "dashboard-core";
 import { Note } from "../note/note.model";
+import { ISlug } from "../common/types";
 
 @ModelOptions({
   schemaOptions: { timestamps: true, collection: "purchase_orders" },
 })
 @ObjectType()
-export class PurchaseOrder extends ExpectResultModel implements TimeStamps {
+export class PurchaseOrder
+  extends ExpectResultModel
+  implements TimeStamps, ISlug
+{
   @Field()
   id!: string;
 
@@ -30,9 +34,13 @@ export class PurchaseOrder extends ExpectResultModel implements TimeStamps {
   })
   uid!: number;
 
-  // @Field()
-  // @Property({ required: true, unique: true })
-  // code!: string;
+  @Field()
+  @Property({
+    get(this: PurchaseOrder) {
+      return String(this.uid);
+    },
+  })
+  code!: string;
 
   @Field()
   @Property({

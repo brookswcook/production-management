@@ -1,5 +1,7 @@
+import { Service } from "typedi";
 import { ProductModel } from "./product.model";
 
+@Service()
 export class ProductService {
   getProductCodesByFabricCode(fabricCode: string) {
     const query = { fabricCode };

@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { LoginResult, useLoginMutation } from "../../generated/graphql";
 import { AuthContext } from "./AuthProvider";
-import { auth } from "./firebaseAuth";
+import { firebaseAuth as auth } from "../../firebase";
 
 export function SignInWithEmailLink(): ReactElement {
   const { signIn } = useContext(AuthContext);
@@ -23,7 +23,7 @@ export function SignInWithEmailLink(): ReactElement {
   const [storagedAuthEmail] = useState<string | null>(
     window.localStorage.getItem("emailForSignIn")
   );
-  const [authEmail, setAuthEmail] = useState<string>("aaa");
+  const [authEmail, setAuthEmail] = useState<string>("");
 
   useEffect(() => {
     if (storagedAuthEmail != null) {

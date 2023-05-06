@@ -2,10 +2,11 @@ import { getModelForClass, prop as Property } from "@typegoose/typegoose";
 import { FileType } from "dashboard-core";
 import { Field, ObjectType } from "type-graphql";
 import { ExpectResultModel } from "../common/expectResultModel";
+import { IMultiTenant, ISlug } from "../common/types";
 import { File } from "../file/file.model";
 
 @ObjectType()
-export class Style extends ExpectResultModel {
+export class Style extends ExpectResultModel implements IMultiTenant, ISlug {
   @Field()
   id!: string;
 
@@ -28,12 +29,13 @@ export class Style extends ExpectResultModel {
     match: { type: "tech-pack" as FileType } as Partial<File>,
     options: { sort: { _id: -1 } },
   })
-  techPacks!: File[];
+  techPacks?: File[];
 
   @Field({ nullable: false })
   @Property({
     get(this: Style) {
-      return this.techPacks.length > 0;
+      if (this.techPacks == null) return false;
+      return this.techPacks?.length > 0;
     },
   })
   techPackUploaded?: boolean;

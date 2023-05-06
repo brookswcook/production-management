@@ -7,6 +7,7 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
+import { Service } from "typedi";
 import { UserActionLog } from "../../lib/userActionLogMiddleware";
 import { TenantId } from "../user/user.decorator";
 import { CreateOrderItemInput, GetOrderItemsInput } from "./orderItem.input";
@@ -16,6 +17,7 @@ import {
   OrderItemsGroupedByAttributes,
 } from "./orderItem.model";
 
+@Service()
 @Resolver(OrderItem)
 export class OrderItemResolver {
   @Query(() => [OrderItem])

@@ -8,14 +8,22 @@ import {
 import { FitSample, FitSampleModel } from "./sample.model";
 import { SendSampleInput, UniqueSampleInput } from "./sample.input";
 import { UserRole } from "dashboard-core";
-import { UserActionLog } from "../../lib/userActionLogMiddleware";
+import { UserActionLogWithNotification } from "../../lib/userActionLogMiddleware";
 import { TenantId } from "../user/user.decorator";
+import { Service } from "typedi";
 
+@Service()
 @Resolver(FitSample)
 export class FitSampleResolver {
   @Authorized(["Admin", "Factory"] as UserRole[])
   @Mutation(() => FitSample)
-  @UseMiddleware(UserActionLog<FitSample>("New fit sample is sent"))
+  @UseMiddleware(
+    UserActionLogWithNotification<FitSample>("New fit sample is sent", [
+      "Admin",
+      "VChapman",
+      "Factory",
+    ])
+  )
   async sendFitSample(
     @TenantId() companyId: string,
     @Arg("data") { ...data }: SendSampleInput
@@ -25,7 +33,13 @@ export class FitSampleResolver {
 
   @Authorized(["Admin", "Factory"] as UserRole[])
   @Mutation(() => FitSample)
-  @UseMiddleware(UserActionLog<FitSample>("Fit sample is delivered"))
+  @UseMiddleware(
+    UserActionLogWithNotification<FitSample>("Fit sample is delivered", [
+      "Admin",
+      "VChapman",
+      "Factory",
+    ])
+  )
   async markFitSampleAsDelivered(
     @TenantId() companyId: string,
     @Arg("data") { parentCode, sku }: UniqueSampleInput
@@ -35,7 +49,13 @@ export class FitSampleResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FitSample)
-  @UseMiddleware(UserActionLog<FitSample>("Fit sample is rejected"))
+  @UseMiddleware(
+    UserActionLogWithNotification<FitSample>("Fit sample is rejected", [
+      "Admin",
+      "VChapman",
+      "Factory",
+    ])
+  )
   async rejectFitSample(
     @TenantId() companyId: string,
     @Arg("data") { parentCode, sku }: UniqueSampleInput
@@ -45,7 +65,13 @@ export class FitSampleResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => FitSample)
-  @UseMiddleware(UserActionLog<FitSample>("Fit sample is approved"))
+  @UseMiddleware(
+    UserActionLogWithNotification<FitSample>("Fit sample is approved", [
+      "Admin",
+      "VChapman",
+      "Factory",
+    ])
+  )
   async approveFitSample(
     @TenantId() companyId: string,
     @Arg("data") { parentCode, sku }: UniqueSampleInput

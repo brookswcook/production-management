@@ -1,34 +1,83 @@
 import { getClassForDocument } from "@typegoose/typegoose";
+import { UserRole } from "dashboard-core";
 import { HydratedDocument } from "mongoose";
-import { MiddlewareFn } from "type-graphql";
-import { ActionLogModel } from "../modules/actionLog/actionLog.model";
+import { MiddlewareFn, ResolverData } from "type-graphql";
+import Container from "typedi";
+import { ActionLogService } from "../modules/actionLog/actionLog.service";
+import { IMultiTenant, ISlug } from "../modules/common/types";
 import { ResolverContext } from "./graphql";
 
-// TODO: support action results as an array of docs
-export function UserActionLog<T extends { companyId: string }>(
-  logTitle: string
-): MiddlewareFn<ResolverContext> {
-  return async (
+
+
+async function getActionMetadata<T>(
     {
       context: {
         user: { id: userId },
       },
-    },
-    next
-  ) => {
-    const document = (await next()) as HydratedDocument<T>;
+  }: ResolverData<ResolverContext>,
+  // TODO: support action function return values as an array of mongo docs
+  next: () => Promise<HydratedDocument<T>>
+): Promise<{
+  userId: string;
+  entityId: string;
+  entityType: string;
+  document: HydratedDocument<T>;
+}> {
+  const document = await next();
     const documentClass = getClassForDocument(document);
     if (documentClass == null) throw Error("Document doesn't have a class?");
     const entityType = documentClass.name;
     const entityId = String(document.id);
-    const { companyId } = document;
-    void new ActionLogModel({
-      // replace with code and do mapping code/title since title potentionally might be changed
-      title: logTitle,
-      companyId,
+  return {
+    document,
       userId,
       entityId,
       entityType,
-    }).save();
+  };
+}
+
+export function UserActionLogWithNotification<T extends IMultiTenant & ISlug>(
+  logTitle: string,
+  userRolesToNotify: UserRole[]
+): MiddlewareFn<ResolverContext> {
+  return async (action, next) => {
+    const {
+      document: { companyId, code },
+      entityType,
+      ...restActionMetadata
+    } = await getActionMetadata<T>(action, next);
+    const actionLogService = Container.get(ActionLogService);
+    const actionLogRecord = {
+      title: logTitle,
+      companyId,
+      entityType,
+      ...restActionMetadata,
+    };
+    void actionLogService.createLogRecordWithNotification(actionLogRecord, {
+      roles: userRolesToNotify,
+      payload: {
+        title: "Production management app notification",
+        body: `${logTitle}
+Related code: ${code}`,
+      },
+    });
+  };
+}
+
+export function UserActionLog<T extends { companyId: string }>(
+  logTitle: string
+): MiddlewareFn<ResolverContext> {
+  return async (action, next) => {
+    const {
+      document: { companyId },
+      ...restActionMetadata
+    } = await getActionMetadata<T>(action, next);
+    const actionLogService = Container.get(ActionLogService);
+    const actionLogRecord = {
+      title: logTitle,
+      companyId,
+      ...restActionMetadata,
+    };
+    void actionLogService.createLogRecord(actionLogRecord);
   };
 }

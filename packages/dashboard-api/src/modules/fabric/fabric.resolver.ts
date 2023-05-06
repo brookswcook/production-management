@@ -10,20 +10,19 @@ import {
   Root,
   UseMiddleware,
 } from "type-graphql";
+import { Service } from "typedi";
 import { ResolverContext } from "../../lib/graphql";
-import { UserActionLog } from "../../lib/userActionLogMiddleware";
+import { UserActionLogWithNotification } from "../../lib/userActionLogMiddleware";
 import { getDownloadFileLink, uploadFile } from "../file/file.service";
 import { ProductService } from "../product/product.service";
 import { TenantId } from "../user/user.decorator";
 import { CreateFabricInput, UploadPrintInput } from "./fabric.input";
 import { Fabric, FabricModel } from "./fabric.model";
 
+@Service()
 @Resolver(() => Fabric)
 export class FabricResolver {
-  constructor(private readonly productService: ProductService) {
-    // TODO: use DI as typedi if it gets annoying
-    this.productService = new ProductService();
-  }
+  constructor(private readonly productService: ProductService) {}
 
   @FieldResolver(() => [String])
   async productCodes(@Root() { code }: Fabric): Promise<string[]> {
@@ -70,7 +69,12 @@ export class FabricResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
-  @UseMiddleware(UserActionLog<Fabric>("Fabric is created"))
+  @UseMiddleware(
+    UserActionLogWithNotification<Fabric>("Fabric is created", [
+      "Admin",
+      "VChapman",
+    ])
+  )
   async createFabric(
     @TenantId() companyId: string,
     @Arg("data") { print, ...data }: CreateFabricInput,
@@ -103,7 +107,12 @@ export class FabricResolver {
 
   @Authorized(["Admin", "VChapman"] as UserRole[])
   @Mutation(() => Fabric)
-  @UseMiddleware(UserActionLog<Fabric>("Print is uploaded"))
+  @UseMiddleware(
+    UserActionLogWithNotification<Fabric>("Print is uploaded", [
+      "Admin",
+      "VChapman",
+    ])
+  )
   async uploadPrint(
     @TenantId() companyId: string,
     @Arg("data") { code, print: { file, fileSize } }: UploadPrintInput,

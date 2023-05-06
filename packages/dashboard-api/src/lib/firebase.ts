@@ -1,10 +1,15 @@
 import firebaseAdmin from "firebase-admin";
 import { Auth } from "firebase-admin/lib/auth/auth";
+import { Messaging } from "firebase-admin/lib/messaging/messaging";
 import { UpdateRequest } from "firebase-admin/lib/auth/auth-config";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import { UserMetadata, UserRecord } from "firebase-admin/lib/auth/user-record";
 import config from "../config";
 import logger from "./logger";
+import {
+  MessagingDevicesResponse,
+  MessagingPayload,
+} from "firebase-admin/lib/messaging/messaging-api";
 
 let firebaseAdminApp: firebaseAdmin.app.App;
 function getFirebaseApp() {
@@ -25,6 +30,14 @@ function getAuthService() {
     firebaseAuthService = firebaseAdmin.auth(getFirebaseApp());
   }
   return firebaseAuthService;
+}
+
+let firebaseMessagingService: Messaging;
+function getMessagingService() {
+  if (firebaseMessagingService == null) {
+    firebaseMessagingService = firebaseAdmin.messaging(getFirebaseApp());
+  }
+  return firebaseMessagingService;
 }
 
 export async function verifyToken(token: string): Promise<DecodedIdToken> {
@@ -101,6 +114,21 @@ export async function deleteUser(email: string): Promise<void> {
       throw new Error(error.message);
     }
     throw new Error("Firebase user detele was not successful");
+  }
+}
+
+export async function sendMessageToDevice(
+  tokens: string[],
+  payload: MessagingPayload
+): Promise<MessagingDevicesResponse> {
+  try {
+    return await getMessagingService().sendToDevice(tokens, payload);
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error(`Firebase message send: ${error.message}`);
+      throw new Error(error.message);
+    }
+    throw new Error("Firebase message send was not successful");
   }
 }
 

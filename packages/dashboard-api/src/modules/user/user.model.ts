@@ -10,6 +10,7 @@ import { Field, ObjectType } from "type-graphql";
 import { UserPayload, UserRole } from "dashboard-core";
 import { ExpectResultModel } from "../common/expectResultModel";
 import { FilterQuery } from "mongoose";
+import { ISlug } from "../common/types";
 
 // TODO: add unique compound index {companyId, email} once we support multitenancy in auth; until then email should be unique
 @index<User>(
@@ -18,9 +19,20 @@ import { FilterQuery } from "mongoose";
 )
 @ModelOptions({ schemaOptions: { timestamps: true } })
 @ObjectType()
-export class User extends ExpectResultModel implements UserPayload, TimeStamps {
+export class User
+  extends ExpectResultModel
+  implements UserPayload, TimeStamps, ISlug
+{
   @Field()
   id!: string;
+
+  @Field()
+  @Property({
+    get(this: User) {
+      return this.email;
+    },
+  })
+  code!: string;
 
   @Field()
   @Property({ unique: true, required: true })

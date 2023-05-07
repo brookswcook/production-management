@@ -54,6 +54,30 @@ import { getMessagingToken } from "../../firebase";
 import { useCreateNotificationSubscriptionMutation } from "../../generated/graphql";
 import useMessagingToken from "../Notification/useMessagingToken";
 import fingerprintjs from "@fingerprintjs/fingerprintjs";
+import { UserRole } from "dashboard-core";
+
+function ToolbarNavigationButton({
+  title,
+  path,
+  authorizedRoles = [],
+}: {
+  title: string;
+  path: string;
+  authorizedRoles?: UserRole[];
+}) {
+  return (
+    <RequireRole authorizedRoles={authorizedRoles}>
+      <Button variant="text" size="small">
+        <Link
+          to={`/${path}`}
+          style={{ textDecoration: "none", color: "white" }}
+        >
+          {title}
+        </Link>
+      </Button>
+    </RequireRole>
+  );
+}
 
 function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const { signOut } = useContext(AuthContext);
@@ -94,158 +118,91 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
     setAnchorElNav(null);
   };
 
+  const navigationPaths: { path: string; authorizedRoles?: UserRole[] }[] = [
+    { path: "products" },
+    { path: "fabrics" },
+    { path: "styles" },
+    { path: "purchase-orders" },
+    { path: "users", authorizedRoles: ["Admin"] },
+    { path: "factories", authorizedRoles: ["Admin"] },
+  ];
+
   return (
     <RequireAuth>
       <Fragment>
         <AppBar position="static">
           <Toolbar>
-            <Grid
-              container
-              direction={"row"}
-              alignItems={"center"}
-              justifyContent={"space-between"}
-            >
-              <Grid
-                container
-                item
-                xs={8}
-                md={10}
-                alignItems={"center"}
-                justifyContent={"left"}
-              >
-                <Grid item xs="auto" sx={{ display: { md: "none" } }}>
-                  <IconButton
-                    size="large"
-                    edge="start"
-                    color="inherit"
-                    aria-label="menu"
-                    sx={{ mr: 2 }}
-                    onClick={handleOpenNavMenu}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorElNav}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "left",
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                    open={Boolean(anchorElNav)}
-                    onClose={handleCloseNavMenu}
-                  >
-                    <MenuItemLink
-                      onClick={handleCloseNavMenu}
-                      name="Products"
-                      to="/products"
-                    />
-                    <MenuItemLink
-                      onClick={handleCloseNavMenu}
-                      name="Fabrics"
-                      to="/fabrics"
-                    />
-                    <MenuItemLink
-                      onClick={handleCloseNavMenu}
-                      name="Styles"
-                      to="/styles"
-                    />
-                    <RequireRole authorizedRoles={["Admin"]}>
+            <Grid container alignItems={"center"}>
+              <Grid item xs="auto" sx={{ display: { md: "none" } }}>
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  sx={{ mr: 2 }}
+                  onClick={handleOpenNavMenu}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                >
+                  {navigationPaths.map(({ path, authorizedRoles }) => (
+                    <RequireRole authorizedRoles={authorizedRoles ?? []}>
                       <MenuItemLink
                         onClick={handleCloseNavMenu}
-                        name="Users"
-                        to="/users"
+                        name={path}
+                        to={`/${path}`}
                       />
                     </RequireRole>
-                    <RequireRole authorizedRoles={["Admin"]}>
-                      <MenuItemLink
-                        onClick={handleCloseNavMenu}
-                        name="Factories"
-                        to="/factories"
-                      />
-                    </RequireRole>
-                    <MenuItemLink
-                      onClick={handleCloseNavMenu}
-                      name="Purchase Orders"
-                      to="/purchase-orders"
-                    />
-                  </Menu>
-                </Grid>
-                <Grid item container alignItems={"center"} gap={3} xs={10}>
-                  <Grid item xs={"auto"}>
-                    <Button variant="text" size="small">
-                      <Typography variant="h6" sx={{ color: "white" }}>
-                        <Link
-                          to="/"
-                          style={{ textDecoration: "none", color: "white" }}
-                        >
-                          Production Management App
-                        </Link>
-                      </Typography>
-                    </Button>
-                  </Grid>
-                  <Grid item sx={{ display: { xs: "none", md: "inline" } }}>
-                    {["products", "fabrics", "styles", "purchase-orders"].map(
-                      item => (
-                        <Button variant="text" size="small" key={item}>
-                          <Link
-                            to={`/${item}`}
-                            style={{ textDecoration: "none", color: "white" }}
-                          >
-                            {item}
-                          </Link>
-                        </Button>
-                      )
-                    )}
-                    <RequireRole authorizedRoles={["Admin"]}>
-                      <Button variant="text" size="small">
-                        <Link
-                          to={`/users`}
-                          style={{ textDecoration: "none", color: "white" }}
-                        >
-                          Users
-                        </Link>
-                      </Button>
-                    </RequireRole>
-                    <RequireRole authorizedRoles={["Admin"]}>
-                      <Button variant="text" size="small">
-                        <Link
-                          to={`/factories`}
-                          style={{ textDecoration: "none", color: "white" }}
-                        >
-                          Factories
-                        </Link>
-                      </Button>
-                    </RequireRole>
-                  </Grid>
-                </Grid>
+                  ))}
+                </Menu>
               </Grid>
-              <Grid
-                container
-                item
-                xs={4}
-                md={2}
-                alignItems={"center"}
-                justifyContent={"end"}
-              >
-                <Grid item>
-                  <Typography
-                    component={"span"}
-                    variant={"button"}
-                    sx={{ whiteSpace: "nowrap", overflow: "hidden" }}
+              <Grid item xs={"auto"}>
+                <Typography variant="button" sx={{ color: "white" }}>
+                  <Link
+                    to="/"
+                    style={{ textDecoration: "none", color: "white" }}
                   >
-                    {`Hi ${firstName}, `}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Button color="inherit" onClick={signOut}>
-                    Logout
-                  </Button>
-                </Grid>
+                    Production Management App
+                  </Link>
+                </Typography>
+              </Grid>
+              <Grid item sx={{ display: { xs: "none", md: "inline" } }}>
+                {navigationPaths.map(({ path, authorizedRoles }) => (
+                  <ToolbarNavigationButton
+                    title={path}
+                    path={path}
+                    key={path}
+                    authorizedRoles={authorizedRoles as UserRole[]}
+                  />
+                ))}
+              </Grid>
+              <Grid item>
+                <Typography
+                  component={"span"}
+                  variant={"button"}
+                  sx={{ whiteSpace: "nowrap", overflow: "hidden" }}
+                >
+                  {`Hi ${firstName}, `}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Button color="inherit" onClick={signOut}>
+                  Logout
+                </Button>
               </Grid>
             </Grid>
           </Toolbar>

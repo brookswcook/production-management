@@ -1,5 +1,7 @@
 import {
   AppBar,
+  Avatar,
+  Box,
   Button,
   createTheme,
   Grid,
@@ -83,6 +85,9 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null
+  );
   const { messagingToken: savedMessagingToken, setMessagingToken } =
     useMessagingToken();
   const [newNotificationSubscription] =
@@ -117,13 +122,25 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
     setAnchorElNav(null);
   };
 
-  const navigationPaths: { path: string; authorizedRoles?: UserRole[] }[] = [
-    { path: "products" },
-    { path: "fabrics" },
-    { path: "styles" },
-    { path: "purchase-orders" },
-    { path: "users", authorizedRoles: ["Admin"] },
-    { path: "factories", authorizedRoles: ["Admin"] },
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const navigationPaths: {
+    path: string;
+    name: string;
+    authorizedRoles?: UserRole[];
+  }[] = [
+    { path: "products", name: "Products" },
+    { path: "fabrics", name: "Fabrics" },
+    { path: "styles", name: "Styles" },
+    { path: "purchase-orders", name: "Purchase orders" },
+    { path: "users", name: "Users", authorizedRoles: ["Admin"] },
+    { path: "factories", name: "Factories", authorizedRoles: ["Admin"] },
   ];
 
   return (
@@ -131,7 +148,11 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
       <>
         <AppBar position="static">
           <Toolbar>
-            <Grid container alignItems={"center"}>
+            <Grid
+              container
+              alignItems={"center"}
+              justifyContent={"space-between"}
+            >
               <Grid item xs="auto" sx={{ display: { md: "none" } }}>
                 <IconButton
                   size="large"
@@ -158,11 +179,14 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
                   open={Boolean(anchorElNav)}
                   onClose={handleCloseNavMenu}
                 >
-                  {navigationPaths.map(({ path, authorizedRoles }) => (
-                    <RequireRole authorizedRoles={authorizedRoles ?? []}>
+                  {navigationPaths.map(({ path, name, authorizedRoles }) => (
+                    <RequireRole
+                      authorizedRoles={authorizedRoles ?? []}
+                      key={path}
+                    >
                       <MenuItemLink
                         onClick={handleCloseNavMenu}
-                        name={path}
+                        name={name}
                         to={`/${path}`}
                       />
                     </RequireRole>
@@ -175,34 +199,51 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
                     to="/"
                     style={{ textDecoration: "none", color: "white" }}
                   >
-                    Production Management App
+                    Production Management
                   </Link>
                 </Typography>
               </Grid>
               <Grid item sx={{ display: { xs: "none", md: "inline" } }}>
-                {navigationPaths.map(({ path, authorizedRoles }) => (
+                {navigationPaths.map(({ path, name, authorizedRoles }) => (
                   <ToolbarNavigationButton
-                    title={path}
+                    title={name}
                     path={path}
                     key={path}
                     authorizedRoles={authorizedRoles as UserRole[]}
                   />
                 ))}
               </Grid>
-              <Grid item>
-                <Typography
-                  component={"span"}
-                  variant={"button"}
-                  sx={{ whiteSpace: "nowrap", overflow: "hidden" }}
+              <Box sx={{ flexGrow: 0 }}>
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  {/*TODO: add avatars */}
+                  <Avatar alt={firstName} src="/static/images/" />
+                </IconButton>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
                 >
-                  {`Hi ${firstName}, `}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Button color="inherit" onClick={signOut}>
-                  Logout
-                </Button>
-              </Grid>
+                  <MenuItem
+                    onClick={() => {
+                      signOut();
+                      handleCloseUserMenu();
+                    }}
+                  >
+                    <Typography textAlign="center">{"Logout"}</Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
             </Grid>
           </Toolbar>
         </AppBar>
@@ -225,7 +266,7 @@ function MenuItemLink({
     <MenuItem key={name.toLowerCase()} onClick={onClick}>
       <Typography textAlign="center">
         <Link to={to} style={{ textDecoration: "none", color: "black" }}>
-          {name}
+          {`${name[0].toUpperCase()}${name.slice(1)}`}
         </Link>
       </Typography>
     </MenuItem>

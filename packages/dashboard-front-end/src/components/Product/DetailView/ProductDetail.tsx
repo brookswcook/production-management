@@ -6,7 +6,7 @@ import {
   LinearProgress,
   Typography,
 } from "@mui/material";
-import { Fragment, ReactElement, useState } from "react";
+import { ReactElement, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   ProductFieldsFragment,
@@ -35,7 +35,7 @@ export function ProductDetail(): ReactElement {
         <LinearProgress />
       </Box>
     );
-  if (data == null || error) return <Fragment>Wrong path!</Fragment>;
+  if (data == null || error) return <>Wrong path!</>;
 
   const {
     id,

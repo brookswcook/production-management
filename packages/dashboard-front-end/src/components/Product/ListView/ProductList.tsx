@@ -15,7 +15,7 @@ import {
 import { PopperButton } from "../../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
 import { CreateProductForm } from "../Form/CreateProductForm";
-import { Fragment, ReactElement } from "react";
+import { ReactElement } from "react";
 import { Link } from "react-router-dom";
 import RequireRole from "../../Auth/RequireRole";
 import { renderCellExpand } from "../../Common/GridCellExpand";
@@ -155,18 +155,16 @@ export function ProductList(): ReactElement {
 
   function CustomToolbar(): ReactElement {
     return (
-      <Fragment>
-        <GridToolbarContainer>
-          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <PopperButton icon={<AddIcon />} title="Add product">
-              <CreateProductForm />
-            </PopperButton>
-          </RequireRole>
-          <GridToolbarColumnsButton />
-          <GridToolbarFilterButton />
-          <GridToolbarExport />
-        </GridToolbarContainer>
-      </Fragment>
+      <GridToolbarContainer>
+        <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+          <PopperButton icon={<AddIcon />} title="Add product">
+            <CreateProductForm />
+          </PopperButton>
+        </RequireRole>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarExport />
+      </GridToolbarContainer>
     );
   }
 

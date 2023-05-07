@@ -1,6 +1,6 @@
 import { Container } from "@mui/material";
 import { GridColDef, GridToolbarContainer, DataGrid } from "@mui/x-data-grid";
-import { Fragment, ReactElement } from "react";
+import { ReactElement } from "react";
 import {
   FactoryListFieldsFragment,
   useFactoriesQuery,
@@ -51,13 +51,13 @@ export function FactoryList(): ReactElement {
 
   function CustomToolbar() {
     return (
-      <Fragment>
+      <>
         <GridToolbarContainer>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
             <CreateFactoryPopperButton />
           </RequireRole>
         </GridToolbarContainer>
-      </Fragment>
+      </>
     );
   }
 

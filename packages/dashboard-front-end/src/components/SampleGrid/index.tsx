@@ -10,7 +10,6 @@ import {
 import {
   ChangeEvent,
   FormEvent,
-  Fragment,
   ReactElement,
   useEffect,
   useState,
@@ -167,7 +166,7 @@ export default function SampleGrid({
     }
 
     return (
-      <Fragment>
+      <>
         <GridToolbarContainer>
           <SendSamplePopperButton
             sampleType={sampleType}
@@ -243,7 +242,7 @@ export default function SampleGrid({
           </a>
           <GridToolbarFilterButton />
         </GridToolbarContainer>
-      </Fragment>
+      </>
     );
     async function markAsDelivered() {
       try {

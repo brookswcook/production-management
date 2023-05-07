@@ -6,7 +6,7 @@ import {
   GridRenderCellParams,
   GridFooterContainer,
 } from "@mui/x-data-grid";
-import { Fragment, ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   OrderItemListFieldsFragment,
@@ -116,7 +116,7 @@ export function OrderItemList({
 
   function CustomToolbar() {
     return (
-      <Fragment>
+      <>
         <GridToolbarContainer>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
             <CreateOrderItemPopperButton
@@ -125,7 +125,7 @@ export function OrderItemList({
             />
           </RequireRole>
         </GridToolbarContainer>
-      </Fragment>
+      </>
     );
   }
 

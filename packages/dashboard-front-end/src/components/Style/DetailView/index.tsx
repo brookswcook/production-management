@@ -1,5 +1,5 @@
 import { Box, Grid, LinearProgress, Stack } from "@mui/material";
-import { Fragment, ReactElement } from "react";
+import { ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { StyleFieldsFragment, useStyleQuery } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
@@ -18,7 +18,7 @@ function StyleHeaderSection({
   style: StyleFieldsFragment;
 }): ReactElement {
   return (
-    <Fragment>
+    <>
       <DetailViewHeaderTitle title={`${title} style`} />
       <Grid item xs={12} sx={{ pl: 1 }}>
         <Stack spacing={2} sx={{ pl: 0.5 }}>
@@ -53,7 +53,7 @@ function StyleHeaderSection({
           )}
         </Stack>
       </Grid>
-    </Fragment>
+    </>
   );
 }
 
@@ -70,11 +70,7 @@ export function StyleDetail(): ReactElement {
       </Box>
     );
   if (data == null || error)
-    return (
-      <Fragment>
-        There's no data to show or unexpected error has happened!
-      </Fragment>
-    );
+    return <>There's no data to show or unexpected error has happened!</>;
 
   const { id, techPacks } = data.style;
 

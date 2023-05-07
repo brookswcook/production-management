@@ -8,7 +8,7 @@ import {
   GridToolbarExport,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { Fragment, ReactElement } from "react";
+import { ReactElement } from "react";
 import { Link } from "react-router-dom";
 import {
   PurchaseOrderListFieldsFragment,
@@ -94,7 +94,7 @@ export function PurchaseOrderList(): ReactElement {
 
   function CustomToolbar() {
     return (
-      <Fragment>
+      <>
         <GridToolbarContainer>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
             <CreatePurchaseOrderPopperButton />
@@ -103,7 +103,7 @@ export function PurchaseOrderList(): ReactElement {
           <GridToolbarFilterButton />
           <GridToolbarExport />
         </GridToolbarContainer>
-      </Fragment>
+      </>
     );
   }
 

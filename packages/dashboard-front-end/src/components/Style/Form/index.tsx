@@ -1,5 +1,5 @@
 import { Button, Stack, TextField, Typography } from "@mui/material";
-import { FormEvent, Fragment, ReactElement, useState } from "react";
+import { FormEvent, ReactElement, useState } from "react";
 import { PopperButton } from "../../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
 import {
@@ -86,12 +86,12 @@ export function CreateStyleForm({
         helperText={"You can upload tech pack now or later"}
         multiple={true}
       />
-      <Fragment>
+      <>
         <Button variant="contained" type="submit">
           Add Style
         </Button>
         {footerEl}
-      </Fragment>
+      </>
     </Stack>
   );
 }

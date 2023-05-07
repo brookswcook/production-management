@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState, ReactElement, useRef } from "react";
+import { useEffect, useState, ReactElement, useRef } from "react";
 import {
   Button,
   ButtonPropsVariantOverrides,
@@ -36,7 +36,7 @@ export function PopperButton({
   }, [closeSwitch]);
 
   return (
-    <Fragment>
+    <>
       <Button
         disabled={disabled}
         variant={variant}
@@ -44,7 +44,7 @@ export function PopperButton({
         onClick={() => setOpen(!open)}
         ref={buttonRef}
       >
-        {icon ? icon : <Fragment />}
+        {icon ? icon : <></>}
         {title}
       </Button>
       <Popper
@@ -68,6 +68,6 @@ export function PopperButton({
           </Paper>
         </ClickAwayListener>
       </Popper>
-    </Fragment>
+    </>
   );
 }

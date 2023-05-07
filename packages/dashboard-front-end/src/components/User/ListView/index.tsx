@@ -1,6 +1,6 @@
 import { Container } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbarContainer } from "@mui/x-data-grid";
-import { Fragment, ReactElement } from "react";
+import { ReactElement } from "react";
 import {
   UserListFieldsFragment,
   useUsersQuery,
@@ -84,13 +84,11 @@ export function UserList(): ReactElement {
 
   function CustomToolbar() {
     return (
-      <Fragment>
-        <GridToolbarContainer>
-          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <CreateUserPopperButton />
-          </RequireRole>
-        </GridToolbarContainer>
-      </Fragment>
+      <GridToolbarContainer>
+        <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+          <CreateUserPopperButton />
+        </RequireRole>
+      </GridToolbarContainer>
     );
   }
 

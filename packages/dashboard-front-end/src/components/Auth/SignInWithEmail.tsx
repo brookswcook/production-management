@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { FirebaseError } from "firebase/app";
 import { signInWithEmailLink } from "firebase/auth";
-import { Fragment, ReactElement, useContext, useEffect, useState } from "react";
+import { ReactElement, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { LoginResult, useLoginMutation } from "../../generated/graphql";
@@ -93,6 +93,6 @@ export function SignInWithEmailLink(): ReactElement {
       </Box>
     </Container>
   ) : (
-    <Fragment></Fragment>
+    <></>
   );
 }

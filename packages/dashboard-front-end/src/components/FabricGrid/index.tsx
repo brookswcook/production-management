@@ -10,7 +10,7 @@ import {
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
 import { FabricFieldsFragment, useFabricsQuery } from "../../generated/graphql";
-import { Fragment, ReactElement } from "react";
+import { ReactElement } from "react";
 import { CreateFabricPopperButton } from "../FabricForm";
 import RequireRole from "../Auth/RequireRole";
 import { renderCellExpand } from "../Common/GridCellExpand";
@@ -92,16 +92,14 @@ export default function FabricGrid(): ReactElement {
 
   function CustomToolbar() {
     return (
-      <Fragment>
-        <GridToolbarContainer>
-          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <CreateFabricPopperButton />
-          </RequireRole>
-          <GridToolbarColumnsButton />
-          <GridToolbarFilterButton />
-          <GridToolbarExport />
-        </GridToolbarContainer>
-      </Fragment>
+      <GridToolbarContainer>
+        <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+          <CreateFabricPopperButton />
+        </RequireRole>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarExport />
+      </GridToolbarContainer>
     );
   }
 

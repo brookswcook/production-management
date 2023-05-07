@@ -1,5 +1,7 @@
 import {
   AppBar,
+  Avatar,
+  Box,
   Button,
   createTheme,
   Grid,
@@ -12,7 +14,6 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
-  Fragment,
   MouseEventHandler,
   ReactElement,
   useContext,
@@ -54,10 +55,37 @@ import { getMessagingToken } from "../../firebase";
 import { useCreateNotificationSubscriptionMutation } from "../../generated/graphql";
 import useMessagingToken from "../Notification/useMessagingToken";
 import fingerprintjs from "@fingerprintjs/fingerprintjs";
+import { UserRole } from "dashboard-core";
+
+function ToolbarNavigationButton({
+  title,
+  path,
+  authorizedRoles = [],
+}: {
+  title: string;
+  path: string;
+  authorizedRoles?: UserRole[];
+}) {
+  return (
+    <RequireRole authorizedRoles={authorizedRoles}>
+      <Button variant="text" size="small">
+        <Link
+          to={`/${path}`}
+          style={{ textDecoration: "none", color: "white" }}
+        >
+          {title}
+        </Link>
+      </Button>
+    </RequireRole>
+  );
+}
 
 function Dashboard({ children }: { children: ReactElement }): ReactElement {
   const { signOut } = useContext(AuthContext);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null
+  );
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
   const { messagingToken: savedMessagingToken, setMessagingToken } =
@@ -94,164 +122,133 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
     setAnchorElNav(null);
   };
 
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const navigationPaths: {
+    path: string;
+    name: string;
+    authorizedRoles?: UserRole[];
+  }[] = [
+    { path: "products", name: "Products" },
+    { path: "fabrics", name: "Fabrics" },
+    { path: "styles", name: "Styles" },
+    { path: "purchase-orders", name: "Purchase orders" },
+    { path: "users", name: "Users", authorizedRoles: ["Admin"] },
+    { path: "factories", name: "Factories", authorizedRoles: ["Admin"] },
+  ];
+
   return (
     <RequireAuth>
-      <Fragment>
+      <>
         <AppBar position="static">
           <Toolbar>
             <Grid
               container
-              direction={"row"}
               alignItems={"center"}
               justifyContent={"space-between"}
             >
-              <Grid
-                container
-                item
-                xs={8}
-                md={10}
-                alignItems={"center"}
-                justifyContent={"left"}
-              >
-                <Grid item xs="auto" sx={{ display: { md: "none" } }}>
-                  <IconButton
-                    size="large"
-                    edge="start"
-                    color="inherit"
-                    aria-label="menu"
-                    sx={{ mr: 2 }}
-                    onClick={handleOpenNavMenu}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorElNav}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "left",
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                    open={Boolean(anchorElNav)}
-                    onClose={handleCloseNavMenu}
-                  >
-                    <MenuItemLink
-                      onClick={handleCloseNavMenu}
-                      name="Products"
-                      to="/products"
-                    />
-                    <MenuItemLink
-                      onClick={handleCloseNavMenu}
-                      name="Fabrics"
-                      to="/fabrics"
-                    />
-                    <MenuItemLink
-                      onClick={handleCloseNavMenu}
-                      name="Styles"
-                      to="/styles"
-                    />
-                    <RequireRole authorizedRoles={["Admin"]}>
+              <Grid item xs="auto" sx={{ display: { md: "none" } }}>
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  sx={{ mr: 2 }}
+                  onClick={handleOpenNavMenu}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                >
+                  {navigationPaths.map(({ path, name, authorizedRoles }) => (
+                    <RequireRole
+                      authorizedRoles={authorizedRoles ?? []}
+                      key={path}
+                    >
                       <MenuItemLink
                         onClick={handleCloseNavMenu}
-                        name="Users"
-                        to="/users"
+                        name={name}
+                        to={`/${path}`}
                       />
                     </RequireRole>
-                    <RequireRole authorizedRoles={["Admin"]}>
-                      <MenuItemLink
-                        onClick={handleCloseNavMenu}
-                        name="Factories"
-                        to="/factories"
-                      />
-                    </RequireRole>
-                    <MenuItemLink
-                      onClick={handleCloseNavMenu}
-                      name="Purchase Orders"
-                      to="/purchase-orders"
-                    />
-                  </Menu>
-                </Grid>
-                <Grid item container alignItems={"center"} gap={3} xs={10}>
-                  <Grid item xs={"auto"}>
-                    <Button variant="text" size="small">
-                      <Typography variant="h6" sx={{ color: "white" }}>
-                        <Link
-                          to="/"
-                          style={{ textDecoration: "none", color: "white" }}
-                        >
-                          Production Management App
-                        </Link>
-                      </Typography>
-                    </Button>
-                  </Grid>
-                  <Grid item sx={{ display: { xs: "none", md: "inline" } }}>
-                    {["products", "fabrics", "styles", "purchase-orders"].map(
-                      item => (
-                        <Button variant="text" size="small" key={item}>
-                          <Link
-                            to={`/${item}`}
-                            style={{ textDecoration: "none", color: "white" }}
-                          >
-                            {item}
-                          </Link>
-                        </Button>
-                      )
-                    )}
-                    <RequireRole authorizedRoles={["Admin"]}>
-                      <Button variant="text" size="small">
-                        <Link
-                          to={`/users`}
-                          style={{ textDecoration: "none", color: "white" }}
-                        >
-                          Users
-                        </Link>
-                      </Button>
-                    </RequireRole>
-                    <RequireRole authorizedRoles={["Admin"]}>
-                      <Button variant="text" size="small">
-                        <Link
-                          to={`/factories`}
-                          style={{ textDecoration: "none", color: "white" }}
-                        >
-                          Factories
-                        </Link>
-                      </Button>
-                    </RequireRole>
-                  </Grid>
-                </Grid>
+                  ))}
+                </Menu>
               </Grid>
-              <Grid
-                container
-                item
-                xs={4}
-                md={2}
-                alignItems={"center"}
-                justifyContent={"end"}
-              >
-                <Grid item>
-                  <Typography
-                    component={"span"}
-                    variant={"button"}
-                    sx={{ whiteSpace: "nowrap", overflow: "hidden" }}
+              <Grid item xs={"auto"}>
+                <Typography variant="button" sx={{ color: "white" }}>
+                  <Link
+                    to="/"
+                    style={{ textDecoration: "none", color: "white" }}
                   >
-                    {`Hi ${firstName}, `}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Button color="inherit" onClick={signOut}>
-                    Logout
-                  </Button>
-                </Grid>
+                    Production Management
+                  </Link>
+                </Typography>
               </Grid>
+              <Grid item sx={{ display: { xs: "none", md: "inline" } }}>
+                {navigationPaths.map(({ path, name, authorizedRoles }) => (
+                  <ToolbarNavigationButton
+                    title={name}
+                    path={path}
+                    key={path}
+                    authorizedRoles={authorizedRoles as UserRole[]}
+                  />
+                ))}
+              </Grid>
+              <Box sx={{ flexGrow: 0 }}>
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  {/*TODO: add avatars */}
+                  <Avatar alt={firstName} src="/static/images/" />
+                </IconButton>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem
+                    onClick={() => {
+                      signOut();
+                      handleCloseUserMenu();
+                    }}
+                  >
+                    <Typography textAlign="center">{"Logout"}</Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
             </Grid>
           </Toolbar>
         </AppBar>
         {children}
-      </Fragment>
+      </>
     </RequireAuth>
   );
 }
@@ -269,7 +266,7 @@ function MenuItemLink({
     <MenuItem key={name.toLowerCase()} onClick={onClick}>
       <Typography textAlign="center">
         <Link to={to} style={{ textDecoration: "none", color: "black" }}>
-          {name}
+          {`${name[0].toUpperCase()}${name.slice(1)}`}
         </Link>
       </Typography>
     </MenuItem>
@@ -351,12 +348,12 @@ function ApolloApp() {
 export default function App(): ReactElement {
   const theme = createTheme();
   return (
-    <Fragment>
+    <>
       <ThemeProvider theme={theme}>
         <AuthProvider>
           <ApolloApp />
         </AuthProvider>
       </ThemeProvider>
-    </Fragment>
+    </>
   );
 }

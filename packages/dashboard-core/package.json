@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "dashboard-core",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Common things across the project",
   "license": "ISC",
   "directories": {

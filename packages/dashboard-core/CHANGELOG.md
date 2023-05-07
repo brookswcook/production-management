@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.1](https://github.com/brookswcook/production-management/compare/dashboard-core@1.5.0...dashboard-core@1.5.1) (2023-05-07)
+
+
+### Bug Fixes
+
+* update package-lock files ([0223811](https://github.com/brookswcook/production-management/commit/022381177ff1344d93a01a01770ccffc8c3756a1))
+
+
+
+
+
 # [1.5.0](https://github.com/brookswcook/production-management/compare/dashboard-core@1.4.0...dashboard-core@1.5.0) (2023-03-05)
 
 

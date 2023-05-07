@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.9.0...dashboard-front-end@1.10.0) (2023-05-07)
+
+
+### Bug Fixes
+
+* add .cert folder to gitignore ([c956e59](https://github.com/brookswcook/production-management/commit/c956e5948485ca6d25041ece0cb5206a4abaab76))
+* add default service-worker ([667b433](https://github.com/brookswcook/production-management/commit/667b43385b329578c7b2f61e43e24706c24e1b43))
+* add icons to page head ([c463795](https://github.com/brookswcook/production-management/commit/c463795727d4762d54837e62f8f2ebb0f1c2cf77))
+* add vapid key to config ([152776c](https://github.com/brookswcook/production-management/commit/152776c971eff5164bcfd0487ed6c090a2dcfa83))
+* add web app title ([fbb2f43](https://github.com/brookswcook/production-management/commit/fbb2f43c617f1ff953816ce7639e7686b5d109bc))
+* build ([8550372](https://github.com/brookswcook/production-management/commit/8550372811c337f5f9297bf53e5f463eafeec422))
+* consistency in app name ([68762cd](https://github.com/brookswcook/production-management/commit/68762cdc339a1d13e212655a53d6ab572787b3b9))
+* firebase project id ([bfe3a79](https://github.com/brookswcook/production-management/commit/bfe3a79a4e40fadc74d5dd791a41a9d60993b611))
+* message event listener ([ecba565](https://github.com/brookswcook/production-management/commit/ecba565088cc71bca2bbb79e37117ed32c3221c2))
+* refactor firebase wrapper ([047f18c](https://github.com/brookswcook/production-management/commit/047f18c47cf2060554107eea36ff3aaba4b70227))
+* remove console.log ([2342c76](https://github.com/brookswcook/production-management/commit/2342c76cddf5fa5239d7caa0da3784097cd0d536))
+* update icons ([a043821](https://github.com/brookswcook/production-management/commit/a043821c83a7b6f613988db5d17de56b146e7455))
+* update package-lock files ([0223811](https://github.com/brookswcook/production-management/commit/022381177ff1344d93a01a01770ccffc8c3756a1))
+* use existing service worker for firebase ([43b01fa](https://github.com/brookswcook/production-management/commit/43b01fa4701f805094df99abe5dace7b887ef5f6))
+* use short fragment notation ([7b675b2](https://github.com/brookswcook/production-management/commit/7b675b296d0e407df75f8f1f979a00d2c1db7c99))
+
+
+### Features
+
+* keep track of user agent in notification subscription ([bbf4ee1](https://github.com/brookswcook/production-management/commit/bbf4ee1f8178616b692a77f5da9c48a009c1750f))
+* new favicon ([e78f30d](https://github.com/brookswcook/production-management/commit/e78f30dd3dffaf32512cd811d8dfce90011c8261))
+* save messaging token on BE side ([2c3cbbf](https://github.com/brookswcook/production-management/commit/2c3cbbf9f35ea312ddc989c2862aa8629ac5e08d))
+* setting up firebase messaging ([a132d36](https://github.com/brookswcook/production-management/commit/a132d36c76064ff08e876c292a1f2728d82b9d3c))
+* show user menu ([2e67994](https://github.com/brookswcook/production-management/commit/2e67994546a8c16c9de51c58c1b43ab84e1e6c60))
+* support dynamic title and body of notifications in sw ([b527c33](https://github.com/brookswcook/production-management/commit/b527c3398b56a4c934f6ac5ffadf53ce2f647975))
+* toolbar navigation button component ([29a9480](https://github.com/brookswcook/production-management/commit/29a9480e03d1e90b93c5a36b3038dcc369ccafb2))
+* use fingerprint for notification subscription ([35e3267](https://github.com/brookswcook/production-management/commit/35e3267b184a1f3b139793ef14e08cbe24d38604))
+
+
+
+
+
 # [1.9.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.8.0...dashboard-front-end@1.9.0) (2023-04-30)
 
 

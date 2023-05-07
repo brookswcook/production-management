@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.8.0...dashboard-api@1.9.0) (2023-05-07)
+
+
+### Bug Fixes
+
+* add app uri to config ([70bcc01](https://github.com/brookswcook/production-management/commit/70bcc013ffc6b2ac0adc7dacf71cebeb3cafa05f))
+* enable typedi in resolvers properly ([f787b50](https://github.com/brookswcook/production-management/commit/f787b50350a5e7ac035f37b41e72cf00e51611ca))
+* introduce interface for entities supporting multi tenancy ([b640edb](https://github.com/brookswcook/production-management/commit/b640edb7d98e2214f1fec6f6829bb4d485ec6ebc))
+* proper handle of techpacks null array ([3c51db0](https://github.com/brookswcook/production-management/commit/3c51db0df07fada88d9ff17fb81f851b541f0092))
+* reduce possible number of messaging tokens ([4535cb6](https://github.com/brookswcook/production-management/commit/4535cb67b476d5463e29e8865683d9da20ebe7f2))
+
+
+### Features
+
+* action logs support push notifications ([2c24f07](https://github.com/brookswcook/production-management/commit/2c24f07f3f1f146fef323d24b6d3d84fdc4b037f))
+* add basic sendgrid integration to send emails ([348515f](https://github.com/brookswcook/production-management/commit/348515f6dafb0914a6d7505edf10fb540d0e67dd))
+* add userAgent to notification subscription model ([b5a3dee](https://github.com/brookswcook/production-management/commit/b5a3deea25667bcd9f4cd5a1c93eb72079a65efe))
+* be able to get notification tokens by user role ([596989e](https://github.com/brookswcook/production-management/commit/596989e925cb7e1f865a527f08032cb3f886b87c))
+* get user ids service method ([1cf8842](https://github.com/brookswcook/production-management/commit/1cf88426241a1d29453630edb42bd657def381d9))
+* notificationSubscription module ([17e2afc](https://github.com/brookswcook/production-management/commit/17e2afce33c19f8c5066041985636e87c559a265))
+* sendgrid config setup ([cec0e7b](https://github.com/brookswcook/production-management/commit/cec0e7bf06377e09bb855900e19b9ba8940e135a))
+* sendMessageToDevice firebase function ([3cfa503](https://github.com/brookswcook/production-management/commit/3cfa5034b5d9ae9785adbff9cef8405d6c701219))
+* show related entity slug in notifications ([4c7a788](https://github.com/brookswcook/production-management/commit/4c7a78821caf377dff5eb2867d037ec8ae10f924))
+* support slug by several models ([b3c81a9](https://github.com/brookswcook/production-management/commit/b3c81a970e6ff53de0a0ac19591a46bea6fd294a))
+* use fingerprint intead of userAgent for notificationSubscription ([70ce26f](https://github.com/brookswcook/production-management/commit/70ce26f32f2e0484db58178f8326798b9921234a))
+* use logs with notifications where possible ([f7ed91a](https://github.com/brookswcook/production-management/commit/f7ed91ae3e1db27c520b1cab9f04b988a683049b))
+* use typedi to inject services ([d230f0a](https://github.com/brookswcook/production-management/commit/d230f0a6fb90f97f849bc04269bdd30b53a165ef))
+
+
+
+
+
 # [1.8.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.7.0...dashboard-api@1.8.0) (2023-04-30)
 
 

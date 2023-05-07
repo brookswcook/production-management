@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { FormEvent, Fragment, ReactElement, useState } from "react";
+import { FormEvent, ReactElement, useState } from "react";
 import { PopperButton } from "../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
 import { ColorType } from "dashboard-core";

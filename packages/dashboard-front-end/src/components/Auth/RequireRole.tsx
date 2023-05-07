@@ -1,5 +1,5 @@
 import { authorizeByRole, UserRole } from "dashboard-core";
-import { Fragment, ReactElement, useContext } from "react";
+import { ReactElement, useContext } from "react";
 import { AuthContext } from "./AuthProvider";
 
 export default function RequireRole({
@@ -12,8 +12,8 @@ export default function RequireRole({
   const { decodedToken } = useContext(AuthContext);
   return decodedToken?.role != null &&
     authorizeByRole(decodedToken.role, authorizedRoles) ? (
-    <Fragment>{children}</Fragment>
+    <>{children}</>
   ) : (
-    <Fragment />
+    <></>
   );
 }

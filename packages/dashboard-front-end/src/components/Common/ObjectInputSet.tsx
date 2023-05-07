@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { Fragment, ReactElement } from "react";
+import { ReactElement } from "react";
 
 export function ObjectInputSet<T>({
   objectToRender,
@@ -9,7 +9,7 @@ export function ObjectInputSet<T>({
   fields: (keyof T)[];
 }): ReactElement {
   return (
-    <Fragment>
+    <>
       {fields
         .map(field => field.toString())
         .map(field => {
@@ -32,6 +32,6 @@ export function ObjectInputSet<T>({
             />
           );
         })}
-    </Fragment>
+    </>
   );
 }

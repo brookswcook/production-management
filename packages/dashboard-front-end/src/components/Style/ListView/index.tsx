@@ -8,7 +8,7 @@ import {
   GridToolbarExport,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { Fragment, ReactElement } from "react";
+import { ReactElement } from "react";
 import { Link } from "react-router-dom";
 import {
   StyleFieldsFragment,
@@ -78,16 +78,14 @@ export function StyleList(): ReactElement {
 
   function CustomToolbar() {
     return (
-      <Fragment>
-        <GridToolbarContainer>
-          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <CreateStylePopperButton />
-          </RequireRole>
-          <GridToolbarColumnsButton />
-          <GridToolbarFilterButton />
-          <GridToolbarExport />
-        </GridToolbarContainer>
-      </Fragment>
+      <GridToolbarContainer>
+        <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+          <CreateStylePopperButton />
+        </RequireRole>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarExport />
+      </GridToolbarContainer>
     );
   }
 

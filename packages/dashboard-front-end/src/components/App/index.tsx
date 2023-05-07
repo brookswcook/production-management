@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
-  Fragment,
   MouseEventHandler,
   ReactElement,
   useContext,
@@ -129,7 +128,7 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
 
   return (
     <RequireAuth>
-      <Fragment>
+      <>
         <AppBar position="static">
           <Toolbar>
             <Grid container alignItems={"center"}>
@@ -208,7 +207,7 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
           </Toolbar>
         </AppBar>
         {children}
-      </Fragment>
+      </>
     </RequireAuth>
   );
 }
@@ -308,12 +307,12 @@ function ApolloApp() {
 export default function App(): ReactElement {
   const theme = createTheme();
   return (
-    <Fragment>
+    <>
       <ThemeProvider theme={theme}>
         <AuthProvider>
           <ApolloApp />
         </AuthProvider>
       </ThemeProvider>
-    </Fragment>
+    </>
   );
 }

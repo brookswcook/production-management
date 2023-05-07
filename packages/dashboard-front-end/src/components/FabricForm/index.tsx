@@ -140,12 +140,12 @@ export function CreateFabricForm({
           multiple={false}
         />
       )}
-      <Fragment>
+      <>
         <Button variant="contained" type="submit">
           Add Fabric
         </Button>
         {footerEl}
-      </Fragment>
+      </>
     </Stack>
   );
 }

@@ -12,7 +12,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { purchaseOrderStatusSet } from "dashboard-core";
-import { Fragment, ReactElement } from "react";
+import { ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import {
   PurchaseOrderDetailFieldsFragment,
@@ -163,11 +163,7 @@ export function PurchaseOrderDetail(): ReactElement {
       </Box>
     );
   if (data == null || error)
-    return (
-      <Fragment>
-        There's no data to show or unexpected error has happened!
-      </Fragment>
-    );
+    return <>There's no data to show or unexpected error has happened!</>;
 
   return (
     <DetailView

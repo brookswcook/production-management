@@ -7,7 +7,7 @@ import {
   GridRenderCellParams,
   GridToolbarContainer,
 } from "@mui/x-data-grid";
-import { Fragment, ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   OrderItemsGroupedByAttributesFieldsFragment,
@@ -152,7 +152,7 @@ export function OrderItemsGroupedByAttributeList({
 
   function CustomToolbar() {
     return (
-      <Fragment>
+      <>
         <GridToolbarContainer>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
             <Button
@@ -166,7 +166,7 @@ export function OrderItemsGroupedByAttributeList({
             </Button>
           </RequireRole>
         </GridToolbarContainer>
-      </Fragment>
+      </>
     );
   }
 

@@ -79,7 +79,7 @@ export function ProductDetail(): ReactElement {
             </Box>
           </Grid>
           <Grid item container xs={12} sx={{ pl: 1.5 }} rowSpacing={1}>
-            <Grid item container alignItems="baseline" xs={12}>
+            <Grid item container alignItems="baseline" xs={12} gap={1}>
               <Grid item xs={12} md={"auto"}>
                 <ObjectProperty
                   title="Style"
@@ -89,7 +89,7 @@ export function ProductDetail(): ReactElement {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} md={"auto"} sx={{ pl: 2 }}>
+              <Grid item xs={12} md={"auto"}>
                 <Button
                   href={`/styles/${style.code}`}
                   size={"small"}

@@ -22,7 +22,10 @@ export function ObjectProperty({
   value: Record<string, PropertyValue>;
 }): ReactElement {
   return (
-    <Box component="fieldset">
+    <Box
+      component="fieldset"
+      sx={{ borderRadius: 3, bgcolor: "background.paper" }}
+    >
       <legend>{title}</legend>
       <Grid item container columnGap={2} alignItems={"center"}>
         <>

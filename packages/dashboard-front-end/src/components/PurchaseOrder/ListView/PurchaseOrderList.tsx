@@ -1,4 +1,4 @@
-import { Container, Grid } from "@mui/material";
+import { capitalize, Container, Grid } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -56,8 +56,12 @@ export function PurchaseOrderList(): ReactElement {
       minWidth: 70,
       flex: 2,
       type: "string",
-      valueGetter: ({ row }: { row: PurchaseOrderListFieldsFragment }) => {
-        return `${row.status[0].toUpperCase()}${row.status.slice(1)}`;
+      valueGetter: ({
+        row: { status },
+      }: {
+        row: PurchaseOrderListFieldsFragment;
+      }) => {
+        return capitalize(status);
       },
     },
     {

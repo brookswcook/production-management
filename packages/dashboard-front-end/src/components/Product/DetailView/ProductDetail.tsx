@@ -70,8 +70,12 @@ export function ProductDetail(): ReactElement {
         >
           <Grid item xs={12} sx={{ pl: 1, pt: 1 }}>
             <Box sx={{ mb: 2 }}>
-              <Typography component="span" variant="h6" sx={{ mr: 5 }}>
-                {name.toUpperCase()}
+              <Typography
+                component="span"
+                variant="h6"
+                sx={{ mr: 5, textTransform: "uppercase" }}
+              >
+                {name}
               </Typography>
               <Typography component="span" variant="body2">
                 {`Production Due in ${dueIn} Days`}

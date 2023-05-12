@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { capitalize, Stack, Typography } from "@mui/material";
 import {
   GridColDef,
   DataGrid,
@@ -43,7 +43,7 @@ export function OrderItemList({
     );
     return attributeKeys.map(key => ({
       field: `${key}Attribute`,
-      headerName: `${key[0].toUpperCase()}${key.slice(1)}`,
+      headerName: capitalize(key),
       minWidth: 50,
       flex: 1,
       type: "string",

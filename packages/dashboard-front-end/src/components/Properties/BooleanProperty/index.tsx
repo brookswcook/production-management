@@ -21,9 +21,9 @@ export function BooleanProperty({
       )}
       <Grid item>
         {value ? (
-          <CheckIcon fontSize={"small"} />
+          <CheckIcon fontSize={"small"} color="success" />
         ) : (
-          <CloseIcon fontSize={"small"} />
+          <CloseIcon fontSize={"small"} color="error" />
         )}
       </Grid>
     </Grid>

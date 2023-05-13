@@ -58,18 +58,18 @@ export function FabricDetail(): ReactElement {
   }: FabricFieldsFragment = data.fabric;
 
   const colorFieldSet: {
-    "Color Type": string;
-    "Color Name": string;
-    "Color Code"?: string;
-    "Print File"?: string;
+    type: string;
+    name: string;
+    code?: string;
+    file?: string;
   } = {
-    "Color Type": colorType,
-    "Color Name": colorName,
+    type: colorType,
+    name: colorName,
   };
   if (colorType === "solid") {
-    colorFieldSet["Color Code"] = String(colorCode);
+    colorFieldSet["code"] = String(colorCode);
   } else {
-    colorFieldSet["Print File"] = String(printFileName);
+    colorFieldSet["file"] = String(printFileName);
   }
 
   async function generatePrintLink() {

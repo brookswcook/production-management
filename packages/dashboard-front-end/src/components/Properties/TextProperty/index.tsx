@@ -10,6 +10,7 @@ export function TextProperty({
   title?: string;
 }): ReactElement {
   const isEmail = /\S+@\S+\.\S+/.test(value);
+  const isFile = /\.[0-9a-z]+$/.test(value);
   return (
     <Grid item container columnGap={1} alignItems={"center"}>
       {title != null && (
@@ -18,7 +19,7 @@ export function TextProperty({
         </Grid>
       )}
       <Grid item>
-        {isEmail ? (
+        {isEmail || isFile ? (
           <FieldValue style={{ textTransform: "lowercase" }}>
             {value}
           </FieldValue>

@@ -7,7 +7,6 @@ import {
   Step,
   StepLabel,
   Stepper,
-  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -22,6 +21,7 @@ import {
 import { DetailView } from "../../Common/DetailView";
 import { DetailViewHeaderTitle } from "../../Common/DetailViewHeaderTitle";
 import { DetailViewSection } from "../../Common/DetailViewSection";
+import { FieldTitle, FieldValue } from "../../Common/Typography";
 import EntityTimeline from "../../EntityTimeline";
 import { OrderItemsGroupedByAttributeList } from "../../OrderItem/ListView";
 import { ObjectProperty } from "../../Properties/ObjectProperty";
@@ -92,12 +92,10 @@ function PurchaseOrderHeaderSection({
             justifyContent={"flex-start"}
           >
             <Grid item xs={12} sm={10} md={"auto"}>
-              <Typography component={"span"} variant="subtitle2">
-                Status
-              </Typography>
+              <FieldTitle title="status" />
             </Grid>
             <Grid item xs={12} sm={10} md={"auto"}>
-              <Typography component={"span"} variant="subtitle2">
+              <FieldValue>
                 <Stepper
                   orientation={greaterThanXS ? "horizontal" : "vertical"}
                   activeStep={
@@ -114,7 +112,7 @@ function PurchaseOrderHeaderSection({
                       </Step>
                     ))}
                 </Stepper>
-              </Typography>
+              </FieldValue>
             </Grid>
             <Grid item xs={12} md={"auto"}>
               {nextStatus != null && (

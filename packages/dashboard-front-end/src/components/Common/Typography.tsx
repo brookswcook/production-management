@@ -2,8 +2,9 @@ import { Typography, TypographyProps } from "@mui/material";
 
 export function FieldTitle({
   title,
+  children,
   ...typographyProps
-}: { title: string } & TypographyProps) {
+}: { title?: string } & TypographyProps) {
   return (
     <Typography
       variant="subtitle2"
@@ -11,21 +12,19 @@ export function FieldTitle({
       {...typographyProps}
     >
       {title}
+      {children}
     </Typography>
   );
 }
 
-export function FieldValue({
-  value,
-  ...typographyProps
-}: { value: string } & TypographyProps) {
+export function FieldValue({ children, ...typographyProps }: TypographyProps) {
   return (
     <Typography
       variant="subtitle2"
       style={{ textTransform: "capitalize" }}
       {...typographyProps}
     >
-      {value}
+      {children}
     </Typography>
   );
 }

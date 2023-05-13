@@ -1,7 +1,8 @@
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import { ReactElement } from "react";
+import { FieldTitle } from "../../Common/Typography";
 
 export function BooleanProperty({
   value,
@@ -13,10 +14,8 @@ export function BooleanProperty({
   return (
     <Grid container columnGap={2}>
       {title != null && (
-        <Grid item>
-          <Typography component="span" variant="subtitle2">
-            {title}
-          </Typography>
+        <Grid item xs={12}>
+          <FieldTitle title={title} />
         </Grid>
       )}
       <Grid item>

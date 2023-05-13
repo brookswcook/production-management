@@ -123,7 +123,7 @@ function PurchaseOrderHeaderSection({
             </Grid>
           </Grid>
           <ObjectProperty
-            title="To       "
+            title="To"
             value={{
               name: factoryName,
               address: factoryAddress,

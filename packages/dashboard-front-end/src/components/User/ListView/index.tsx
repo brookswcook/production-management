@@ -106,7 +106,7 @@ export function UserList(): ReactElement {
         }}
         initialState={{
           pagination: {
-            pageSize: 20,
+            pageSize: 10,
           },
         }}
         rowsPerPageOptions={[5, 10, 20, 50, 100]}

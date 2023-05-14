@@ -22,11 +22,13 @@ export function ObjectProperty({
   value,
   detailLink,
   onEdit,
+  children,
 }: {
   title: string;
   value: Record<string, PropertyValue>;
   detailLink?: string;
   onEdit?: () => void;
+  children?: ReactElement;
 }): ReactElement {
   return (
     <Grid
@@ -77,6 +79,7 @@ export function ObjectProperty({
             </Tooltip>
           </IconButton>
         )}
+        <>{children}</>
       </Stack>
 
       {Object.entries(value)

@@ -1,5 +1,5 @@
-import { Box, Divider, Grid, LinearProgress } from "@mui/material";
-import { Fragment, ReactElement, useState } from "react";
+import { Box, Grid, LinearProgress } from "@mui/material";
+import { ReactElement, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   ProductFieldsFragment,
@@ -14,10 +14,7 @@ import EntityTimeline from "../../EntityTimeline";
 import { UpdateProductionCostDialog } from "../Dialog/UpdateProductionCostDialog";
 import { toCurrency } from "../../Common";
 import { DetailView } from "../../Common/DetailView";
-import {
-  DetailViewHeaderTitle,
-  DetailViewHeaderDataValue,
-} from "../../Common/Typography";
+import { DetailViewHeader } from "../../Common/DetailViewHeader";
 
 export function ProductDetailHeader({
   product: { name, deliveryDate, stage, factory },
@@ -30,29 +27,7 @@ export function ProductDetailHeader({
     stage,
   ];
 
-  return (
-    <Grid item container rowGap={1} xs={12}>
-      <Grid item xs={12}>
-        <DetailViewHeaderTitle>{name}</DetailViewHeaderTitle>
-      </Grid>
-      <Grid item container columnGap={1} xs={12} sm={"auto"}>
-        {headerData.map((item, index) => (
-          <Fragment key={item}>
-            <Grid item xs={12} sm={"auto"}>
-              <DetailViewHeaderDataValue>{item}</DetailViewHeaderDataValue>
-            </Grid>
-            {index < headerData.length - 1 && (
-              <Divider
-                orientation="vertical"
-                flexItem={true}
-                sx={{ borderRightWidth: 2 }}
-              />
-            )}
-          </Fragment>
-        ))}
-      </Grid>
-    </Grid>
-  );
+  return <DetailViewHeader title={name} headerData={headerData} />;
 }
 
 export function ProductDetail(): ReactElement {

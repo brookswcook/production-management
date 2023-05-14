@@ -154,14 +154,14 @@ export function FabricDetail(): ReactElement {
           )}
         </Grid>
       </Box>
-      <DetailViewSection headerTitle="Fabric samples:">
+      <DetailViewSection title="Fabric samples:">
         <SampleGrid
           parentCode={code}
           sampleType="fabric"
           samples={samples as Sample[]}
         />
       </DetailViewSection>
-      <DetailViewSection headerTitle="Timeline">
+      <DetailViewSection title="Timeline">
         <EntityTimeline
           entityIds={[id, ...samples.map(({ id }) => id)]}
           entityTypes={["Fabric", "FabricSample"]}

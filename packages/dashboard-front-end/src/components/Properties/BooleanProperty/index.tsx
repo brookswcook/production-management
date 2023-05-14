@@ -12,13 +12,13 @@ export function BooleanProperty({
   title?: string;
 }): ReactElement {
   return (
-    <Grid container columnGap={2}>
+    <Grid item container>
       {title != null && (
         <Grid item xs={12}>
           <FieldTitle title={title} />
         </Grid>
       )}
-      <Grid item>
+      <Grid item xs={12}>
         {value ? (
           <CheckIcon fontSize={"small"} color="success" />
         ) : (

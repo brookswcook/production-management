@@ -12,13 +12,13 @@ export function TextProperty({
   const isEmail = /\S+@\S+\.\S+/.test(value);
   const isFile = /\.[0-9a-z]+$/.test(value);
   return (
-    <Grid item container columnGap={1} alignItems={"center"}>
+    <Grid item container alignItems={"center"}>
       {title != null && (
         <Grid item xs={12}>
           <FieldTitle title={title} />
         </Grid>
       )}
-      <Grid item>
+      <Grid item xs={12}>
         {isEmail || isFile ? (
           <FieldValue style={{ textTransform: "lowercase" }}>
             {value}

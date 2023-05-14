@@ -16,7 +16,7 @@ import { toCurrency } from "../../Common";
 import { DetailView } from "../../Common/DetailView";
 import {
   DetailViewHeaderTitle,
-  DetailViewHeaderData,
+  DetailViewHeaderDataValue,
 } from "../../Common/Typography";
 
 export function ProductDetailHeader({
@@ -39,7 +39,7 @@ export function ProductDetailHeader({
         {headerData.map((item, index) => (
           <Fragment key={item}>
             <Grid item xs={12} sm={"auto"}>
-              <DetailViewHeaderData>{item}</DetailViewHeaderData>
+              <DetailViewHeaderDataValue>{item}</DetailViewHeaderDataValue>
             </Grid>
             {index < headerData.length - 1 && (
               <Divider

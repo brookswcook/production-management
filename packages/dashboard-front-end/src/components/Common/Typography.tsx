@@ -46,7 +46,7 @@ export function DetailViewHeaderTitle({
   );
 }
 
-export function DetailViewHeaderData({
+export function DetailViewHeaderDataValue({
   title,
   children,
   ...typographyProps

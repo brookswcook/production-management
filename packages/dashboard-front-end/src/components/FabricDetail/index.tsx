@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  LinearProgress,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, IconButton, LinearProgress, Tooltip } from "@mui/material";
 import { ReactElement, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -16,12 +8,26 @@ import {
   useFabricQuery,
   usePrintLinkLazyQuery,
 } from "../../generated/graphql";
+import { DetailView } from "../Common/DetailView";
+import { DetailViewHeader } from "../Common/DetailViewHeader";
 import { DetailViewSection } from "../Common/DetailViewSection";
 import EntityTimeline from "../EntityTimeline";
-import { BooleanProperty, TextProperty } from "../Properties";
 import { LinkProperty } from "../Properties/LinkProperty";
 import { ObjectProperty } from "../Properties/ObjectProperty";
 import SampleGrid from "../SampleGrid";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+
+export function FabricDetailHeader({
+  fabric: {
+    stage,
+    title,
+    factory: { code: factoryCode },
+  },
+}: {
+  fabric: FabricFieldsFragment;
+}) {
+  return <DetailViewHeader title={title} headerData={[factoryCode, stage]} />;
+}
 
 export function FabricDetail(): ReactElement {
   const { code = "" } = useParams();
@@ -29,10 +35,9 @@ export function FabricDetail(): ReactElement {
     variables: { code },
   });
   const [getPrintLink] = usePrintLinkLazyQuery();
-  const [printLink, setPrintLink] = useState<string>("#");
+  const [printLink, setPrintLink] = useState<string | null>(null);
 
   useEffect(() => {
-    if (loading) return;
     void generatePrintLink();
   }, [loading]);
 
@@ -42,13 +47,11 @@ export function FabricDetail(): ReactElement {
         <LinearProgress />
       </Box>
     );
-  if (data == null || error) return <>Wrong path!</>;
+  if (data == null || error)
+    return <>There's no data to show or unexpected error has happened!</>;
 
   const {
     id,
-    title,
-    stage,
-    factory,
     colorName,
     colorType,
     colorCode,
@@ -56,6 +59,19 @@ export function FabricDetail(): ReactElement {
     productCodes,
     samples,
   }: FabricFieldsFragment = data.fabric;
+
+  async function generatePrintLink() {
+    if (printFileName != null) {
+      try {
+        const { data } = await getPrintLink({
+          variables: { fileName: printFileName },
+        });
+        setPrintLink(data?.printLink ?? "#");
+      } catch (error) {
+        toast.error((error as Error).message);
+      }
+    }
+  }
 
   const colorFieldSet: {
     type: string;
@@ -72,75 +88,39 @@ export function FabricDetail(): ReactElement {
     colorFieldSet["file"] = String(printFileName);
   }
 
-  async function generatePrintLink() {
-    if (printFileName != null) {
-      try {
-        const { data } = await getPrintLink({
-          variables: { fileName: printFileName },
-        });
-        setPrintLink(data?.printLink ?? "#");
-      } catch (error) {
-        toast.error((error as Error).message);
-      }
-    }
-  }
-
   return (
-    <Container maxWidth="xl">
-      <Box sx={{ p: 1 }}>
-        <Grid
-          justifyContent={"left"}
-          container
-          sx={{
-            border: "1px solid rgba(224, 224, 224, 1)",
-            borderRadius: "5px",
-            p: 1,
-          }}
-        >
-          <Grid item xs={12} sx={{ pl: 1, pt: 1 }}>
-            <Box sx={{ mb: 2 }}>
-              <Typography
-                component="span"
-                variant="h6"
-                style={{ textTransform: "uppercase" }}
-              >
-                {title}
-              </Typography>
-            </Box>
+    <DetailView header={<FabricDetailHeader fabric={data.fabric} />}>
+      <DetailViewSection>
+        <Grid item container gap={3}>
+          <Grid item xs={12} md={"auto"}>
+            <ObjectProperty title="Color" value={colorFieldSet}>
+              {colorType === "print" && printLink != null ? (
+                <IconButton
+                  href={printLink}
+                  size="small"
+                  edge="start"
+                  color="primary"
+                  aria-label="edit"
+                >
+                  <Tooltip title="Print file download">
+                    <FileDownloadOutlinedIcon />
+                  </Tooltip>
+                </IconButton>
+              ) : (
+                <></>
+              )}
+            </ObjectProperty>
           </Grid>
-          <Grid item xs={12} lg={8} sx={{ pl: 1 }}>
-            <Stack spacing={2} sx={{ pl: 0.5 }}>
-              <BooleanProperty
-                title="Fabric approved"
-                value={stage === "Approved"}
-              />
-              <TextProperty title="Stage" value={stage} />
-              <TextProperty title="Factory" value={factory.code} />
-              <Grid container direction={"row"} alignItems={"center"}>
-                <Grid item xs={12} sm={8} xl={6}>
-                  <ObjectProperty title="Color" value={colorFieldSet} />
-                </Grid>
-                {colorType === "print" && (
-                  <Grid item xs={12} sm={4} xl={2}>
-                    <Button
-                      href={printLink}
-                      size={"small"}
-                      variant={"contained"}
-                    >
-                      Download print
-                    </Button>
-                  </Grid>
-                )}
-              </Grid>
-              <LinkProperty
-                title="Products"
-                baseUrl="products"
-                resources={productCodes.map(code => ({ id: code, text: code }))}
-              />
-            </Stack>
+          <Grid item xs={12}>
+            <LinkProperty
+              title="Products"
+              baseUrl="products"
+              resources={productCodes.map(code => ({ id: code, text: code }))}
+            />
           </Grid>
-          {printLink != null && (
-            <Grid item xs={12} lg={4}>
+
+          {printLink != null ? (
+            <Grid item xs={12} md={4}>
               <Box
                 component="img"
                 sx={{
@@ -151,23 +131,25 @@ export function FabricDetail(): ReactElement {
                 src={printLink}
               />
             </Grid>
+          ) : (
+            <></>
           )}
         </Grid>
-      </Box>
-      <DetailViewSection title="Fabric samples:">
+      </DetailViewSection>
+      <DetailViewSection title="fabric samples">
         <SampleGrid
           parentCode={code}
           sampleType="fabric"
           samples={samples as Sample[]}
         />
       </DetailViewSection>
-      <DetailViewSection title="Timeline">
+      <DetailViewSection title="timeline">
         <EntityTimeline
           entityIds={[id, ...samples.map(({ id }) => id)]}
           entityTypes={["Fabric", "FabricSample"]}
           noteType="fabricNote"
         />
       </DetailViewSection>
-    </Container>
+    </DetailView>
   );
 }

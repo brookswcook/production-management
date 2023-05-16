@@ -74,12 +74,10 @@ export function FabricDetail(): ReactElement {
   }
 
   const colorFieldSet: {
-    type: string;
     name: string;
     code?: string;
     file?: string;
   } = {
-    type: colorType,
     name: colorName,
   };
   if (colorType === "solid") {
@@ -93,7 +91,10 @@ export function FabricDetail(): ReactElement {
       <DetailViewSection>
         <Grid item container gap={3}>
           <Grid item xs={12} md={"auto"}>
-            <ObjectProperty title="Color" value={colorFieldSet}>
+            <ObjectProperty
+              title={colorType === "print" ? "print" : "color"}
+              value={colorFieldSet}
+            >
               {colorType === "print" && printLink != null ? (
                 <IconButton
                   href={printLink}
@@ -122,10 +123,12 @@ export function FabricDetail(): ReactElement {
           )}
 
           {printLink != null ? (
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12}>
               <Box
                 component="img"
                 sx={{
+                  border: "1px solid rgba(224, 224, 224, 1)",
+                  borderRadius: 2,
                   maxWidth: { xs: 300, lg: 370 },
                   backgroundColor: "#D9D9D9",
                 }}

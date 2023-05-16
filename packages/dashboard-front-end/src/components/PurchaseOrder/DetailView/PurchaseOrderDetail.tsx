@@ -165,17 +165,15 @@ export function PurchaseOrderDetail(): ReactElement {
 
   return (
     <DetailView
-      headerSections={
-        <PurchaseOrderHeaderSection purchaseOrder={data.purchaseOrder} />
-      }
+      header={<PurchaseOrderHeaderSection purchaseOrder={data.purchaseOrder} />}
     >
-      <DetailViewSection headerTitle="Order items:">
+      <DetailViewSection title="Order items">
         <OrderItemsGroupedByAttributeList
           orderUid={Number(uid)}
           addActionDisabled={data.purchaseOrder.status !== "draft"}
         />
       </DetailViewSection>
-      <DetailViewSection headerTitle="Timeline">
+      <DetailViewSection title="Timeline">
         <EntityTimeline
           entityIds={[
             data.purchaseOrder.id,

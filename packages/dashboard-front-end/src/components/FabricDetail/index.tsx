@@ -38,7 +38,7 @@ export function FabricDetail(): ReactElement {
   const [printLink, setPrintLink] = useState<string | null>(null);
 
   useEffect(() => {
-    void generatePrintLink();
+    !loading && void generatePrintLink();
   }, [loading]);
 
   if (loading)
@@ -111,13 +111,15 @@ export function FabricDetail(): ReactElement {
               )}
             </ObjectProperty>
           </Grid>
-          <Grid item xs={12}>
-            <LinkProperty
-              title="Products"
-              baseUrl="products"
-              resources={productCodes.map(code => ({ id: code, text: code }))}
-            />
-          </Grid>
+          {productCodes.length > 0 && (
+            <Grid item xs={12}>
+              <LinkProperty
+                title="Products"
+                baseUrl="products"
+                resources={productCodes.map(code => ({ id: code, text: code }))}
+              />
+            </Grid>
+          )}
 
           {printLink != null ? (
             <Grid item xs={12} md={4}>

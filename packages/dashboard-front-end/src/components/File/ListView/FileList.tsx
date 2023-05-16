@@ -1,11 +1,11 @@
 import { Button, Grid } from "@mui/material";
 import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { FileType } from "dashboard-core";
-import { FileFieldsFragment } from "../../generated/graphql";
+import { FileFieldsFragment } from "../../../generated/graphql";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { ReactElement } from "react";
 
-export function FileGrid({
+export function FileList({
   files,
 }: {
   parentID: string;

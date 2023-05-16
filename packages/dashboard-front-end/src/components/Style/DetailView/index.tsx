@@ -1,23 +1,52 @@
-import { Box, Grid, LinearProgress, Stack } from "@mui/material";
-import { ReactElement } from "react";
+import { Box, Button, Grid, LinearProgress, Stack } from "@mui/material";
+import { ReactElement, useState } from "react";
 import { useParams } from "react-router-dom";
 import { StyleFieldsFragment, useStyleQuery } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
 import { DetailView } from "../../Common/DetailView";
-import { DetailViewHeaderTitle } from "../../Common/DetailViewHeaderTitle";
+import { DetailViewHeader } from "../../Common/DetailViewHeader";
 import { DetailViewSection } from "../../Common/DetailViewSection";
 import EntityTimeline from "../../EntityTimeline";
-import { FileGrid } from "../../FileGrid";
-import { BooleanProperty, TextProperty } from "../../Properties";
+import { TextProperty } from "../../Properties";
 import { LinkProperty } from "../../Properties/LinkProperty";
-import { UploadTechPackPopperButton } from "../../TechPackForm";
+import { UploadTechPackDialog } from "../../TechPackForm";
+import { FileList } from "../../File";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 
 function StyleDetailHeader({
-  style: { name: title, code },
+  style: { name: title, code, techPackUploaded },
 }: {
   style: StyleFieldsFragment;
 }): ReactElement {
-  return <DetailViewHeaderTitle title={`${title} style #${code}`} />;
+  const [updateTechPackDialogOpen, setUpdateTechPackDialogOpen] =
+    useState<boolean>(false);
+  const status = techPackUploaded
+    ? "tech pack uploaded"
+    : "awaiting tech pack upload";
+
+  return (
+    <DetailViewHeader title={`${title} style #${code}`} headerData={[status]}>
+      <>
+        <UploadTechPackDialog
+          styleCode={code}
+          open={updateTechPackDialogOpen}
+          onSave={() => setUpdateTechPackDialogOpen(false)}
+          onClose={() => setUpdateTechPackDialogOpen(false)}
+        />
+        <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+          <Button
+            color="primary"
+            variant="outlined"
+            size="large"
+            onClick={() => setUpdateTechPackDialogOpen(true)}
+            startIcon={<FileUploadOutlinedIcon />}
+          >
+            Upload tech pack
+          </Button>
+        </RequireRole>
+      </>
+    </DetailViewHeader>
+  );
 }
 
 export function StyleDetail(): ReactElement {
@@ -35,29 +64,13 @@ export function StyleDetail(): ReactElement {
   if (data == null || error)
     return <>There's no data to show or unexpected error has happened!</>;
 
-  const { id, techPacks, techPackUploaded, productCodes } = data.style;
+  const { id, techPacks, productCodes } = data.style;
 
   return (
     <DetailView header={<StyleDetailHeader style={data.style} />}>
       <DetailViewSection>
         <Grid item xs={12}>
           <Stack spacing={2}>
-            <Grid alignItems="baseline" gap={3} container>
-              <Grid item>
-                <BooleanProperty
-                  title="Tech pack uploaded"
-                  value={techPackUploaded}
-                />
-              </Grid>
-              <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-                <Grid item>
-                  <UploadTechPackPopperButton
-                    variant="contained"
-                    styleCode={code}
-                  />
-                </Grid>
-              </RequireRole>
-            </Grid>
             {productCodes.length > 0 ? (
               <LinkProperty
                 title="Products"
@@ -74,7 +87,7 @@ export function StyleDetail(): ReactElement {
         </Grid>
       </DetailViewSection>
       <DetailViewSection title="tech packs">
-        <FileGrid fileType="tech-pack" parentID={id} files={techPacks} />
+        <FileList fileType="tech-pack" parentID={id} files={techPacks} />
       </DetailViewSection>
       <DetailViewSection title="timeline">
         <EntityTimeline

@@ -1,5 +1,4 @@
-import { Container } from "@mui/material";
-import { GridColDef, GridToolbarContainer, DataGrid } from "@mui/x-data-grid";
+import { GridColDef, GridToolbarContainer } from "@mui/x-data-grid";
 import { ReactElement } from "react";
 import {
   FactoryListFieldsFragment,
@@ -7,6 +6,7 @@ import {
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
 import { renderCellExpand } from "../../Common/GridCellExpand";
+import { ListView } from "../../Common/ListView";
 import { CreateFactoryPopperButton } from "../Form";
 
 export function FactoryList(): ReactElement {
@@ -62,26 +62,16 @@ export function FactoryList(): ReactElement {
   }
 
   return (
-    <Container maxWidth="xl">
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        getRowId={item => item.code}
-        loading={loading}
-        error={error}
-        autoHeight
-        components={{
-          Toolbar: CustomToolbar,
-        }}
-        initialState={{
-          pagination: {
-            pageSize: 10,
-          },
-        }}
-        rowsPerPageOptions={[5, 10, 20, 50, 100]}
-        disableSelectionOnClick
-        sx={{ mt: 1 }}
-      />
-    </Container>
+    <ListView
+      rows={rows}
+      columns={columns}
+      getRowId={item => item.code}
+      loading={loading}
+      error={error}
+      components={{
+        Toolbar: CustomToolbar,
+      }}
+      disableSelectionOnClick
+    />
   );
 }

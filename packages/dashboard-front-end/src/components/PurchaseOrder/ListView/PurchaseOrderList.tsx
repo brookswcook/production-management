@@ -1,6 +1,5 @@
-import { capitalize, Container, Grid } from "@mui/material";
+import { capitalize } from "@mui/material";
 import {
-  DataGrid,
   GridColDef,
   GridRenderCellParams,
   GridToolbarColumnsButton,
@@ -15,6 +14,7 @@ import {
   usePurchaseOrdersQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
+import { ListView } from "../../Common/ListView";
 import { CreatePurchaseOrderPopperButton } from "../Form";
 
 export function PurchaseOrderList(): ReactElement {
@@ -112,28 +112,16 @@ export function PurchaseOrderList(): ReactElement {
   }
 
   return (
-    <Container maxWidth="xl">
-      <Grid item xs={12}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          getRowId={item => item.uid}
-          loading={loading}
-          error={error}
-          autoHeight
-          initialState={{
-            pagination: {
-              pageSize: 10,
-            },
-          }}
-          rowsPerPageOptions={[5, 10, 20, 50, 100]}
-          components={{
-            Toolbar: CustomToolbar,
-          }}
-          disableSelectionOnClick
-          sx={{ mt: 1 }}
-        />
-      </Grid>
-    </Container>
+    <ListView
+      rows={rows}
+      columns={columns}
+      getRowId={item => item.uid}
+      loading={loading}
+      error={error}
+      components={{
+        Toolbar: CustomToolbar,
+      }}
+      disableSelectionOnClick
+    />
   );
 }

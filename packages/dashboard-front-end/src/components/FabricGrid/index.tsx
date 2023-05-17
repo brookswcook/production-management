@@ -1,7 +1,5 @@
-import { Container, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 import {
-  DataGrid,
   GridColDef,
   GridRenderCellParams,
   GridToolbarColumnsButton,
@@ -14,6 +12,7 @@ import { ReactElement } from "react";
 import { CreateFabricPopperButton } from "../FabricForm";
 import RequireRole from "../Auth/RequireRole";
 import { renderCellExpand } from "../Common/GridCellExpand";
+import { ListView } from "../Common/ListView";
 
 export default function FabricGrid(): ReactElement {
   const { data, loading, error } = useFabricsQuery({});
@@ -104,28 +103,16 @@ export default function FabricGrid(): ReactElement {
   }
 
   return (
-    <Container maxWidth="xl">
-      <Grid item xs={12}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          getRowId={item => item.code}
-          loading={loading}
-          error={error}
-          autoHeight
-          components={{
-            Toolbar: CustomToolbar,
-          }}
-          initialState={{
-            pagination: {
-              pageSize: 10,
-            },
-          }}
-          rowsPerPageOptions={[5, 10, 20, 50, 100]}
-          disableSelectionOnClick
-          sx={{ mt: 1 }}
-        />
-      </Grid>
-    </Container>
+    <ListView
+      rows={rows}
+      columns={columns}
+      getRowId={item => item.code}
+      loading={loading}
+      error={error}
+      components={{
+        Toolbar: CustomToolbar,
+      }}
+      disableSelectionOnClick
+    />
   );
 }

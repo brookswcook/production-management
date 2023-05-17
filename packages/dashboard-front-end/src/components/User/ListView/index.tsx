@@ -1,11 +1,11 @@
-import { Container } from "@mui/material";
-import { DataGrid, GridColDef, GridToolbarContainer } from "@mui/x-data-grid";
+import { GridColDef, GridToolbarContainer } from "@mui/x-data-grid";
 import { ReactElement } from "react";
 import {
   UserListFieldsFragment,
   useUsersQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
+import { ListView } from "../../Common/ListView";
 import { CreateUserPopperButton } from "../Form";
 
 export function UserList(): ReactElement {
@@ -93,26 +93,17 @@ export function UserList(): ReactElement {
   }
 
   return (
-    <Container maxWidth="xl">
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        getRowId={item => item.id}
-        loading={loading}
-        error={error}
-        autoHeight
-        components={{
-          Toolbar: CustomToolbar,
-        }}
-        initialState={{
-          pagination: {
-            pageSize: 10,
-          },
-        }}
-        rowsPerPageOptions={[5, 10, 20, 50, 100]}
-        disableSelectionOnClick
-        sx={{ mt: 1 }}
-      />
-    </Container>
+    <ListView
+      rows={rows}
+      columns={columns}
+      getRowId={item => item.id}
+      loading={loading}
+      error={error}
+      autoHeight
+      components={{
+        Toolbar: CustomToolbar,
+      }}
+      disableSelectionOnClick
+    />
   );
 }

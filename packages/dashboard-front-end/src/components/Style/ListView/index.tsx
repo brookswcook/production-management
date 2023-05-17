@@ -1,6 +1,5 @@
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 import {
-  DataGrid,
   GridColDef,
   GridRenderCellParams,
   GridToolbarColumnsButton,
@@ -15,6 +14,7 @@ import {
   useStylesQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
+import { ListView } from "../../Common/ListView";
 import { CreateStylePopperButton } from "../Form";
 
 export function StyleList(): ReactElement {
@@ -90,26 +90,17 @@ export function StyleList(): ReactElement {
   }
 
   return (
-    <Container maxWidth="xl">
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        getRowId={item => item.code}
-        loading={loading}
-        error={error}
-        autoHeight
-        components={{
-          Toolbar: CustomToolbar,
-        }}
-        initialState={{
-          pagination: {
-            pageSize: 10,
-          },
-        }}
-        rowsPerPageOptions={[5, 10, 20, 50, 100]}
-        disableSelectionOnClick
-        sx={{ mt: 1 }}
-      />
-    </Container>
+    <ListView
+      rows={rows}
+      columns={columns}
+      getRowId={item => item.code}
+      loading={loading}
+      error={error}
+      autoHeight
+      components={{
+        Toolbar: CustomToolbar,
+      }}
+      disableSelectionOnClick
+    />
   );
 }

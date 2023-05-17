@@ -1,6 +1,7 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import { ReactElement } from "react";
 import { Link } from "react-router-dom";
+import { FieldTitle } from "../../Common/Typography";
 
 export function LinkProperty({
   title,
@@ -12,11 +13,9 @@ export function LinkProperty({
   resources: { id: string; text: string }[];
 }): ReactElement {
   return (
-    <Grid container columnGap={2} alignItems={"center"}>
-      <Grid item>
-        <Typography component="span" variant="subtitle2">
-          {title}
-        </Typography>
+    <Grid item container columnGap={2} alignItems={"center"}>
+      <Grid item xs={12}>
+        <FieldTitle title={title} />
       </Grid>
       {resources.map(({ id, text }) => (
         <Grid item key={id}>

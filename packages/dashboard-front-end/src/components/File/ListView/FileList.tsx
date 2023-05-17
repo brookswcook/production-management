@@ -1,11 +1,11 @@
-import { Button } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { FileType } from "dashboard-core";
-import { FileFieldsFragment } from "../../generated/graphql";
+import { FileFieldsFragment } from "../../../generated/graphql";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { ReactElement } from "react";
 
-export function FileGrid({
+export function FileList({
   files,
 }: {
   parentID: string;
@@ -50,19 +50,21 @@ export function FileGrid({
   ];
 
   return (
-    <DataGrid
-      rows={files ?? []}
-      columns={columns}
-      getRowId={item => item.id}
-      initialState={{
-        pagination: {
-          pageSize: 5,
-        },
-      }}
-      rowsPerPageOptions={[5, 10, 20, 50, 100]}
-      disableSelectionOnClick={true}
-      autoHeight
-      sx={{ mt: 1 }}
-    />
+    <Grid item xs={12}>
+      <DataGrid
+        rows={files ?? []}
+        columns={columns}
+        getRowId={item => item.id}
+        initialState={{
+          pagination: {
+            pageSize: 5,
+          },
+        }}
+        rowsPerPageOptions={[5, 10, 20, 50, 100]}
+        disableSelectionOnClick={true}
+        autoHeight
+        sx={{ mt: 1 }}
+      />
+    </Grid>
   );
 }

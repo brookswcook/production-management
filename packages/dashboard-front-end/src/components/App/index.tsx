@@ -265,8 +265,15 @@ function MenuItemLink({
   return (
     <MenuItem key={name.toLowerCase()} onClick={onClick}>
       <Typography textAlign="center">
-        <Link to={to} style={{ textDecoration: "none", color: "black" }}>
-          {`${name[0].toUpperCase()}${name.slice(1)}`}
+        <Link
+          to={to}
+          style={{
+            textDecoration: "none",
+            color: "black",
+            textTransform: "capitalize",
+          }}
+        >
+          {name}
         </Link>
       </Typography>
     </MenuItem>

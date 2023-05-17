@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Grid, Stack, Typography } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -171,14 +171,13 @@ export function OrderItemsGroupedByAttributeList({
   }
 
   return (
-    <>
+    <Grid item container>
       <CreateOrderItemByVariantSetsDialog
         orderUid={orderUid}
         open={createOrderItemsDialogOpen}
         onSave={() => setCreateOrderItemsDialogOpen(false)}
         onClose={() => setCreateOrderItemsDialogOpen(false)}
       />
-
       <DataGrid
         rows={rows}
         columns={columns}
@@ -229,6 +228,6 @@ export function OrderItemsGroupedByAttributeList({
         disableSelectionOnClick
         sx={{ mt: 1 }}
       />
-    </>
+    </Grid>
   );
 }

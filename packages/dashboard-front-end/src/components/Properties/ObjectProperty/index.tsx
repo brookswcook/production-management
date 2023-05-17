@@ -1,7 +1,10 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid, IconButton, Stack, Tooltip } from "@mui/material";
 import { ReactElement } from "react";
 import { BooleanProperty } from "../BooleanProperty";
 import { TextProperty } from "../TextProperty";
+import PageviewOutlinedIcon from "@mui/icons-material/PageviewOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { FieldTitle } from "../../Common/Typography";
 
 interface PropertyObject {
   [x: string]: PropertyValue;
@@ -17,44 +20,84 @@ type PropertyValue =
 export function ObjectProperty({
   title,
   value,
+  detailLink,
+  onEdit,
+  children,
 }: {
   title: string;
   value: Record<string, PropertyValue>;
+  detailLink?: string;
+  onEdit?: () => void;
+  children?: ReactElement;
 }): ReactElement {
   return (
-    <Grid item container columnGap={2} alignItems={"center"}>
-      <Grid item xs={12} sm={"auto"}>
-        <Typography
-          component="span"
-          variant="subtitle2"
-          style={{ whiteSpace: "pre" }}
-        >
+    <Grid
+      component="fieldset"
+      sx={{
+        borderRadius: 2,
+        bgcolor: "background.paper",
+        border: "1px solid rgba(224, 224, 224, 1)",
+      }}
+      item
+      container
+      justifyContent={"space-between"}
+      rowGap={1}
+      alignItems={"center"}
+    >
+      <Stack
+        component="legend"
+        direction={"row"}
+        columnGap={1}
+        alignItems="center"
+      >
+        <FieldTitle style={{ color: "inherit", textTransform: "capitalize" }}>
           {title}
-        </Typography>
-      </Grid>
-      <>
-        {Object.entries(value)
-          .filter(([, entryValue]) => entryValue != null)
-          .map(([key, entryValue]) => {
-            const entryValueType = typeof entryValue;
-            return (
-              <Grid item key={key}>
-                <Typography component="div" variant="caption">
-                  {key}
-                </Typography>
-                {entryValueType === "string" || entryValueType === "number" ? (
-                  <TextProperty value={entryValue as string} />
-                ) : entryValueType === "boolean" ? (
-                  <Typography component="div" variant="h5">
-                    <BooleanProperty value={entryValue as boolean} />
-                  </Typography>
-                ) : (
-                  <></>
-                )}
-              </Grid>
-            );
-          })}
-      </>
+        </FieldTitle>
+        {detailLink && (
+          <IconButton
+            href={detailLink}
+            size="small"
+            edge="start"
+            color="primary"
+            aria-label="details"
+          >
+            <Tooltip title="Open details">
+              <PageviewOutlinedIcon />
+            </Tooltip>
+          </IconButton>
+        )}
+        {onEdit && (
+          <IconButton
+            size="small"
+            edge="start"
+            color="primary"
+            aria-label="edit"
+            onClick={onEdit}
+          >
+            <Tooltip title="Edit">
+              <EditOutlinedIcon />
+            </Tooltip>
+          </IconButton>
+        )}
+        <>{children}</>
+      </Stack>
+
+      {Object.entries(value)
+        .filter(([, entryValue]) => entryValue != null)
+        .map(([key, entryValue]) => {
+          const entryValueType = typeof entryValue;
+          return (
+            <Grid item alignItems={"baseline"} xs={"auto"} key={key}>
+              {entryValueType === "string" || entryValueType === "number" ? (
+                <TextProperty title={key} value={entryValue as string} />
+              ) : entryValueType === "boolean" ? (
+                <BooleanProperty title={key} value={entryValue as boolean} />
+              ) : (
+                <></>
+              )}
+            </Grid>
+          );
+        })}
     </Grid>
   );
 }

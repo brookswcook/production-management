@@ -1,6 +1,4 @@
-import { Container, Grid } from "@mui/material";
 import {
-  DataGrid,
   GridColDef,
   GridRenderCellParams,
   GridToolbarColumnsButton,
@@ -19,6 +17,7 @@ import { ReactElement } from "react";
 import { Link } from "react-router-dom";
 import RequireRole from "../../Auth/RequireRole";
 import { renderCellExpand } from "../../Common/GridCellExpand";
+import { ListView } from "../../Common/ListView";
 
 export function ProductList(): ReactElement {
   const { data, loading, error } = useProductsQuery({
@@ -169,28 +168,16 @@ export function ProductList(): ReactElement {
   }
 
   return (
-    <Container maxWidth="xl">
-      <Grid item xs={12}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          getRowId={item => item.code}
-          loading={loading}
-          error={error}
-          autoHeight
-          initialState={{
-            pagination: {
-              pageSize: 20,
-            },
-          }}
-          rowsPerPageOptions={[5, 10, 20, 50, 100]}
-          components={{
-            Toolbar: CustomToolbar,
-          }}
-          disableSelectionOnClick
-          sx={{ mt: 1 }}
-        />
-      </Grid>
-    </Container>
+    <ListView
+      rows={rows}
+      columns={columns}
+      getRowId={item => item.code}
+      loading={loading}
+      error={error}
+      components={{
+        Toolbar: CustomToolbar,
+      }}
+      disableSelectionOnClick
+    />
   );
 }

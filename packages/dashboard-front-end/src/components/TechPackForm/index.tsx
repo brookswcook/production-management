@@ -1,21 +1,18 @@
 import { ApolloError } from "@apollo/client";
-import {
-  Button,
-  ButtonPropsVariantOverrides,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Stack } from "@mui/material";
 import { FormEvent, ReactElement, useState } from "react";
 import { toast } from "react-toastify";
 import { useUploadTechPackMutation } from "../../generated/graphql";
 import FilePreload from "../FilePreload";
-import { PopperButton } from "../PopperButton";
-import { OverridableStringUnion } from "@mui/types";
+
+import { ActionDialog } from "../Common/ActionDialog";
 
 export function UploadTechPackForm({
   styleCode: code,
+  onSubmit = () => {},
 }: {
   styleCode: string;
+  onSubmit?: () => void;
 }): ReactElement {
   const [techPackFiles, setTechPackFiles] = useState<File[]>();
   const mutationOptions = {
@@ -38,6 +35,7 @@ export function UploadTechPackForm({
             },
           },
         });
+        onSubmit();
       }
     } catch (error) {
       toast.error((error as ApolloError).message);
@@ -49,44 +47,33 @@ export function UploadTechPackForm({
       component="form"
       autoComplete="off"
       onSubmit={uploadTechPack}
+      id="uploadTechPackForm"
       spacing={2}
     >
-      <Typography component="h4" variant="inherit">
-        {`Upload tech pack for style ${code}`}
-      </Typography>
-      <FilePreload
-        label="Tech Pack"
-        setFiles={setTechPackFiles}
-        helperText={
-          "Important: it will override tech pack of all products based on given style"
-        }
-      />
-      <Button variant="contained" type="submit">
-        Upload
-      </Button>
+      <FilePreload label="Tech Pack" setFiles={setTechPackFiles} />
     </Stack>
   );
 }
 
-export function UploadTechPackPopperButton({
-  disabled = false,
+export function UploadTechPackDialog({
   styleCode,
-  variant = "text",
+  open = false,
+  onSave = () => {},
+  onClose = () => {},
 }: {
-  disabled?: boolean;
   styleCode: string;
-  variant?: OverridableStringUnion<
-    "text" | "outlined" | "contained",
-    ButtonPropsVariantOverrides
-  >;
-}): ReactElement {
+  open?: boolean;
+  onSave?: () => void;
+  onClose?: () => void;
+}) {
   return (
-    <PopperButton
-      variant={variant}
-      title="Upload Tech Pack"
-      disabled={disabled}
+    <ActionDialog
+      title="Upload tech pack"
+      open={open}
+      onClose={onClose}
+      form="uploadTechPackForm"
     >
-      <UploadTechPackForm styleCode={styleCode} />
-    </PopperButton>
+      <UploadTechPackForm styleCode={styleCode} onSubmit={onSave} />
+    </ActionDialog>
   );
 }

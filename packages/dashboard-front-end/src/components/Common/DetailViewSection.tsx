@@ -1,19 +1,20 @@
-import { Paper, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import { ReactElement } from "react";
+import { FieldTitle } from "./Typography";
 
 export function DetailViewSection({
   children,
-  headerTitle,
+  title,
 }: {
   children: JSX.Element[] | JSX.Element;
-  headerTitle: string;
+  title?: string;
 }): ReactElement {
   return (
-    <Paper elevation={0} sx={{ p: 1 }}>
-      <Typography component="h4" variant="inherit">
-        {headerTitle}
-      </Typography>
+    <Grid item container xs={12}>
+      <FieldTitle style={{ color: "inherit", textTransform: "capitalize" }}>
+        {title}
+      </FieldTitle>
       {children}
-    </Paper>
+    </Grid>
   );
 }

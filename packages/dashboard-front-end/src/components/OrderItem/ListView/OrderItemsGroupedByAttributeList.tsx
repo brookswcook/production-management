@@ -15,12 +15,12 @@ import {
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
 import AddIcon from "@mui/icons-material/Add";
-import {
-  stringifyAttributes,
-  stringifyVariantAttributes,
-} from "../../VariantAttribute";
 import toCurrency from "../../Utils";
 import CreateOrderItemByVariantSetsDialog from "../Dialog/CreateOrderItemByVariantSetsDialog";
+import {
+  stringifyVariantAttributes,
+  stringifyAttributes,
+} from "../../VariantAttribute/VariantAttributeSetTable";
 
 export default function OrderItemsGroupedByAttributeList({
   orderUid,

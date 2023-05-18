@@ -1,12 +1,12 @@
 import { Grid } from "@mui/material";
 import { FormEvent, useState } from "react";
 import { ProductFieldsFragment } from "../../../generated/graphql";
-import { ProductDropDown } from "../../Product";
-import { VariantAttributeSetTable } from "../../VariantAttribute";
-import { OrderItemPriceTextField } from "../OrderItemPriceTextField";
+import ProductDropDown from "../../Product/ProductDropDown";
+import VariantAttributeSetTable from "../../VariantAttribute/VariantAttributeSetTable";
+import OrderItemPriceTextField from "../OrderItemPriceTextField";
 import { OrderItemBulkyFormType } from "./types";
 
-export function CreateOrderItemBulkyTableForm({
+export default function CreateOrderItemBulkyTableForm({
   onSubmit,
   onChange,
   id = "createOrderItemBulkyForm",

@@ -11,17 +11,16 @@ import { useState, useEffect, ReactElement, FormEvent } from "react";
 import {
   CreateAttributeInput,
   CreateOrderItemInput,
-  useAttributeDefinitionsQuery,
   useCreateOrderItemMutation,
   useProductsQuery,
 } from "../../../generated/graphql";
-import { PopperButton } from "../../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { toast } from "react-toastify";
-import FloatTextField from "../../Common/FloatTextField";
+import FloatTextField from "../../Properties/FloatTextField";
+import AddOrderItemAttributeForm from "./AddOrderItemAttributeForm";
 
-export function CreateOrderItemForm({
+export default function CreateOrderItemForm({
   orderUid,
   title,
   footerEl,
@@ -153,110 +152,5 @@ export function CreateOrderItemForm({
         {footerEl}
       </>
     </Stack>
-  );
-}
-
-function AddOrderItemAttributeForm({
-  attribute,
-  title,
-  onChange = () => {},
-  attributeNamesToOmit = [],
-}: {
-  attribute: CreateAttributeInput;
-  title?: string;
-  onChange?: () => void;
-  attributeNamesToOmit?: string[];
-}) {
-  const [selectedAttributeDefinitionName, setSelectedAttributeDefinitionName] =
-    useState<string | null>(null);
-  const [attributeOptions, setAttributeOptions] = useState<string[] | null>(
-    null
-  );
-  const {
-    data: { attributeDefinitions: allAttributeDefinitions } = {
-      attributeDefinitions: [],
-    },
-  } = useAttributeDefinitionsQuery();
-
-  useEffect(() => {
-    const selectedAttributeDefinition = allAttributeDefinitions.find(
-      item => item.name === selectedAttributeDefinitionName
-    );
-    selectedAttributeDefinition &&
-      setAttributeOptions(selectedAttributeDefinition.values);
-  }, [selectedAttributeDefinitionName, allAttributeDefinitions]);
-
-  return (
-    <Stack component="div" spacing={2}>
-      <Typography component="span" variant="subtitle2">
-        {title}
-      </Typography>
-      <Autocomplete
-        onChange={(_, value) => {
-          setSelectedAttributeDefinitionName(String(value));
-          attribute.key = String(value);
-          onChange();
-        }}
-        options={allAttributeDefinitions
-          .flatMap(item => item.name)
-          .filter(name => !~attributeNamesToOmit.indexOf(name))}
-        renderOption={(props, option) => (
-          <Box component="li" {...props}>
-            {`${option}`}
-          </Box>
-        )}
-        renderInput={params => <TextField {...params} required />}
-      />
-      {attributeOptions != null ? (
-        <Autocomplete
-          onChange={(_, value) => {
-            attribute.value = String(value);
-          }}
-          options={attributeOptions}
-          renderOption={(props, option) => (
-            <Box component="li" {...props}>
-              {`${option}`}
-            </Box>
-          )}
-          renderInput={params => <TextField {...params} required />}
-        />
-      ) : selectedAttributeDefinitionName != null ? (
-        <TextField required />
-      ) : (
-        <></>
-      )}
-    </Stack>
-  );
-}
-
-export function CreateOrderItemPopperButton({
-  orderUid,
-  disabled = false,
-}: {
-  orderUid: number;
-  disabled?: boolean;
-}): ReactElement {
-  const [closeSwitch, setCloseSwitch] = useState(0);
-  function closePopper() {
-    setCloseSwitch(closeSwitch + 1);
-  }
-
-  return (
-    <PopperButton
-      icon={<AddIcon />}
-      title={"Add item"}
-      disabled={disabled}
-      closeSwitch={closeSwitch}
-    >
-      <CreateOrderItemForm
-        orderUid={orderUid}
-        title="Add items to the order"
-        footerEl={
-          <Button variant="contained" onClick={closePopper}>
-            Cancel
-          </Button>
-        }
-      />
-    </PopperButton>
   );
 }

@@ -1,10 +1,10 @@
 import { Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ProductFieldsFragment } from "../../generated/graphql";
-import { toCurrency } from "../Common";
-import FloatTextField from "../Common/FloatTextField";
+import FloatTextField from "../Properties/FloatTextField";
+import toCurrency from "../Utils";
 
-export function OrderItemPriceTextField({
+export default function OrderItemPriceTextField({
   onChange,
   product,
   quantity = 0,

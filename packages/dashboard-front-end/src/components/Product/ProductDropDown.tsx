@@ -4,7 +4,7 @@ import {
   useProductsQuery,
 } from "../../generated/graphql";
 
-export function ProductDropDown({
+export default function ProductDropDown({
   onChange,
 }: {
   onChange: (value: ProductFieldsFragment) => void;

@@ -14,10 +14,10 @@ import {
   usePurchaseOrdersQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
-import { ListView } from "../../Common/ListView";
-import { CreatePurchaseOrderPopperButton } from "../Form";
+import { ListView } from "../../ListView";
+import CreatePurchaseOrderPopperButton from "../Popper/CreatePurchaseOrderPopperButton";
 
-export function PurchaseOrderList(): ReactElement {
+export default function PurchaseOrderList(): ReactElement {
   const { data, loading, error } = usePurchaseOrdersQuery({});
   const rows: PurchaseOrderListFieldsFragment[] = data?.purchaseOrders ?? [];
 

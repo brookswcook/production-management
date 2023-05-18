@@ -5,7 +5,7 @@ import { FileFieldsFragment } from "../../../generated/graphql";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { ReactElement } from "react";
 
-export function FileList({
+export default function FileList({
   files,
 }: {
   parentID: string;

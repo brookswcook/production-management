@@ -16,6 +16,7 @@
     "@typescript-eslint/no-empty-function": 0,
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }]
   },
+  "overrides": [{"files": ["*.tsx"], "rules": {"import/prefer-default-export": ["error"]}}],
   "plugins": ["import", "jsx-a11y", "@typescript-eslint"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {

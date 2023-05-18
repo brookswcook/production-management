@@ -43,19 +43,19 @@ import "react-toastify/dist/ReactToastify.css";
 
 import React from "react";
 import RequireRole from "../Auth/RequireRole";
-import FabricGrid from "../FabricGrid";
-import { FabricDetail } from "../FabricDetail";
+import FabricGrid from "../Fabric/ListView/FabricList";
 import { StyleDetail, StyleList } from "../Style";
-import { SignInWithEmailLink } from "../Auth/SignInWithEmail";
 import { UserList } from "../User";
-import { FactoryList } from "../Factory/ListView";
-import { ProductDetail, ProductList } from "../Product";
-import { PurchaseOrderList, PurchaseOrderDetail } from "../PurchaseOrder";
 import { getMessagingToken } from "../../firebase";
 import { useCreateNotificationSubscriptionMutation } from "../../generated/graphql";
 import useMessagingToken from "../Notification/useMessagingToken";
 import fingerprintjs from "@fingerprintjs/fingerprintjs";
 import { UserRole } from "dashboard-core";
+import { ProductList, ProductDetail } from "../Product";
+import { PurchaseOrderList, PurchaseOrderDetail } from "../PurchaseOrder";
+import SignInWithEmailLink from "../Auth/SignInWithEmail";
+import { FabricDetail } from "../Fabric";
+import { FactoryList } from "../Factory";
 
 function ToolbarNavigationButton({
   title,

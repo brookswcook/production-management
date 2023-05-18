@@ -1,0 +1,63 @@
+mutation SendFabricSample($data: SendSampleInput!) {
+  sendFabricSample(data: $data) {
+    sku
+  }
+}
+
+mutation SendFitSample($data: SendSampleInput!) {
+  sendFitSample(data: $data) {
+    sku
+  }
+}
+
+mutation ApproveFitSample($data: UniqueSampleInput!) {
+  approveFitSample(data: $data) {
+    id
+    sku
+  }
+}
+
+mutation RejectFitSample($data: UniqueSampleInput!) {
+  rejectFitSample(data: $data) {
+    id
+    sku
+  }
+}
+
+mutation MarkFitSampleAsDelivered($data: UniqueSampleInput!) {
+  markFitSampleAsDelivered(data: $data) {
+    id
+    sku
+  }
+}
+
+mutation ApproveFabricSample($data: UniqueSampleInput!) {
+  approveFabricSample(data: $data) {
+    id
+    sku
+  }
+}
+
+mutation RejectFabricSample($data: UniqueSampleInput!) {
+  rejectFabricSample(data: $data) {
+    id
+    sku
+  }
+}
+
+mutation MarkFabricSampleAsDelivered($data: UniqueSampleInput!) {
+  markFabricSampleAsDelivered(data: $data) {
+    id
+    sku
+  }
+}
+
+mutation CreateNote($data: CreateNoteInput!) {
+  createNote(data: $data) {
+    parentId
+  }
+}
+
+query ImageLink($fileName: String!) {
+  imageLink(fileName: $fileName)
+}

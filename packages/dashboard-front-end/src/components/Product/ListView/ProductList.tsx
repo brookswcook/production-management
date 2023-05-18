@@ -10,16 +10,15 @@ import {
   ProductFieldsFragment,
   useProductsQuery,
 } from "../../../generated/graphql";
-import { PopperButton } from "../../PopperButton";
 import AddIcon from "@mui/icons-material/Add";
-import { CreateProductForm } from "../Form/CreateProductForm";
-import { ReactElement } from "react";
 import { Link } from "react-router-dom";
+import { ReactElement } from "react";
 import RequireRole from "../../Auth/RequireRole";
-import { renderCellExpand } from "../../Common/GridCellExpand";
-import { ListView } from "../../Common/ListView";
+import { renderCellExpand, ListView } from "../../ListView";
+import PopperButton from "../../PopperButton";
+import CreateProductForm from "../Form/CreateProductForm";
 
-export function ProductList(): ReactElement {
+export default function ProductList(): ReactElement {
   const { data, loading, error } = useProductsQuery({
     variables: {},
   });

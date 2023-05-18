@@ -19,7 +19,7 @@ import {
 import { toast } from "react-toastify";
 import { ApolloError } from "@apollo/client";
 
-export function CreateProductForm(): ReactElement {
+export default function CreateProductForm(): ReactElement {
   const [newProductMutation] = useCreateProductMutation({
     refetchQueries: ["Products"],
   });

@@ -1,3 +1,3 @@
-export function UploadFileDialog() {
+export default function UploadFileDialog() {
   return <></>;
 }

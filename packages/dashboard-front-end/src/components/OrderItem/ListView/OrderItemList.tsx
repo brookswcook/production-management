@@ -13,10 +13,10 @@ import {
   useOrderItemsQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
-import { toCurrency } from "../../Common";
-import { CreateOrderItemPopperButton } from "../Form";
+import toCurrency from "../../Utils";
+import CreateOrderItemPopperButton from "../PopperButton/CreateOrderItemPopperButton";
 
-export function OrderItemList({
+export default function OrderItemList({
   orderUid,
   addActionDisabled = false,
 }: {

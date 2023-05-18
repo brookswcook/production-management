@@ -24,6 +24,12 @@ npx lerna run dev --scope=dashboard-api
 
 # publish & generate changelog
 npx lerna publish --conventional-commits
+
+# generate bundle stats
+npx lerna run build --scope=dashboard-front-end -- --statson
+
+# analyze bundle stats
+npx webpack-bundle-analyzer ./packages/dashboard-front-end/build/bundle-stats.json
 ```
 
 ## Prettier

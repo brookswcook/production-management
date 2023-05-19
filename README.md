@@ -53,3 +53,11 @@ No ESlint issues or code not run through prettier should be in the codebase
 ## Volta
 
 Volta is used to make sure version of Node is the consistent in dev environment. Prettier might behave differently on different versions of node.
+
+## Changelogs
+
+[API](https://github.com/brookswcook/production-management/blob/master/packages/dashboard-api/CHANGELOG.md)
+
+[Core](https://github.com/brookswcook/production-management/blob/master/packages/dashboard-api/CHANGELOG.md)
+
+[Front-end](https://github.com/brookswcook/production-management/blob/master/packages/dashboard-api/CHANGELOG.md)

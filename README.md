@@ -58,6 +58,6 @@ Volta is used to make sure version of Node is the consistent in dev environment.
 
 [API](https://github.com/brookswcook/production-management/blob/master/packages/dashboard-api/CHANGELOG.md)
 
-[Core](https://github.com/brookswcook/production-management/blob/master/packages/dashboard-api/CHANGELOG.md)
+[Core](https://github.com/brookswcook/production-management/blob/master/packages/dashboard-core/CHANGELOG.md)
 
-[Front-end](https://github.com/brookswcook/production-management/blob/master/packages/dashboard-api/CHANGELOG.md)
+[Front-end](https://github.com/brookswcook/production-management/blob/master/packages/dashboard-front-end/CHANGELOG.md)

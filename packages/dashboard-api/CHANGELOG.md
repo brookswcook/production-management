@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.1](https://github.com/brookswcook/production-management/compare/dashboard-api@1.9.0...dashboard-api@1.9.1) (2023-05-19)
+
+
+### Bug Fixes
+
+* fabric image loading; update apollo/client ([ddd9930](https://github.com/brookswcook/production-management/commit/ddd99304fa76baeead1a6f4d881a2f3dd4dcd919))
+
+
+
+
+
 # [1.9.0](https://github.com/brookswcook/production-management/compare/dashboard-api@1.8.0...dashboard-api@1.9.0) (2023-05-07)
 
 

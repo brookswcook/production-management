@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "dashboard-api",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "Dashboard api",
   "license": "ISC",
   "directories": {

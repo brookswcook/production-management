@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.10.0...dashboard-front-end@1.11.0) (2023-05-19)
+
+
+### Bug Fixes
+
+* add additional typographies ([8669ae7](https://github.com/brookswcook/production-management/commit/8669ae704da6af905858ccfe2f012722130ce9fb))
+* do not uppercase file name values ([b1a8259](https://github.com/brookswcook/production-management/commit/b1a82596394b6f04f5c175a596de4ca0cb995894))
+* fabric image loading; update apollo/client ([ddd9930](https://github.com/brookswcook/production-management/commit/ddd99304fa76baeead1a6f4d881a2f3dd4dcd919))
+* file grid component title position ([034d652](https://github.com/brookswcook/production-management/commit/034d652dc6158f1643927fd2e1bbe6b45e270eb3))
+* generic field title and value typography ([ab9559e](https://github.com/brookswcook/production-management/commit/ab9559e30d233f5050c61c97e3bb70b192a6253e))
+* header data typography comp name according to convention ([c382fca](https://github.com/brookswcook/production-management/commit/c382fca62508e62986eb695a5d0f7067d49374f6))
+* markup changes in property components ([01697ab](https://github.com/brookswcook/production-management/commit/01697ab482af14700cc4f07ceaadcd3b51a3d550))
+* one component for list views ([f846fdc](https://github.com/brookswcook/production-management/commit/f846fdc98812d15f0ccbaa1a3eaccd8c86f45655))
+* remove color prefix for fields in the fieldset of color ([2cf5fc2](https://github.com/brookswcook/production-management/commit/2cf5fc243160820dd71ca90df80bb63a83c13b1e))
+* remove not needed spaces ([e5e9d5a](https://github.com/brookswcook/production-management/commit/e5e9d5a5ead3e121f90a1679e5f98724183ea3f0))
+* rename detail view header data component ([e647d63](https://github.com/brookswcook/production-management/commit/e647d63284c9ddeddb9ef8b976a6e0452e8f4f7e))
+* replace string manipulation with text transform where possible ([b1a4eaa](https://github.com/brookswcook/production-management/commit/b1a4eaa815c0b451d75d598fcad595209ac90d21))
+* reuse detail view header with data component ([8a89631](https://github.com/brookswcook/production-management/commit/8a89631b306d8896e99acde2f72172658581d5ec))
+* simplify fabric ui ([8fe1d4d](https://github.com/brookswcook/production-management/commit/8fe1d4d1b7e939f8860b653e658ea55d5e98dde2))
+* style details button positioning ([d32818d](https://github.com/brookswcook/production-management/commit/d32818d980e4394eef4280d5e84f4f71630e679f))
+* update fabric detail view ([b9f1c53](https://github.com/brookswcook/production-management/commit/b9f1c53bcb7c8ae3da9eb80e10d0dd02b320807a))
+* update link property component ([292c0f5](https://github.com/brookswcook/production-management/commit/292c0f51ebeeef0379a140aba961f010e363fa43))
+* update PO detail view ui ([1cf5528](https://github.com/brookswcook/production-management/commit/1cf5528ceb2dbcc3f7d08594070bd1a1fe8c7bfe))
+* update style detail view using new styles ([1938ee0](https://github.com/brookswcook/production-management/commit/1938ee0b71ea7a18a00c89cf871906218b524a44))
+* use colorful checkbox for boolean field ([7724c0b](https://github.com/brookswcook/production-management/commit/7724c0b6051f5abdc935a3dd5915100952e001a5))
+* use field title/value where possible ([d035051](https://github.com/brookswcook/production-management/commit/d03505126d417551bdf9df5c8e38452675f09509))
+* use smaller list views to fit page and avoid scroll tab ([b625d3c](https://github.com/brookswcook/production-management/commit/b625d3ce89af1dc1db98b2a3c855ce26d9ec0c27))
+* use updated components in PO detail view ([d2e71cc](https://github.com/brookswcook/production-management/commit/d2e71ccd697b4c80cab35bf15228ee6247e5e35f))
+* various of improvements for property object component ([c1d8fb6](https://github.com/brookswcook/production-management/commit/c1d8fb698271e2aa2909b2547c6f222a60699d14))
+
+
+### Features
+
+* add children to object prop ([db1c3bd](https://github.com/brookswcook/production-management/commit/db1c3bd9717e066c2b3415e25e8e35a1152d0132))
+* be able to override base typography props ([bf64760](https://github.com/brookswcook/production-management/commit/bf6476036358d029f7e14f0bf9d6b2e6589e1465))
+* improve ui of detail views ([8a39f9a](https://github.com/brookswcook/production-management/commit/8a39f9a081902967912203e2d0ce8fc7a8bd16c2))
+* rebuild product detail view with more clean markup ([ccc2d86](https://github.com/brookswcook/production-management/commit/ccc2d867fc1a5f133c5bba4488c4919fe2035535))
+* style detail view ui update + upload tech pack dialog ([da29233](https://github.com/brookswcook/production-management/commit/da29233c2d0d519152f3fdbd317aaf3bb5bb6dc4))
+
+
+
+
+
 # [1.10.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.9.0...dashboard-front-end@1.10.0) (2023-05-07)
 
 

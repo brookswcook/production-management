@@ -17,8 +17,8 @@ import {
   useCreateNoteMutation,
   useNotesQuery,
   User,
-} from "../../generated/graphql";
-import PopperButton from "../PopperButton";
+} from "../../../generated/graphql";
+import PopperButton from "../../PopperButton";
 
 export default function EntityTimelineList({
   entityIds,

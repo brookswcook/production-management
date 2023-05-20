@@ -18,7 +18,7 @@ import {
   usePushPurchaseOrderToNextStageMutation,
 } from "../../../generated/graphql";
 
-import EntityTimeline from "../../EntityTimeline";
+import { EntityTimelineList } from "../../EntityTimeline";
 
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import {
@@ -188,7 +188,7 @@ export default function PurchaseOrderDetail(): ReactElement {
         />
       </DetailViewSection>
       <DetailViewSection title="Timeline">
-        <EntityTimeline
+        <EntityTimelineList
           entityIds={[
             data.purchaseOrder.id,
             ...data.purchaseOrder.items.map(({ id }) => id),

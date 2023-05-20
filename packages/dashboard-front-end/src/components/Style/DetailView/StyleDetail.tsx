@@ -3,7 +3,7 @@ import { ReactElement, useState } from "react";
 import { useParams } from "react-router-dom";
 import { StyleFieldsFragment, useStyleQuery } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
-import EntityTimeline from "../../EntityTimeline";
+import { EntityTimelineList } from "../../EntityTimeline";
 import { LinkProperty, TextProperty } from "../../Properties";
 import { UploadTechPackDialog } from "../../TechPack";
 import { FileList } from "../../File";
@@ -91,7 +91,7 @@ export default function StyleDetail(): ReactElement {
         <FileList fileType="tech-pack" parentID={id} files={techPacks} />
       </DetailViewSection>
       <DetailViewSection title="timeline">
-        <EntityTimeline
+        <EntityTimelineList
           entityIds={[id]}
           entityTypes={["Style"]}
           noteType="styleNote"

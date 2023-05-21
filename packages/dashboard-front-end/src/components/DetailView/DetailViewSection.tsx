@@ -11,10 +11,14 @@ export default function DetailViewSection({
 }): ReactElement {
   return (
     <Grid item container xs={12}>
-      <FieldTitle style={{ color: "inherit", textTransform: "capitalize" }}>
-        {title}
-      </FieldTitle>
-      {children}
+      <Grid item xs={12}>
+        <FieldTitle style={{ color: "inherit", textTransform: "capitalize" }}>
+          {title}
+        </FieldTitle>
+      </Grid>
+      <Grid item xs={12}>
+        {children}
+      </Grid>
     </Grid>
   );
 }

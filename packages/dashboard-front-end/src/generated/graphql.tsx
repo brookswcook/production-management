@@ -95,8 +95,8 @@ export type CreateNoteInput = {
 };
 
 export type CreateNotificationSubscriptionInput = {
-  token: Scalars["String"];
   fingerprint: Scalars["String"];
+  token: Scalars["String"];
 };
 
 export type CreateOrderItemInput = {
@@ -167,6 +167,7 @@ export type FabricProduction = {
 export type FabricSample = {
   __typename?: "FabricSample";
   approved: Maybe<Scalars["Boolean"]>;
+  code: Scalars["String"];
   delivered: Maybe<Scalars["Boolean"]>;
   id: Scalars["String"];
   note: Maybe<Note>;
@@ -211,6 +212,7 @@ export type FirebaseUserMetadata = {
 export type FitSample = {
   __typename?: "FitSample";
   approved: Maybe<Scalars["Boolean"]>;
+  code: Scalars["String"];
   delivered: Maybe<Scalars["Boolean"]>;
   id: Scalars["String"];
   note: Maybe<Note>;
@@ -402,10 +404,10 @@ export type NotificationSubscription = {
   __typename?: "NotificationSubscription";
   companyId: Scalars["String"];
   createdAt: Maybe<Scalars["DateTime"]>;
+  fingerprint: Scalars["String"];
   id: Scalars["String"];
   token: Scalars["String"];
   updatedAt: Maybe<Scalars["DateTime"]>;
-  fingerprint: Scalars["String"];
   userId: Scalars["String"];
 };
 
@@ -497,6 +499,7 @@ export type ProductShipping = {
 
 export type PurchaseOrder = {
   __typename?: "PurchaseOrder";
+  code: Scalars["String"];
   company: Company;
   createdAt: Scalars["DateTime"];
   expectedDeliveryDate: Scalars["DateTime"];
@@ -580,6 +583,7 @@ export type QueryStyleArgs = {
 export type Sample = {
   __typename?: "Sample";
   approved: Maybe<Scalars["Boolean"]>;
+  code: Scalars["String"];
   delivered: Maybe<Scalars["Boolean"]>;
   id: Scalars["String"];
   note: Maybe<Note>;
@@ -643,6 +647,7 @@ export type UploadTechPackInput = {
 
 export type User = {
   __typename?: "User";
+  code: Scalars["String"];
   companyId: Scalars["String"];
   createdAt: Maybe<Scalars["DateTime"]>;
   deleted: Scalars["Boolean"];
@@ -692,7 +697,7 @@ export type ActionLogsQuery = {
     id: string;
     title: string;
     createdAt: string | null;
-    user: { __typename?: "User"; firstName: string } | null;
+    user: { __typename?: "User"; firstName: string; fullName: string } | null;
   }>;
 };
 
@@ -701,7 +706,7 @@ export type ActionLogListFieldsFragment = {
   id: string;
   title: string;
   createdAt: string | null;
-  user: { __typename?: "User"; firstName: string } | null;
+  user: { __typename?: "User"; firstName: string; fullName: string } | null;
 };
 
 export type NotesQueryVariables = Exact<{
@@ -717,7 +722,7 @@ export type NotesQuery = {
     parentId: string;
     type: string;
     createdAt: string | null;
-    user: { __typename?: "User"; firstName: string } | null;
+    user: { __typename?: "User"; firstName: string; fullName: string } | null;
   }>;
 };
 
@@ -728,67 +733,7 @@ export type NotesFieldsFragment = {
   parentId: string;
   type: string;
   createdAt: string | null;
-  user: { __typename?: "User"; firstName: string } | null;
-};
-
-export type FabricQueryVariables = Exact<{
-  code: Scalars["String"];
-}>;
-
-export type FabricQuery = {
-  __typename?: "Query";
-  fabric: {
-    __typename?: "Fabric";
-    code: string;
-    colorName: string;
-    id: string;
-    title: string;
-    colorType: string;
-    colorCode: string | null;
-    printFileName: string | null;
-    productCodes: Array<string>;
-    stage: string;
-    factory: { __typename?: "Company"; code: string; name: string };
-    notes: Array<{
-      __typename?: "Note";
-      id: string;
-      type: string;
-      text: string;
-      imageFileNames: Array<string>;
-      createdAt: string | null;
-      user: { __typename?: "User"; firstName: string; fullName: string } | null;
-    }>;
-    samples: Array<{
-      __typename?: "FabricSample";
-      id: string;
-      sku: string;
-      approved: boolean | null;
-      trackNumber: string;
-      delivered: boolean | null;
-      note: {
-        __typename?: "Note";
-        id: string;
-        type: string;
-        text: string;
-        imageFileNames: Array<string>;
-        createdAt: string | null;
-        user: {
-          __typename?: "User";
-          firstName: string;
-          fullName: string;
-        } | null;
-      } | null;
-    }>;
-  };
-};
-
-export type CreateFabricMutationVariables = Exact<{
-  data: CreateFabricInput;
-}>;
-
-export type CreateFabricMutation = {
-  __typename?: "Mutation";
-  createFabric: { __typename?: "Fabric"; code: string; colorName: string };
+  user: { __typename?: "User"; firstName: string; fullName: string } | null;
 };
 
 export type FabricFieldsFragment = {
@@ -878,6 +823,66 @@ export type FabricsQuery = {
       } | null;
     }>;
   }>;
+};
+
+export type FabricQueryVariables = Exact<{
+  code: Scalars["String"];
+}>;
+
+export type FabricQuery = {
+  __typename?: "Query";
+  fabric: {
+    __typename?: "Fabric";
+    code: string;
+    colorName: string;
+    id: string;
+    title: string;
+    colorType: string;
+    colorCode: string | null;
+    printFileName: string | null;
+    productCodes: Array<string>;
+    stage: string;
+    factory: { __typename?: "Company"; code: string; name: string };
+    notes: Array<{
+      __typename?: "Note";
+      id: string;
+      type: string;
+      text: string;
+      imageFileNames: Array<string>;
+      createdAt: string | null;
+      user: { __typename?: "User"; firstName: string; fullName: string } | null;
+    }>;
+    samples: Array<{
+      __typename?: "FabricSample";
+      id: string;
+      sku: string;
+      approved: boolean | null;
+      trackNumber: string;
+      delivered: boolean | null;
+      note: {
+        __typename?: "Note";
+        id: string;
+        type: string;
+        text: string;
+        imageFileNames: Array<string>;
+        createdAt: string | null;
+        user: {
+          __typename?: "User";
+          firstName: string;
+          fullName: string;
+        } | null;
+      } | null;
+    }>;
+  };
+};
+
+export type CreateFabricMutationVariables = Exact<{
+  data: CreateFabricInput;
+}>;
+
+export type CreateFabricMutation = {
+  __typename?: "Mutation";
+  createFabric: { __typename?: "Fabric"; code: string; colorName: string };
 };
 
 export type FactoriesQueryVariables = Exact<{ [key: string]: never }>;
@@ -1998,6 +2003,7 @@ export const ActionLogListFieldsFragmentDoc = gql`
     title
     user {
       firstName
+      fullName
     }
     createdAt
   }
@@ -2008,6 +2014,7 @@ export const NotesFieldsFragmentDoc = gql`
     text
     user {
       firstName
+      fullName
     }
     parentId
     type
@@ -2477,6 +2484,54 @@ export type NotesQueryResult = Apollo.QueryResult<
   NotesQuery,
   NotesQueryVariables
 >;
+export const FabricsDocument = gql`
+  query Fabrics {
+    fabrics {
+      ...fabricFields
+    }
+  }
+  ${FabricFieldsFragmentDoc}
+`;
+
+/**
+ * __useFabricsQuery__
+ *
+ * To run a query within a React component, call `useFabricsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFabricsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFabricsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFabricsQuery(
+  baseOptions?: Apollo.QueryHookOptions<FabricsQuery, FabricsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FabricsQuery, FabricsQueryVariables>(
+    FabricsDocument,
+    options
+  );
+}
+export function useFabricsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<FabricsQuery, FabricsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<FabricsQuery, FabricsQueryVariables>(
+    FabricsDocument,
+    options
+  );
+}
+export type FabricsQueryHookResult = ReturnType<typeof useFabricsQuery>;
+export type FabricsLazyQueryHookResult = ReturnType<typeof useFabricsLazyQuery>;
+export type FabricsQueryResult = Apollo.QueryResult<
+  FabricsQuery,
+  FabricsQueryVariables
+>;
 export const FabricDocument = gql`
   query Fabric($code: String!) {
     fabric(code: $code) {
@@ -2578,54 +2633,6 @@ export type CreateFabricMutationResult =
 export type CreateFabricMutationOptions = Apollo.BaseMutationOptions<
   CreateFabricMutation,
   CreateFabricMutationVariables
->;
-export const FabricsDocument = gql`
-  query Fabrics {
-    fabrics {
-      ...fabricFields
-    }
-  }
-  ${FabricFieldsFragmentDoc}
-`;
-
-/**
- * __useFabricsQuery__
- *
- * To run a query within a React component, call `useFabricsQuery` and pass it any options that fit your needs.
- * When your component renders, `useFabricsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFabricsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useFabricsQuery(
-  baseOptions?: Apollo.QueryHookOptions<FabricsQuery, FabricsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<FabricsQuery, FabricsQueryVariables>(
-    FabricsDocument,
-    options
-  );
-}
-export function useFabricsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<FabricsQuery, FabricsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<FabricsQuery, FabricsQueryVariables>(
-    FabricsDocument,
-    options
-  );
-}
-export type FabricsQueryHookResult = ReturnType<typeof useFabricsQuery>;
-export type FabricsLazyQueryHookResult = ReturnType<typeof useFabricsLazyQuery>;
-export type FabricsQueryResult = Apollo.QueryResult<
-  FabricsQuery,
-  FabricsQueryVariables
 >;
 export const FactoriesDocument = gql`
   query Factories {

@@ -87,7 +87,7 @@ export default function ObjectProperty({
         .map(([key, entryValue]) => {
           const entryValueType = typeof entryValue;
           return (
-            <Grid item alignItems={"baseline"} xs={"auto"} key={key}>
+            <Grid item alignItems={"baseline"} xs={12} md={"auto"} key={key}>
               {entryValueType === "string" || entryValueType === "number" ? (
                 <TextProperty title={key} value={entryValue as string} />
               ) : entryValueType === "boolean" ? (

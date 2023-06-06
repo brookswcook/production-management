@@ -155,7 +155,7 @@ export default function PurchaseOrderDetail(): ReactElement {
               </Stepper>
             </FieldValue>
           </Grid>
-          <Grid item xs={12} md={"auto"}>
+          <Grid item xs={12} lg={"auto"}>
             <ObjectProperty
               title="To"
               value={{
@@ -167,7 +167,7 @@ export default function PurchaseOrderDetail(): ReactElement {
               }}
             />
           </Grid>
-          <Grid item xs={12} md={"auto"}>
+          <Grid item xs={12} lg={"auto"}>
             <ObjectProperty
               title="Ship to"
               value={{

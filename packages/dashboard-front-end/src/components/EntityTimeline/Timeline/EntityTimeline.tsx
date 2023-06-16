@@ -184,7 +184,7 @@ export default function EntityTimeline({
       sx={{
         py: 1,
         borderTop: "1px solid rgba(224, 224, 224, 1)",
-        borderBottom: "1px solid rgba(224, 224, 224, 1)",
+        borderBottom: "2px solid rgba(224, 224, 224, 1)",
       }}
     >
       <Timeline

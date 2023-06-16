@@ -15,6 +15,7 @@ import {
   useActionLogsQuery,
   useNotesQuery,
 } from "../../../generated/graphql";
+import EditIcon from "@mui/icons-material/Edit";
 
 type TimelineItem = Omit<ActionLogListFieldsFragment, "__typename"> & {
   __typename?: "ActionLog" | "Note";
@@ -22,7 +23,7 @@ type TimelineItem = Omit<ActionLogListFieldsFragment, "__typename"> & {
 
 function TimelineSeparatorItem() {
   return (
-    <TimelineItem sx={{ minHeight: 20, pl: "5px" }}>
+    <TimelineItem sx={{ minHeight: 20, pl: 2 }}>
       <TimelineSeparator>
         <TimelineConnector />
       </TimelineSeparator>
@@ -33,29 +34,59 @@ function TimelineSeparatorItem() {
 function TimelineCommentItem({
   userFullName,
   comment,
-  date: _,
+  date,
 }: {
   userFullName: string;
   comment: string;
-  date?: Date;
+  date: Date;
 }) {
   return (
-    <TimelineItem sx={{ minHeight: 50 }}>
+    <TimelineItem sx={{ minHeight: 40, backgroundColor: "#ffffff" }}>
       <TimelineContent sx={{ p: 0 }}>
         <ListItemText
-          sx={{ m: 0 }}
-          primary={`${userFullName} commented`}
-          secondary={
-            <>
+          disableTypography={true}
+          sx={{
+            m: 0,
+            p: 0,
+            border: "2px solid rgba(224, 224, 224, 1)",
+            borderRadius: 2,
+          }}
+          primary={
+            <Box
+              sx={{
+                px: 2,
+                py: 0.5,
+                borderBottom: "2px solid rgba(224, 224, 224, 1) ",
+              }}
+            >
               <Typography
+                fontWeight={600}
                 sx={{ display: "inline" }}
                 component="span"
-                variant="body2"
-                color="text.primary"
+                variant="body1"
+              >{`${userFullName}`}</Typography>
+              <Typography
+                fontWeight={400}
+                fontSize={14}
+                sx={{ display: "inline" }}
+                component="span"
+              >
+                {` commented on ${new Date(date).toLocaleDateString()}`}
+              </Typography>
+            </Box>
+          }
+          secondary={
+            <Box sx={{ px: 2, py: 1 }}>
+              <Typography
+                sx={{
+                  display: "inline",
+                }}
+                component="span"
+                variant="body1"
               >
                 {comment}
               </Typography>
-            </>
+            </Box>
           }
         />
       </TimelineContent>
@@ -75,14 +106,39 @@ function TimeLineActionItem({
   last?: boolean;
 }) {
   return (
-    <TimelineItem sx={{ minHeight: 50 }}>
-      <TimelineSeparator>
-        <TimelineDot />
+    <TimelineItem sx={{ minHeight: 50, px: 0 }}>
+      <TimelineSeparator sx={{ minHeight: 70 }}>
+        <TimelineDot variant="outlined" sx={{ m: 0 }}>
+          <EditIcon fontSize="small" />
+        </TimelineDot>
         {last && <TimelineConnector />}
       </TimelineSeparator>
-      <TimelineContent>{`${capitalize(title)} by ${userFullName} on ${new Date(
-        date
-      ).toLocaleDateString()}`}</TimelineContent>
+      <TimelineContent>
+        <>
+          <Typography
+            fontWeight={400}
+            fontSize={14}
+            sx={{ display: "inline" }}
+            component="span"
+          >
+            {`${capitalize(title)} by `}
+          </Typography>
+          <Typography
+            fontWeight={600}
+            sx={{ display: "inline" }}
+            component="span"
+            variant="body1"
+          >{`${userFullName}`}</Typography>
+          <Typography
+            fontWeight={400}
+            fontSize={14}
+            sx={{ display: "inline" }}
+            component="span"
+          >
+            {` on ${new Date(date).toLocaleDateString()}`}
+          </Typography>
+        </>
+      </TimelineContent>
     </TimelineItem>
   );
 }
@@ -123,32 +179,26 @@ export default function EntityTimeline({
         )
       : [];
 
-  console.log(items);
-
   return (
     <Box
       sx={{
-        backgroundColor: "#FCFCFC",
-        border: "1px solid rgba(224, 224, 224, 1)",
-        borderRadius: 1,
+        py: 1,
+        borderTop: "1px solid rgba(224, 224, 224, 1)",
+        borderBottom: "1px solid rgba(224, 224, 224, 1)",
       }}
     >
       <Timeline
         sx={{
           padding: 0,
+          margin: 0,
           [`& .${timelineItemClasses.root}:before`]: {
             flex: 0,
             padding: 0,
           },
-          // [`& .${timelineItemClasses.root}`]: {
-          //   border: "1px solid rgba(224, 224, 224, 1)",
-          // },
         }}
       >
         {items.map(({ __typename, title, id, user, createdAt }, index) => {
           const isLastItem = index < items.length - 1;
-          const isNextItemNote =
-            index < items.length - 1 && items[index + 1].__typename === "Note";
           const userFullName = user?.fullName ?? "";
           return __typename === "ActionLog" ? (
             <TimeLineActionItem
@@ -165,7 +215,7 @@ export default function EntityTimeline({
                 comment={title}
                 date={new Date(createdAt ?? 0)}
               />
-              {isLastItem && !isNextItemNote && <TimelineSeparatorItem />}
+              {isLastItem && <TimelineSeparatorItem />}
             </React.Fragment>
           );
         })}

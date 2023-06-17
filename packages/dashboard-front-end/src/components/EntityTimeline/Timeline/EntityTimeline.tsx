@@ -127,7 +127,7 @@ function TimeLineActionItem({
         </TimelineDot>
         {last && <TimelineConnector />}
       </TimelineSeparator>
-      <TimelineContent>
+      <TimelineContent sx={{ py: 0 }}>
         <>
           <Typography
             fontWeight={400}

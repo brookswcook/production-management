@@ -11,7 +11,7 @@ import {
   DetailView,
   DetailViewSection,
 } from "../../DetailView";
-import EntityTimeline from "../../EntityTimeline";
+import { EntityTimeline } from "../../EntityTimeline";
 import { ObjectProperty } from "../../Properties";
 import { SampleList } from "../../Sample";
 import toCurrency from "../../Utils";
@@ -125,7 +125,7 @@ export default function ProductDetail(): ReactElement {
           ]}
           entityTypes={["Product", "FitSample"]}
           noteType="productNote"
-        />
+        ></EntityTimeline>
       </DetailViewSection>
     </DetailView>
   );

@@ -8,7 +8,7 @@ import {
   useFabricQuery,
   usePrintLinkLazyQuery,
 } from "../../../generated/graphql";
-import { EntityTimelineList } from "../../EntityTimeline";
+import { EntityTimeline } from "../../EntityTimeline";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { ObjectProperty, LinkProperty } from "../../Properties";
 import {
@@ -150,7 +150,7 @@ export default function FabricDetail(): ReactElement {
         />
       </DetailViewSection>
       <DetailViewSection title="timeline">
-        <EntityTimelineList
+        <EntityTimeline
           entityIds={[id, ...samples.map(({ id }) => id)]}
           entityTypes={["Fabric", "FabricSample"]}
           noteType="fabricNote"

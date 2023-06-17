@@ -7,15 +7,29 @@ import {
   TimelineContent,
   timelineItemClasses,
 } from "@mui/lab";
-import { Box, capitalize, ListItemText, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  capitalize,
+  Divider,
+  ListItemText,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { NoteType } from "dashboard-core";
-import React from "react";
+import React, { FormEvent, useState } from "react";
 import {
   ActionLogListFieldsFragment,
+  CreateNoteInput,
+  FileUploadInput,
   useActionLogsQuery,
+  useCreateNoteMutation,
   useNotesQuery,
 } from "../../../generated/graphql";
 import EditIcon from "@mui/icons-material/Edit";
+import { ApolloError } from "@apollo/client";
+import { toast } from "react-toastify";
 
 type TimelineItem = Omit<ActionLogListFieldsFragment, "__typename"> & {
   __typename?: "ActionLog" | "Note";
@@ -106,7 +120,7 @@ function TimeLineActionItem({
   last?: boolean;
 }) {
   return (
-    <TimelineItem sx={{ minHeight: 50, px: 0 }}>
+    <TimelineItem sx={{ minHeight: 50, p: 0 }}>
       <TimelineSeparator sx={{ minHeight: 70 }}>
         <TimelineDot variant="outlined" sx={{ m: 0 }}>
           <EditIcon fontSize="small" />
@@ -152,6 +166,17 @@ export default function EntityTimeline({
   entityTypes: string[];
   noteType: NoteType;
 }) {
+  const refetchQueries = ["Notes", "ActionLogs"];
+  if (noteType === "productNote") refetchQueries.push("Product");
+  if (noteType === "fabricNote") refetchQueries.push("Fabric");
+  if (noteType === "purchaseOrderNote") refetchQueries.push("PurchaseOrder");
+  if (noteType === "styleNote") refetchQueries.push("Style");
+  const refetchPolicy = {
+    refetchQueries,
+  };
+
+  const [noteText, setNoteText] = useState<string>("");
+  const [createNoteMutation] = useCreateNoteMutation(refetchPolicy);
   const { data, loading, error } = useActionLogsQuery({
     variables: { data: { entityIds, entityTypes } },
   });
@@ -179,6 +204,27 @@ export default function EntityTimeline({
         )
       : [];
 
+  async function createNewNote(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    try {
+      const newNoteData = {
+        parentId: entityIds[0],
+        text: noteText,
+        type: noteType,
+        images: [],
+      } as CreateNoteInput & { images: FileUploadInput[] };
+
+      await createNoteMutation({
+        variables: {
+          data: newNoteData,
+        },
+      });
+    } catch (error) {
+      toast.error((error as ApolloError).message);
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -189,8 +235,9 @@ export default function EntityTimeline({
     >
       <Timeline
         sx={{
-          padding: 0,
-          margin: 0,
+          p: 0,
+          m: 0,
+          mb: 1,
           [`& .${timelineItemClasses.root}:before`]: {
             flex: 0,
             padding: 0,
@@ -220,6 +267,30 @@ export default function EntityTimeline({
           );
         })}
       </Timeline>
+      <Divider sx={{ mb: 1 }}></Divider>
+      <Stack
+        component="form"
+        onSubmit={createNewNote}
+        spacing={2}
+        autoComplete="off"
+      >
+        <TextField
+          variant="outlined"
+          label="Leave a comment"
+          multiline
+          rows={2}
+          maxRows={4}
+          onChange={({ target: { value } }) => {
+            setNoteText(value);
+          }}
+          required
+        />
+        <Box>
+          <Button sx={{ float: "right" }} variant="contained" type="submit">
+            Comment
+          </Button>
+        </Box>
+      </Stack>
     </Box>
   );
 }

@@ -8,14 +8,14 @@ import {
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { CreateAttributeInput } from "../../generated/graphql";
-import { VariantAttributesDropDown } from "./VariantAttributeDropDown";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { VariantAttributeSet } from "./types";
+import VariantAttributesDropDown from "./VariantAttributeDropDown";
 
 type UniqueVariantAttributeSet = VariantAttributeSet & { id: number };
 
-export function VariantAttributeSetDropDown({
+export default function VariantAttributeSetDropDown({
   productCode,
   onChange,
 }: {

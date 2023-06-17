@@ -9,6 +9,7 @@ fragment ActionLogListFields on ActionLog {
   title
   user {
     firstName
+    fullName
   }
   createdAt
 }
@@ -24,6 +25,7 @@ fragment NotesFields on Note {
   text
   user {
     firstName
+    fullName
   }
   parentId
   type

@@ -47,3 +47,5 @@ export const purchaseOrderStatusSet = [
   "completed",
   "cancelled",
 ];
+
+export type SampleType = "fit" | "fabric";

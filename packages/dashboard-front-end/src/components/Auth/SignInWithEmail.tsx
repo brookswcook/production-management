@@ -15,7 +15,7 @@ import { LoginResult, useLoginMutation } from "../../generated/graphql";
 import { AuthContext } from "./AuthProvider";
 import { firebaseAuth as auth } from "../../firebase";
 
-export function SignInWithEmailLink(): ReactElement {
+export default function SignInWithEmailLink(): ReactElement {
   const { signIn } = useContext(AuthContext);
   const navigate = useNavigate();
   const [loginMutation] = useLoginMutation();

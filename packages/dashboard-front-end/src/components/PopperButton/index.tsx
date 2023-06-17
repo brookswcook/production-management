@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { OverridableStringUnion } from "@mui/types";
 
-export function PopperButton({
+export default function PopperButton({
   icon,
   title,
   children,

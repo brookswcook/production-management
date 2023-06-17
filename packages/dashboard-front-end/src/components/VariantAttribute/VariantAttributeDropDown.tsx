@@ -5,7 +5,7 @@ import {
   useAttributeDefinitionsQuery,
 } from "../../generated/graphql";
 
-export function VariantAttributesDropDown({
+export default function VariantAttributesDropDown({
   onChange,
 }: {
   onChange: (variantAttributes: CreateAttributeInput[]) => void;

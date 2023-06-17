@@ -17,14 +17,18 @@ import {
   usePurchaseOrderQuery,
   usePushPurchaseOrderToNextStageMutation,
 } from "../../../generated/graphql";
-import { DetailView } from "../../Common/DetailView";
-import { DetailViewHeader } from "../../Common/DetailViewHeader";
-import { DetailViewSection } from "../../Common/DetailViewSection";
-import { FieldTitle, FieldValue } from "../../Common/Typography";
-import EntityTimeline from "../../EntityTimeline";
-import { OrderItemsGroupedByAttributeList } from "../../OrderItem/ListView";
-import { ObjectProperty } from "../../Properties/ObjectProperty";
+
+import { EntityTimeline } from "../../EntityTimeline";
+
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import {
+  DetailViewHeader,
+  DetailView,
+  DetailViewSection,
+} from "../../DetailView";
+import { OrderItemsGroupedByAttributeList } from "../../OrderItem";
+import { ObjectProperty } from "../../Properties";
+import { FieldTitle, FieldValue } from "../../Typography";
 
 function PurchaseOrderHeader({
   purchaseOrder: {
@@ -76,7 +80,7 @@ function PurchaseOrderHeader({
   );
 }
 
-export function PurchaseOrderDetail(): ReactElement {
+export default function PurchaseOrderDetail(): ReactElement {
   const { uid = -1 } = useParams();
   const { data, error, loading } = usePurchaseOrderQuery({
     variables: { uid: Number(uid) },
@@ -151,7 +155,7 @@ export function PurchaseOrderDetail(): ReactElement {
               </Stepper>
             </FieldValue>
           </Grid>
-          <Grid item xs={12} md={"auto"}>
+          <Grid item xs={12} lg={"auto"}>
             <ObjectProperty
               title="To"
               value={{
@@ -163,7 +167,7 @@ export function PurchaseOrderDetail(): ReactElement {
               }}
             />
           </Grid>
-          <Grid item xs={12} md={"auto"}>
+          <Grid item xs={12} lg={"auto"}>
             <ObjectProperty
               title="Ship to"
               value={{

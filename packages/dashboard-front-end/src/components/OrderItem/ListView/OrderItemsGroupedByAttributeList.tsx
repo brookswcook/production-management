@@ -14,15 +14,15 @@ import {
   useOrderItemsGroupedByAttributesQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
-import { CreateOrderItemByVariantSetsDialog } from "../Dialog/CreateOrderItemByVariantSetsDialog";
 import AddIcon from "@mui/icons-material/Add";
-import { toCurrency } from "../../Common";
+import toCurrency from "../../Utils";
+import CreateOrderItemByVariantSetsDialog from "../Dialog/CreateOrderItemByVariantSetsDialog";
 import {
-  stringifyAttributes,
   stringifyVariantAttributes,
-} from "../../VariantAttribute";
+  stringifyAttributes,
+} from "../../VariantAttribute/VariantAttributeSetTable";
 
-export function OrderItemsGroupedByAttributeList({
+export default function OrderItemsGroupedByAttributeList({
   orderUid,
   addActionDisabled = false,
 }: {

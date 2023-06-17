@@ -15,10 +15,8 @@ import {
   useCreatePurchaseOrderMutation,
   useFactoriesQuery,
 } from "../../../generated/graphql";
-import { PopperButton } from "../../PopperButton";
-import AddIcon from "@mui/icons-material/Add";
 
-export function CreatePurchaseOrderForm({
+export default function CreatePurchaseOrderForm({
   footerEl,
 }: {
   footerEl?: ReactElement;
@@ -87,33 +85,5 @@ export function CreatePurchaseOrderForm({
         {footerEl}
       </>
     </Stack>
-  );
-}
-
-export function CreatePurchaseOrderPopperButton({
-  disabled = false,
-}: {
-  disabled?: boolean;
-}): ReactElement {
-  const [closeSwitch, setCloseSwitch] = useState(0);
-  function closePopper() {
-    setCloseSwitch(closeSwitch + 1);
-  }
-
-  return (
-    <PopperButton
-      icon={<AddIcon />}
-      title={"Add Purchase Order"}
-      disabled={disabled}
-      closeSwitch={closeSwitch}
-    >
-      <CreatePurchaseOrderForm
-        footerEl={
-          <Button variant="contained" onClick={closePopper}>
-            Cancel
-          </Button>
-        }
-      />
-    </PopperButton>
   );
 }

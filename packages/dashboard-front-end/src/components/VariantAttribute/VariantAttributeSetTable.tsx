@@ -74,7 +74,7 @@ export function createVariantsByAttributeDefinitions(
 
 type UniqueVariantAttributeSet = VariantAttributeSet & { id: string };
 
-export function VariantAttributeSetTable({
+export default function VariantAttributeSetTable({
   onChange,
 }: {
   onChange: (variantAttributeSets: UniqueVariantAttributeSet[]) => void;

@@ -6,17 +6,18 @@ import {
   Sample,
   useProductQuery,
 } from "../../../generated/graphql";
-import SampleGrid from "../../SampleGrid";
-import { DetailViewSection } from "../../Common/DetailViewSection";
+import {
+  DetailViewHeader,
+  DetailView,
+  DetailViewSection,
+} from "../../DetailView";
+import { EntityTimeline } from "../../EntityTimeline";
+import { ObjectProperty } from "../../Properties";
+import { SampleList } from "../../Sample";
+import toCurrency from "../../Utils";
+import UpdateProductionCostDialog from "../Dialog/UpdateProductionCostDialog";
 
-import { ObjectProperty } from "../../Properties/ObjectProperty";
-import EntityTimeline from "../../EntityTimeline";
-import { UpdateProductionCostDialog } from "../Dialog/UpdateProductionCostDialog";
-import { toCurrency } from "../../Common";
-import { DetailView } from "../../Common/DetailView";
-import { DetailViewHeader } from "../../Common/DetailViewHeader";
-
-export function ProductDetailHeader({
+function ProductDetailHeader({
   product: { name, deliveryDate, stage, factory },
 }: {
   product: ProductFieldsFragment;
@@ -30,7 +31,7 @@ export function ProductDetailHeader({
   return <DetailViewHeader title={name} headerData={headerData} />;
 }
 
-export function ProductDetail(): ReactElement {
+export default function ProductDetail(): ReactElement {
   const { code = "" } = useParams();
   const { data, error, loading } = useProductQuery({
     variables: { code },
@@ -110,7 +111,7 @@ export function ProductDetail(): ReactElement {
         </Grid>
       </DetailViewSection>
       <DetailViewSection title="Fit samples">
-        <SampleGrid
+        <SampleList
           parentCode={code}
           sampleType="fit"
           samples={data.product.fitSamples as Sample[]}
@@ -124,7 +125,7 @@ export function ProductDetail(): ReactElement {
           ]}
           entityTypes={["Product", "FitSample"]}
           noteType="productNote"
-        />
+        ></EntityTimeline>
       </DetailViewSection>
     </DetailView>
   );

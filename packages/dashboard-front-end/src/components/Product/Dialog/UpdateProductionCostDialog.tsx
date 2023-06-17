@@ -12,12 +12,12 @@ import {
   useProductQuery,
   useUpdateCostMutation,
 } from "../../../generated/graphql";
-import { ActionDialog } from "../../Common/ActionDialog";
-import FloatTextField from "../../Common/FloatTextField";
+import FloatTextField from "../../Properties/FloatTextField";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import ActionDialog from "../../ActionDialog/ActionDialog";
 
-export function UpdateProductionCostDialog({
+export default function UpdateProductionCostDialog({
   productCode: code,
   open = false,
   onSave = () => {},

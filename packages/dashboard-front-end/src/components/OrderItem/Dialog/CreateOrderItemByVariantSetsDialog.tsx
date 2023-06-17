@@ -2,14 +2,12 @@ import { useMediaQuery, useTheme } from "@mui/material";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useCreateOrderItemMutation } from "../../../generated/graphql";
-import { ActionDialog } from "../../Common/ActionDialog";
-import {
-  CreateOrderItemBulkyDropdownForm,
-  OrderItemBulkyFormType,
-} from "../Form";
-import { CreateOrderItemBulkyTableForm } from "../Form/CreateOrderItemBulkyTableForm";
+import ActionDialog from "../../ActionDialog/ActionDialog";
+import CreateOrderItemBulkyDropdownForm from "../Form/CreateOrderItemBulkyDropdownForm";
+import CreateOrderItemBulkyTableForm from "../Form/CreateOrderItemBulkyTableForm";
+import { OrderItemBulkyFormType } from "../Form/types";
 
-export function CreateOrderItemByVariantSetsDialog({
+export default function CreateOrderItemByVariantSetsDialog({
   orderUid,
   open = false,
   onSave = () => {},

@@ -5,7 +5,7 @@ import { authorizeByRole } from "dashboard-core";
 
 // TODO: later it might make sense to use class class authChecker see typegraphql-authorization page
 export const authChecker: AuthChecker<Context<ResolverContext>> = (
-  { root, args, context, info },
+  { root: _root, args: _args, context, info: _info },
   authRuleRoles
 ) => {
   if (context.user == null) return false;

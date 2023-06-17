@@ -1,0 +1,42 @@
+fragment fabricFields on Fabric {
+  id
+  code
+  title
+  factory {
+    code
+    name
+  }
+  colorName
+  colorType
+  colorCode
+  printFileName
+  productCodes
+  stage
+  notes {
+    ...noteFields
+  }
+  samples {
+    ...fabricSampleFields
+  }
+}
+
+query Fabrics {
+  fabrics {
+    ...fabricFields
+  }
+}
+
+query Fabric($code: String!) {
+  fabric(code: $code) {
+    code
+    colorName
+    ...fabricFields
+  }
+}
+
+mutation CreateFabric($data: CreateFabricInput!) {
+  createFabric(data: $data) {
+    code
+    colorName
+  }
+}

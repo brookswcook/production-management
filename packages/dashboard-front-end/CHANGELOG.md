@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.12.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.11.0...dashboard-front-end@1.12.0) (2023-06-17)
+
+
+### Bug Fixes
+
+* detail view section title should take the whole width ([f870bd8](https://github.com/brookswcook/production-management/commit/f870bd8a0d3bd9b7a4aeac61f846f3fe512db42f))
+* disable entity timeline listview ([2c42c3b](https://github.com/brookswcook/production-management/commit/2c42c3b58c39e2d51c742083f974e917b5946200))
+* eslint issues ([44a48c3](https://github.com/brookswcook/production-management/commit/44a48c3aec3e68c3ad7ca742ab7ada80b59f8b74))
+* graphql query fullname of the user too ([4e28121](https://github.com/brookswcook/production-management/commit/4e28121d50e4b4d135e4e4636aa05abbc15efba3))
+* increase thickness of the border ([2461ddb](https://github.com/brookswcook/production-management/commit/2461ddb5cf2a2b5b7ef375eb25f820c62728e8a0))
+* proper sizing of object prop fields ([499a8e0](https://github.com/brookswcook/production-management/commit/499a8e0026080a5c4dc277eabc90593f9dcdfc9f))
+* reset note text once submited ([61933e3](https://github.com/brookswcook/production-management/commit/61933e317c685f046735360e3ee40bf5711d0a20))
+* update padding of timeline content ([d0214ac](https://github.com/brookswcook/production-management/commit/d0214ac85413484ce58765d126e5beff2638696e))
+
+
+### Features
+
+* button to add comments in new timeline ([1b13628](https://github.com/brookswcook/production-management/commit/1b13628139a60d52b70f75099bb3031d70654427))
+* entity timeline like github ui ([9eb6675](https://github.com/brookswcook/production-management/commit/9eb667522baa19b7ebecc98ad9173a8753f62c0b))
+* use new timeline component ([f1de6aa](https://github.com/brookswcook/production-management/commit/f1de6aadf3794b4a93c9de323c69c9123915eff5))
+
+
+
+
+
 # [1.11.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.10.0...dashboard-front-end@1.11.0) (2023-05-19)
 
 

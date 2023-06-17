@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.2](https://github.com/brookswcook/production-management/compare/dashboard-api@1.9.1...dashboard-api@1.9.2) (2023-06-17)
+
+
+### Bug Fixes
+
+* eslint issues ([44a48c3](https://github.com/brookswcook/production-management/commit/44a48c3aec3e68c3ad7ca742ab7ada80b59f8b74))
+
+
+
+
+
 ## [1.9.1](https://github.com/brookswcook/production-management/compare/dashboard-api@1.9.0...dashboard-api@1.9.1) (2023-05-19)
 
 

@@ -220,6 +220,8 @@ export default function EntityTimeline({
           data: newNoteData,
         },
       });
+
+      setNoteText("");
     } catch (error) {
       toast.error((error as ApolloError).message);
     }
@@ -283,6 +285,7 @@ export default function EntityTimeline({
           onChange={({ target: { value } }) => {
             setNoteText(value);
           }}
+          value={noteText}
           required
         />
         <Box>

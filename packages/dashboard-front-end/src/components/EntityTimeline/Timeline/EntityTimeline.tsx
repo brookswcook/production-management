@@ -125,7 +125,7 @@ function TimeLineActionItem({
         <TimelineDot variant="outlined" sx={{ m: 0 }}>
           <EditIcon fontSize="small" />
         </TimelineDot>
-        {last && <TimelineConnector />}
+        {<TimelineConnector />}
       </TimelineSeparator>
       <TimelineContent sx={{ py: 0 }}>
         <>
@@ -264,7 +264,7 @@ export default function EntityTimeline({
                 comment={title}
                 date={new Date(createdAt ?? 0)}
               />
-              {isLastItem && <TimelineSeparatorItem />}
+              <TimelineSeparatorItem />
             </React.Fragment>
           );
         })}

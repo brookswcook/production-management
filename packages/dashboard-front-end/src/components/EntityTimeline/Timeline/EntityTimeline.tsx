@@ -11,7 +11,6 @@ import {
   Box,
   Button,
   capitalize,
-  Divider,
   ListItemText,
   Stack,
   TextField,
@@ -112,22 +111,23 @@ function TimeLineActionItem({
   title,
   userFullName,
   date,
-  last = false,
+  first = false,
 }: {
   title: string;
   userFullName: string;
   date: Date;
-  last?: boolean;
+  first: boolean;
 }) {
   return (
     <TimelineItem sx={{ minHeight: 50, p: 0 }}>
       <TimelineSeparator sx={{ minHeight: 70 }}>
+        {first && <TimelineConnector />}
         <TimelineDot variant="outlined" sx={{ m: 0 }}>
           <EditIcon fontSize="small" />
         </TimelineDot>
-        {last && <TimelineConnector />}
+        {<TimelineConnector />}
       </TimelineSeparator>
-      <TimelineContent sx={{ py: 0 }}>
+      <TimelineContent sx={{ py: first ? "19px" : 0 }}>
         <>
           <Typography
             fontWeight={400}
@@ -228,48 +228,50 @@ export default function EntityTimeline({
   }
 
   return (
-    <Box
-      sx={{
-        py: 1,
-        borderTop: "1px solid rgba(224, 224, 224, 1)",
-        borderBottom: "2px solid rgba(224, 224, 224, 1)",
-      }}
-    >
-      <Timeline
+    <>
+      <Box
         sx={{
-          p: 0,
-          m: 0,
+          py: 0,
           mb: 1,
-          [`& .${timelineItemClasses.root}:before`]: {
-            flex: 0,
-            padding: 0,
-          },
+          borderTop: "2px solid rgba(224, 224, 224, 1)",
+          borderBottom: "2px solid rgba(224, 224, 224, 1)",
         }}
       >
-        {items.map(({ __typename, title, id, user, createdAt }, index) => {
-          const isLastItem = index < items.length - 1;
-          const userFullName = user?.fullName ?? "";
-          return __typename === "ActionLog" ? (
-            <TimeLineActionItem
-              title={title}
-              date={new Date(createdAt ?? 0)}
-              key={id}
-              last={isLastItem}
-              userFullName={userFullName}
-            />
-          ) : (
-            <React.Fragment key={id}>
-              <TimelineCommentItem
-                userFullName={userFullName}
-                comment={title}
-                date={new Date(createdAt ?? 0)}
-              />
-              {isLastItem && <TimelineSeparatorItem />}
-            </React.Fragment>
-          );
-        })}
-      </Timeline>
-      <Divider sx={{ mb: 1 }}></Divider>
+        <Timeline
+          sx={{
+            p: 0,
+            m: 0,
+            [`& .${timelineItemClasses.root}:before`]: {
+              flex: 0,
+              padding: 0,
+            },
+          }}
+        >
+          {items.map(({ __typename, title, id, user, createdAt }, index) => {
+            const isFirstItem = index === 0;
+            const userFullName = user?.fullName ?? "";
+            return __typename === "ActionLog" ? (
+              <React.Fragment key={id}>
+                <TimeLineActionItem
+                  title={title}
+                  date={new Date(createdAt ?? 0)}
+                  first={isFirstItem}
+                  userFullName={userFullName}
+                />
+              </React.Fragment>
+            ) : (
+              <React.Fragment key={id}>
+                <TimelineCommentItem
+                  userFullName={userFullName}
+                  comment={title}
+                  date={new Date(createdAt ?? 0)}
+                />
+                <TimelineSeparatorItem />
+              </React.Fragment>
+            );
+          })}
+        </Timeline>
+      </Box>
       <Stack
         component="form"
         onSubmit={createNewNote}
@@ -294,6 +296,6 @@ export default function EntityTimeline({
           </Button>
         </Box>
       </Stack>
-    </Box>
+    </>
   );
 }

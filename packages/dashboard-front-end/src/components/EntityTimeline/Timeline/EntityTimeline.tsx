@@ -120,7 +120,7 @@ function TimeLineActionItem({
 }) {
   return (
     <TimelineItem sx={{ minHeight: 50, p: 0 }}>
-      <TimelineSeparator sx={{ minHeight: 70 }}>
+      <TimelineSeparator sx={{ minHeight: 50 }}>
         {first && <TimelineConnector />}
         <TimelineDot variant="outlined" sx={{ m: 0 }}>
           <EditIcon fontSize="small" />

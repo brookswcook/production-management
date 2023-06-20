@@ -34,7 +34,7 @@ import {
 import RequireRole from "../../Auth/RequireRole";
 import { renderCellExpand } from "../../ListView";
 import PopperButton from "../../PopperButton";
-import SendSamplePopperButton from "../Popper/SendSamplePopperButton";
+import SendSampleDialog from "../Dialog/SendSampleDialog";
 
 export default function SampleList({
   parentCode,
@@ -50,6 +50,8 @@ export default function SampleList({
   };
   const [selectedGridItems, setSelectedGridItems] =
     useState<GridSelectionModel>([]);
+  const [sendSampleDialogOpen, setSendSampleDialogOpen] = useState(false);
+
   const [approveFitSampleMutation] = useApproveFitSampleMutation(refetchPolicy);
   const [rejectFitSampleMutation] = useRejectFitSampleMutation(refetchPolicy);
 
@@ -124,6 +126,13 @@ export default function SampleList({
 
   return (
     <Box sx={{ height: "300px", width: "100%", pt: 1 }}>
+      <SendSampleDialog
+        sampleType={sampleType}
+        parentCode={parentCode}
+        open={sendSampleDialogOpen}
+        onSave={() => setSendSampleDialogOpen(false)}
+        onClose={() => setSendSampleDialogOpen(false)}
+      />
       <DataGrid
         rows={rows ?? []}
         columns={columns}
@@ -168,10 +177,13 @@ export default function SampleList({
     return (
       <>
         <GridToolbarContainer>
-          <SendSamplePopperButton
-            sampleType={sampleType}
-            parentCode={parentCode}
-          />
+          <Button
+            variant={"text"}
+            size={"small"}
+            onClick={() => setSendSampleDialogOpen(true)}
+          >
+            {`New ${sampleType == "fit" ? "fit" : "fabric"} sample`}
+          </Button>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
             <Button
               variant="text"

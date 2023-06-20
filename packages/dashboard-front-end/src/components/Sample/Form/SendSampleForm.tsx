@@ -1,12 +1,5 @@
 import { ApolloError } from "@apollo/client";
-import {
-  Stack,
-  FormControl,
-  InputLabel,
-  Input,
-  Button,
-  Typography,
-} from "@mui/material";
+import { TextField, Stack } from "@mui/material";
 import { SampleType } from "dashboard-core";
 import { FormEvent, ReactElement } from "react";
 import { toast } from "react-toastify";
@@ -17,11 +10,15 @@ import {
 } from "../../../generated/graphql";
 
 export default function SendSampleForm({
+  onSubmit,
   parentCode,
   sampleType,
+  id = "sendSampleForm",
 }: {
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   parentCode: string;
   sampleType: SampleType;
+  id?: string;
 }): ReactElement {
   const mutationOptions = {
     refetchQueries: ["Products", "Product", "ActionLogs"],
@@ -47,6 +44,7 @@ export default function SendSampleForm({
     } catch (error) {
       toast.error((error as ApolloError).message);
     }
+    onSubmit(event);
   }
 
   return (
@@ -55,21 +53,10 @@ export default function SendSampleForm({
       onSubmit={sendSample}
       spacing={2}
       autoComplete="off"
+      id={id}
     >
-      <Typography component="h4" variant="inherit">
-        {`Send ${sampleType === "fit" ? "fit" : "fabric"} sample`}
-      </Typography>
-      <FormControl>
-        <InputLabel htmlFor="sku-input">SKU</InputLabel>
-        <Input name="sku" id="sku-input" />
-      </FormControl>
-      <FormControl>
-        <InputLabel htmlFor="track-number-input">Track Number</InputLabel>
-        <Input name="trackNumber" id="track-number-input" />
-      </FormControl>
-      <Button variant="contained" type="submit">
-        Send
-      </Button>
+      <TextField label="SKU" name="sku" required sx={{ mt: 1 }} />
+      <TextField label="Track Number" name="trackNumber" required />
     </Stack>
   );
 }

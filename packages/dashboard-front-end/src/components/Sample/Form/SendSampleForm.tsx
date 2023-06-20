@@ -55,7 +55,7 @@ export default function SendSampleForm({
       autoComplete="off"
       id={id}
     >
-      <TextField label="SKU" name="sku" required sx={{ mt: 1 }} />
+      <TextField label="Sample number" name="sku" required sx={{ mt: 1 }} />
       <TextField label="Track Number" name="trackNumber" required />
     </Stack>
   );

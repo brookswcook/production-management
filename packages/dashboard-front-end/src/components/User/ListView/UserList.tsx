@@ -1,14 +1,16 @@
+import { Button } from "@mui/material";
 import { GridColDef, GridToolbarContainer } from "@mui/x-data-grid";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import {
   UserListFieldsFragment,
   useUsersQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
 import { ListView } from "../../ListView";
-import CreateUserPopperButton from "../Popper/CreateUserPopperButton";
+import CreateUserDialog from "../Dialog/CreateUserDialog";
 
 export default function UserList(): ReactElement {
+  const [createUserDialogOpen, setCreateUserDialogOpen] = useState(false);
   const { data, loading, error } = useUsersQuery({});
   const rows: UserListFieldsFragment[] = data?.users ?? [];
 
@@ -86,24 +88,37 @@ export default function UserList(): ReactElement {
     return (
       <GridToolbarContainer>
         <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-          <CreateUserPopperButton />
+          <Button
+            variant={"text"}
+            size={"small"}
+            onClick={() => setCreateUserDialogOpen(true)}
+          >
+            Add User
+          </Button>
         </RequireRole>
       </GridToolbarContainer>
     );
   }
 
   return (
-    <ListView
-      rows={rows}
-      columns={columns}
-      getRowId={item => item.id}
-      loading={loading}
-      error={error}
-      autoHeight
-      components={{
-        Toolbar: CustomToolbar,
-      }}
-      disableSelectionOnClick
-    />
+    <>
+      <CreateUserDialog
+        open={createUserDialogOpen}
+        onSave={() => setCreateUserDialogOpen(false)}
+        onClose={() => setCreateUserDialogOpen(false)}
+      />
+      <ListView
+        rows={rows}
+        columns={columns}
+        getRowId={item => item.id}
+        loading={loading}
+        error={error}
+        autoHeight
+        components={{
+          Toolbar: CustomToolbar,
+        }}
+        disableSelectionOnClick
+      />
+    </>
   );
 }

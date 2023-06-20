@@ -1,4 +1,4 @@
-import { capitalize } from "@mui/material";
+import { Button, capitalize } from "@mui/material";
 import {
   GridColDef,
   GridRenderCellParams,
@@ -7,7 +7,7 @@ import {
   GridToolbarExport,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   PurchaseOrderListFieldsFragment,
@@ -15,9 +15,11 @@ import {
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
 import { ListView } from "../../ListView";
-import CreatePurchaseOrderPopperButton from "../Popper/CreatePurchaseOrderPopperButton";
+import CreatePurchaseOrderDialog from "../Dialog/CreatePurchaseOrderDialog";
 
 export default function PurchaseOrderList(): ReactElement {
+  const [createPurchaseOrderDialogOpen, setCreatePurchaseOrderDialogOpen] =
+    useState(false);
   const { data, loading, error } = usePurchaseOrdersQuery({});
   const rows: PurchaseOrderListFieldsFragment[] = data?.purchaseOrders ?? [];
 
@@ -101,7 +103,13 @@ export default function PurchaseOrderList(): ReactElement {
       <>
         <GridToolbarContainer>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <CreatePurchaseOrderPopperButton />
+            <Button
+              variant={"text"}
+              size={"small"}
+              onClick={() => setCreatePurchaseOrderDialogOpen(true)}
+            >
+              Add purchase order
+            </Button>
           </RequireRole>
           <GridToolbarColumnsButton />
           <GridToolbarFilterButton />
@@ -112,16 +120,23 @@ export default function PurchaseOrderList(): ReactElement {
   }
 
   return (
-    <ListView
-      rows={rows}
-      columns={columns}
-      getRowId={item => item.uid}
-      loading={loading}
-      error={error}
-      components={{
-        Toolbar: CustomToolbar,
-      }}
-      disableSelectionOnClick
-    />
+    <>
+      <CreatePurchaseOrderDialog
+        open={createPurchaseOrderDialogOpen}
+        onSave={() => setCreatePurchaseOrderDialogOpen(false)}
+        onClose={() => setCreatePurchaseOrderDialogOpen(false)}
+      />
+      <ListView
+        rows={rows}
+        columns={columns}
+        getRowId={item => item.uid}
+        loading={loading}
+        error={error}
+        components={{
+          Toolbar: CustomToolbar,
+        }}
+        disableSelectionOnClick
+      />
+    </>
   );
 }

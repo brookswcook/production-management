@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.13.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.12.0...dashboard-front-end@1.13.0) (2023-06-21)
+
+
+### Bug Fixes
+
+* attempt to update cache ([9f377e6](https://github.com/brookswcook/production-management/commit/9f377e6ace05008e1634da6e2ca21e522d573dd0))
+* remove old timeline list ([551e311](https://github.com/brookswcook/production-management/commit/551e3119a3edac0fa00c6bf690d9ad33f1118f09))
+* rename field label ([b3faa26](https://github.com/brookswcook/production-management/commit/b3faa26cbe79092d09840004536172986025bd1c))
+* timeline separator length ([ceddf0b](https://github.com/brookswcook/production-management/commit/ceddf0ba5efbdf7dc9b2a666867d682610fa6794))
+
+
+### Features
+
+* connect top border and timeline connector ([1064975](https://github.com/brookswcook/production-management/commit/1064975fe434f23301ffb2cf816d1b28d32ac28e))
+* replace create fabric popper with dialog ([0692103](https://github.com/brookswcook/production-management/commit/069210365c139415d53503fb9c116658a2cdfa7b))
+* replace create factory popper with dialog ([80dd471](https://github.com/brookswcook/production-management/commit/80dd4712c3f9a8161cafdad914a593bce874f9a5))
+* replace new sample popup with dialog ([86875b9](https://github.com/brookswcook/production-management/commit/86875b963397436e095724ae6399f857646a36a5))
+* replace order item creation popper with dialog ([7d1c356](https://github.com/brookswcook/production-management/commit/7d1c35658618fb6c77fc3a7c7fdcffe0be27b68b))
+* replace product creation popper with dialog ([0b36f8e](https://github.com/brookswcook/production-management/commit/0b36f8e89c7ea9837661cca53065816f8c9f98db))
+* replace purchase order creation popup button with dialog ([9ed5f8d](https://github.com/brookswcook/production-management/commit/9ed5f8d1c66be69afcc8c2c4712200b7bf3fcc0d))
+* replace sample rejection popper with dialog ([9960b4a](https://github.com/brookswcook/production-management/commit/9960b4ac95bafe411a2abf53d26477018df35607))
+* replace style creation popper with dialog ([31d4814](https://github.com/brookswcook/production-management/commit/31d4814f31d2fe76ced0ac4d3991539e2a79d906))
+* show connector down to the border ([15e0ed9](https://github.com/brookswcook/production-management/commit/15e0ed9a7668ba4e6e19ca0a47b2e028ac9c09f0))
+
+
+
+
+
 # [1.12.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.11.0...dashboard-front-end@1.12.0) (2023-06-17)
 
 

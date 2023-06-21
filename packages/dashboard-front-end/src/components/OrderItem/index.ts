@@ -5,5 +5,5 @@ export { default as CreateOrderItemBulkyTableForm } from "./Form/CreateOrderItem
 export { default as CreateOrderItemForm } from "./Form/CreateOrderItemForm";
 export { default as OrderItemList } from "./ListView/OrderItemList";
 export { default as OrderItemsGroupedByAttributeList } from "./ListView/OrderItemsGroupedByAttributeList";
-export { default as CreateOrderItemPopperButton } from "./PopperButton/CreateOrderItemPopperButton";
+export { default as CreateOrderItemDialog } from "./Dialog/CreateOrderItemDialog";
 export { default as OrderItemPriceTextField } from "./OrderItemPriceTextField";

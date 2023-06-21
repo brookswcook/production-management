@@ -1,11 +1,4 @@
-import {
-  Autocomplete,
-  Box,
-  Button,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Autocomplete, Box, Stack, TextField } from "@mui/material";
 import { FormEvent, ReactElement, useState } from "react";
 import { ColorType } from "dashboard-core";
 import FilePreload from "../../FilePreload";
@@ -18,9 +11,11 @@ import {
 import { toast } from "react-toastify";
 
 export default function CreateFabricForm({
-  footerEl,
+  onSubmit,
+  id = "createFabric",
 }: {
-  footerEl?: ReactElement;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  id?: string;
 }): ReactElement {
   const [selectedColorType, setSelectedColorType] = useState<string>("");
   const [printFiles, setPrintFiles] = useState<File[] | null>(null);
@@ -72,6 +67,7 @@ export default function CreateFabricForm({
     } catch (error) {
       toast.error((error as Error).message);
     }
+    onSubmit(event);
   }
 
   return (
@@ -80,10 +76,9 @@ export default function CreateFabricForm({
       onSubmit={createNewFabric}
       spacing={2}
       autoComplete="off"
+      id={id}
+      sx={{ mt: 1 }}
     >
-      <Typography component="h4" variant="inherit">
-        {`Create new Fabric`}
-      </Typography>
       <TextField
         label="Fabric Title"
         name="title"
@@ -138,12 +133,6 @@ export default function CreateFabricForm({
           multiple={false}
         />
       )}
-      <>
-        <Button variant="contained" type="submit">
-          Add Fabric
-        </Button>
-        {footerEl}
-      </>
     </Stack>
   );
 }

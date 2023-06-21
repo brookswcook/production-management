@@ -1,5 +1,5 @@
 import { ApolloError } from "@apollo/client";
-import { Box, Button, Stack, TextField } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -7,34 +7,20 @@ import {
   GridToolbarContainer,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { NoteType } from "dashboard-core";
-import {
-  ChangeEvent,
-  FormEvent,
-  ReactElement,
-  useEffect,
-  useState,
-} from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   Sample,
   useApproveFitSampleMutation,
-  useRejectFitSampleMutation,
   useMarkFitSampleAsDeliveredMutation,
   useApproveFabricSampleMutation,
-  useRejectFabricSampleMutation,
-  useMarkFabricSampleAsDeliveredMutation,
-  useCreateNoteMutation,
   useImageLinkLazyQuery,
-  RejectFitSampleMutation,
-  RejectFabricSampleMutation,
-  CreateNoteInput,
-  FileUploadInput,
+  useMarkFabricSampleAsDeliveredMutation,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
 import { renderCellExpand } from "../../ListView";
-import PopperButton from "../../PopperButton";
-import SendSamplePopperButton from "../Popper/SendSamplePopperButton";
+import RejectSampleDialog from "../Dialog/RejectSampleDialog";
+import SendSampleDialog from "../Dialog/SendSampleDialog";
 
 export default function SampleList({
   parentCode,
@@ -50,18 +36,17 @@ export default function SampleList({
   };
   const [selectedGridItems, setSelectedGridItems] =
     useState<GridSelectionModel>([]);
-  const [approveFitSampleMutation] = useApproveFitSampleMutation(refetchPolicy);
-  const [rejectFitSampleMutation] = useRejectFitSampleMutation(refetchPolicy);
+  const [sendSampleDialogOpen, setSendSampleDialogOpen] = useState(false);
+  const [rejectSampleDialogOpen, setRejectSampleDialogOpen] = useState(false);
 
+  const [approveFitSampleMutation] = useApproveFitSampleMutation(refetchPolicy);
+
+  const [markFabricSampleAsDelivered] =
+    useMarkFabricSampleAsDeliveredMutation(refetchPolicy);
   const [markFitSampleAsDelivered] =
     useMarkFitSampleAsDeliveredMutation(refetchPolicy);
   const [approveFabricSampleMutation] =
     useApproveFabricSampleMutation(refetchPolicy);
-  const [rejectFabricSampleMutation] =
-    useRejectFabricSampleMutation(refetchPolicy);
-  const [markFabricSampleAsDelivered] =
-    useMarkFabricSampleAsDeliveredMutation(refetchPolicy);
-  const [createNoteMutation] = useCreateNoteMutation(refetchPolicy);
 
   // TODO: reuse it since there's a similar thing in ProductGrid
   const selectedSampleSkus = Array.from(selectedGridItems.values());
@@ -124,6 +109,21 @@ export default function SampleList({
 
   return (
     <Box sx={{ height: "300px", width: "100%", pt: 1 }}>
+      <RejectSampleDialog
+        parentCode={parentCode}
+        sampleType={sampleType}
+        open={rejectSampleDialogOpen}
+        sku={selectedSamples[0]?.sku ?? ""}
+        onSave={() => setRejectSampleDialogOpen(false)}
+        onClose={() => setRejectSampleDialogOpen(false)}
+      />
+      <SendSampleDialog
+        sampleType={sampleType}
+        parentCode={parentCode}
+        open={sendSampleDialogOpen}
+        onSave={() => setSendSampleDialogOpen(false)}
+        onClose={() => setSendSampleDialogOpen(false)}
+      />
       <DataGrid
         rows={rows ?? []}
         columns={columns}
@@ -146,8 +146,6 @@ export default function SampleList({
   );
 
   function CustomToolbar(): ReactElement {
-    const [rejectionText, setRejectionText] = useState<string>("");
-    const [imageFiles, setImageFiles] = useState<FileList>();
     const [noteFileLink, setNoteFileLink] = useState<string>();
     const [getImageFileLink] = useImageLinkLazyQuery();
 
@@ -156,22 +154,16 @@ export default function SampleList({
       return () => {};
     }, [selectedGridItems]);
 
-    function onImagesInputChange({
-      target: {
-        files,
-        validity: { valid },
-      },
-    }: ChangeEvent<HTMLInputElement>) {
-      if (valid && files) setImageFiles(files);
-    }
-
     return (
       <>
         <GridToolbarContainer>
-          <SendSamplePopperButton
-            sampleType={sampleType}
-            parentCode={parentCode}
-          />
+          <Button
+            variant={"text"}
+            size={"small"}
+            onClick={() => setSendSampleDialogOpen(true)}
+          >
+            {`New ${sampleType == "fit" ? "fit" : "fabric"} sample`}
+          </Button>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
             <Button
               variant="text"
@@ -193,36 +185,14 @@ export default function SampleList({
             </Button>
           </RequireRole>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <PopperButton
-              title={"Reject"}
+            <Button
+              variant="text"
+              size="small"
+              onClick={() => setRejectSampleDialogOpen(true)}
               disabled={selectedSamples.length !== 1}
             >
-              <Stack
-                component="form"
-                onSubmit={rejectSample}
-                spacing={2}
-                autoComplete="off"
-              >
-                <TextField
-                  variant="standard"
-                  label="Rejection comment"
-                  onChange={({ target: { value } }) => {
-                    setRejectionText(value);
-                  }}
-                  required
-                />
-                <TextField
-                  variant="standard"
-                  label="Images"
-                  type="file"
-                  helperText="Images associated with rejection comment. Put them in archive if you want to upload more than one image"
-                  onChange={onImagesInputChange}
-                />
-                <Button variant="contained" type="submit">
-                  Submit
-                </Button>
-              </Stack>
-            </PopperButton>
+              Reject
+            </Button>
           </RequireRole>
           <a
             href={noteFileLink}
@@ -267,53 +237,6 @@ export default function SampleList({
             data: { parentCode, sku: selectedSamples[0].sku ?? "" },
           },
         });
-      } catch (error) {
-        toast.error((error as ApolloError).message);
-      }
-    }
-
-    async function rejectSample(event: FormEvent<HTMLFormElement>) {
-      event.preventDefault();
-      try {
-        const { data: rejectSampleMutationResult } = await (sampleType == "fit"
-          ? rejectFitSampleMutation
-          : rejectFabricSampleMutation)({
-          variables: {
-            data: {
-              parentCode,
-              sku: selectedSamples[0].sku ?? "",
-            },
-          },
-        });
-        if (rejectSampleMutationResult != null) {
-          const { id: parentId } =
-            sampleType == "fit"
-              ? (rejectSampleMutationResult as RejectFitSampleMutation)
-                  .rejectFitSample
-              : (rejectSampleMutationResult as RejectFabricSampleMutation)
-                  .rejectFabricSample;
-          const newNoteData = {
-            parentId,
-            text: rejectionText,
-            type: "sampleRejectionComment" as NoteType,
-            images: [],
-          } as CreateNoteInput & { images: FileUploadInput[] };
-
-          if (imageFiles) {
-            for (let i = 0; i < imageFiles.length; i++) {
-              newNoteData.images.push({
-                file: imageFiles[i],
-                fileSize: imageFiles[i].size,
-              });
-            }
-          }
-
-          await createNoteMutation({
-            variables: {
-              data: newNoteData,
-            },
-          });
-        }
       } catch (error) {
         toast.error((error as ApolloError).message);
       }

@@ -11,12 +11,14 @@ import {
   FabricFieldsFragment,
   useFabricsQuery,
 } from "../../../generated/graphql";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import RequireRole from "../../Auth/RequireRole";
 import { renderCellExpand, ListView } from "../../ListView";
-import CreateFabricPopperButton from "../PopperButton/CreateFabricPopperButton";
+import CreateFabricDialog from "../Dialog/CreateFabricDialog";
+import { Button } from "@mui/material";
 
 export default function FabricList(): ReactElement {
+  const [createFabricDialogOpen, setCreateFabricDialogOpen] = useState(false);
   const { data, loading, error } = useFabricsQuery({});
   const rows: FabricFieldsFragment[] = data?.fabrics ?? [];
 
@@ -95,7 +97,13 @@ export default function FabricList(): ReactElement {
     return (
       <GridToolbarContainer>
         <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-          <CreateFabricPopperButton />
+          <Button
+            variant={"text"}
+            size={"small"}
+            onClick={() => setCreateFabricDialogOpen(true)}
+          >
+            Add fabric
+          </Button>
         </RequireRole>
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
@@ -105,16 +113,23 @@ export default function FabricList(): ReactElement {
   }
 
   return (
-    <ListView
-      rows={rows}
-      columns={columns}
-      getRowId={item => item.code}
-      loading={loading}
-      error={error}
-      components={{
-        Toolbar: CustomToolbar,
-      }}
-      disableSelectionOnClick
-    />
+    <>
+      <CreateFabricDialog
+        open={createFabricDialogOpen}
+        onSave={() => setCreateFabricDialogOpen(false)}
+        onClose={() => setCreateFabricDialogOpen(false)}
+      />
+      <ListView
+        rows={rows}
+        columns={columns}
+        getRowId={item => item.code}
+        loading={loading}
+        error={error}
+        components={{
+          Toolbar: CustomToolbar,
+        }}
+        disableSelectionOnClick
+      />
+    </>
   );
 }

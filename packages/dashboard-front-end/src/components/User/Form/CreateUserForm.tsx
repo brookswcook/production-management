@@ -1,11 +1,4 @@
-import {
-  Stack,
-  Typography,
-  TextField,
-  Button,
-  Autocomplete,
-  Box,
-} from "@mui/material";
+import { Stack, TextField, Autocomplete, Box } from "@mui/material";
 import { FormEvent, ReactElement, useState } from "react";
 
 import {
@@ -17,9 +10,11 @@ import { toast } from "react-toastify";
 import { userRoles } from "dashboard-core";
 
 export default function CreateUserForm({
-  onCancel,
+  onSubmit,
+  id = "createNewUser",
 }: {
-  onCancel?: VoidFunction;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  id?: string;
 }): ReactElement {
   const [role, setRole] = useState<string | null>(null);
   const { data: { factories } = { factories: [] } } = useFactoriesQuery();
@@ -44,6 +39,7 @@ export default function CreateUserForm({
     } catch (error) {
       toast.error((error as Error).message);
     }
+    onSubmit(event);
   }
 
   return (
@@ -52,10 +48,8 @@ export default function CreateUserForm({
       onSubmit={createNewUser}
       spacing={2}
       autoComplete="off"
+      id={id}
     >
-      <Typography component="h4" variant="inherit">
-        {`Create new User`}
-      </Typography>
       <TextField label="Email" name="email" required />
       <TextField label="First name" name="firstName" required />
       <TextField label="Last name" name="lastName" required />
@@ -81,14 +75,6 @@ export default function CreateUserForm({
           )}
         />
       )}
-      <>
-        <Button variant="contained" type="submit">
-          Add User
-        </Button>
-        <Button variant="contained" onClick={onCancel}>
-          Cancel
-        </Button>
-      </>
     </Stack>
   );
 }

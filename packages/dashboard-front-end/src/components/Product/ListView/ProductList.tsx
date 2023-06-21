@@ -10,15 +10,15 @@ import {
   ProductFieldsFragment,
   useProductsQuery,
 } from "../../../generated/graphql";
-import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import RequireRole from "../../Auth/RequireRole";
 import { renderCellExpand, ListView } from "../../ListView";
-import PopperButton from "../../PopperButton";
-import CreateProductForm from "../Form/CreateProductForm";
+import { Button } from "@mui/material";
+import CreateProductDialog from "../Dialog/CreateProductDialog";
 
 export default function ProductList(): ReactElement {
+  const [createProductDialogOpen, setCreateProductDialogOpen] = useState(false);
   const { data, loading, error } = useProductsQuery({
     variables: {},
   });
@@ -155,9 +155,13 @@ export default function ProductList(): ReactElement {
     return (
       <GridToolbarContainer>
         <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-          <PopperButton icon={<AddIcon />} title="Add product">
-            <CreateProductForm />
-          </PopperButton>
+          <Button
+            variant={"text"}
+            size={"small"}
+            onClick={() => setCreateProductDialogOpen(true)}
+          >
+            Add product
+          </Button>
         </RequireRole>
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
@@ -167,16 +171,23 @@ export default function ProductList(): ReactElement {
   }
 
   return (
-    <ListView
-      rows={rows}
-      columns={columns}
-      getRowId={item => item.code}
-      loading={loading}
-      error={error}
-      components={{
-        Toolbar: CustomToolbar,
-      }}
-      disableSelectionOnClick
-    />
+    <>
+      <CreateProductDialog
+        open={createProductDialogOpen}
+        onSave={() => setCreateProductDialogOpen(false)}
+        onClose={() => setCreateProductDialogOpen(false)}
+      />
+      <ListView
+        rows={rows}
+        columns={columns}
+        getRowId={item => item.code}
+        loading={loading}
+        error={error}
+        components={{
+          Toolbar: CustomToolbar,
+        }}
+        disableSelectionOnClick
+      />
+    </>
   );
 }

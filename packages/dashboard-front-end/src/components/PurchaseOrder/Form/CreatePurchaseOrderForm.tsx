@@ -3,13 +3,11 @@ import { DatePicker } from "@mui/lab";
 import {
   Autocomplete,
   Box,
-  Button,
   Stack,
   TextField,
   TextFieldProps,
-  Typography,
 } from "@mui/material";
-import { FormEvent, ReactElement, useState } from "react";
+import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import {
   useCreatePurchaseOrderMutation,
@@ -17,9 +15,11 @@ import {
 } from "../../../generated/graphql";
 
 export default function CreatePurchaseOrderForm({
-  footerEl,
+  onSubmit,
+  id = "createPurchaseOrder",
 }: {
-  footerEl?: ReactElement;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  id?: string;
 }) {
   const [newPurchaseOrderMutation] = useCreatePurchaseOrderMutation({
     refetchQueries: ["PurchaseOrders"],
@@ -43,6 +43,7 @@ export default function CreatePurchaseOrderForm({
     } catch (error) {
       toast.error((error as ApolloError).message);
     }
+    onSubmit(event);
   }
 
   return (
@@ -51,10 +52,9 @@ export default function CreatePurchaseOrderForm({
       onSubmit={createNewPurchaseOrder}
       spacing={2}
       autoComplete="off"
+      id={id}
+      sx={{ mt: 1 }}
     >
-      <Typography component="h4" variant="inherit">
-        {`Create new Purchase Order`}
-      </Typography>
       <Autocomplete
         onChange={(_, value) => setFactoryId(value?.id ?? null)}
         options={factories}
@@ -78,12 +78,6 @@ export default function CreatePurchaseOrderForm({
           <TextField name="Expected delivery date" {...params} required />
         )}
       />
-      <>
-        <Button variant="contained" type="submit">
-          Create
-        </Button>
-        {footerEl}
-      </>
     </Stack>
   );
 }

@@ -2,11 +2,9 @@ import { FormEvent, ReactElement, useState } from "react";
 import {
   Autocomplete,
   Box,
-  Button,
   Stack,
   TextField,
   TextFieldProps,
-  Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import {
@@ -19,7 +17,13 @@ import {
 import { toast } from "react-toastify";
 import { ApolloError } from "@apollo/client";
 
-export default function CreateProductForm(): ReactElement {
+export default function CreateProductForm({
+  onSubmit,
+  id = "createProduct",
+}: {
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  id?: string;
+}): ReactElement {
   const [newProductMutation] = useCreateProductMutation({
     refetchQueries: ["Products"],
   });
@@ -47,6 +51,7 @@ export default function CreateProductForm(): ReactElement {
     } catch (error) {
       toast.error((error as ApolloError).message);
     }
+    onSubmit(event);
   }
 
   return (
@@ -55,10 +60,9 @@ export default function CreateProductForm(): ReactElement {
       onSubmit={createNewProduct}
       spacing={2}
       autoComplete="off"
+      id={id}
+      sx={{ mt: 1 }}
     >
-      <Typography component="h4" variant="inherit">
-        {`Create new Product`}
-      </Typography>
       <Autocomplete
         options={styles}
         getOptionLabel={option => option.code}
@@ -106,9 +110,6 @@ export default function CreateProductForm(): ReactElement {
           <TextField name="Production due" {...params} required />
         )}
       />
-      <Button variant="contained" type="submit">
-        Create
-      </Button>
     </Stack>
   );
 }

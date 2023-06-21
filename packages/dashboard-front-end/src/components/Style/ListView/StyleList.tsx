@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import {
   GridColDef,
   GridRenderCellParams,
@@ -7,7 +7,7 @@ import {
   GridToolbarExport,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   StyleFieldsFragment,
@@ -15,9 +15,10 @@ import {
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
 import { ListView } from "../../ListView";
-import CreateStylePopperButton from "../Popper/CreateStylePopperButton";
+import CreateStyleDialog from "../Dialog/CreateStyleDialog";
 
 export default function StyleList(): ReactElement {
+  const [createStyleDialogOpen, setCreateStyleDialogOpen] = useState(false);
   const { data, loading, error } = useStylesQuery({});
   const rows: StyleFieldsFragment[] = data?.styles ?? [];
 
@@ -80,7 +81,13 @@ export default function StyleList(): ReactElement {
     return (
       <GridToolbarContainer>
         <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-          <CreateStylePopperButton />
+          <Button
+            variant={"text"}
+            size={"small"}
+            onClick={() => setCreateStyleDialogOpen(true)}
+          >
+            Add style
+          </Button>
         </RequireRole>
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
@@ -90,17 +97,24 @@ export default function StyleList(): ReactElement {
   }
 
   return (
-    <ListView
-      rows={rows}
-      columns={columns}
-      getRowId={item => item.code}
-      loading={loading}
-      error={error}
-      autoHeight
-      components={{
-        Toolbar: CustomToolbar,
-      }}
-      disableSelectionOnClick
-    />
+    <>
+      <CreateStyleDialog
+        open={createStyleDialogOpen}
+        onSave={() => setCreateStyleDialogOpen(false)}
+        onClose={() => setCreateStyleDialogOpen(false)}
+      />
+      <ListView
+        rows={rows}
+        columns={columns}
+        getRowId={item => item.code}
+        loading={loading}
+        error={error}
+        autoHeight
+        components={{
+          Toolbar: CustomToolbar,
+        }}
+        disableSelectionOnClick
+      />
+    </>
   );
 }

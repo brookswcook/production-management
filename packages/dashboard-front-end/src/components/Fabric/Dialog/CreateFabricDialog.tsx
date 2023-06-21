@@ -1,7 +1,7 @@
 import ActionDialog from "../../ActionDialog/ActionDialog";
-import CreatePurchaseOrderForm from "../Form/CreatePurchaseOrderForm";
+import CreateFabricForm from "../Form/CreateFabricForm";
 
-export default function CreatePurchaseOrderDialog({
+export default function CreateFabricDialog({
   open = false,
   onSave = () => {},
   onClose = () => {},
@@ -12,12 +12,12 @@ export default function CreatePurchaseOrderDialog({
 }) {
   return (
     <ActionDialog
-      title={`Create purchase order`}
+      title={`Create fabric`}
       open={open}
       onClose={onClose}
-      form="createPurchaseOrder"
+      form="createFabric"
     >
-      <CreatePurchaseOrderForm onSubmit={onSave} />
+      <CreateFabricForm onSubmit={onSave} />
     </ActionDialog>
   );
 }

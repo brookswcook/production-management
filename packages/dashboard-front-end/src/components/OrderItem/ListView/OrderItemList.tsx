@@ -1,4 +1,4 @@
-import { capitalize, Stack, Typography } from "@mui/material";
+import { Button, capitalize, Stack, Typography } from "@mui/material";
 import {
   GridColDef,
   DataGrid,
@@ -14,7 +14,7 @@ import {
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
 import toCurrency from "../../Utils";
-import CreateOrderItemPopperButton from "../PopperButton/CreateOrderItemPopperButton";
+import CreateOrderItemDialog from "../Dialog/CreateOrderItemDialog";
 
 export default function OrderItemList({
   orderUid,
@@ -23,6 +23,8 @@ export default function OrderItemList({
   orderUid: number;
   addActionDisabled?: boolean;
 }): ReactElement {
+  const [createOrderItemDialogOpen, setCreateOrderItemDialogOpen] =
+    useState(false);
   const [attributeColumns, setAttributeColumns] = useState<
     GridColDef<OrderItemListFieldsFragment>[]
   >([]);
@@ -119,10 +121,14 @@ export default function OrderItemList({
       <>
         <GridToolbarContainer>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <CreateOrderItemPopperButton
+            <Button
               disabled={addActionDisabled}
-              orderUid={orderUid}
-            />
+              variant={"text"}
+              size={"small"}
+              onClick={() => setCreateOrderItemDialogOpen(true)}
+            >
+              Add item
+            </Button>
           </RequireRole>
         </GridToolbarContainer>
       </>
@@ -130,43 +136,55 @@ export default function OrderItemList({
   }
 
   return (
-    <DataGrid
-      rows={rows}
-      columns={columns}
-      getRowId={item => item.id}
-      loading={loading}
-      error={error}
-      autoHeight
-      components={{
-        Toolbar: CustomToolbar,
-        Footer: () => {
-          return (
-            <GridFooterContainer sx={{ pl: 1, pr: 1 }}>
-              <Stack direction={"row"} justifyContent={"flex-end"} spacing={2}>
-                <Typography>Total:</Typography>
-                <Typography>{`Quantity: ${rows.reduce(
-                  (acc, { quantity }) => acc + quantity,
-                  0
-                )}`}</Typography>
-                <Typography>{`Price: ${toCurrency(
-                  rows.reduce(
-                    (acc, { price, quantity }) => acc + price * quantity,
+    <>
+      <CreateOrderItemDialog
+        orderUid={orderUid}
+        open={createOrderItemDialogOpen}
+        onSave={() => setCreateOrderItemDialogOpen(false)}
+        onClose={() => setCreateOrderItemDialogOpen(false)}
+      />
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        getRowId={item => item.id}
+        loading={loading}
+        error={error}
+        autoHeight
+        components={{
+          Toolbar: CustomToolbar,
+          Footer: () => {
+            return (
+              <GridFooterContainer sx={{ pl: 1, pr: 1 }}>
+                <Stack
+                  direction={"row"}
+                  justifyContent={"flex-end"}
+                  spacing={2}
+                >
+                  <Typography>Total:</Typography>
+                  <Typography>{`Quantity: ${rows.reduce(
+                    (acc, { quantity }) => acc + quantity,
                     0
-                  )
-                )}`}</Typography>
-              </Stack>
-            </GridFooterContainer>
-          );
-        },
-      }}
-      initialState={{
-        pagination: {
-          pageSize: 10,
-        },
-      }}
-      rowsPerPageOptions={[5, 10, 20, 50, 100]}
-      disableSelectionOnClick
-      sx={{ mt: 1 }}
-    />
+                  )}`}</Typography>
+                  <Typography>{`Price: ${toCurrency(
+                    rows.reduce(
+                      (acc, { price, quantity }) => acc + price * quantity,
+                      0
+                    )
+                  )}`}</Typography>
+                </Stack>
+              </GridFooterContainer>
+            );
+          },
+        }}
+        initialState={{
+          pagination: {
+            pageSize: 10,
+          },
+        }}
+        rowsPerPageOptions={[5, 10, 20, 50, 100]}
+        disableSelectionOnClick
+        sx={{ mt: 1 }}
+      />
+    </>
   );
 }

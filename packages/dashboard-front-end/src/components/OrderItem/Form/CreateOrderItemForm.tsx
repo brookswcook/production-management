@@ -4,10 +4,9 @@ import {
   Autocomplete,
   Box,
   TextField,
-  Button,
   IconButton,
 } from "@mui/material";
-import { useState, useEffect, ReactElement, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import {
   CreateAttributeInput,
   CreateOrderItemInput,
@@ -22,12 +21,12 @@ import AddOrderItemAttributeForm from "./AddOrderItemAttributeForm";
 
 export default function CreateOrderItemForm({
   orderUid,
-  title,
-  footerEl,
+  onSubmit,
+  id = "createOrderItem",
 }: {
   orderUid: number;
-  title: string;
-  footerEl?: ReactElement;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  id?: string;
 }) {
   const [attributes, setAttributes] = useState<CreateAttributeInput[]>([]);
   const [attributeNamesToOmit, setAttributeNamesToOmit] = useState<string[]>(
@@ -68,6 +67,7 @@ export default function CreateOrderItemForm({
     } catch (error) {
       toast.error((error as Error).message);
     }
+    onSubmit(event);
   }
 
   return (
@@ -76,10 +76,9 @@ export default function CreateOrderItemForm({
       onSubmit={createOrderItem}
       spacing={2}
       autoComplete="off"
+      id={id}
+      sx={{ mt: 1 }}
     >
-      <Typography component="h4" variant="inherit">
-        {title}
-      </Typography>
       <Autocomplete
         options={products}
         getOptionLabel={option => option.code}
@@ -145,12 +144,6 @@ export default function CreateOrderItemForm({
           attributeNamesToOmit={attributeNamesToOmit}
         />
       ))}
-      <>
-        <Button variant="contained" type="submit">
-          Create
-        </Button>
-        {footerEl}
-      </>
     </Stack>
   );
 }

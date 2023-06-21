@@ -1,4 +1,4 @@
-import { Stack, Typography, TextField, Button } from "@mui/material";
+import { Stack, TextField } from "@mui/material";
 import { FormEvent, ReactElement } from "react";
 import {
   CreateCompanyInput,
@@ -7,9 +7,11 @@ import {
 import { toast } from "react-toastify";
 
 export default function CreateFactoryForm({
-  onCancel,
+  onSubmit,
+  id = "createFactory",
 }: {
-  onCancel?: VoidFunction;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  id?: string;
 }): ReactElement {
   const [newFactoryMutation] = useCreateFactoryMutation({
     refetchQueries: ["Factories"],
@@ -31,6 +33,7 @@ export default function CreateFactoryForm({
     } catch (error) {
       toast.error((error as Error).message);
     }
+    onSubmit(event);
   }
 
   return (
@@ -39,21 +42,11 @@ export default function CreateFactoryForm({
       onSubmit={createNewFactory}
       spacing={2}
       autoComplete="off"
+      id={id}
+      sx={{ mt: 1 }}
     >
-      <Typography component="h4" variant="inherit">
-        {`Create new Factory`}
-      </Typography>
       <TextField label="Name" name="name" required />
       <TextField label="Address" name="address" required />
-      {/* <TextField label="Email" name="email" required /> */}
-      <>
-        <Button variant="contained" type="submit">
-          Add Factory
-        </Button>
-        <Button variant="contained" onClick={onCancel}>
-          Cancel
-        </Button>
-      </>
     </Stack>
   );
 }

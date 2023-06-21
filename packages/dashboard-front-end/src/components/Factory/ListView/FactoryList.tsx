@@ -1,14 +1,16 @@
+import { Button } from "@mui/material";
 import { GridColDef, GridToolbarContainer } from "@mui/x-data-grid";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import {
   FactoryListFieldsFragment,
   useFactoriesQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
 import { renderCellExpand, ListView } from "../../ListView";
-import CreateFactoryPopperButton from "../Popper/CreateFactoryPopperButton";
+import CreateFactoryDialog from "../Dialog/CreateFactoryDialog";
 
 export default function FactoryList(): ReactElement {
+  const [createFactoryDialogOpen, setCreateFactoryDialogOpen] = useState(false);
   const { data, loading, error } = useFactoriesQuery({});
   const rows: FactoryListFieldsFragment[] = data?.factories ?? [];
 
@@ -53,7 +55,13 @@ export default function FactoryList(): ReactElement {
       <>
         <GridToolbarContainer>
           <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <CreateFactoryPopperButton />
+            <Button
+              variant={"text"}
+              size={"small"}
+              onClick={() => setCreateFactoryDialogOpen(true)}
+            >
+              Add factory
+            </Button>
           </RequireRole>
         </GridToolbarContainer>
       </>
@@ -61,16 +69,23 @@ export default function FactoryList(): ReactElement {
   }
 
   return (
-    <ListView
-      rows={rows}
-      columns={columns}
-      getRowId={item => item.code}
-      loading={loading}
-      error={error}
-      components={{
-        Toolbar: CustomToolbar,
-      }}
-      disableSelectionOnClick
-    />
+    <>
+      <CreateFactoryDialog
+        open={createFactoryDialogOpen}
+        onSave={() => setCreateFactoryDialogOpen(false)}
+        onClose={() => setCreateFactoryDialogOpen(false)}
+      />
+      <ListView
+        rows={rows}
+        columns={columns}
+        getRowId={item => item.code}
+        loading={loading}
+        error={error}
+        components={{
+          Toolbar: CustomToolbar,
+        }}
+        disableSelectionOnClick
+      />
+    </>
   );
 }

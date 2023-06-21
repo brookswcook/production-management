@@ -1,4 +1,4 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Stack, TextField } from "@mui/material";
 import { FormEvent, ReactElement, useState } from "react";
 import {
   CreateStyleInput,
@@ -9,9 +9,11 @@ import { toast } from "react-toastify";
 import FilePreload from "../../FilePreload";
 
 export default function CreateStyleForm({
-  footerEl,
+  onSubmit,
+  id = "createStyle",
 }: {
-  footerEl?: ReactElement;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  id?: string;
 }): ReactElement {
   const [getStyle] = useStyleLazyQuery();
   const [newStyleMutation] = useCreateStyleMutation({
@@ -54,6 +56,7 @@ export default function CreateStyleForm({
     } catch (error) {
       toast.error((error as Error).message);
     }
+    onSubmit(event);
   }
 
   return (
@@ -62,10 +65,9 @@ export default function CreateStyleForm({
       onSubmit={createNewStyle}
       spacing={2}
       autoComplete="off"
+      id={id}
+      sx={{ mt: 1 }}
     >
-      <Typography component="h4" variant="inherit">
-        {`Create new Style`}
-      </Typography>
       <TextField
         label="Style number"
         name="code"
@@ -84,12 +86,6 @@ export default function CreateStyleForm({
         helperText={"You can upload tech pack now or later"}
         multiple={true}
       />
-      <>
-        <Button variant="contained" type="submit">
-          Add Style
-        </Button>
-        {footerEl}
-      </>
     </Stack>
   );
 }

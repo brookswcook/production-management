@@ -1,5 +1,4 @@
 import {
-  GridColDef,
   GridRenderCellParams,
   GridToolbarColumnsButton,
   GridToolbarContainer,
@@ -16,6 +15,7 @@ import RequireRole from "../../Auth/RequireRole";
 import { renderCellExpand, ListView } from "../../ListView";
 import { Button } from "@mui/material";
 import CreateProductDialog from "../Dialog/CreateProductDialog";
+import { HideableGridColDef } from "../../ListView/types";
 
 export default function ProductList(): ReactElement {
   const [createProductDialogOpen, setCreateProductDialogOpen] = useState(false);
@@ -24,7 +24,7 @@ export default function ProductList(): ReactElement {
   });
   const rows: ProductFieldsFragment[] = data ? data.products : [];
 
-  const columns: GridColDef<ProductFieldsFragment>[] = [
+  const columns: HideableGridColDef<ProductFieldsFragment>[] = [
     {
       field: "name",
       headerName: "Title",
@@ -49,6 +49,7 @@ export default function ProductList(): ReactElement {
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
         return row.style.name;
       },
+      hideOnMobile: true,
     },
     {
       field: "styleCode",
@@ -59,6 +60,7 @@ export default function ProductList(): ReactElement {
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
         return row.style.code;
       },
+      hideOnMobile: true,
     },
     {
       field: "fabricCode",
@@ -132,6 +134,7 @@ export default function ProductList(): ReactElement {
       minWidth: 50,
       flex: 1,
       type: "boolean",
+      hideOnMobile: true,
     },
     {
       field: "fabricSampleDelivered",
@@ -140,6 +143,7 @@ export default function ProductList(): ReactElement {
       minWidth: 50,
       flex: 1,
       type: "boolean",
+      hideOnMobile: true,
     },
     {
       field: "fitSampleDelivered",
@@ -148,6 +152,7 @@ export default function ProductList(): ReactElement {
       minWidth: 50,
       flex: 1,
       type: "boolean",
+      hideOnMobile: true,
     },
   ];
 

@@ -71,6 +71,7 @@ export default function ProductList(): ReactElement {
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
         return row.fabric.code;
       },
+      hideOnMobile: true,
     },
     {
       field: "colorName",
@@ -81,6 +82,7 @@ export default function ProductList(): ReactElement {
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
         return row.fabric.colorName;
       },
+      hideOnMobile: true,
     },
     {
       field: "factoryCode",
@@ -92,6 +94,7 @@ export default function ProductList(): ReactElement {
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
         return row.factory.name;
       },
+      hideOnMobile: true,
     },
     {
       field: "deliveryDate",
@@ -102,6 +105,7 @@ export default function ProductList(): ReactElement {
       valueFormatter: params => {
         return new Date(params.value as string).toLocaleDateString();
       },
+      hideOnMobile: true,
     },
     {
       field: "dueIn",
@@ -111,6 +115,7 @@ export default function ProductList(): ReactElement {
       valueFormatter: params => {
         return `${params.value as string} days`;
       },
+      hideOnMobile: true,
     },
     {
       field: "stage",
@@ -118,6 +123,7 @@ export default function ProductList(): ReactElement {
       minWidth: 70,
       flex: 1,
       type: "string",
+      hideOnMobile: true,
     },
     {
       field: "onTime",

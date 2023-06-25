@@ -64,7 +64,7 @@ export default function FabricList(): ReactElement {
     {
       field: "factoryCode",
       headerName: "Factory",
-      minWidth: 80,
+      minWidth: 120,
       flex: 2,
       type: "string",
       renderCell: renderCellExpand,

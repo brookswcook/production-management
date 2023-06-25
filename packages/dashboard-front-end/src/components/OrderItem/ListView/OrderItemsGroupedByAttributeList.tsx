@@ -55,8 +55,8 @@ export default function OrderItemsGroupedByAttributeList({
       variantSetAttributeIdentifier => ({
         field: variantSetAttributeIdentifier,
         headerName: variantSetAttributeIdentifier,
-        minWidth: 50,
-        flex: 1,
+        minWidth: 100,
+        flex: 2,
         type: "string",
         valueGetter: ({
           row,
@@ -82,8 +82,8 @@ export default function OrderItemsGroupedByAttributeList({
     {
       field: "productCode",
       headerName: "Product",
-      minWidth: 50,
-      flex: 1,
+      minWidth: 100,
+      flex: 2,
       type: "string",
       valueGetter: ({
         row,
@@ -109,7 +109,7 @@ export default function OrderItemsGroupedByAttributeList({
     {
       field: "quantity",
       headerName: "Quantity",
-      minWidth: 50,
+      minWidth: 70,
       flex: 1,
       type: "number",
       valueGetter: ({
@@ -123,7 +123,7 @@ export default function OrderItemsGroupedByAttributeList({
     {
       field: "unitPrice",
       headerName: "Unit Price",
-      minWidth: 50,
+      minWidth: 80,
       flex: 1,
       type: "number",
       valueGetter: ({
@@ -137,7 +137,7 @@ export default function OrderItemsGroupedByAttributeList({
     {
       field: "extPrice",
       headerName: "Ext Price",
-      minWidth: 50,
+      minWidth: 80,
       flex: 1,
       type: "number",
       valueGetter: ({

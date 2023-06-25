@@ -12,7 +12,11 @@ export default function LinkColumn({
   return (
     <Stack direction={"row"} columnGap={1}>
       {linkIds?.map(code => (
-        <Link to={`${linkPath}${code}`} style={{ textDecoration: "none" }}>
+        <Link
+          key={code}
+          to={`${linkPath}${code}`}
+          style={{ textDecoration: "none" }}
+        >
           {code}
         </Link>
       ))}

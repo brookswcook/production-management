@@ -28,7 +28,7 @@ export default function StyleList(): ReactElement {
       field: "name",
       headerName: "Name",
       minWidth: 120,
-      flex: 2,
+      flex: 1,
       renderCell({ id, formattedValue }: GridRenderCellParams) {
         const linkPath = `/styles/${id}`;
         const linkText = `${String(formattedValue)}`;

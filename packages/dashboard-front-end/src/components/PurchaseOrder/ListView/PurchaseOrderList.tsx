@@ -45,7 +45,7 @@ export default function PurchaseOrderList(): ReactElement {
     {
       field: "createdAt",
       headerName: "Date",
-      minWidth: 70,
+      minWidth: 90,
       flex: 1,
       type: "date",
       valueFormatter: params => {
@@ -55,8 +55,8 @@ export default function PurchaseOrderList(): ReactElement {
     {
       field: "status",
       headerName: "Status",
-      minWidth: 70,
-      flex: 2,
+      minWidth: 100,
+      flex: 1,
       type: "string",
       valueGetter: ({
         row: { status },
@@ -67,20 +67,10 @@ export default function PurchaseOrderList(): ReactElement {
       },
     },
     {
-      field: "factoryName",
-      headerName: "Factory",
-      minWidth: 70,
-      flex: 2,
-      type: "string",
-      valueGetter: ({ row }: { row: PurchaseOrderListFieldsFragment }) => {
-        return row.factory.name;
-      },
-    },
-    {
       field: "companyName",
       headerName: "Company",
-      minWidth: 70,
-      flex: 2,
+      minWidth: 120,
+      flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: PurchaseOrderListFieldsFragment }) => {
         return row.company.name;
@@ -89,11 +79,21 @@ export default function PurchaseOrderList(): ReactElement {
     {
       field: "expectedDeliveryDate",
       headerName: "Delivery Date",
-      minWidth: 70,
+      minWidth: 110,
       flex: 1,
       type: "date",
       valueFormatter: params => {
         return new Date(params.value as string).toLocaleDateString();
+      },
+    },
+    {
+      field: "factoryName",
+      headerName: "Factory",
+      minWidth: 120,
+      flex: 5,
+      type: "string",
+      valueGetter: ({ row }: { row: PurchaseOrderListFieldsFragment }) => {
+        return row.factory.name;
       },
     },
   ];

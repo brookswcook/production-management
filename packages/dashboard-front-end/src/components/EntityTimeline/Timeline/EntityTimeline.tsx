@@ -282,7 +282,6 @@ export default function EntityTimeline({
           label="Leave a comment"
           multiline
           rows={2}
-          maxRows={4}
           onChange={({ target: { value } }) => {
             setNoteText(value);
           }}

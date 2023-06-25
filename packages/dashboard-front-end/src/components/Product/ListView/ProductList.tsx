@@ -85,18 +85,6 @@ export default function ProductList(): ReactElement {
       hideOnMobile: true,
     },
     {
-      field: "factoryCode",
-      headerName: "Factory",
-      minWidth: 120,
-      flex: 1,
-      type: "string",
-      renderCell: renderCellExpand,
-      valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
-        return row.factory.name;
-      },
-      hideOnMobile: true,
-    },
-    {
       field: "deliveryDate",
       headerName: "Delivery date",
       minWidth: 110,
@@ -158,6 +146,18 @@ export default function ProductList(): ReactElement {
       flex: 1,
       type: "boolean",
       hideOnMobile: false,
+    },
+    {
+      field: "factoryCode",
+      headerName: "Factory",
+      minWidth: 120,
+      flex: 5,
+      type: "string",
+      renderCell: renderCellExpand,
+      valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
+        return row.factory.name;
+      },
+      hideOnMobile: true,
     },
   ];
 

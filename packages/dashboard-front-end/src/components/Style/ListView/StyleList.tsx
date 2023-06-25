@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import {
   GridColDef,
   GridRenderCellParams,
@@ -26,7 +26,7 @@ export default function StyleList(): ReactElement {
     {
       field: "name",
       headerName: "Name",
-      minWidth: 70,
+      minWidth: 120,
       flex: 3,
       renderCell({ id, formattedValue }: GridRenderCellParams) {
         const linkPath = `/styles/${id}`;
@@ -41,7 +41,7 @@ export default function StyleList(): ReactElement {
     {
       field: "code",
       headerName: "Number",
-      minWidth: 50,
+      minWidth: 70,
       flex: 1,
       type: "string",
     },
@@ -49,14 +49,14 @@ export default function StyleList(): ReactElement {
       field: "techPackUploaded",
       description: "Tech pack is uploaded",
       headerName: "Tech pack uploaded",
-      minWidth: 50,
+      minWidth: 150,
       flex: 1,
       type: "boolean",
     },
     {
       field: "productCodes",
       headerName: "Associated Products",
-      minWidth: 100,
+      minWidth: 150,
       flex: 5,
       valueGetter: ({ row }: { row: StyleFieldsFragment }) => {
         return row.productCodes;
@@ -65,14 +65,15 @@ export default function StyleList(): ReactElement {
       renderCell({
         value: productCodes,
       }: GridRenderCellParams<string[], StyleFieldsFragment>) {
-        return productCodes?.map(code => (
-          <Box key={code} sx={{ whiteSpace: "pre" }}>
-            <Link to={`/products/${code}`} style={{ textDecoration: "none" }}>
-              {code}
-            </Link>
-            {"  "}
-          </Box>
-        ));
+        return (
+          <Stack direction={"row"} columnGap={1}>
+            {productCodes?.map(code => (
+              <Link to={`/products/${code}`} style={{ textDecoration: "none" }}>
+                {code}
+              </Link>
+            ))}
+          </Stack>
+        );
       },
     },
   ];

@@ -28,7 +28,7 @@ export default function StyleList(): ReactElement {
       field: "name",
       headerName: "Name",
       minWidth: 120,
-      flex: 3,
+      flex: 2,
       renderCell({ id, formattedValue }: GridRenderCellParams) {
         const linkPath = `/styles/${id}`;
         const linkText = `${String(formattedValue)}`;
@@ -62,7 +62,6 @@ export default function StyleList(): ReactElement {
       valueGetter: ({ row }: { row: StyleFieldsFragment }) => {
         return row.productCodes;
       },
-      // TODO: reuse
       renderCell({
         value: productCodes,
       }: GridRenderCellParams<string[], StyleFieldsFragment>) {

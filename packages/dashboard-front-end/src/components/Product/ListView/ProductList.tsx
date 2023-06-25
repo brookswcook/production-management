@@ -28,7 +28,7 @@ export default function ProductList(): ReactElement {
     {
       field: "name",
       headerName: "Title",
-      minWidth: 120,
+      minWidth: 170,
       flex: 3,
       renderCell({ id, formattedValue }: GridRenderCellParams) {
         const linkPath = `/products/${id}`;
@@ -43,7 +43,7 @@ export default function ProductList(): ReactElement {
     {
       field: "styleName",
       headerName: "Style Name",
-      minWidth: 70,
+      minWidth: 120,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
@@ -54,7 +54,7 @@ export default function ProductList(): ReactElement {
     {
       field: "styleCode",
       headerName: "Style Number",
-      minWidth: 50,
+      minWidth: 100,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
@@ -65,7 +65,7 @@ export default function ProductList(): ReactElement {
     {
       field: "fabricCode",
       headerName: "Fabric",
-      minWidth: 50,
+      minWidth: 70,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
@@ -76,7 +76,7 @@ export default function ProductList(): ReactElement {
     {
       field: "colorName",
       headerName: "Color Name",
-      minWidth: 70,
+      minWidth: 120,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
@@ -87,7 +87,7 @@ export default function ProductList(): ReactElement {
     {
       field: "factoryCode",
       headerName: "Factory",
-      minWidth: 50,
+      minWidth: 120,
       flex: 1,
       type: "string",
       renderCell: renderCellExpand,
@@ -99,37 +99,36 @@ export default function ProductList(): ReactElement {
     {
       field: "deliveryDate",
       headerName: "Delivery date",
-      minWidth: 70,
+      minWidth: 110,
       flex: 1,
       type: "date",
       valueFormatter: params => {
         return new Date(params.value as string).toLocaleDateString();
       },
-      hideOnMobile: true,
     },
     {
       field: "dueIn",
       headerName: "Due in",
-      minWidth: 70,
+      minWidth: 90,
       flex: 1,
       valueFormatter: params => {
         return `${params.value as string} days`;
       },
-      hideOnMobile: true,
+      hideOnMobile: false,
     },
     {
       field: "stage",
       headerName: "Stage",
-      minWidth: 70,
+      minWidth: 130,
       flex: 1,
       type: "string",
-      hideOnMobile: true,
+      hideOnMobile: false,
     },
     {
       field: "onTime",
       headerName: "On time",
       description: "Product lifecycle based on workflow rules is on time",
-      minWidth: 50,
+      minWidth: 70,
       flex: 1,
       type: "boolean",
     },
@@ -137,28 +136,28 @@ export default function ProductList(): ReactElement {
       field: "techPackUploaded",
       description: "Tech pack is uploaded",
       headerName: "Tech pack",
-      minWidth: 50,
+      minWidth: 80,
       flex: 1,
       type: "boolean",
-      hideOnMobile: true,
+      hideOnMobile: false,
     },
     {
       field: "fabricSampleDelivered",
       description: "Fabric sample is delivered",
       headerName: "Fabric Sample",
-      minWidth: 50,
+      minWidth: 120,
       flex: 1,
       type: "boolean",
-      hideOnMobile: true,
+      hideOnMobile: false,
     },
     {
       field: "fitSampleDelivered",
       description: "Fit sample is delivered",
       headerName: "Fit Sample",
-      minWidth: 50,
+      minWidth: 100,
       flex: 1,
       type: "boolean",
-      hideOnMobile: true,
+      hideOnMobile: false,
     },
   ];
 

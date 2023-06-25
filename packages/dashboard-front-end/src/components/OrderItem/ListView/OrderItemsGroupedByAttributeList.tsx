@@ -195,26 +195,27 @@ export default function OrderItemsGroupedByAttributeList({
           Toolbar: CustomToolbar,
           Footer: () => {
             return (
-              <GridFooterContainer sx={{ pl: 1, pr: 1 }}>
-                <Stack
-                  direction={"row"}
-                  justifyContent={"flex-end"}
-                  spacing={2}
-                >
-                  <Typography>Total:</Typography>
-                  <Typography>{`Quantity: ${rows.reduce(
-                    (acc, { quantity }) => acc + quantity,
-                    0
-                  )}`}</Typography>
-                  <Typography>{`Price: ${toCurrency(
-                    rows.reduce((acc, { extPrice }) => acc + extPrice, 0)
-                  )}`}</Typography>
-                </Stack>
-                <GridFooter
-                  sx={{
-                    border: "none",
-                  }}
-                />
+              <GridFooterContainer>
+                <Grid container>
+                  <Grid item xs={12} sx={{ my: 2, px: 2 }}>
+                    <Stack
+                      direction={"row"}
+                      justifyContent={"flex-end"}
+                      columnGap={2}
+                    >
+                      <Typography variant="inherit">{`Quantity: ${rows.reduce(
+                        (acc, { quantity }) => acc + quantity,
+                        0
+                      )}`}</Typography>
+                      <Typography variant="inherit">{`Price: ${toCurrency(
+                        rows.reduce((acc, { extPrice }) => acc + extPrice, 0)
+                      )}`}</Typography>
+                    </Stack>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <GridFooter />
+                  </Grid>
+                </Grid>
               </GridFooterContainer>
             );
           },

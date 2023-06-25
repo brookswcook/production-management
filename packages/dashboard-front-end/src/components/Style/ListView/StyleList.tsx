@@ -1,4 +1,4 @@
-import { Button, Stack } from "@mui/material";
+import { Button } from "@mui/material";
 import {
   GridColDef,
   GridRenderCellParams,
@@ -15,6 +15,7 @@ import {
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
 import { ListView } from "../../ListView";
+import LinkColumn from "../../ListView/LinkColumn";
 import CreateStyleDialog from "../Dialog/CreateStyleDialog";
 
 export default function StyleList(): ReactElement {
@@ -66,13 +67,7 @@ export default function StyleList(): ReactElement {
         value: productCodes,
       }: GridRenderCellParams<string[], StyleFieldsFragment>) {
         return (
-          <Stack direction={"row"} columnGap={1}>
-            {productCodes?.map(code => (
-              <Link to={`/products/${code}`} style={{ textDecoration: "none" }}>
-                {code}
-              </Link>
-            ))}
-          </Stack>
+          <LinkColumn linkIds={productCodes ?? []} linkPath="/products/" />
         );
       },
     },

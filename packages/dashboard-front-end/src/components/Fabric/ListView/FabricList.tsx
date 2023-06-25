@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import {
-  GridColDef,
   GridRenderCellParams,
   GridToolbarColumnsButton,
   GridToolbarContainer,
@@ -16,17 +15,19 @@ import RequireRole from "../../Auth/RequireRole";
 import { renderCellExpand, ListView } from "../../ListView";
 import CreateFabricDialog from "../Dialog/CreateFabricDialog";
 import { Button } from "@mui/material";
+import { HideableGridColDef } from "../../ListView/types";
+import LinkColumn from "../../ListView/LinkColumn";
 
 export default function FabricList(): ReactElement {
   const [createFabricDialogOpen, setCreateFabricDialogOpen] = useState(false);
   const { data, loading, error } = useFabricsQuery({});
   const rows: FabricFieldsFragment[] = data?.fabrics ?? [];
 
-  const columns: GridColDef<FabricFieldsFragment>[] = [
+  const columns: HideableGridColDef<FabricFieldsFragment>[] = [
     {
       field: "title",
       headerName: "Title",
-      minWidth: 70,
+      minWidth: 220,
       flex: 3,
       renderCell({ id, formattedValue }: GridRenderCellParams) {
         const linkPath = `/fabrics/${id}`;
@@ -41,39 +42,41 @@ export default function FabricList(): ReactElement {
     {
       field: "code",
       headerName: "Code",
-      minWidth: 50,
+      minWidth: 70,
       flex: 1,
       type: "string",
     },
     {
       field: "colorName",
       headerName: "Color Name",
-      minWidth: 120,
+      minWidth: 130,
       flex: 2,
       type: "string",
+      hideOnMobile: true,
     },
     {
       field: "stage",
       headerName: "Stage",
-      minWidth: 70,
+      minWidth: 130,
       flex: 2,
       type: "string",
     },
     {
       field: "factoryCode",
       headerName: "Factory",
-      minWidth: 50,
+      minWidth: 80,
       flex: 2,
       type: "string",
       renderCell: renderCellExpand,
       valueGetter: ({ row }: { row: FabricFieldsFragment }) => {
         return row.factory.name;
       },
+      hideOnMobile: true,
     },
     {
       field: "productCodes",
       headerName: "Associated Products",
-      minWidth: 100,
+      minWidth: 150,
       flex: 5,
       valueGetter: ({ row }: { row: FabricFieldsFragment }) => {
         return row.productCodes;
@@ -81,14 +84,9 @@ export default function FabricList(): ReactElement {
       renderCell({
         value: productCodes,
       }: GridRenderCellParams<string[], FabricFieldsFragment>) {
-        return productCodes?.map(code => (
-          <div key={code} style={{ whiteSpace: "pre" }}>
-            <Link to={`/products/${code}`} style={{ textDecoration: "none" }}>
-              {code}
-            </Link>
-            {"  "}
-          </div>
-        ));
+        return (
+          <LinkColumn linkIds={productCodes ?? []} linkPath="/products/" />
+        );
       },
     },
   ];

@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.14.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.13.0...dashboard-front-end@1.14.0) (2023-06-25)
+
+
+### Bug Fixes
+
+* fix length of item separators ([038a6df](https://github.com/brookswcook/production-management/commit/038a6dfe4516f0113ff6b1e19ff4ffa1f23d8b7b))
+* hide more fields in the product view ([7d3227e](https://github.com/brookswcook/production-management/commit/7d3227e86378292113141a72c0e653927e538388))
+* various changes to improve listviews readability ([c5ab39b](https://github.com/brookswcook/production-management/commit/c5ab39b58966a652e0edb7a584ac3a212b78d23f))
+
+
+### Features
+
+* correct min width of columns ([0016737](https://github.com/brookswcook/production-management/commit/00167376489c520b01412f206eb178c531493197))
+* disable gutters in detail view for mobile devices ([685b62a](https://github.com/brookswcook/production-management/commit/685b62a5cc633ad9e7bf070dc4862a459d9219af))
+* fabric listview columns update ([f8cc242](https://github.com/brookswcook/production-management/commit/f8cc242bd01b1d56854e4a648ca3ac1858c180e2))
+* proper aggregation column ui ([d8890c3](https://github.com/brookswcook/production-management/commit/d8890c36e96acf8cac9f22c4d9f0405962f9711c))
+* style listview columns update ([bb54f64](https://github.com/brookswcook/production-management/commit/bb54f64fddc35fa081dbdd217e58e41b1c4b05b3))
+* support different set of fields for mobile devices ([ffdff06](https://github.com/brookswcook/production-management/commit/ffdff0624e936840248f04d6414a5a96bdfcc3e8))
+
+
+
+
+
 # [1.13.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.12.0...dashboard-front-end@1.13.0) (2023-06-21)
 
 

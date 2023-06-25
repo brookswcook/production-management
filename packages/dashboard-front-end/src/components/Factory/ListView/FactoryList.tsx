@@ -15,38 +15,38 @@ export default function FactoryList(): ReactElement {
   const rows: FactoryListFieldsFragment[] = data?.factories ?? [];
 
   const columns: GridColDef<FactoryListFieldsFragment>[] = [
-    {
-      field: "code",
-      headerName: "Code",
-      minWidth: 50,
-      flex: 1,
-      type: "string",
-    },
+    // {
+    //   field: "code",
+    //   headerName: "Code",
+    //   minWidth: 250,
+    //   flex: 1,
+    //   type: "string",
+    // },
     {
       field: "name",
       headerName: "Name",
-      minWidth: 70,
-      flex: 1,
-      renderCell: renderCellExpand,
-      type: "string",
-    },
-    {
-      field: "address",
-      headerName: "Address",
-      minWidth: 70,
-      flex: 3,
+      minWidth: 250,
+      flex: 2,
       renderCell: renderCellExpand,
       type: "string",
     },
     {
       field: "email",
       headerName: "Email",
-      minWidth: 70,
+      minWidth: 210,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: FactoryListFieldsFragment }) => {
         return row.contacts[0]?.email ?? "";
       },
+    },
+    {
+      field: "address",
+      headerName: "Address",
+      minWidth: 300,
+      flex: 5,
+      renderCell: renderCellExpand,
+      type: "string",
     },
   ];
 

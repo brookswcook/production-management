@@ -1,4 +1,10 @@
-import { Container, Divider, Grid } from "@mui/material";
+import {
+  Container,
+  Divider,
+  Grid,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { ReactElement } from "react";
 
 export default function DetailView({
@@ -8,8 +14,14 @@ export default function DetailView({
   header: JSX.Element;
   children: JSX.Element[] | JSX.Element;
 }): ReactElement {
+  const theme = useTheme();
+  const greaterThanXS = useMediaQuery(theme.breakpoints.up("sm"));
   return (
-    <Container maxWidth="xl" sx={{ pt: 1 }}>
+    <Container
+      maxWidth="xl"
+      disableGutters={greaterThanXS ? false : true}
+      sx={{ pt: 1 }}
+    >
       <Grid
         justifyContent={"left"}
         container

@@ -111,23 +111,20 @@ function TimeLineActionItem({
   title,
   userFullName,
   date,
-  first = false,
 }: {
   title: string;
   userFullName: string;
   date: Date;
-  first: boolean;
 }) {
   return (
     <TimelineItem sx={{ minHeight: 50, p: 0 }}>
       <TimelineSeparator sx={{ minHeight: 50 }}>
-        {first && <TimelineConnector />}
         <TimelineDot variant="outlined" sx={{ m: 0 }}>
           <EditIcon fontSize="small" />
         </TimelineDot>
         {<TimelineConnector />}
       </TimelineSeparator>
-      <TimelineContent sx={{ py: first ? "19px" : 0 }}>
+      <TimelineContent>
         <>
           <Typography
             fontWeight={400}
@@ -233,7 +230,8 @@ export default function EntityTimeline({
         sx={{
           py: 0,
           mb: 1,
-          borderTop: "2px solid rgba(224, 224, 224, 1)",
+          borderTop:
+            items.length > 0 ? "2px solid rgba(224, 224, 224, 1)" : "0px",
           borderBottom: "2px solid rgba(224, 224, 224, 1)",
         }}
       >
@@ -252,15 +250,16 @@ export default function EntityTimeline({
             const userFullName = user?.fullName ?? "";
             return __typename === "ActionLog" ? (
               <React.Fragment key={id}>
+                {isFirstItem && <TimelineSeparatorItem />}
                 <TimeLineActionItem
                   title={title}
                   date={new Date(createdAt ?? 0)}
-                  first={isFirstItem}
                   userFullName={userFullName}
                 />
               </React.Fragment>
             ) : (
               <React.Fragment key={id}>
+                {isFirstItem && <TimelineSeparatorItem />}
                 <TimelineCommentItem
                   userFullName={userFullName}
                   comment={title}
@@ -283,7 +282,6 @@ export default function EntityTimeline({
           label="Leave a comment"
           multiline
           rows={2}
-          maxRows={4}
           onChange={({ target: { value } }) => {
             setNoteText(value);
           }}

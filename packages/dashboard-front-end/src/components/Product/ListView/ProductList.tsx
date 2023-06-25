@@ -1,5 +1,4 @@
 import {
-  GridColDef,
   GridRenderCellParams,
   GridToolbarColumnsButton,
   GridToolbarContainer,
@@ -16,6 +15,7 @@ import RequireRole from "../../Auth/RequireRole";
 import { renderCellExpand, ListView } from "../../ListView";
 import { Button } from "@mui/material";
 import CreateProductDialog from "../Dialog/CreateProductDialog";
+import { HideableGridColDef } from "../../ListView/types";
 
 export default function ProductList(): ReactElement {
   const [createProductDialogOpen, setCreateProductDialogOpen] = useState(false);
@@ -24,11 +24,11 @@ export default function ProductList(): ReactElement {
   });
   const rows: ProductFieldsFragment[] = data ? data.products : [];
 
-  const columns: GridColDef<ProductFieldsFragment>[] = [
+  const columns: HideableGridColDef<ProductFieldsFragment>[] = [
     {
       field: "name",
       headerName: "Title",
-      minWidth: 120,
+      minWidth: 170,
       flex: 3,
       renderCell({ id, formattedValue }: GridRenderCellParams) {
         const linkPath = `/products/${id}`;
@@ -43,58 +43,51 @@ export default function ProductList(): ReactElement {
     {
       field: "styleName",
       headerName: "Style Name",
-      minWidth: 70,
+      minWidth: 120,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
         return row.style.name;
       },
+      hideOnMobile: true,
     },
     {
       field: "styleCode",
       headerName: "Style Number",
-      minWidth: 50,
+      minWidth: 100,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
         return row.style.code;
       },
+      hideOnMobile: true,
     },
     {
       field: "fabricCode",
       headerName: "Fabric",
-      minWidth: 50,
+      minWidth: 70,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
         return row.fabric.code;
       },
+      hideOnMobile: true,
     },
     {
       field: "colorName",
       headerName: "Color Name",
-      minWidth: 70,
+      minWidth: 120,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
         return row.fabric.colorName;
       },
-    },
-    {
-      field: "factoryCode",
-      headerName: "Factory",
-      minWidth: 50,
-      flex: 1,
-      type: "string",
-      renderCell: renderCellExpand,
-      valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
-        return row.factory.name;
-      },
+      hideOnMobile: true,
     },
     {
       field: "deliveryDate",
       headerName: "Delivery date",
-      minWidth: 70,
+      minWidth: 110,
       flex: 1,
       type: "date",
       valueFormatter: params => {
@@ -104,24 +97,26 @@ export default function ProductList(): ReactElement {
     {
       field: "dueIn",
       headerName: "Due in",
-      minWidth: 70,
+      minWidth: 90,
       flex: 1,
       valueFormatter: params => {
         return `${params.value as string} days`;
       },
+      hideOnMobile: false,
     },
     {
       field: "stage",
       headerName: "Stage",
-      minWidth: 70,
+      minWidth: 130,
       flex: 1,
       type: "string",
+      hideOnMobile: false,
     },
     {
       field: "onTime",
       headerName: "On time",
       description: "Product lifecycle based on workflow rules is on time",
-      minWidth: 50,
+      minWidth: 70,
       flex: 1,
       type: "boolean",
     },
@@ -129,25 +124,40 @@ export default function ProductList(): ReactElement {
       field: "techPackUploaded",
       description: "Tech pack is uploaded",
       headerName: "Tech pack",
-      minWidth: 50,
+      minWidth: 80,
       flex: 1,
       type: "boolean",
+      hideOnMobile: false,
     },
     {
       field: "fabricSampleDelivered",
       description: "Fabric sample is delivered",
       headerName: "Fabric Sample",
-      minWidth: 50,
+      minWidth: 120,
       flex: 1,
       type: "boolean",
+      hideOnMobile: false,
     },
     {
       field: "fitSampleDelivered",
       description: "Fit sample is delivered",
       headerName: "Fit Sample",
-      minWidth: 50,
+      minWidth: 100,
       flex: 1,
       type: "boolean",
+      hideOnMobile: false,
+    },
+    {
+      field: "factoryCode",
+      headerName: "Factory",
+      minWidth: 120,
+      flex: 5,
+      type: "string",
+      renderCell: renderCellExpand,
+      valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
+        return row.factory.name;
+      },
+      hideOnMobile: true,
     },
   ];
 

@@ -16,6 +16,7 @@ export default function FileList({
     {
       field: "createdAt",
       headerName: "Upload time",
+      minWidth: 110,
       type: "date",
       flex: 1,
       valueFormatter: params => {
@@ -25,6 +26,7 @@ export default function FileList({
     {
       field: "contributor",
       headerName: "Contributor",
+      minWidth: 110,
       type: "string",
       flex: 1,
       valueGetter: ({ row }: { row: FileFieldsFragment }) => {
@@ -34,6 +36,7 @@ export default function FileList({
     {
       field: "link",
       headerName: "Download Copy",
+      minWidth: 110,
       type: "string",
       flex: 1,
       renderCell: (params: GridCellParams<string>) => (

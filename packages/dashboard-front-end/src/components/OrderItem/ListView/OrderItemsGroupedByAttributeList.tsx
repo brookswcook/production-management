@@ -55,8 +55,8 @@ export default function OrderItemsGroupedByAttributeList({
       variantSetAttributeIdentifier => ({
         field: variantSetAttributeIdentifier,
         headerName: variantSetAttributeIdentifier,
-        minWidth: 50,
-        flex: 1,
+        minWidth: 100,
+        flex: 2,
         type: "string",
         valueGetter: ({
           row,
@@ -82,8 +82,8 @@ export default function OrderItemsGroupedByAttributeList({
     {
       field: "productCode",
       headerName: "Product",
-      minWidth: 50,
-      flex: 1,
+      minWidth: 100,
+      flex: 2,
       type: "string",
       valueGetter: ({
         row,
@@ -109,7 +109,7 @@ export default function OrderItemsGroupedByAttributeList({
     {
       field: "quantity",
       headerName: "Quantity",
-      minWidth: 50,
+      minWidth: 70,
       flex: 1,
       type: "number",
       valueGetter: ({
@@ -123,7 +123,7 @@ export default function OrderItemsGroupedByAttributeList({
     {
       field: "unitPrice",
       headerName: "Unit Price",
-      minWidth: 50,
+      minWidth: 80,
       flex: 1,
       type: "number",
       valueGetter: ({
@@ -137,7 +137,7 @@ export default function OrderItemsGroupedByAttributeList({
     {
       field: "extPrice",
       headerName: "Ext Price",
-      minWidth: 50,
+      minWidth: 80,
       flex: 1,
       type: "number",
       valueGetter: ({
@@ -195,26 +195,27 @@ export default function OrderItemsGroupedByAttributeList({
           Toolbar: CustomToolbar,
           Footer: () => {
             return (
-              <GridFooterContainer sx={{ pl: 1, pr: 1 }}>
-                <Stack
-                  direction={"row"}
-                  justifyContent={"flex-end"}
-                  spacing={2}
-                >
-                  <Typography>Total:</Typography>
-                  <Typography>{`Quantity: ${rows.reduce(
-                    (acc, { quantity }) => acc + quantity,
-                    0
-                  )}`}</Typography>
-                  <Typography>{`Price: ${toCurrency(
-                    rows.reduce((acc, { extPrice }) => acc + extPrice, 0)
-                  )}`}</Typography>
-                </Stack>
-                <GridFooter
-                  sx={{
-                    border: "none",
-                  }}
-                />
+              <GridFooterContainer>
+                <Grid container>
+                  <Grid item xs={12} sx={{ my: 2, px: 2 }}>
+                    <Stack
+                      direction={"row"}
+                      justifyContent={"flex-end"}
+                      columnGap={2}
+                    >
+                      <Typography variant="inherit">{`Quantity: ${rows.reduce(
+                        (acc, { quantity }) => acc + quantity,
+                        0
+                      )}`}</Typography>
+                      <Typography variant="inherit">{`Price: ${toCurrency(
+                        rows.reduce((acc, { extPrice }) => acc + extPrice, 0)
+                      )}`}</Typography>
+                    </Stack>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <GridFooter />
+                  </Grid>
+                </Grid>
               </GridFooterContainer>
             );
           },

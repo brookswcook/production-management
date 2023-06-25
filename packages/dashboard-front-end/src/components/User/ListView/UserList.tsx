@@ -18,28 +18,28 @@ export default function UserList(): ReactElement {
     {
       field: "fullName",
       headerName: "Name",
-      minWidth: 50,
-      flex: 1,
+      minWidth: 160,
+      flex: 2,
       type: "string",
     },
     {
       field: "email",
       headerName: "Email",
-      minWidth: 70,
-      flex: 1,
+      minWidth: 210,
+      flex: 2,
       type: "string",
     },
     {
       field: "role",
       headerName: "Role",
-      minWidth: 50,
+      minWidth: 90,
       flex: 1,
       type: "string",
     },
     {
       field: "active",
       headerName: "Active",
-      minWidth: 50,
+      minWidth: 90,
       flex: 1,
       type: "boolean",
       valueGetter: params => !params.value,
@@ -47,7 +47,7 @@ export default function UserList(): ReactElement {
     {
       field: "emailVerified",
       headerName: "Email Verified",
-      minWidth: 50,
+      minWidth: 110,
       flex: 1,
       type: "boolean",
       valueGetter: ({ row }: { row: UserListFieldsFragment }) => {
@@ -56,8 +56,8 @@ export default function UserList(): ReactElement {
     },
     {
       field: "creationTime",
-      headerName: "Creation Time",
-      minWidth: 70,
+      headerName: "Creation Date",
+      minWidth: 110,
       flex: 1,
       type: "date",
       valueGetter: ({ row }: { row: UserListFieldsFragment }) => {
@@ -65,13 +65,13 @@ export default function UserList(): ReactElement {
       },
       valueFormatter: params => {
         const date = new Date(params.value as string);
-        return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+        return `${date.toLocaleDateString()}`;
       },
     },
     {
       field: "lastSignInTime",
-      headerName: "Last Sign In Time",
-      minWidth: 70,
+      headerName: "Last Sign In Date",
+      minWidth: 120,
       flex: 1,
       type: "date",
       valueGetter: ({ row }: { row: UserListFieldsFragment }) => {
@@ -79,7 +79,7 @@ export default function UserList(): ReactElement {
       },
       valueFormatter: params => {
         const date = new Date(params.value as string);
-        return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+        return `${date.toLocaleDateString()}`;
       },
     },
   ];

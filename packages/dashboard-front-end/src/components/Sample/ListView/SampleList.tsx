@@ -55,18 +55,38 @@ export default function SampleList({
   );
 
   const columns: GridColDef<Sample>[] = [
-    { field: "sku", headerName: "Sample Number", type: "string", flex: 1 },
     {
-      field: "trackNumber",
-      headerName: "Tracking Number",
+      field: "sku",
+      headerName: "Sample Number",
+      minWidth: 120,
       type: "string",
       flex: 1,
     },
-    { field: "delivered", headerName: "Delivered", type: "boolean", flex: 1 },
-    { field: "approved", headerName: "Approved", type: "boolean", flex: 1 },
+    {
+      field: "trackNumber",
+      headerName: "Tracking Number",
+      minWidth: 130,
+      type: "string",
+      flex: 1,
+    },
+    {
+      field: "delivered",
+      headerName: "Delivered",
+      minWidth: 80,
+      type: "boolean",
+      flex: 1,
+    },
+    {
+      field: "approved",
+      headerName: "Approved",
+      minWidth: 80,
+      type: "boolean",
+      flex: 1,
+    },
     {
       field: "attachment",
       headerName: "Comment Attachment",
+      minWidth: 160,
       type: "boolean",
       flex: 1,
       valueGetter: ({ row }: { row: Sample }) => {
@@ -77,18 +97,9 @@ export default function SampleList({
       },
     },
     {
-      field: "comment",
-      headerName: "Rejection Comment",
-      type: "string",
-      flex: 3,
-      renderCell: renderCellExpand,
-      valueGetter: ({ row }: { row: Sample }) => {
-        return row.note?.text ?? "";
-      },
-    },
-    {
       field: "commentAuthor",
       headerName: "Comment author",
+      minWidth: 130,
       type: "string",
       flex: 1,
       valueGetter: ({ row }: { row: Sample }) => {
@@ -98,11 +109,24 @@ export default function SampleList({
     {
       field: "commentDate",
       headerName: "Comment date",
+      minWidth: 110,
       type: "date",
       flex: 1,
       valueGetter: ({ row }: { row: Sample }) => {
         if (row.note?.createdAt == null) return "";
         return new Date(row.note?.createdAt).toLocaleDateString();
+      },
+    },
+    // Add a user comment to the timeline when a sample is rejected with comment
+    {
+      field: "comment",
+      headerName: "Rejection Comment",
+      minWidth: 140,
+      type: "string",
+      flex: 4,
+      renderCell: renderCellExpand,
+      valueGetter: ({ row }: { row: Sample }) => {
+        return row.note?.text ?? "";
       },
     },
   ];

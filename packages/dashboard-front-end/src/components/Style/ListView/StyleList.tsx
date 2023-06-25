@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import {
   GridColDef,
   GridRenderCellParams,
@@ -15,6 +15,7 @@ import {
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
 import { ListView } from "../../ListView";
+import LinkColumn from "../../ListView/LinkColumn";
 import CreateStyleDialog from "../Dialog/CreateStyleDialog";
 
 export default function StyleList(): ReactElement {
@@ -26,8 +27,8 @@ export default function StyleList(): ReactElement {
     {
       field: "name",
       headerName: "Name",
-      minWidth: 70,
-      flex: 3,
+      minWidth: 120,
+      flex: 1,
       renderCell({ id, formattedValue }: GridRenderCellParams) {
         const linkPath = `/styles/${id}`;
         const linkText = `${String(formattedValue)}`;
@@ -41,7 +42,7 @@ export default function StyleList(): ReactElement {
     {
       field: "code",
       headerName: "Number",
-      minWidth: 50,
+      minWidth: 70,
       flex: 1,
       type: "string",
     },
@@ -49,30 +50,24 @@ export default function StyleList(): ReactElement {
       field: "techPackUploaded",
       description: "Tech pack is uploaded",
       headerName: "Tech pack uploaded",
-      minWidth: 50,
+      minWidth: 150,
       flex: 1,
       type: "boolean",
     },
     {
       field: "productCodes",
       headerName: "Associated Products",
-      minWidth: 100,
+      minWidth: 150,
       flex: 5,
       valueGetter: ({ row }: { row: StyleFieldsFragment }) => {
         return row.productCodes;
       },
-      // TODO: reuse
       renderCell({
         value: productCodes,
       }: GridRenderCellParams<string[], StyleFieldsFragment>) {
-        return productCodes?.map(code => (
-          <Box key={code} sx={{ whiteSpace: "pre" }}>
-            <Link to={`/products/${code}`} style={{ textDecoration: "none" }}>
-              {code}
-            </Link>
-            {"  "}
-          </Box>
-        ));
+        return (
+          <LinkColumn linkIds={productCodes ?? []} linkPath="/products/" />
+        );
       },
     },
   ];

@@ -181,59 +181,64 @@ export default function SampleList({
     return (
       <>
         <GridToolbarContainer>
-          <Button
-            variant={"text"}
-            size={"small"}
-            onClick={() => setSendSampleDialogOpen(true)}
-          >
-            {`New ${sampleType == "fit" ? "fit" : "fabric"} sample`}
-          </Button>
-          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+          <Box sx={{ display: { xs: "inline", sm: "none" } }}></Box>
+          <Box sx={{ display: { xs: "none", sm: "inline" } }}>
             <Button
-              variant="text"
-              size="small"
-              onClick={markAsDelivered}
-              disabled={selectedSamples.length !== 1}
+              variant={"text"}
+              size={"small"}
+              onClick={() => setSendSampleDialogOpen(true)}
             >
-              Mark As Delivered
+              {`New ${sampleType == "fit" ? "fit" : "fabric"} sample`}
             </Button>
-          </RequireRole>
-          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <Button
-              variant="text"
-              size="small"
-              onClick={approveSample}
-              disabled={selectedSamples.length !== 1}
+            <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+              <Button
+                variant="text"
+                size="small"
+                onClick={markAsDelivered}
+                disabled={selectedSamples.length !== 1}
+              >
+                Mark As Delivered
+              </Button>
+            </RequireRole>
+            <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+              <Button
+                variant="text"
+                size="small"
+                onClick={approveSample}
+                disabled={selectedSamples.length !== 1}
+              >
+                Approve
+              </Button>
+            </RequireRole>
+            <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+              <Button
+                variant="text"
+                size="small"
+                onClick={() => setRejectSampleDialogOpen(true)}
+                disabled={selectedSamples.length !== 1}
+              >
+                Reject
+              </Button>
+            </RequireRole>
+            <a
+              href={noteFileLink}
+              target="_blank"
+              style={{
+                pointerEvents: `${
+                  selectedSamples.length == 1 ? "auto" : "none"
+                }`,
+                textDecoration: "none",
+              }}
             >
-              Approve
-            </Button>
-          </RequireRole>
-          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-            <Button
-              variant="text"
-              size="small"
-              onClick={() => setRejectSampleDialogOpen(true)}
-              disabled={selectedSamples.length !== 1}
-            >
-              Reject
-            </Button>
-          </RequireRole>
-          <a
-            href={noteFileLink}
-            target="_blank"
-            style={{
-              pointerEvents: `${selectedSamples.length == 1 ? "auto" : "none"}`,
-              textDecoration: "none",
-            }}
-          >
-            <Button
-              variant="text"
-              size="small"
-              disabled={selectedSamples.length !== 1}
-            >
-              Download Comment Attachment
-            </Button>
-          </a>
+              <Button
+                variant="text"
+                size="small"
+                disabled={selectedSamples.length !== 1}
+              >
+                Download Comment Attachment
+              </Button>
+            </a>
+          </Box>
           <GridToolbarFilterButton />
         </GridToolbarContainer>
       </>

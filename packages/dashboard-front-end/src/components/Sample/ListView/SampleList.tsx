@@ -220,24 +220,19 @@ export default function SampleList({
                 Reject
               </Button>
             </RequireRole>
-            <a
-              href={noteFileLink}
+            <Button
+              href={noteFileLink ?? "#"}
               target="_blank"
-              style={{
-                pointerEvents: `${
-                  selectedSamples.length == 1 ? "auto" : "none"
-                }`,
-                textDecoration: "none",
-              }}
+              variant="text"
+              size="small"
+              disabled={
+                selectedSamples.length !== 1 ||
+                noteFileLink == "" ||
+                noteFileLink == null
+              }
             >
-              <Button
-                variant="text"
-                size="small"
-                disabled={selectedSamples.length !== 1}
-              >
-                Download Comment Attachment
-              </Button>
-            </a>
+              Download Comment Attachment
+            </Button>
           </Box>
           <GridToolbarFilterButton />
         </GridToolbarContainer>

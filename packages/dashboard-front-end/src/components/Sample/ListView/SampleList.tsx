@@ -1,5 +1,5 @@
 import { ApolloError } from "@apollo/client";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -7,7 +7,7 @@ import {
   GridToolbarContainer,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { ReactElement, useEffect, useState } from "react";
+import { Fragment, ReactElement, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   Sample,
@@ -21,6 +21,7 @@ import RequireRole from "../../Auth/RequireRole";
 import { renderCellExpand } from "../../ListView";
 import RejectSampleDialog from "../Dialog/RejectSampleDialog";
 import SendSampleDialog from "../Dialog/SendSampleDialog";
+import MenuIcon from "@mui/icons-material/Menu";
 
 export default function SampleList({
   parentCode,
@@ -169,7 +170,7 @@ export default function SampleList({
     </Box>
   );
 
-  function CustomToolbar(): ReactElement {
+  function ToolbarActions(): ReactElement[] {
     const [noteFileLink, setNoteFileLink] = useState<string>();
     const [getImageFileLink] = useImageLinkLazyQuery();
 
@@ -178,66 +179,61 @@ export default function SampleList({
       return () => {};
     }, [selectedGridItems]);
 
-    return (
-      <>
-        <GridToolbarContainer>
-          <Box sx={{ display: { xs: "inline", sm: "none" } }}></Box>
-          <Box sx={{ display: { xs: "none", sm: "inline" } }}>
-            <Button
-              variant={"text"}
-              size={"small"}
-              onClick={() => setSendSampleDialogOpen(true)}
-            >
-              {`New ${sampleType == "fit" ? "fit" : "fabric"} sample`}
-            </Button>
-            <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-              <Button
-                variant="text"
-                size="small"
-                onClick={markAsDelivered}
-                disabled={selectedSamples.length !== 1}
-              >
-                Mark As Delivered
-              </Button>
-            </RequireRole>
-            <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-              <Button
-                variant="text"
-                size="small"
-                onClick={approveSample}
-                disabled={selectedSamples.length !== 1}
-              >
-                Approve
-              </Button>
-            </RequireRole>
-            <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-              <Button
-                variant="text"
-                size="small"
-                onClick={() => setRejectSampleDialogOpen(true)}
-                disabled={selectedSamples.length !== 1}
-              >
-                Reject
-              </Button>
-            </RequireRole>
-            <Button
-              href={noteFileLink ?? "#"}
-              target="_blank"
-              variant="text"
-              size="small"
-              disabled={
-                selectedSamples.length !== 1 ||
-                noteFileLink == "" ||
-                noteFileLink == null
-              }
-            >
-              Download Comment Attachment
-            </Button>
-          </Box>
-          <GridToolbarFilterButton />
-        </GridToolbarContainer>
-      </>
-    );
+    return [
+      <Button
+        variant={"text"}
+        size={"small"}
+        onClick={() => setSendSampleDialogOpen(true)}
+        key="send-sample"
+      >
+        {`New ${sampleType == "fit" ? "fit" : "fabric"} sample`}
+      </Button>,
+      <RequireRole authorizedRoles={["Admin", "VChapman"]} key="deliver-sample">
+        <Button
+          variant="text"
+          size="small"
+          onClick={markAsDelivered}
+          disabled={selectedSamples.length !== 1}
+        >
+          Mark As Delivered
+        </Button>
+      </RequireRole>,
+      <RequireRole authorizedRoles={["Admin", "VChapman"]} key="approve-sample">
+        <Button
+          variant="text"
+          size="small"
+          onClick={approveSample}
+          disabled={selectedSamples.length !== 1}
+        >
+          Approve
+        </Button>
+      </RequireRole>,
+      <RequireRole authorizedRoles={["Admin", "VChapman"]} key="reject-sample">
+        <Button
+          variant="text"
+          size="small"
+          onClick={() => setRejectSampleDialogOpen(true)}
+          disabled={selectedSamples.length !== 1}
+        >
+          Reject
+        </Button>
+      </RequireRole>,
+      <Button
+        href={noteFileLink ?? "#"}
+        target="_blank"
+        variant="text"
+        size="small"
+        disabled={
+          selectedSamples.length !== 1 ||
+          noteFileLink == "" ||
+          noteFileLink == null
+        }
+        key="download-comment-attachment"
+      >
+        Download Comment Attachment
+      </Button>,
+    ];
+
     async function markAsDelivered() {
       try {
         await (sampleType == "fit"
@@ -282,5 +278,42 @@ export default function SampleList({
         }
       }
     }
+  }
+
+  function CustomToolbar(): ReactElement {
+    const [actionsMenuAnchorEl, setActionsMenuAnchorEl] =
+      useState<null | HTMLElement>(null);
+    return (
+      <>
+        <GridToolbarContainer>
+          <Box sx={{ display: { xs: "inline", md: "none" } }}>
+            <Button
+              size="small"
+              onClick={event => setActionsMenuAnchorEl(event.currentTarget)}
+            >
+              <MenuIcon sx={{ mr: 1 }} />
+              <Typography variant="inherit">Actions</Typography>
+            </Button>
+            <Menu
+              id="menu-actions"
+              anchorEl={actionsMenuAnchorEl}
+              open={Boolean(actionsMenuAnchorEl)}
+              keepMounted
+              onClose={() => setActionsMenuAnchorEl(null)}
+            >
+              {ToolbarActions().map(item => {
+                return <MenuItem key={item.key}>{item}</MenuItem>;
+              })}
+            </Menu>
+          </Box>
+          <Box sx={{ display: { xs: "none", md: "inline" } }}>
+            {ToolbarActions().map(item => {
+              return <Fragment key={item.key}>{item}</Fragment>;
+            })}
+          </Box>
+          <GridToolbarFilterButton />
+        </GridToolbarContainer>
+      </>
+    );
   }
 }

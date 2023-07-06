@@ -9,23 +9,38 @@ import { RefAttributes, useEffect, useState } from "react";
 import { HideableGridColDef } from "./types";
 
 export default function ListView<R extends GridValidRowModel = any>(
-  props: DataGridProps<R> & RefAttributes<HTMLDivElement>
+  props: DataGridProps<R> & RefAttributes<HTMLDivElement> & { name: string }
 ) {
   const theme = useTheme();
   const greaterThanXS = useMediaQuery(theme.breakpoints.up("sm"));
 
-  const initialColumnVisibilityModel = (
+  const defaultColumnVisibilityModel = (
     props.columns as HideableGridColDef<any>[]
   ).reduce((acc, { field, hideOnMobile }) => {
     acc[field] = greaterThanXS ? true : !hideOnMobile;
     return acc;
   }, {} as GridColumnVisibilityModel);
 
+  // TODO: save it per user
+  const savedColumnVisibilityModelString = localStorage.getItem(
+    `${props.name}-columnVisibilityModel`
+  );
+  const savedColumnVisibilityModel =
+    savedColumnVisibilityModelString != null
+      ? (JSON.parse(
+          savedColumnVisibilityModelString
+        ) as GridColumnVisibilityModel)
+      : null;
+
   const [columnVisibilityModel, setColumnVisibilityModel] =
-    useState<GridColumnVisibilityModel>(initialColumnVisibilityModel);
+    useState<GridColumnVisibilityModel>(
+      savedColumnVisibilityModel ?? defaultColumnVisibilityModel
+    );
 
   useEffect(() => {
-    setColumnVisibilityModel(initialColumnVisibilityModel);
+    setColumnVisibilityModel(
+      savedColumnVisibilityModel ?? defaultColumnVisibilityModel
+    );
   }, [greaterThanXS]);
 
   return (
@@ -37,9 +52,13 @@ export default function ListView<R extends GridValidRowModel = any>(
               pageSize: 10,
             },
           }}
-          onColumnVisibilityModelChange={newModel =>
-            setColumnVisibilityModel(newModel)
-          }
+          onColumnVisibilityModelChange={newModel => {
+            setColumnVisibilityModel(newModel);
+            localStorage.setItem(
+              `${props.name}-columnVisibilityModel`,
+              JSON.stringify(newModel)
+            );
+          }}
           columnVisibilityModel={columnVisibilityModel}
           rowsPerPageOptions={[5, 10, 20, 50, 100]}
           sx={{

@@ -188,6 +188,7 @@ export default function ProductList(): ReactElement {
         onClose={() => setCreateProductDialogOpen(false)}
       />
       <ListView
+        name="products"
         rows={rows}
         columns={columns}
         getRowId={item => item.code}

@@ -127,6 +127,7 @@ export default function PurchaseOrderList(): ReactElement {
         onClose={() => setCreatePurchaseOrderDialogOpen(false)}
       />
       <ListView
+        name="purchase-orders"
         rows={rows}
         columns={columns}
         getRowId={item => item.uid}

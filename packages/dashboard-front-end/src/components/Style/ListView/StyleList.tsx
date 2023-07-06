@@ -99,6 +99,7 @@ export default function StyleList(): ReactElement {
         onClose={() => setCreateStyleDialogOpen(false)}
       />
       <ListView
+        name="styles"
         rows={rows}
         columns={columns}
         getRowId={item => item.code}

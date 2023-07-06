@@ -1,5 +1,5 @@
 import { ApolloError } from "@apollo/client";
-import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -7,7 +7,7 @@ import {
   GridToolbarContainer,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { Fragment, ReactElement, useEffect, useState } from "react";
+import { Fragment, ReactElement, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import {
   Sample,
@@ -22,6 +22,7 @@ import { renderCellExpand } from "../../ListView";
 import RejectSampleDialog from "../Dialog/RejectSampleDialog";
 import SendSampleDialog from "../Dialog/SendSampleDialog";
 import MenuIcon from "@mui/icons-material/Menu";
+import ActionMenu from "../../ActionMenu/ActionMenu";
 
 export default function SampleList({
   parentCode,
@@ -170,7 +171,10 @@ export default function SampleList({
     </Box>
   );
 
-  function ToolbarActions(): ReactElement[] {
+  function CustomToolbar(): ReactElement {
+    const actionsMenuAnchorElRef = useRef(null);
+    const [actionsMenuAnchorEl, setActionsMenuAnchorEl] =
+      useState<null | HTMLElement>(actionsMenuAnchorElRef.current);
     const [noteFileLink, setNoteFileLink] = useState<string>();
     const [getImageFileLink] = useImageLinkLazyQuery();
 
@@ -179,7 +183,52 @@ export default function SampleList({
       return () => {};
     }, [selectedGridItems]);
 
-    return [
+    async function markAsDelivered() {
+      try {
+        await (sampleType == "fit"
+          ? markFitSampleAsDelivered
+          : markFabricSampleAsDelivered)({
+          variables: {
+            data: { parentCode, sku: selectedSamples[0].sku ?? "" },
+          },
+        });
+      } catch (error) {
+        toast.error((error as ApolloError).message);
+      }
+    }
+
+    async function approveSample() {
+      try {
+        await (sampleType == "fit"
+          ? approveFitSampleMutation
+          : approveFabricSampleMutation)({
+          variables: {
+            data: { parentCode, sku: selectedSamples[0].sku ?? "" },
+          },
+        });
+      } catch (error) {
+        toast.error((error as ApolloError).message);
+      }
+    }
+
+    // TODO: create and use common way for getting files
+    async function generateNoteFileLink() {
+      const selectedSample = selectedSamples[0];
+      if (selectedSample?.note != null) {
+        if (selectedSample.note.imageFileNames.length > 0) {
+          try {
+            const { data } = await getImageFileLink({
+              variables: { fileName: selectedSample.note.imageFileNames[0] },
+            });
+            setNoteFileLink(data?.imageLink ?? "#");
+          } catch (error) {
+            toast.error((error as ApolloError).message);
+          }
+        }
+      }
+    }
+
+    const actions = [
       <Button
         variant={"text"}
         size={"small"}
@@ -234,86 +283,33 @@ export default function SampleList({
       </Button>,
     ];
 
-    async function markAsDelivered() {
-      try {
-        await (sampleType == "fit"
-          ? markFitSampleAsDelivered
-          : markFabricSampleAsDelivered)({
-          variables: {
-            data: { parentCode, sku: selectedSamples[0].sku ?? "" },
-          },
-        });
-      } catch (error) {
-        toast.error((error as ApolloError).message);
-      }
-    }
-
-    async function approveSample() {
-      try {
-        await (sampleType == "fit"
-          ? approveFitSampleMutation
-          : approveFabricSampleMutation)({
-          variables: {
-            data: { parentCode, sku: selectedSamples[0].sku ?? "" },
-          },
-        });
-      } catch (error) {
-        toast.error((error as ApolloError).message);
-      }
-    }
-
-    // TODO: create and use common way for getting files
-    async function generateNoteFileLink() {
-      const selectedSample = selectedSamples[0];
-      if (selectedSample?.note != null) {
-        if (selectedSample.note.imageFileNames.length > 0) {
-          try {
-            const { data } = await getImageFileLink({
-              variables: { fileName: selectedSample.note.imageFileNames[0] },
-            });
-            setNoteFileLink(data?.imageLink ?? "#");
-          } catch (error) {
-            toast.error((error as ApolloError).message);
-          }
-        }
-      }
-    }
-  }
-
-  function CustomToolbar(): ReactElement {
-    const [actionsMenuAnchorEl, setActionsMenuAnchorEl] =
-      useState<null | HTMLElement>(null);
     return (
-      <>
-        <GridToolbarContainer>
-          <Box sx={{ display: { xs: "inline", md: "none" } }}>
-            <Button
-              size="small"
-              onClick={event => setActionsMenuAnchorEl(event.currentTarget)}
-            >
-              <MenuIcon sx={{ mr: 1 }} />
-              <Typography variant="inherit">Actions</Typography>
-            </Button>
-            <Menu
-              id="menu-actions"
-              anchorEl={actionsMenuAnchorEl}
-              open={Boolean(actionsMenuAnchorEl)}
-              keepMounted
-              onClose={() => setActionsMenuAnchorEl(null)}
-            >
-              {ToolbarActions().map(item => {
-                return <MenuItem key={item.key}>{item}</MenuItem>;
-              })}
-            </Menu>
-          </Box>
-          <Box sx={{ display: { xs: "none", md: "inline" } }}>
-            {ToolbarActions().map(item => {
-              return <Fragment key={item.key}>{item}</Fragment>;
-            })}
-          </Box>
-          <GridToolbarFilterButton />
-        </GridToolbarContainer>
-      </>
+      <GridToolbarContainer>
+        <Box
+          ref={actionsMenuAnchorElRef}
+          sx={{ display: { xs: "inline", md: "none" } }}
+        >
+          <Button
+            size="small"
+            onClick={event => setActionsMenuAnchorEl(event.currentTarget)}
+          >
+            <MenuIcon sx={{ mr: 1 }} />
+            <Typography variant="inherit">Actions</Typography>
+          </Button>
+          <ActionMenu
+            anchorEl={actionsMenuAnchorEl}
+            onClose={() => setActionsMenuAnchorEl(null)}
+          >
+            {actions}
+          </ActionMenu>
+        </Box>
+        <Box sx={{ display: { xs: "none", md: "inline" } }}>
+          {actions.map((item, index) => {
+            return <Fragment key={index}>{item}</Fragment>;
+          })}
+        </Box>
+        <GridToolbarFilterButton />
+      </GridToolbarContainer>
     );
   }
 }

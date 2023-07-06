@@ -118,6 +118,7 @@ export default function FabricList(): ReactElement {
         onClose={() => setCreateFabricDialogOpen(false)}
       />
       <ListView
+        name="fabrics"
         rows={rows}
         columns={columns}
         getRowId={item => item.code}

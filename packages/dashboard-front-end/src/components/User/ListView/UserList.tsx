@@ -108,6 +108,7 @@ export default function UserList(): ReactElement {
         onClose={() => setCreateUserDialogOpen(false)}
       />
       <ListView
+        name="users"
         rows={rows}
         columns={columns}
         getRowId={item => item.id}

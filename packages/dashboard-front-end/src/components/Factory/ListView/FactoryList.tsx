@@ -76,6 +76,7 @@ export default function FactoryList(): ReactElement {
         onClose={() => setCreateFactoryDialogOpen(false)}
       />
       <ListView
+        name="factories"
         rows={rows}
         columns={columns}
         getRowId={item => item.code}

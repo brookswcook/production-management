@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.14.0...dashboard-front-end@1.15.0) (2023-07-07)
+
+
+### Bug Fixes
+
+* use generic way of specifying links as buttons ([8c6f63e](https://github.com/brookswcook/production-management/commit/8c6f63e73b762923e0899058defc23e3c570ad1d))
+* wip hideable actions on listview toolbar ([851f044](https://github.com/brookswcook/production-management/commit/851f0445ca17591df89f965e9818272a6542b169))
+
+
+### Features
+
+* action menu component ([e97bb3c](https://github.com/brookswcook/production-management/commit/e97bb3ccfebdb92a444cba63013b372816303690))
+* hideable actions under menu on mobile devices ([309d77c](https://github.com/brookswcook/production-management/commit/309d77c13471170bda2cdf050ea2fcb5a316855a))
+* save column visibility model in local storage ([b6ea640](https://github.com/brookswcook/production-management/commit/b6ea640860d28e37338b9ab2148ff2a6a8621d53))
+
+
+
+
+
 # [1.14.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.13.0...dashboard-front-end@1.14.0) (2023-06-25)
 
 

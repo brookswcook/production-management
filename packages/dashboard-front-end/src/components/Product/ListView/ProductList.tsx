@@ -1,21 +1,39 @@
 import {
-  GridRenderCellParams,
-  GridToolbarColumnsButton,
-  GridToolbarContainer,
-  GridToolbarExport,
-  GridToolbarFilterButton,
-} from "@mui/x-data-grid";
-import {
   ProductFieldsFragment,
   useProductsQuery,
 } from "../../../generated/graphql";
-import { Link } from "react-router-dom";
-import { ReactElement, useState } from "react";
-import RequireRole from "../../Auth/RequireRole";
-import { renderCellExpand, ListView } from "../../ListView";
-import { Button } from "@mui/material";
-import CreateProductDialog from "../Dialog/CreateProductDialog";
+import { ReactElement, Suspense, lazy, useState } from "react";
+import { ListView, RenderCellExpand } from "../../ListView";
 import { HideableGridColDef } from "../../ListView/types";
+
+const CreateProductDialog = lazy(() => import("../Dialog/CreateProductDialog"));
+const GridToolbarContainer = lazy(() =>
+  import("@mui/x-data-grid").then(module => ({
+    default: module.GridToolbarContainer,
+  }))
+);
+const GridToolbarColumnsButton = lazy(() =>
+  import("@mui/x-data-grid").then(module => ({
+    default: module.GridToolbarColumnsButton,
+  }))
+);
+const GridToolbarExport = lazy(() =>
+  import("@mui/x-data-grid").then(module => ({
+    default: module.GridToolbarExport,
+  }))
+);
+const GridToolbarFilterButton = lazy(() =>
+  import("@mui/x-data-grid").then(module => ({
+    default: module.GridToolbarFilterButton,
+  }))
+);
+const Button = lazy(() => import("@mui/material/Button"));
+const RequireRole = lazy(() => import("../../Auth/RequireRole"));
+const Link = lazy(() =>
+  import("react-router-dom").then(module => ({
+    default: module.Link,
+  }))
+);
 
 export default function ProductList(): ReactElement {
   const [createProductDialogOpen, setCreateProductDialogOpen] = useState(false);
@@ -30,13 +48,15 @@ export default function ProductList(): ReactElement {
       headerName: "Title",
       minWidth: 170,
       flex: 3,
-      renderCell({ id, formattedValue }: GridRenderCellParams) {
+      renderCell({ id, formattedValue }) {
         const linkPath = `/products/${id}`;
         const linkText = `${formattedValue as string}`;
         return (
-          <Link to={linkPath} style={{ textDecoration: "none" }}>
-            {linkText}
-          </Link>
+          <Suspense fallback={<span>{linkText}</span>}>
+            <Link to={linkPath} style={{ textDecoration: "none" }}>
+              {linkText}
+            </Link>
+          </Suspense>
         );
       },
     },
@@ -126,8 +146,6 @@ export default function ProductList(): ReactElement {
       headerName: "Tech pack",
       minWidth: 80,
       flex: 1,
-      type: "boolean",
-      hideOnMobile: false,
     },
     {
       field: "fabricSampleDelivered",
@@ -153,7 +171,7 @@ export default function ProductList(): ReactElement {
       minWidth: 120,
       flex: 5,
       type: "string",
-      renderCell: renderCellExpand,
+      renderCell: RenderCellExpand,
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
         return row.factory.name;
       },
@@ -163,30 +181,34 @@ export default function ProductList(): ReactElement {
 
   function CustomToolbar(): ReactElement {
     return (
-      <GridToolbarContainer>
-        <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-          <Button
-            variant={"text"}
-            size={"small"}
-            onClick={() => setCreateProductDialogOpen(true)}
-          >
-            Add product
-          </Button>
-        </RequireRole>
-        <GridToolbarColumnsButton />
-        <GridToolbarFilterButton />
-        <GridToolbarExport />
-      </GridToolbarContainer>
+      <Suspense fallback={<div></div>}>
+        <GridToolbarContainer>
+          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+            <Button
+              variant={"text"}
+              size={"small"}
+              onClick={() => setCreateProductDialogOpen(true)}
+            >
+              Add product
+            </Button>
+          </RequireRole>
+          <GridToolbarColumnsButton />
+          <GridToolbarFilterButton />
+          <GridToolbarExport />
+        </GridToolbarContainer>
+      </Suspense>
     );
   }
 
   return (
     <>
-      <CreateProductDialog
-        open={createProductDialogOpen}
-        onSave={() => setCreateProductDialogOpen(false)}
-        onClose={() => setCreateProductDialogOpen(false)}
-      />
+      <Suspense fallback={<div></div>}>
+        <CreateProductDialog
+          open={createProductDialogOpen}
+          onSave={() => setCreateProductDialogOpen(false)}
+          onClose={() => setCreateProductDialogOpen(false)}
+        />
+      </Suspense>
       <ListView
         name="products"
         rows={rows}

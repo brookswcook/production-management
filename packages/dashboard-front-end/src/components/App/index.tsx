@@ -20,7 +20,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import {
   ApolloClient,
@@ -292,7 +292,7 @@ function ApolloApp() {
 
   return (
     <ApolloProvider client={apolloClient}>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en">
         <Router>
           <Routes>
             <Route path="/signin" element={<SignIn />} />

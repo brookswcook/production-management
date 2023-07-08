@@ -49,7 +49,6 @@ import { UserList } from "../User";
 import { getMessagingToken } from "../../firebase";
 import { useCreateNotificationSubscriptionMutation } from "../../generated/graphql";
 import useMessagingToken from "../Notification/useMessagingToken";
-import fingerprintjs from "@fingerprintjs/fingerprintjs";
 import { UserRole } from "dashboard-core";
 import { ProductList, ProductDetail } from "../Product";
 import { PurchaseOrderList, PurchaseOrderDetail } from "../PurchaseOrder";
@@ -99,7 +98,10 @@ function Dashboard({ children }: { children: ReactElement }): ReactElement {
       if (permission === "granted") {
         const token = await getMessagingToken();
         if (savedMessagingToken !== token) {
-          const fingerprintAgent = await fingerprintjs.load();
+          const { load: fingerprintLoad } = await import(
+            "@fingerprintjs/fingerprintjs"
+          );
+          const fingerprintAgent = await fingerprintLoad();
           const { visitorId: fingerprint } = await fingerprintAgent.get();
           await newNotificationSubscription({
             variables: { data: { token, fingerprint } },

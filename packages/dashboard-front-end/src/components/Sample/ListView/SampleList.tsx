@@ -18,7 +18,7 @@ import {
   useMarkFabricSampleAsDeliveredMutation,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
-import { renderCellExpand } from "../../ListView";
+import { RenderCellExpand } from "../../ListView";
 import RejectSampleDialog from "../Dialog/RejectSampleDialog";
 import SendSampleDialog from "../Dialog/SendSampleDialog";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -126,7 +126,7 @@ export default function SampleList({
       minWidth: 140,
       type: "string",
       flex: 4,
-      renderCell: renderCellExpand,
+      renderCell: RenderCellExpand,
       valueGetter: ({ row }: { row: Sample }) => {
         return row.note?.text ?? "";
       },

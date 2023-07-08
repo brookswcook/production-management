@@ -1,8 +1,7 @@
-import { Paper, Popper, Typography } from "@mui/material";
-import { GridCellParams } from "@mui/x-data-grid";
-import React, { ReactElement } from "react";
-import { createStyles, makeStyles } from "@mui/styles";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Box, Paper, Typography } from "@mui/material";
+import React, { ReactElement, Suspense, lazy } from "react";
+
+const Popper = lazy(() => import("@mui/material/Popper"));
 
 interface CellExpandProps {
   value: string;
@@ -17,30 +16,10 @@ function isOverflown(element: Element | null) {
   );
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      alignItems: "center",
-      lineHeight: "24px",
-      width: "100%",
-      height: "100%",
-      position: "relative",
-      display: "flex",
-      "& .cellValue": {
-        whiteSpace: "nowrap",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-      },
-    },
-  })
-);
-const theme = createTheme();
-
-const CellExpand = React.memo(function CellExpand(
+export default React.memo(function CellExpand(
   props: CellExpandProps
 ): ReactElement {
   const { value, width } = props;
-  const classes = useStyles();
 
   const wrapper = React.useRef<HTMLDivElement | null>(null);
   const cellDiv = React.useRef(null);
@@ -78,28 +57,42 @@ const CellExpand = React.memo(function CellExpand(
     };
   }, [setShowFullCell, showFullCell]);
 
+  const renderLoader = () => <p>Loading</p>;
+
   return (
-    <ThemeProvider theme={theme}>
+    <Box
+      ref={wrapper}
+      sx={{
+        alignItems: "center",
+        lineHeight: "24px",
+        width: "100%",
+        height: "100%",
+        position: "relative",
+        display: "flex",
+        "& .cellValue": {
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        },
+      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <div
-        ref={wrapper}
-        className={classes.root}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        <div
-          ref={cellDiv}
-          style={{
-            height: 1,
-            width,
-            display: "block",
-            position: "absolute",
-            top: 0,
-          }}
-        />
-        <div ref={cellValue} className="cellValue">
-          {value}
-        </div>
-        {showPopper && (
+        ref={cellDiv}
+        style={{
+          height: 1,
+          width,
+          display: "block",
+          position: "absolute",
+          top: 0,
+        }}
+      />
+      <div ref={cellValue} className="cellValue">
+        {value}
+      </div>
+      {showPopper && (
+        <Suspense fallback={renderLoader()}>
           <Popper
             open={showFullCell && anchorEl != null}
             anchorEl={anchorEl}
@@ -114,17 +107,8 @@ const CellExpand = React.memo(function CellExpand(
               </Typography>
             </Paper>
           </Popper>
-        )}
-      </div>
-    </ThemeProvider>
+        </Suspense>
+      )}
+    </Box>
   );
 });
-
-export default function renderCellExpand(params: GridCellParams): ReactElement {
-  return (
-    <CellExpand
-      value={String(params.value)}
-      width={params.colDef.computedWidth}
-    />
-  );
-}

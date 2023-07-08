@@ -12,7 +12,7 @@ import {
 } from "../../../generated/graphql";
 import { ReactElement, useState } from "react";
 import RequireRole from "../../Auth/RequireRole";
-import { renderCellExpand, ListView } from "../../ListView";
+import { RenderCellExpand, ListView } from "../../ListView";
 import CreateFabricDialog from "../Dialog/CreateFabricDialog";
 import { Button } from "@mui/material";
 import { HideableGridColDef } from "../../ListView/types";
@@ -67,7 +67,7 @@ export default function FabricList(): ReactElement {
       minWidth: 120,
       flex: 2,
       type: "string",
-      renderCell: renderCellExpand,
+      renderCell: RenderCellExpand,
       valueGetter: ({ row }: { row: FabricFieldsFragment }) => {
         return row.factory.name;
       },

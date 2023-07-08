@@ -6,7 +6,7 @@ import {
   useFactoriesQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
-import { renderCellExpand, ListView } from "../../ListView";
+import { RenderCellExpand, ListView } from "../../ListView";
 import CreateFactoryDialog from "../Dialog/CreateFactoryDialog";
 
 export default function FactoryList(): ReactElement {
@@ -27,7 +27,7 @@ export default function FactoryList(): ReactElement {
       headerName: "Name",
       minWidth: 250,
       flex: 2,
-      renderCell: renderCellExpand,
+      renderCell: RenderCellExpand,
       type: "string",
     },
     {
@@ -45,7 +45,7 @@ export default function FactoryList(): ReactElement {
       headerName: "Address",
       minWidth: 300,
       flex: 5,
-      renderCell: renderCellExpand,
+      renderCell: RenderCellExpand,
       type: "string",
     },
   ];

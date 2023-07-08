@@ -136,8 +136,8 @@ export default function VariantAttributeSetTable({
         editMode="row"
         rows={variantAttributeSets}
         columns={columns}
-        components={{
-          Footer: () => {
+        slots={{
+          footer: () => {
             return <></>;
           },
         }}

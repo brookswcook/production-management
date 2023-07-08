@@ -37,7 +37,7 @@ const Link = lazy(() =>
 
 export default function ProductList(): ReactElement {
   const [createProductDialogOpen, setCreateProductDialogOpen] = useState(false);
-  const { data, loading, error } = useProductsQuery({
+  const { data, loading } = useProductsQuery({
     variables: {},
   });
   const rows: ProductFieldsFragment[] = data ? data.products : [];
@@ -63,7 +63,7 @@ export default function ProductList(): ReactElement {
     {
       field: "styleName",
       headerName: "Style Name",
-      minWidth: 120,
+      minWidth: 130,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
@@ -74,7 +74,7 @@ export default function ProductList(): ReactElement {
     {
       field: "styleCode",
       headerName: "Style Number",
-      minWidth: 100,
+      minWidth: 140,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
@@ -85,7 +85,7 @@ export default function ProductList(): ReactElement {
     {
       field: "fabricCode",
       headerName: "Fabric",
-      minWidth: 70,
+      minWidth: 90,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
@@ -96,7 +96,7 @@ export default function ProductList(): ReactElement {
     {
       field: "colorName",
       headerName: "Color Name",
-      minWidth: 120,
+      minWidth: 130,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
@@ -107,7 +107,7 @@ export default function ProductList(): ReactElement {
     {
       field: "deliveryDate",
       headerName: "Delivery date",
-      minWidth: 110,
+      minWidth: 140,
       flex: 1,
       type: "date",
       valueFormatter: params => {
@@ -136,7 +136,7 @@ export default function ProductList(): ReactElement {
       field: "onTime",
       headerName: "On time",
       description: "Product lifecycle based on workflow rules is on time",
-      minWidth: 70,
+      minWidth: 100,
       flex: 1,
       type: "boolean",
     },
@@ -144,14 +144,14 @@ export default function ProductList(): ReactElement {
       field: "techPackUploaded",
       description: "Tech pack is uploaded",
       headerName: "Tech pack",
-      minWidth: 80,
+      minWidth: 120,
       flex: 1,
     },
     {
       field: "fabricSampleDelivered",
       description: "Fabric sample is delivered",
       headerName: "Fabric Sample",
-      minWidth: 120,
+      minWidth: 140,
       flex: 1,
       type: "boolean",
       hideOnMobile: false,
@@ -160,7 +160,7 @@ export default function ProductList(): ReactElement {
       field: "fitSampleDelivered",
       description: "Fit sample is delivered",
       headerName: "Fit Sample",
-      minWidth: 100,
+      minWidth: 120,
       flex: 1,
       type: "boolean",
       hideOnMobile: false,
@@ -215,11 +215,10 @@ export default function ProductList(): ReactElement {
         columns={columns}
         getRowId={item => item.code}
         loading={loading}
-        error={error}
-        components={{
-          Toolbar: CustomToolbar,
+        slots={{
+          toolbar: CustomToolbar,
         }}
-        disableSelectionOnClick
+        disableRowSelectionOnClick
       />
     </>
   );

@@ -49,7 +49,9 @@ export default function ListView<R extends GridValidRowModel = any>(
         <DataGrid
           initialState={{
             pagination: {
-              pageSize: 10,
+              paginationModel: {
+                pageSize: 10,
+              },
             },
           }}
           onColumnVisibilityModelChange={newModel => {
@@ -60,13 +62,14 @@ export default function ListView<R extends GridValidRowModel = any>(
             );
           }}
           columnVisibilityModel={columnVisibilityModel}
-          rowsPerPageOptions={[5, 10, 20, 50, 100]}
+          pageSizeOptions={[5, 10, 20, 50, 100]}
           sx={{
             mt: 1,
             border: "2px solid rgba(224, 224, 224, 1)",
             borderRadius: 4,
           }}
           autoHeight
+          disableColumnMenu
           {...props}
         />
       </Grid>

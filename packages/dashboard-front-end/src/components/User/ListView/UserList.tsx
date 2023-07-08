@@ -11,7 +11,7 @@ import CreateUserDialog from "../Dialog/CreateUserDialog";
 
 export default function UserList(): ReactElement {
   const [createUserDialogOpen, setCreateUserDialogOpen] = useState(false);
-  const { data, loading, error } = useUsersQuery({});
+  const { data, loading } = useUsersQuery({});
   const rows: UserListFieldsFragment[] = data?.users ?? [];
 
   const columns: GridColDef<UserListFieldsFragment>[] = [
@@ -47,7 +47,7 @@ export default function UserList(): ReactElement {
     {
       field: "emailVerified",
       headerName: "Email Verified",
-      minWidth: 110,
+      minWidth: 140,
       flex: 1,
       type: "boolean",
       valueGetter: ({ row }: { row: UserListFieldsFragment }) => {
@@ -57,7 +57,7 @@ export default function UserList(): ReactElement {
     {
       field: "creationTime",
       headerName: "Creation Date",
-      minWidth: 110,
+      minWidth: 140,
       flex: 1,
       type: "date",
       valueGetter: ({ row }: { row: UserListFieldsFragment }) => {
@@ -71,7 +71,7 @@ export default function UserList(): ReactElement {
     {
       field: "lastSignInTime",
       headerName: "Last Sign In Date",
-      minWidth: 120,
+      minWidth: 160,
       flex: 1,
       type: "date",
       valueGetter: ({ row }: { row: UserListFieldsFragment }) => {
@@ -113,12 +113,11 @@ export default function UserList(): ReactElement {
         columns={columns}
         getRowId={item => item.id}
         loading={loading}
-        error={error}
         autoHeight
-        components={{
-          Toolbar: CustomToolbar,
+        slots={{
+          toolbar: CustomToolbar,
         }}
-        disableSelectionOnClick
+        disableRowSelectionOnClick
       />
     </>
   );

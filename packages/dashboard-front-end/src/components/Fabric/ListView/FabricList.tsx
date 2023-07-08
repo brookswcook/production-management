@@ -20,7 +20,7 @@ import LinkColumn from "../../ListView/LinkColumn";
 
 export default function FabricList(): ReactElement {
   const [createFabricDialogOpen, setCreateFabricDialogOpen] = useState(false);
-  const { data, loading, error } = useFabricsQuery({});
+  const { data, loading } = useFabricsQuery({});
   const rows: FabricFieldsFragment[] = data?.fabrics ?? [];
 
   const columns: HideableGridColDef<FabricFieldsFragment>[] = [
@@ -42,7 +42,7 @@ export default function FabricList(): ReactElement {
     {
       field: "code",
       headerName: "Code",
-      minWidth: 70,
+      minWidth: 90,
       flex: 1,
       type: "string",
     },
@@ -76,14 +76,14 @@ export default function FabricList(): ReactElement {
     {
       field: "productCodes",
       headerName: "Associated Products",
-      minWidth: 150,
+      minWidth: 190,
       flex: 5,
       valueGetter: ({ row }: { row: FabricFieldsFragment }) => {
         return row.productCodes;
       },
       renderCell({
         value: productCodes,
-      }: GridRenderCellParams<string[], FabricFieldsFragment>) {
+      }: GridRenderCellParams<any, string[], FabricFieldsFragment>) {
         return (
           <LinkColumn linkIds={productCodes ?? []} linkPath="/products/" />
         );
@@ -123,11 +123,10 @@ export default function FabricList(): ReactElement {
         columns={columns}
         getRowId={item => item.code}
         loading={loading}
-        error={error}
-        components={{
-          Toolbar: CustomToolbar,
+        slots={{
+          toolbar: CustomToolbar,
         }}
-        disableSelectionOnClick
+        disableRowSelectionOnClick
       />
     </>
   );

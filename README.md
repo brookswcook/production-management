@@ -26,10 +26,10 @@ npx lerna run dev --scope=dashboard-api
 npx lerna publish --conventional-commits
 
 # generate bundle stats
-npx lerna run build --scope=dashboard-front-end -- --statson
+npx lerna run build --scope=dashboard-front-end
 
 # analyze bundle stats
-npx webpack-bundle-analyzer ./packages/dashboard-front-end/build/bundle-stats.json
+npx lerna run analyze --scope=dashboard-front-end
 ```
 
 ## Prettier

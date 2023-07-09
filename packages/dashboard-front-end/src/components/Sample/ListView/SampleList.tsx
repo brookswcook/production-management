@@ -1,7 +1,6 @@
 import { ApolloError } from "@apollo/client";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import {
-  DataGrid,
   GridColDef,
   GridRowSelectionModel,
   GridToolbarContainer,
@@ -18,7 +17,7 @@ import {
   useMarkFabricSampleAsDeliveredMutation,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
-import { RenderCellExpand } from "../../ListView";
+import { ListView, RenderCellExpand } from "../../ListView";
 import RejectSampleDialog from "../Dialog/RejectSampleDialog";
 import SendSampleDialog from "../Dialog/SendSampleDialog";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -123,7 +122,7 @@ export default function SampleList({
     {
       field: "comment",
       headerName: "Rejection Comment",
-      minWidth: 200,
+      minWidth: 180,
       type: "string",
       flex: 4,
       renderCell: RenderCellExpand,
@@ -134,7 +133,7 @@ export default function SampleList({
   ];
 
   return (
-    <Box sx={{ height: "300px", width: "100%", pt: 1 }}>
+    <Grid item container>
       <RejectSampleDialog
         parentCode={parentCode}
         sampleType={sampleType}
@@ -150,7 +149,8 @@ export default function SampleList({
         onSave={() => setSendSampleDialogOpen(false)}
         onClose={() => setSendSampleDialogOpen(false)}
       />
-      <DataGrid
+      <ListView
+        name={"sample-list"}
         rows={rows ?? []}
         columns={columns}
         getRowId={item => item.sku}
@@ -161,7 +161,6 @@ export default function SampleList({
             },
           },
         }}
-        pageSizeOptions={[5, 10, 20, 50, 100]}
         checkboxSelection
         onRowSelectionModelChange={selectionModel =>
           setSelectedGridItems(selectionModel)
@@ -169,8 +168,10 @@ export default function SampleList({
         slots={{
           toolbar: CustomToolbar,
         }}
+        disableGutters
+        sx={{ mt: 1 }}
       />
-    </Box>
+    </Grid>
   );
 
   function CustomToolbar() {

@@ -117,7 +117,6 @@ export default function UserList(): ReactElement {
         slots={{
           toolbar: CustomToolbar,
         }}
-        disableRowSelectionOnClick
       />
     </>
   );

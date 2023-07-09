@@ -218,7 +218,6 @@ export default function ProductList(): ReactElement {
         slots={{
           toolbar: CustomToolbar,
         }}
-        disableRowSelectionOnClick
       />
     </>
   );

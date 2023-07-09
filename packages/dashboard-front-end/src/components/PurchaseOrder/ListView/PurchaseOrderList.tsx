@@ -135,7 +135,6 @@ export default function PurchaseOrderList(): ReactElement {
         slots={{
           toolbar: CustomToolbar,
         }}
-        disableRowSelectionOnClick
       />
     </>
   );

@@ -1,6 +1,5 @@
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import {
-  DataGrid,
   GridColDef,
   GridFooter,
   GridFooterContainer,
@@ -21,6 +20,7 @@ import {
   stringifyVariantAttributes,
   stringifyAttributes,
 } from "../../VariantAttribute/VariantAttributeSetTable";
+import { ListView } from "../../ListView";
 
 export default function OrderItemsGroupedByAttributeList({
   orderUid,
@@ -178,7 +178,8 @@ export default function OrderItemsGroupedByAttributeList({
         onSave={() => setCreateOrderItemsDialogOpen(false)}
         onClose={() => setCreateOrderItemsDialogOpen(false)}
       />
-      <DataGrid
+      <ListView
+        name="order-items-list"
         rows={rows}
         columns={columns}
         getRowId={item =>
@@ -189,7 +190,6 @@ export default function OrderItemsGroupedByAttributeList({
           item.quantity.toString()
         }
         loading={loading}
-        autoHeight
         slots={{
           toolbar: CustomToolbar,
           footer: () => {
@@ -219,16 +219,7 @@ export default function OrderItemsGroupedByAttributeList({
             );
           },
         }}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 10,
-            },
-          },
-        }}
-        pageSizeOptions={[5, 10, 20, 50, 100]}
-        disableRowSelectionOnClick
-        disableColumnMenu
+        disableGutters
         sx={{ mt: 1 }}
       />
     </Grid>

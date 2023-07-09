@@ -84,7 +84,6 @@ export default function FactoryList(): ReactElement {
         slots={{
           toolbar: CustomToolbar,
         }}
-        disableRowSelectionOnClick
       />
     </>
   );

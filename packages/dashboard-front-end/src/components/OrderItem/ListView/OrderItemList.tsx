@@ -1,7 +1,6 @@
 import { Button, capitalize, Stack, Typography } from "@mui/material";
 import {
   GridColDef,
-  DataGrid,
   GridToolbarContainer,
   GridRenderCellParams,
   GridFooterContainer,
@@ -15,6 +14,7 @@ import {
 import RequireRole from "../../Auth/RequireRole";
 import toCurrency from "../../Utils";
 import CreateOrderItemDialog from "../Dialog/CreateOrderItemDialog";
+import { ListView } from "../../ListView";
 
 export default function OrderItemList({
   orderUid,
@@ -143,12 +143,12 @@ export default function OrderItemList({
         onSave={() => setCreateOrderItemDialogOpen(false)}
         onClose={() => setCreateOrderItemDialogOpen(false)}
       />
-      <DataGrid
+      <ListView
+        name="order-item-list"
         rows={rows}
         columns={columns}
         getRowId={item => item.id}
         loading={loading}
-        autoHeight
         slots={{
           toolbar: CustomToolbar,
           footer: () => {
@@ -175,17 +175,8 @@ export default function OrderItemList({
             );
           },
         }}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 10,
-            },
-          },
-        }}
-        pageSizeOptions={[5, 10, 20, 50, 100]}
-        disableRowSelectionOnClick
         sx={{ mt: 1 }}
-        disableColumnMenu
+        disableGutters
       />
     </>
   );

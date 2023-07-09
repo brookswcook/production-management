@@ -126,7 +126,6 @@ export default function FabricList(): ReactElement {
         slots={{
           toolbar: CustomToolbar,
         }}
-        disableRowSelectionOnClick
       />
     </>
   );

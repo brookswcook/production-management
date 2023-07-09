@@ -1,8 +1,9 @@
 import { Button, Grid } from "@mui/material";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { FileType } from "dashboard-core";
 import { FileFieldsFragment } from "../../../generated/graphql";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+import { ListView } from "../../ListView";
 
 export default function FileList({
   files,
@@ -53,7 +54,8 @@ export default function FileList({
 
   return (
     <Grid item xs={12}>
-      <DataGrid
+      <ListView
+        name="file-list"
         rows={files ?? []}
         columns={columns}
         getRowId={item => item.id}
@@ -64,11 +66,8 @@ export default function FileList({
             },
           },
         }}
-        pageSizeOptions={[5, 10, 20, 50, 100]}
-        disableRowSelectionOnClick={true}
-        autoHeight
         sx={{ mt: 1 }}
-        disableColumnMenu
+        disableGutters
       />
     </Grid>
   );

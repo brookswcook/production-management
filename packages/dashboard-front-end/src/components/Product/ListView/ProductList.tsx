@@ -46,7 +46,7 @@ export default function ProductList(): ReactElement {
     {
       field: "name",
       headerName: "Title",
-      minWidth: 170,
+      minWidth: 150,
       flex: 3,
       renderCell({ id, formattedValue }) {
         const linkPath = `/products/${id}`;
@@ -73,8 +73,8 @@ export default function ProductList(): ReactElement {
     },
     {
       field: "styleCode",
-      headerName: "Style Number",
-      minWidth: 140,
+      headerName: "Style #",
+      minWidth: 95,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
@@ -95,8 +95,8 @@ export default function ProductList(): ReactElement {
     },
     {
       field: "colorName",
-      headerName: "Color Name",
-      minWidth: 130,
+      headerName: "Color",
+      minWidth: 120,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
@@ -106,8 +106,8 @@ export default function ProductList(): ReactElement {
     },
     {
       field: "deliveryDate",
-      headerName: "Delivery date",
-      minWidth: 140,
+      headerName: "Delivery",
+      minWidth: 100,
       flex: 1,
       type: "date",
       valueFormatter: params => {
@@ -127,7 +127,7 @@ export default function ProductList(): ReactElement {
     {
       field: "stage",
       headerName: "Stage",
-      minWidth: 130,
+      minWidth: 120,
       flex: 1,
       type: "string",
       hideOnMobile: false,
@@ -144,7 +144,7 @@ export default function ProductList(): ReactElement {
       field: "techPackUploaded",
       description: "Tech pack is uploaded",
       headerName: "Tech pack",
-      minWidth: 120,
+      minWidth: 115,
       flex: 1,
     },
     {
@@ -168,7 +168,7 @@ export default function ProductList(): ReactElement {
     {
       field: "factoryCode",
       headerName: "Factory",
-      minWidth: 120,
+      minWidth: 110,
       flex: 5,
       type: "string",
       renderCell: RenderCellExpand,

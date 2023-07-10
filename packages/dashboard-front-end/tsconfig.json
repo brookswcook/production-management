@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "es2021",
+    "target": "ES5",
     "lib": [
       "dom",
       "dom.iterable",

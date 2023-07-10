@@ -1,5 +1,7 @@
+import { Suspense, lazy } from "react";
 import ActionDialog from "../../ActionDialog/ActionDialog";
-import CreateProductForm from "../Form/CreateProductForm";
+
+const CreateProductForm = lazy(() => import("../Form/CreateProductForm"));
 
 export default function CreateProductDialog({
   open = false,
@@ -17,7 +19,9 @@ export default function CreateProductDialog({
       onClose={onClose}
       form="createProduct"
     >
-      <CreateProductForm onSubmit={onSave} />
+      <Suspense fallback={<div>loading</div>}>
+        <CreateProductForm onSubmit={onSave} />
+      </Suspense>
     </ActionDialog>
   );
 }

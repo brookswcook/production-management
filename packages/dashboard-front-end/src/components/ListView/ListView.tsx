@@ -9,7 +9,8 @@ import { RefAttributes, useEffect, useState } from "react";
 import { HideableGridColDef } from "./types";
 
 export default function ListView<R extends GridValidRowModel = any>(
-  props: DataGridProps<R> & RefAttributes<HTMLDivElement> & { name: string }
+  props: DataGridProps<R> &
+    RefAttributes<HTMLDivElement> & { name: string; disableGutters?: true }
 ) {
   const theme = useTheme();
   const greaterThanXS = useMediaQuery(theme.breakpoints.up("sm"));
@@ -44,14 +45,20 @@ export default function ListView<R extends GridValidRowModel = any>(
   }, [greaterThanXS]);
 
   return (
-    <Container maxWidth="xl" disableGutters={greaterThanXS ? false : true}>
+    <Container
+      maxWidth="xl"
+      disableGutters={props.disableGutters ?? (greaterThanXS ? false : true)}
+    >
       <Grid item xs={12}>
         <DataGrid
           initialState={{
             pagination: {
-              pageSize: 10,
+              paginationModel: {
+                pageSize: 10,
+              },
             },
           }}
+          pageSizeOptions={[5, 10, 20, 50, 100]}
           onColumnVisibilityModelChange={newModel => {
             setColumnVisibilityModel(newModel);
             localStorage.setItem(
@@ -60,13 +67,14 @@ export default function ListView<R extends GridValidRowModel = any>(
             );
           }}
           columnVisibilityModel={columnVisibilityModel}
-          rowsPerPageOptions={[5, 10, 20, 50, 100]}
           sx={{
             mt: 1,
             border: "2px solid rgba(224, 224, 224, 1)",
             borderRadius: 4,
           }}
           autoHeight
+          disableColumnMenu
+          disableRowSelectionOnClick
           {...props}
         />
       </Grid>

@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { ReactElement, useContext, useState } from "react";
+import { ReactElement, useContext, useState, FormEvent } from "react";
 import { AuthContext } from "./AuthProvider";
 import { toast } from "react-toastify";
 import {
@@ -50,7 +50,7 @@ export default function SignIn(): ReactElement {
   const [authType, setAuthType] = useState<string>("");
   const [loginMutation] = useLoginMutation();
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     try {
       event.preventDefault();
       if (authType === "password") {

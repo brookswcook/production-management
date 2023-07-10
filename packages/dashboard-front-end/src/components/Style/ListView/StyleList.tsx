@@ -20,7 +20,7 @@ import CreateStyleDialog from "../Dialog/CreateStyleDialog";
 
 export default function StyleList(): ReactElement {
   const [createStyleDialogOpen, setCreateStyleDialogOpen] = useState(false);
-  const { data, loading, error } = useStylesQuery({});
+  const { data, loading } = useStylesQuery({});
   const rows: StyleFieldsFragment[] = data?.styles ?? [];
 
   const columns: GridColDef<StyleFieldsFragment>[] = [
@@ -42,7 +42,7 @@ export default function StyleList(): ReactElement {
     {
       field: "code",
       headerName: "Number",
-      minWidth: 70,
+      minWidth: 100,
       flex: 1,
       type: "string",
     },
@@ -50,21 +50,21 @@ export default function StyleList(): ReactElement {
       field: "techPackUploaded",
       description: "Tech pack is uploaded",
       headerName: "Tech pack uploaded",
-      minWidth: 150,
+      minWidth: 180,
       flex: 1,
       type: "boolean",
     },
     {
       field: "productCodes",
       headerName: "Associated Products",
-      minWidth: 150,
+      minWidth: 190,
       flex: 5,
       valueGetter: ({ row }: { row: StyleFieldsFragment }) => {
         return row.productCodes;
       },
       renderCell({
         value: productCodes,
-      }: GridRenderCellParams<string[], StyleFieldsFragment>) {
+      }: GridRenderCellParams<any, string[], StyleFieldsFragment>) {
         return (
           <LinkColumn linkIds={productCodes ?? []} linkPath="/products/" />
         );
@@ -104,12 +104,10 @@ export default function StyleList(): ReactElement {
         columns={columns}
         getRowId={item => item.code}
         loading={loading}
-        error={error}
         autoHeight
-        components={{
-          Toolbar: CustomToolbar,
+        slots={{
+          toolbar: CustomToolbar,
         }}
-        disableSelectionOnClick
       />
     </>
   );

@@ -1,5 +1,6 @@
 import { ApolloError } from "@apollo/client";
-import { DatePicker } from "@mui/lab";
+import { DatePicker, LocalizationProvider } from "@mui/lab";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
   Autocomplete,
   Box,
@@ -68,16 +69,18 @@ export default function CreatePurchaseOrderForm({
           <TextField {...params} name="factoryId" label="Factory" required />
         )}
       />
-      <DatePicker
-        label="Expected delivery date"
-        value={expectedDeliveryDate}
-        onChange={newValue => {
-          setDeliveryDate(newValue as string);
-        }}
-        renderInput={(params: TextFieldProps) => (
-          <TextField name="Expected delivery date" {...params} required />
-        )}
-      />
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en">
+        <DatePicker
+          label="Expected delivery date"
+          value={expectedDeliveryDate}
+          onChange={newValue => {
+            setDeliveryDate(newValue as string);
+          }}
+          renderInput={(params: TextFieldProps) => (
+            <TextField name="Expected delivery date" {...params} required />
+          )}
+        />
+      </LocalizationProvider>
     </Stack>
   );
 }

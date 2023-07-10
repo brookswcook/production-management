@@ -1,6 +1,5 @@
 import { Grid } from "@mui/material";
 import {
-  DataGrid,
   GridColDef,
   GridRowEditStopParams,
   GridValueSetterParams,
@@ -12,6 +11,7 @@ import {
   useAttributeDefinitionsQuery,
 } from "../../generated/graphql";
 import { VariantAttributeSet } from "./types";
+import { ListView } from "../ListView";
 
 export function stringifyAttributes(
   attributes: { key: string; value: string }[]
@@ -131,13 +131,14 @@ export default function VariantAttributeSetTable({
 
   return (
     <Grid container>
-      <DataGrid
+      <ListView
+        name={"variant-attribute-set-table"}
         autoHeight
         editMode="row"
         rows={variantAttributeSets}
         columns={columns}
-        components={{
-          Footer: () => {
+        slots={{
+          footer: () => {
             return <></>;
           },
         }}
@@ -154,6 +155,7 @@ export default function VariantAttributeSetTable({
             updatedVariantAttributeSets.filter(item => item.quantity > 0);
           onChange(specifiedVariantAttributeSets);
         }}
+        disableGutters
       />
     </Grid>
   );

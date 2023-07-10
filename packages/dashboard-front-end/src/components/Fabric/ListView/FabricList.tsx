@@ -12,7 +12,7 @@ import {
 } from "../../../generated/graphql";
 import { ReactElement, useState } from "react";
 import RequireRole from "../../Auth/RequireRole";
-import { renderCellExpand, ListView } from "../../ListView";
+import { RenderCellExpand, ListView } from "../../ListView";
 import CreateFabricDialog from "../Dialog/CreateFabricDialog";
 import { Button } from "@mui/material";
 import { HideableGridColDef } from "../../ListView/types";
@@ -20,7 +20,7 @@ import LinkColumn from "../../ListView/LinkColumn";
 
 export default function FabricList(): ReactElement {
   const [createFabricDialogOpen, setCreateFabricDialogOpen] = useState(false);
-  const { data, loading, error } = useFabricsQuery({});
+  const { data, loading } = useFabricsQuery({});
   const rows: FabricFieldsFragment[] = data?.fabrics ?? [];
 
   const columns: HideableGridColDef<FabricFieldsFragment>[] = [
@@ -42,7 +42,7 @@ export default function FabricList(): ReactElement {
     {
       field: "code",
       headerName: "Code",
-      minWidth: 70,
+      minWidth: 90,
       flex: 1,
       type: "string",
     },
@@ -67,7 +67,7 @@ export default function FabricList(): ReactElement {
       minWidth: 120,
       flex: 2,
       type: "string",
-      renderCell: renderCellExpand,
+      renderCell: RenderCellExpand,
       valueGetter: ({ row }: { row: FabricFieldsFragment }) => {
         return row.factory.name;
       },
@@ -76,14 +76,14 @@ export default function FabricList(): ReactElement {
     {
       field: "productCodes",
       headerName: "Associated Products",
-      minWidth: 150,
+      minWidth: 190,
       flex: 5,
       valueGetter: ({ row }: { row: FabricFieldsFragment }) => {
         return row.productCodes;
       },
       renderCell({
         value: productCodes,
-      }: GridRenderCellParams<string[], FabricFieldsFragment>) {
+      }: GridRenderCellParams<any, string[], FabricFieldsFragment>) {
         return (
           <LinkColumn linkIds={productCodes ?? []} linkPath="/products/" />
         );
@@ -123,11 +123,9 @@ export default function FabricList(): ReactElement {
         columns={columns}
         getRowId={item => item.code}
         loading={loading}
-        error={error}
-        components={{
-          Toolbar: CustomToolbar,
+        slots={{
+          toolbar: CustomToolbar,
         }}
-        disableSelectionOnClick
       />
     </>
   );

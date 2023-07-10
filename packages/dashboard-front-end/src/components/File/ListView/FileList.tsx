@@ -1,9 +1,9 @@
 import { Button, Grid } from "@mui/material";
-import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { FileType } from "dashboard-core";
 import { FileFieldsFragment } from "../../../generated/graphql";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import { ReactElement } from "react";
+import { ListView } from "../../ListView";
 
 export default function FileList({
   files,
@@ -11,12 +11,12 @@ export default function FileList({
   parentID: string;
   fileType: FileType;
   files: FileFieldsFragment[];
-}): ReactElement {
+}) {
   const columns: GridColDef<FileFieldsFragment>[] = [
     {
       field: "createdAt",
       headerName: "Upload time",
-      minWidth: 110,
+      minWidth: 130,
       type: "date",
       flex: 1,
       valueFormatter: params => {
@@ -26,7 +26,7 @@ export default function FileList({
     {
       field: "contributor",
       headerName: "Contributor",
-      minWidth: 110,
+      minWidth: 130,
       type: "string",
       flex: 1,
       valueGetter: ({ row }: { row: FileFieldsFragment }) => {
@@ -36,10 +36,10 @@ export default function FileList({
     {
       field: "link",
       headerName: "Download Copy",
-      minWidth: 110,
+      minWidth: 150,
       type: "string",
       flex: 1,
-      renderCell: (params: GridCellParams<string>) => (
+      renderCell: (params: GridRenderCellParams<any, string>) => (
         <Button
           href={params.value ?? "#"}
           target="_blank"
@@ -54,19 +54,20 @@ export default function FileList({
 
   return (
     <Grid item xs={12}>
-      <DataGrid
+      <ListView
+        name="file-list"
         rows={files ?? []}
         columns={columns}
         getRowId={item => item.id}
         initialState={{
           pagination: {
-            pageSize: 5,
+            paginationModel: {
+              pageSize: 5,
+            },
           },
         }}
-        rowsPerPageOptions={[5, 10, 20, 50, 100]}
-        disableSelectionOnClick={true}
-        autoHeight
         sx={{ mt: 1 }}
+        disableGutters
       />
     </Grid>
   );

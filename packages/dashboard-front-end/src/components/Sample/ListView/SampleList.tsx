@@ -1,13 +1,12 @@
 import { ApolloError } from "@apollo/client";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import {
-  DataGrid,
   GridColDef,
-  GridSelectionModel,
+  GridRowSelectionModel,
   GridToolbarContainer,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { Fragment, ReactElement, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import {
   Sample,
@@ -18,7 +17,7 @@ import {
   useMarkFabricSampleAsDeliveredMutation,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
-import { renderCellExpand } from "../../ListView";
+import { ListView, RenderCellExpand } from "../../ListView";
 import RejectSampleDialog from "../Dialog/RejectSampleDialog";
 import SendSampleDialog from "../Dialog/SendSampleDialog";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -32,12 +31,12 @@ export default function SampleList({
   parentCode: string;
   sampleType: "fit" | "fabric";
   samples: Omit<Sample, "typename">[];
-}): ReactElement {
+}) {
   const refetchPolicy = {
     refetchQueries: ["Fabrics", "ActionLogs", "Products", "Fabric", "Product"],
   };
   const [selectedGridItems, setSelectedGridItems] =
-    useState<GridSelectionModel>([]);
+    useState<GridRowSelectionModel>([]);
   const [sendSampleDialogOpen, setSendSampleDialogOpen] = useState(false);
   const [rejectSampleDialogOpen, setRejectSampleDialogOpen] = useState(false);
 
@@ -60,35 +59,35 @@ export default function SampleList({
     {
       field: "sku",
       headerName: "Sample Number",
-      minWidth: 120,
+      minWidth: 180,
       type: "string",
       flex: 1,
     },
     {
       field: "trackNumber",
       headerName: "Tracking Number",
-      minWidth: 130,
+      minWidth: 180,
       type: "string",
       flex: 1,
     },
     {
       field: "delivered",
       headerName: "Delivered",
-      minWidth: 80,
+      minWidth: 140,
       type: "boolean",
       flex: 1,
     },
     {
       field: "approved",
       headerName: "Approved",
-      minWidth: 80,
+      minWidth: 140,
       type: "boolean",
       flex: 1,
     },
     {
       field: "attachment",
       headerName: "Comment Attachment",
-      minWidth: 160,
+      minWidth: 220,
       type: "boolean",
       flex: 1,
       valueGetter: ({ row }: { row: Sample }) => {
@@ -101,7 +100,7 @@ export default function SampleList({
     {
       field: "commentAuthor",
       headerName: "Comment author",
-      minWidth: 130,
+      minWidth: 180,
       type: "string",
       flex: 1,
       valueGetter: ({ row }: { row: Sample }) => {
@@ -111,22 +110,22 @@ export default function SampleList({
     {
       field: "commentDate",
       headerName: "Comment date",
-      minWidth: 110,
+      minWidth: 170,
       type: "date",
       flex: 1,
       valueGetter: ({ row }: { row: Sample }) => {
         if (row.note?.createdAt == null) return "";
-        return new Date(row.note?.createdAt).toLocaleDateString();
+        return new Date(row.note?.createdAt);
       },
     },
     // Add a user comment to the timeline when a sample is rejected with comment
     {
       field: "comment",
       headerName: "Rejection Comment",
-      minWidth: 140,
+      minWidth: 180,
       type: "string",
       flex: 4,
-      renderCell: renderCellExpand,
+      renderCell: RenderCellExpand,
       valueGetter: ({ row }: { row: Sample }) => {
         return row.note?.text ?? "";
       },
@@ -134,7 +133,7 @@ export default function SampleList({
   ];
 
   return (
-    <Box sx={{ height: "300px", width: "100%", pt: 1 }}>
+    <Grid item container>
       <RejectSampleDialog
         parentCode={parentCode}
         sampleType={sampleType}
@@ -150,28 +149,32 @@ export default function SampleList({
         onSave={() => setSendSampleDialogOpen(false)}
         onClose={() => setSendSampleDialogOpen(false)}
       />
-      <DataGrid
+      <ListView
+        name={"sample-list"}
         rows={rows ?? []}
         columns={columns}
         getRowId={item => item.sku}
         initialState={{
           pagination: {
-            pageSize: 5,
+            paginationModel: {
+              pageSize: 5,
+            },
           },
         }}
-        rowsPerPageOptions={[5, 10, 20, 50, 100]}
         checkboxSelection
-        onSelectionModelChange={selectionModel =>
+        onRowSelectionModelChange={selectionModel =>
           setSelectedGridItems(selectionModel)
         }
-        components={{
-          Toolbar: CustomToolbar,
+        slots={{
+          toolbar: CustomToolbar,
         }}
+        disableGutters
+        sx={{ mt: 1 }}
       />
-    </Box>
+    </Grid>
   );
 
-  function CustomToolbar(): ReactElement {
+  function CustomToolbar() {
     const actionsMenuAnchorElRef = useRef(null);
     const [actionsMenuAnchorEl, setActionsMenuAnchorEl] =
       useState<null | HTMLElement>(actionsMenuAnchorElRef.current);

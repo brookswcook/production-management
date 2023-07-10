@@ -6,7 +6,8 @@ import {
   TextField,
   TextFieldProps,
 } from "@mui/material";
-import { DatePicker } from "@mui/lab";
+import { DatePicker, LocalizationProvider } from "@mui/lab";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
   CreateProductInput,
   useCreateProductMutation,
@@ -100,16 +101,18 @@ export default function CreateProductForm({
           <TextField {...params} name="factoryId" label="Factory" required />
         )}
       />
-      <DatePicker
-        label="Production due"
-        value={deliveryDate}
-        onChange={newValue => {
-          setDeliveryDate(newValue as string);
-        }}
-        renderInput={(params: TextFieldProps) => (
-          <TextField name="Production due" {...params} required />
-        )}
-      />
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en">
+        <DatePicker
+          label="Production due"
+          value={deliveryDate}
+          onChange={newValue => {
+            setDeliveryDate(newValue as string);
+          }}
+          renderInput={(params: TextFieldProps) => (
+            <TextField name="Production due" {...params} required />
+          )}
+        />
+      </LocalizationProvider>
     </Stack>
   );
 }

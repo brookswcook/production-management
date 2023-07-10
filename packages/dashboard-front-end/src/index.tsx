@@ -1,17 +1,13 @@
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
-import "./index.css";
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./components/App";
+import { StrictMode } from "react";
+import { render } from "react-dom";
+import App from "./components/App/App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import "./index.css";
 
-ReactDOM.render(
-  <React.StrictMode>
+render(
+  <StrictMode>
     <App />
-  </React.StrictMode>,
+  </StrictMode>,
   document.getElementById("root")
 );
 

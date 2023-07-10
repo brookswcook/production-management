@@ -1,5 +1,11 @@
 import { UserPayload, DecodedTokenPayload } from "dashboard-core";
-import { createContext, ReactElement, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactElement,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 import useToken from "./useToken";
 import jwt_decode from "jwt-decode";
 
@@ -20,7 +26,7 @@ export const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }): ReactElement {
   const { token, setToken } = useToken();
   const [decodedToken, setDecodedToken] =

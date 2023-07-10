@@ -1,7 +1,6 @@
 import { Button, capitalize, Stack, Typography } from "@mui/material";
 import {
   GridColDef,
-  DataGrid,
   GridToolbarContainer,
   GridRenderCellParams,
   GridFooterContainer,
@@ -15,6 +14,7 @@ import {
 import RequireRole from "../../Auth/RequireRole";
 import toCurrency from "../../Utils";
 import CreateOrderItemDialog from "../Dialog/CreateOrderItemDialog";
+import { ListView } from "../../ListView";
 
 export default function OrderItemList({
   orderUid,
@@ -29,7 +29,7 @@ export default function OrderItemList({
     GridColDef<OrderItemListFieldsFragment>[]
   >([]);
 
-  const { data, loading, error } = useOrderItemsQuery({
+  const { data, loading } = useOrderItemsQuery({
     variables: { data: { orderUid } },
   });
   const rows: OrderItemListFieldsFragment[] = data?.orderItems ?? [];
@@ -143,16 +143,15 @@ export default function OrderItemList({
         onSave={() => setCreateOrderItemDialogOpen(false)}
         onClose={() => setCreateOrderItemDialogOpen(false)}
       />
-      <DataGrid
+      <ListView
+        name="order-item-list"
         rows={rows}
         columns={columns}
         getRowId={item => item.id}
         loading={loading}
-        error={error}
-        autoHeight
-        components={{
-          Toolbar: CustomToolbar,
-          Footer: () => {
+        slots={{
+          toolbar: CustomToolbar,
+          footer: () => {
             return (
               <GridFooterContainer sx={{ pl: 1, pr: 1 }}>
                 <Stack
@@ -176,14 +175,8 @@ export default function OrderItemList({
             );
           },
         }}
-        initialState={{
-          pagination: {
-            pageSize: 10,
-          },
-        }}
-        rowsPerPageOptions={[5, 10, 20, 50, 100]}
-        disableSelectionOnClick
         sx={{ mt: 1 }}
+        disableGutters
       />
     </>
   );

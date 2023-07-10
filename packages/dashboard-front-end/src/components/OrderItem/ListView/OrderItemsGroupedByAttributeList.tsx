@@ -1,6 +1,5 @@
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import {
-  DataGrid,
   GridColDef,
   GridFooter,
   GridFooterContainer,
@@ -21,6 +20,7 @@ import {
   stringifyVariantAttributes,
   stringifyAttributes,
 } from "../../VariantAttribute/VariantAttributeSetTable";
+import { ListView } from "../../ListView";
 
 export default function OrderItemsGroupedByAttributeList({
   orderUid,
@@ -29,7 +29,7 @@ export default function OrderItemsGroupedByAttributeList({
   orderUid: number;
   addActionDisabled?: boolean;
 }): ReactElement {
-  const { data, loading, error } = useOrderItemsGroupedByAttributesQuery({
+  const { data, loading } = useOrderItemsGroupedByAttributesQuery({
     variables: { data: { orderUid } },
   });
   const [attributeColumns, setAttributeColumns] = useState<
@@ -55,7 +55,7 @@ export default function OrderItemsGroupedByAttributeList({
       variantSetAttributeIdentifier => ({
         field: variantSetAttributeIdentifier,
         headerName: variantSetAttributeIdentifier,
-        minWidth: 100,
+        minWidth: 160,
         flex: 2,
         type: "string",
         valueGetter: ({
@@ -109,7 +109,7 @@ export default function OrderItemsGroupedByAttributeList({
     {
       field: "quantity",
       headerName: "Quantity",
-      minWidth: 70,
+      minWidth: 110,
       flex: 1,
       type: "number",
       valueGetter: ({
@@ -123,7 +123,7 @@ export default function OrderItemsGroupedByAttributeList({
     {
       field: "unitPrice",
       headerName: "Unit Price",
-      minWidth: 80,
+      minWidth: 120,
       flex: 1,
       type: "number",
       valueGetter: ({
@@ -137,7 +137,7 @@ export default function OrderItemsGroupedByAttributeList({
     {
       field: "extPrice",
       headerName: "Ext Price",
-      minWidth: 80,
+      minWidth: 110,
       flex: 1,
       type: "number",
       valueGetter: ({
@@ -178,7 +178,8 @@ export default function OrderItemsGroupedByAttributeList({
         onSave={() => setCreateOrderItemsDialogOpen(false)}
         onClose={() => setCreateOrderItemsDialogOpen(false)}
       />
-      <DataGrid
+      <ListView
+        name="order-items-list"
         rows={rows}
         columns={columns}
         getRowId={item =>
@@ -189,11 +190,9 @@ export default function OrderItemsGroupedByAttributeList({
           item.quantity.toString()
         }
         loading={loading}
-        error={error}
-        autoHeight
-        components={{
-          Toolbar: CustomToolbar,
-          Footer: () => {
+        slots={{
+          toolbar: CustomToolbar,
+          footer: () => {
             return (
               <GridFooterContainer>
                 <Grid container>
@@ -220,13 +219,7 @@ export default function OrderItemsGroupedByAttributeList({
             );
           },
         }}
-        initialState={{
-          pagination: {
-            pageSize: 10,
-          },
-        }}
-        rowsPerPageOptions={[5, 10, 20, 50, 100]}
-        disableSelectionOnClick
+        disableGutters
         sx={{ mt: 1 }}
       />
     </Grid>

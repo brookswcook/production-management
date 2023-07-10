@@ -1,25 +1,43 @@
 import {
-  GridRenderCellParams,
-  GridToolbarColumnsButton,
-  GridToolbarContainer,
-  GridToolbarExport,
-  GridToolbarFilterButton,
-} from "@mui/x-data-grid";
-import {
   ProductFieldsFragment,
   useProductsQuery,
 } from "../../../generated/graphql";
-import { Link } from "react-router-dom";
-import { ReactElement, useState } from "react";
-import RequireRole from "../../Auth/RequireRole";
-import { renderCellExpand, ListView } from "../../ListView";
-import { Button } from "@mui/material";
-import CreateProductDialog from "../Dialog/CreateProductDialog";
+import { ReactElement, Suspense, lazy, useState } from "react";
+import { ListView, RenderCellExpand } from "../../ListView";
 import { HideableGridColDef } from "../../ListView/types";
+
+const CreateProductDialog = lazy(() => import("../Dialog/CreateProductDialog"));
+const GridToolbarContainer = lazy(() =>
+  import("@mui/x-data-grid").then(module => ({
+    default: module.GridToolbarContainer,
+  }))
+);
+const GridToolbarColumnsButton = lazy(() =>
+  import("@mui/x-data-grid").then(module => ({
+    default: module.GridToolbarColumnsButton,
+  }))
+);
+const GridToolbarExport = lazy(() =>
+  import("@mui/x-data-grid").then(module => ({
+    default: module.GridToolbarExport,
+  }))
+);
+const GridToolbarFilterButton = lazy(() =>
+  import("@mui/x-data-grid").then(module => ({
+    default: module.GridToolbarFilterButton,
+  }))
+);
+const Button = lazy(() => import("@mui/material/Button"));
+const RequireRole = lazy(() => import("../../Auth/RequireRole"));
+const Link = lazy(() =>
+  import("react-router-dom").then(module => ({
+    default: module.Link,
+  }))
+);
 
 export default function ProductList(): ReactElement {
   const [createProductDialogOpen, setCreateProductDialogOpen] = useState(false);
-  const { data, loading, error } = useProductsQuery({
+  const { data, loading } = useProductsQuery({
     variables: {},
   });
   const rows: ProductFieldsFragment[] = data ? data.products : [];
@@ -28,22 +46,24 @@ export default function ProductList(): ReactElement {
     {
       field: "name",
       headerName: "Title",
-      minWidth: 170,
+      minWidth: 150,
       flex: 3,
-      renderCell({ id, formattedValue }: GridRenderCellParams) {
+      renderCell({ id, formattedValue }) {
         const linkPath = `/products/${id}`;
         const linkText = `${formattedValue as string}`;
         return (
-          <Link to={linkPath} style={{ textDecoration: "none" }}>
-            {linkText}
-          </Link>
+          <Suspense fallback={<span>{linkText}</span>}>
+            <Link to={linkPath} style={{ textDecoration: "none" }}>
+              {linkText}
+            </Link>
+          </Suspense>
         );
       },
     },
     {
       field: "styleName",
       headerName: "Style Name",
-      minWidth: 120,
+      minWidth: 130,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
@@ -53,8 +73,8 @@ export default function ProductList(): ReactElement {
     },
     {
       field: "styleCode",
-      headerName: "Style Number",
-      minWidth: 100,
+      headerName: "Style #",
+      minWidth: 95,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
@@ -65,7 +85,7 @@ export default function ProductList(): ReactElement {
     {
       field: "fabricCode",
       headerName: "Fabric",
-      minWidth: 70,
+      minWidth: 90,
       flex: 1,
       type: "string",
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
@@ -75,7 +95,7 @@ export default function ProductList(): ReactElement {
     },
     {
       field: "colorName",
-      headerName: "Color Name",
+      headerName: "Color",
       minWidth: 120,
       flex: 1,
       type: "string",
@@ -86,8 +106,8 @@ export default function ProductList(): ReactElement {
     },
     {
       field: "deliveryDate",
-      headerName: "Delivery date",
-      minWidth: 110,
+      headerName: "Delivery",
+      minWidth: 100,
       flex: 1,
       type: "date",
       valueFormatter: params => {
@@ -107,7 +127,7 @@ export default function ProductList(): ReactElement {
     {
       field: "stage",
       headerName: "Stage",
-      minWidth: 130,
+      minWidth: 120,
       flex: 1,
       type: "string",
       hideOnMobile: false,
@@ -116,7 +136,7 @@ export default function ProductList(): ReactElement {
       field: "onTime",
       headerName: "On time",
       description: "Product lifecycle based on workflow rules is on time",
-      minWidth: 70,
+      minWidth: 100,
       flex: 1,
       type: "boolean",
     },
@@ -124,16 +144,14 @@ export default function ProductList(): ReactElement {
       field: "techPackUploaded",
       description: "Tech pack is uploaded",
       headerName: "Tech pack",
-      minWidth: 80,
+      minWidth: 115,
       flex: 1,
-      type: "boolean",
-      hideOnMobile: false,
     },
     {
       field: "fabricSampleDelivered",
       description: "Fabric sample is delivered",
       headerName: "Fabric Sample",
-      minWidth: 120,
+      minWidth: 140,
       flex: 1,
       type: "boolean",
       hideOnMobile: false,
@@ -142,7 +160,7 @@ export default function ProductList(): ReactElement {
       field: "fitSampleDelivered",
       description: "Fit sample is delivered",
       headerName: "Fit Sample",
-      minWidth: 100,
+      minWidth: 120,
       flex: 1,
       type: "boolean",
       hideOnMobile: false,
@@ -150,10 +168,10 @@ export default function ProductList(): ReactElement {
     {
       field: "factoryCode",
       headerName: "Factory",
-      minWidth: 120,
+      minWidth: 110,
       flex: 5,
       type: "string",
-      renderCell: renderCellExpand,
+      renderCell: RenderCellExpand,
       valueGetter: ({ row }: { row: ProductFieldsFragment }) => {
         return row.factory.name;
       },
@@ -163,41 +181,43 @@ export default function ProductList(): ReactElement {
 
   function CustomToolbar(): ReactElement {
     return (
-      <GridToolbarContainer>
-        <RequireRole authorizedRoles={["Admin", "VChapman"]}>
-          <Button
-            variant={"text"}
-            size={"small"}
-            onClick={() => setCreateProductDialogOpen(true)}
-          >
-            Add product
-          </Button>
-        </RequireRole>
-        <GridToolbarColumnsButton />
-        <GridToolbarFilterButton />
-        <GridToolbarExport />
-      </GridToolbarContainer>
+      <Suspense fallback={<div></div>}>
+        <GridToolbarContainer>
+          <RequireRole authorizedRoles={["Admin", "VChapman"]}>
+            <Button
+              variant={"text"}
+              size={"small"}
+              onClick={() => setCreateProductDialogOpen(true)}
+            >
+              Add product
+            </Button>
+          </RequireRole>
+          <GridToolbarColumnsButton />
+          <GridToolbarFilterButton />
+          <GridToolbarExport />
+        </GridToolbarContainer>
+      </Suspense>
     );
   }
 
   return (
     <>
-      <CreateProductDialog
-        open={createProductDialogOpen}
-        onSave={() => setCreateProductDialogOpen(false)}
-        onClose={() => setCreateProductDialogOpen(false)}
-      />
+      <Suspense fallback={<div></div>}>
+        <CreateProductDialog
+          open={createProductDialogOpen}
+          onSave={() => setCreateProductDialogOpen(false)}
+          onClose={() => setCreateProductDialogOpen(false)}
+        />
+      </Suspense>
       <ListView
         name="products"
         rows={rows}
         columns={columns}
         getRowId={item => item.code}
         loading={loading}
-        error={error}
-        components={{
-          Toolbar: CustomToolbar,
+        slots={{
+          toolbar: CustomToolbar,
         }}
-        disableSelectionOnClick
       />
     </>
   );

@@ -20,7 +20,7 @@ import CreatePurchaseOrderDialog from "../Dialog/CreatePurchaseOrderDialog";
 export default function PurchaseOrderList(): ReactElement {
   const [createPurchaseOrderDialogOpen, setCreatePurchaseOrderDialogOpen] =
     useState(false);
-  const { data, loading, error } = usePurchaseOrdersQuery({});
+  const { data, loading } = usePurchaseOrdersQuery({});
   const rows: PurchaseOrderListFieldsFragment[] = data?.purchaseOrders ?? [];
 
   const columns: GridColDef<PurchaseOrderListFieldsFragment>[] = [
@@ -79,7 +79,7 @@ export default function PurchaseOrderList(): ReactElement {
     {
       field: "expectedDeliveryDate",
       headerName: "Delivery Date",
-      minWidth: 110,
+      minWidth: 140,
       flex: 1,
       type: "date",
       valueFormatter: params => {
@@ -132,11 +132,9 @@ export default function PurchaseOrderList(): ReactElement {
         columns={columns}
         getRowId={item => item.uid}
         loading={loading}
-        error={error}
-        components={{
-          Toolbar: CustomToolbar,
+        slots={{
+          toolbar: CustomToolbar,
         }}
-        disableSelectionOnClick
       />
     </>
   );

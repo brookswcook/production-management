@@ -6,12 +6,12 @@ import {
   useFactoriesQuery,
 } from "../../../generated/graphql";
 import RequireRole from "../../Auth/RequireRole";
-import { renderCellExpand, ListView } from "../../ListView";
+import { RenderCellExpand, ListView } from "../../ListView";
 import CreateFactoryDialog from "../Dialog/CreateFactoryDialog";
 
 export default function FactoryList(): ReactElement {
   const [createFactoryDialogOpen, setCreateFactoryDialogOpen] = useState(false);
-  const { data, loading, error } = useFactoriesQuery({});
+  const { data, loading } = useFactoriesQuery({});
   const rows: FactoryListFieldsFragment[] = data?.factories ?? [];
 
   const columns: GridColDef<FactoryListFieldsFragment>[] = [
@@ -27,7 +27,7 @@ export default function FactoryList(): ReactElement {
       headerName: "Name",
       minWidth: 250,
       flex: 2,
-      renderCell: renderCellExpand,
+      renderCell: RenderCellExpand,
       type: "string",
     },
     {
@@ -45,7 +45,7 @@ export default function FactoryList(): ReactElement {
       headerName: "Address",
       minWidth: 300,
       flex: 5,
-      renderCell: renderCellExpand,
+      renderCell: RenderCellExpand,
       type: "string",
     },
   ];
@@ -81,11 +81,9 @@ export default function FactoryList(): ReactElement {
         columns={columns}
         getRowId={item => item.code}
         loading={loading}
-        error={error}
-        components={{
-          Toolbar: CustomToolbar,
+        slots={{
+          toolbar: CustomToolbar,
         }}
-        disableSelectionOnClick
       />
     </>
   );

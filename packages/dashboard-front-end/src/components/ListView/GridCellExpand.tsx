@@ -1,5 +1,13 @@
 import { Box, Paper, Typography } from "@mui/material";
-import React, { ReactElement, Suspense, lazy } from "react";
+import {
+  ReactElement,
+  Suspense,
+  lazy,
+  memo,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 const Popper = lazy(() => import("@mui/material/Popper"));
 
@@ -16,17 +24,15 @@ function isOverflown(element: Element | null) {
   );
 }
 
-export default React.memo(function CellExpand(
-  props: CellExpandProps
-): ReactElement {
+export default memo(function CellExpand(props: CellExpandProps): ReactElement {
   const { value, width } = props;
 
-  const wrapper = React.useRef<HTMLDivElement | null>(null);
-  const cellDiv = React.useRef(null);
-  const cellValue = React.useRef(null);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [showFullCell, setShowFullCell] = React.useState(false);
-  const [showPopper, setShowPopper] = React.useState(false);
+  const wrapper = useRef<HTMLDivElement | null>(null);
+  const cellDiv = useRef(null);
+  const cellValue = useRef(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [showFullCell, setShowFullCell] = useState(false);
+  const [showPopper, setShowPopper] = useState(false);
 
   const handleMouseEnter = () => {
     const isCurrentlyOverflown = isOverflown(cellValue.current);
@@ -39,7 +45,7 @@ export default React.memo(function CellExpand(
     setShowFullCell(false);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!showFullCell) {
       return undefined;
     }

@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { NoteType } from "dashboard-core";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, Fragment, useState } from "react";
 import {
   ActionLogListFieldsFragment,
   CreateNoteInput,
@@ -249,16 +249,16 @@ export default function EntityTimeline({
             const isFirstItem = index === 0;
             const userFullName = user?.fullName ?? "";
             return __typename === "ActionLog" ? (
-              <React.Fragment key={id}>
+              <Fragment key={id}>
                 {isFirstItem && <TimelineSeparatorItem />}
                 <TimeLineActionItem
                   title={title}
                   date={new Date(createdAt ?? 0)}
                   userFullName={userFullName}
                 />
-              </React.Fragment>
+              </Fragment>
             ) : (
-              <React.Fragment key={id}>
+              <Fragment key={id}>
                 {isFirstItem && <TimelineSeparatorItem />}
                 <TimelineCommentItem
                   userFullName={userFullName}
@@ -266,7 +266,7 @@ export default function EntityTimeline({
                   date={new Date(createdAt ?? 0)}
                 />
                 <TimelineSeparatorItem />
-              </React.Fragment>
+              </Fragment>
             );
           })}
         </Timeline>

@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.15.1](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.15.0...dashboard-front-end@1.15.1) (2023-07-10)
+
+
+### Bug Fixes
+
+* do not require top level react ([b152a46](https://github.com/brookswcook/production-management/commit/b152a464dbf255e28c88645fd12f4766ad65164a))
+* fit listview columns to the width of the desktop without scroll tab ([423a6d7](https://github.com/brookswcook/production-management/commit/423a6d777603e154792d25b49cc6831c6f30602e))
+* load fingerprint lib only when it's needed ([23d6e2b](https://github.com/brookswcook/production-management/commit/23d6e2bb6801c4f5dda6a6abe621c8f49e052232))
+* move localization provider to where it's used ([e7d49e5](https://github.com/brookswcook/production-management/commit/e7d49e5ee21c80df235b3891379b0323b2b7d05c))
+* refactor app component and use lazy loading in router ([3f6eab7](https://github.com/brookswcook/production-management/commit/3f6eab7ca15b3711cf796c348fd8c1ea09d298a7))
+* reuse listview component fully ([060bfde](https://github.com/brookswcook/production-management/commit/060bfdeed856d5593221445a94f250b1450c30b0))
+* simplify render cell expand ([cd6c541](https://github.com/brookswcook/production-management/commit/cd6c54170e66541787c2f897e1ebbfcf2feae553))
+* update mui data grid to new major version ([55ca9e0](https://github.com/brookswcook/production-management/commit/55ca9e0ad62a1092bd894252f7825a3b20b7c4fb))
+* use dayjs date adapter ([b197db3](https://github.com/brookswcook/production-management/commit/b197db3aef4d3e8bd7d0bb7f6f18160c86e7c6ca))
+* use lazy loading in product list ([df0f777](https://github.com/brookswcook/production-management/commit/df0f777b387a6c71720bd00da10da7d46d0b14b3))
+* vscode hints ([f1dc0e7](https://github.com/brookswcook/production-management/commit/f1dc0e7fce18e2087e07f88c63c5496251984816))
+
+
+
+
+
 # [1.15.0](https://github.com/brookswcook/production-management/compare/dashboard-front-end@1.14.0...dashboard-front-end@1.15.0) (2023-07-07)
 
 

@@ -1,9 +1,5 @@
 import { Grid } from "@mui/material";
-import {
-  GridColDef,
-  GridRowEditStopParams,
-  GridValueSetterParams,
-} from "@mui/x-data-grid";
+import { GridColDef, GridValueSetterParams } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import {
   AttributeDefinition,
@@ -142,20 +138,26 @@ export default function VariantAttributeSetTable({
             return <></>;
           },
         }}
-        onRowEditStop={(
-          params: GridRowEditStopParams<UniqueVariantAttributeSet>
-        ) => {
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 100,
+            },
+          },
+        }}
+        processRowUpdate={newRow => {
           const changedVariantAttributeSetIndex =
-            variantAttributeSets.findIndex(({ id }) => id === params.row.id);
+            variantAttributeSets.findIndex(({ id }) => id === newRow.id);
           const updatedVariantAttributeSets = [...variantAttributeSets];
-          updatedVariantAttributeSets[changedVariantAttributeSetIndex] =
-            params.row;
+          updatedVariantAttributeSets[changedVariantAttributeSetIndex] = newRow;
           setVariantAttributeSets(updatedVariantAttributeSets);
           const specifiedVariantAttributeSets =
             updatedVariantAttributeSets.filter(item => item.quantity > 0);
           onChange(specifiedVariantAttributeSets);
+          return newRow;
         }}
         disableGutters
+        sx={{ mt: 1 }}
       />
     </Grid>
   );

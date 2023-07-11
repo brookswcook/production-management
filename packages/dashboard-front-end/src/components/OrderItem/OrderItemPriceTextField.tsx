@@ -22,10 +22,12 @@ export default function OrderItemPriceTextField({
   initialValue?: number;
 }) {
   const [itemPrice, setItemPrice] = useState<number>(initialValue);
+  const [isItemPriceOverridden, setIsItemPriceOverridden] =
+    useState<boolean>(false);
   const [discountPerItem, setDiscountPerItem] = useState<number>(0);
 
   useEffect(() => {
-    if (product != null) {
+    if (product != null && !isItemPriceOverridden) {
       const { cost: baseCost, bulkProductionCostDiscounts } =
         product.production;
       const bulkProductionCost = [...bulkProductionCostDiscounts]
@@ -51,7 +53,11 @@ export default function OrderItemPriceTextField({
           fullWidth
           label="Price per item"
           value={itemPrice}
-          onChange={({ target: { value } }) => setItemPrice(Number(value))}
+          onChange={({ target: { value } }) => {
+            setIsItemPriceOverridden(true);
+            setItemPrice(Number(value));
+            setDiscountPerItem(0);
+          }}
           required
           sx={{ mt: 1 }}
         />
